@@ -3,6 +3,8 @@ package server.ctrl;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import server.connection.ServerProtocol;
+import server.ctrl.ThreadCtrl;
 
 /**
  *
