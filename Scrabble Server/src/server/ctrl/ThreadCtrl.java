@@ -35,7 +35,7 @@ public class ThreadCtrl extends Thread {
         // TODO switch
     }
     
-    private void processError(GameBoardException gbe) {
+    private void processError(Exception e) {
         Message answer = null;
         // TODO based on the created exception
     }
@@ -47,8 +47,8 @@ public class ThreadCtrl extends Thread {
             gameBoard.deconnection(clientName);
             Message answer = new Message(Message.M_OK, clientName, 0);
             sProto.respond(answer);
-        } catch (GameBoardException gbe) {
-            processError(gbe);
+        } catch (Exception e) {
+            processError(e);
         }
     }
     
