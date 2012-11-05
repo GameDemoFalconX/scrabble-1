@@ -27,9 +27,5 @@ public class ServerProtocol extends Protocol {
     public void respond(Message answer) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
-    public void respond(Message answer) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
     
 }
