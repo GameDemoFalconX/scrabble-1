@@ -1,8 +1,10 @@
 package client.model;
 
+import common.Message;
 import common.Protocol;
 import client.model.Tile;
 import client.connection.ClientProtocol;
+import common.GameBoardException;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +43,7 @@ public class GameBoard {
         Tile [][] board = null;
         for (int x = 0; x <= 15; x++) {
             for (int y = 0; y <= 15; y++) {
-                board[x][y] = null;
+//                board[x][y] = null;
             }
         }
         return board;
@@ -64,11 +66,17 @@ public class GameBoard {
             {},
             {"K", "W", "X", "Y", "Z"}
         };
-        for (int i = 0; i <= tileDistribution.length; i++) {
-            for (int j = 0; j <= tileDistribution[i].length; j++) {
-                bag.add(new Tile(tileDistribution[i][j], i));
-            }
-        }
+//        for (int i = 0; i <= tileDistribution.length; i++) {
+//            for (int j = 0; j <= tileDistribution[i].length; j++) {
+//                bag.add(new Tile(tileDistribution[i][j], i));
+//            }
+//        }
         return bag;
+    }
+
+    public void newPlayer(String name) throws GameBoardException {
+        playerName = name;
+//        Message answer = gbProtocol.sendMessage(Message.OP_NC,playerName, 0);
+//        TODO continue HERE !!! (Bernard)
     }
 }
