@@ -1,7 +1,7 @@
 package client.ctrl;
 
-import client.view.View;
 import client.model.GameBoard;
+import client.view.View;
 import common.GameBoardException;
 
 /**
@@ -47,10 +47,14 @@ public class ClientController {
     public void initialChoice(Integer choice) {
         switch (choice) {
             case 1:
-                String clientName = view.askName();
+                String name = view.askName();
                 try {
-                    gameBoard.newPlayer(clientName);
-                    view.display(clientName + ", you're successfully registered.");
+                    gameBoard.newPlayer(name);
+                    if (debug) {
+                        view.display(name + ", you're successfully registered.");
+                    } else {
+//                        TODO GUI 
+                    }
 //                  TODO player menu  
                 } catch (GameBoardException gbe) {
                     processException(gbe);
