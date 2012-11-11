@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
-
+//  TODO TileBag class
 //        private ArrayList initBag() {
 //        // Initialization of tiles bag : There are 102 tiles and some tiles are a specific frequence and value.
 //        ArrayList bag = null;
