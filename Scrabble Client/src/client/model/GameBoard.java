@@ -39,7 +39,15 @@ public class GameBoard {
        Message request = new Message(cProcess, args);
         
         Message serverResponse = gbProtocol.sendRequest(request);
-        player = new Player(name, password);
+        
+        // Handle response
+        cProcess  = serverResponse.getProcess();
+        args = serverResponse.getArgs();
+        if (cProcess.getObject() == "PLAYER" && cProcess.getTask() == "NEW" && cProcess.getStatus() == "SUCCESS") {
+            player = new Player(args);
+        } else {
+            
+        }
     }
     
     public void setPlayerName(String name) {

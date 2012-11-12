@@ -13,10 +13,15 @@ class Player {
     private String playerPassword;
     private int playerID;
     
+    public Player(String args) {
+        String [] argsTab = args.split("_");
+        this(argsTab[1], argsTab[2]);
+        playerID = Integer.parseInt(argsTab[0]); 
+    }
+    
     public Player(String name, String pwd) {
         playerName = name;
         playerPassword = pwd; 
-        }
     }
 
     private void newPlayer(String name) throws GameBoardException {

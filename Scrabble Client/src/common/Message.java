@@ -36,6 +36,10 @@ public class Message {
         return cToken;
     }
     
+    public String getArgs() {
+        return args;
+    }
+    
     @Override
     public String toString() {
         return content;

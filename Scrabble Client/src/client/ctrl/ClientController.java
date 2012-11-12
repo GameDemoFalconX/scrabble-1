@@ -14,9 +14,7 @@ public class ClientController {
     private View view;
     private GameBoard gameBoard;
     private static String IPaddress = "localhost";
-    private static int port = 8189;
-    private Process cProcess;
-    
+    private static int port = 8189;    
     private boolean debug = true;
     
 
