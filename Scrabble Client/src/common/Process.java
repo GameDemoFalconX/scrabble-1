@@ -20,6 +20,13 @@ public class Process {
         this.status = status;
     }
     
+    public Process(String args) {
+        String [] argsTab = args.split("_");
+        this.object = argsTab[0];
+        this.task = argsTab[1];
+        this.status = argsTab[2];
+    }
+    
     public String getObject() {
         return this.object;
     }

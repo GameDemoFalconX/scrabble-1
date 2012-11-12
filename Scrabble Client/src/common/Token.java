@@ -18,11 +18,21 @@ public class Token {
         this.idGame = idGame;
     }
     
+    public Token(String args) {
+        String [] argsTab = args.split("_");
+        this.idPlayer = argsTab[0];
+        this.idGame = argsTab[1];
+    }
+    
     public String getTokenPlayer() {
         return this.idPlayer;
     }
     
     public String getTokenGame() {
         return this.idGame;
+    }
+    
+    public String formatToken() {
+        return this.idGame+"_"+this.idPlayer;
     }
 }

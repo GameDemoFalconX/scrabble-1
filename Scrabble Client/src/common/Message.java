@@ -6,41 +6,49 @@ package common;
  */
 public class Message {
     
-    private Integer code = 0;
-    private String name = "";
-    private String paquet = "";
+    private Process cProcess;
+    private Token cToken;
+    private String args;
+    private String content;
     
    // Add here message by considering the model : gameboard
     
-    public Message(Integer code, String name) {
-        this.code = code;
-        this.name = name;
-        setPaquet();
+    public Message(Process p, String args) {
+        this.cProcess = p;
+        this.args = args;
+        formatMessage();
     }
     
-    public Message(String msg) {
-        String[] str = new String[2];
-        str = msg.split(":");
-        this.code = Integer.parseInt(str[0]);
-        this.name = str[1];
-        setPaquet();
+    public Message(Process p, Token t, String args) {
+        //String[] str = new String[2];
+        //str = msg.split(":");
+        this.cProcess = p;
+        this.cToken = t;
+        this.args = args;
+        formatMessage();
     }
     
-    public Integer getCode() {
-        return code;
+    public Process getProcess() {
+        return cProcess;
     }
     
-    public String getName() {
-        return name;
+    public Token getToken() {
+        return cToken;
     }
     
     @Override
     public String toString() {
-        return paquet;
+        return content;
     }
     
-    private void setPaquet() {
-        paquet = code.toString() + ":" + name;
+    private void formatMessage() {
+        String t;
+        if (this.cToken != null) {
+          t = cToken.formatToken();  
+        } else {
+            t = "0";
+        }
+        content = cProcess.formatProcess()+"#"+t+"#"+args;
     }
     
 }

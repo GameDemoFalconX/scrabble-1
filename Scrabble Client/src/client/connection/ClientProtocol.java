@@ -3,12 +3,12 @@ package client.connection;
 import common.Message;
 import common.Protocol;
 import common.Process;
+import common.Token;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
 
 /**
  *
@@ -42,57 +42,64 @@ public class ClientProtocol extends Protocol {
             if (serverResponse[2] == "SUCCESS") {
                 return "SUCCESS";
             } else {
-                return ;
+                return "WARNING";
             }
         } catch (IOException ex) {
-            return CONN_KO;
+            return "ERROR";
         }
     }
     
-    public HashMap sendRequest(Process cProcess, HashMap args) {
-       if (TCPConnexion() == CONN_OK) {
-            int state = connectionScrabbleServer();
-            if (etat == CONN_ACK) {
-                etat = envoiMsg(new Message(code, nom, montant));
-                if (etat == CONN_ACK){
-                    msgRep = attenteReponse();
+    public Message sendRequest(Message request) {
+        Message serverResponse = null;
+        Process connectProcess = TCPConnection();
+        if (connectProcess.getStatus() == "SUCCESS") {
+            String state = connectionScrabbleServer();
+            if (state == "SUCCESS") {
+                state = sendServerRequest(request);
+                if (state == "SUCCESS"){
+                    serverResponse = serverResponse();
                 }
             }
-            if (etat != CONN_KO)
-                deconnexionTCP();
-         }
-        return msgRep;
+            if (state == "SUCCESS")
+                deconnectionTCP();
+        } else {
+            serverResponse = new Message(connectProcess, "");
+        }
+        return serverResponse;
     }
     
-     private int envoiMsg(Message msgToSend) {
-        write(msgToSend);
+     private String sendServerRequest (Message request) {
+        write(request);
         try {
-            if (in.readLine().equals("ACK")) {
-                return CONN_ACK;
-            } else {
-                return CONN_NOT_BANK;
-            }
+            String [] serverResponse = in.readLine().split("_");
+            return serverResponse[2];
         } catch (IOException ex) {
-            return CONN_KO;
+            return "ERROR";
         }
     }
     
-    private Message waitingAnswer() {
+    private Message serverResponse() {
         try {
-            receivedMessage = new Message(in.readLine());
-            write("ACK");
-            return receivedMessage;
+            Message serverResponse;
+            String [] response = in.readLine().split("#");
+            if (response.length > 2) {
+                serverResponse = new Message(new Process(response[0]), new Token(response[1]), response[2]);
+            } else {
+                serverResponse = new Message(new Process(response[0]), response[1]);
+            }
+            write("SUCCESS");
+            return serverResponse;
         } catch (Exception e) {
             return null;
         }
     }
     
-    private int TCPdeconnection() {
+    private String deconnectionTCP() {
         try {
             socket.close();
-            return CONN_OK;
+            return "SUCCESS";
         } catch (Exception e) {
-            return CONN_KO;
+            return "ERROR";
         }
     }
 }

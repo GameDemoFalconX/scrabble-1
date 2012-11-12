@@ -4,7 +4,6 @@ import client.connection.ClientProtocol;
 import common.GameBoardException;
 import common.Message;
 import common.Process;
-import java.util.HashMap;
 
 /**
  *
@@ -36,11 +35,10 @@ public class GameBoard {
         Process cProcess = new Process("PLAYER", "NEW", "START");
         
         // Create new hashMap which contains current args
-        HashMap args = new HashMap();
-        args.put("name", name);
-        args.put("password", password);
+       String args = "name:"+name+"_password:"+password;
+       Message request = new Message(cProcess, args);
         
-        Message serverResponse = gbProtocol.sendRequest(cProcess,args);
+        Message serverResponse = gbProtocol.sendRequest(request);
         player = new Player(name, password);
     }
     
