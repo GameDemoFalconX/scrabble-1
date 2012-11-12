@@ -5,20 +5,17 @@ import common.GameBoardException;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 class Player {
     
     private String playerName;
+    private String playerPassword;
     private int playerID;
     
-    public Player(String name) {
+    public Player(String name, String pwd) {
         playerName = name;
-        boolean playerExists = true/*ask to server*/;
-        if (playerExists) {
-//            getPlayerID;
-        } else {
-//            newPlayerID
+        playerPassword = pwd; 
         }
     }
 
@@ -34,6 +31,14 @@ class Player {
     
     public void setPlayerName(String name) {
         this.playerName = name;
+    }
+    
+    public String getPlayerPassword() {
+        return playerPassword;
+    }
+    
+    public void setPlayerPassword(String pwd) {
+        this.playerPassword = pwd;
     }
     
     public int getPlayerID() {

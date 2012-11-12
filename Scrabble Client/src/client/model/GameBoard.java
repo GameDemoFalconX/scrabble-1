@@ -2,7 +2,9 @@ package client.model;
 
 import client.connection.ClientProtocol;
 import common.GameBoardException;
-import java.util.ArrayList;
+import common.Message;
+import common.Process;
+import java.util.HashMap;
 
 /**
  *
@@ -30,12 +32,24 @@ public class GameBoard {
         gameBoardID = newGameBoardID();
     }
     
-    public void newPlayer(String name) {
-        player = new Player(name);
+    public void newPlayer(String name, String password) {
+        Process cProcess = new Process("PLAYER", "NEW", "START");
+        
+        // Create new hashMap which contains current args
+        HashMap args = new HashMap();
+        args.put("name", name);
+        args.put("password", password);
+        
+        Message serverResponse = gbProtocol.sendRequest(cProcess,args);
+        player = new Player(name, password);
     }
     
     public void setPlayerName(String name) {
         player.setPlayerName(name);
+    }
+    
+     public void setPlayerPassword(String pwd) {
+        player.setPlayerPassword(pwd);
     }
     
     public String getPlayerName() {

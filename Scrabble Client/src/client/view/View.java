@@ -14,14 +14,43 @@ public class View {
         this.ctrl = ctrl;
     }
     
-    public void initialMenu() {
+    public void firstMenu() {
         System.out.println("#####################################");
         System.out.println("#             SCRABBLE              #");
         System.out.println("#####################################\n");
-        System.out.println("1: New player");
+        System.out.println("1: Create new account");
+        System.out.println("2: Login");
+        System.out.println("3: Exit\n");
+        ctrl.firstChoice(Console.readInt("Your choice ?  "));
+    }
+    
+    public void initMenu() {
+        System.out.println("#####################################");
+        System.out.println("#             SCRABBLE              #");
+        System.out.println("#####################################\n");
+        System.out.println("1: New game");
         System.out.println("2: Load game");
         System.out.println("3: Exit\n");
-        ctrl.initialChoice(Console.readInt("Your choice ?  "));
+        ctrl.initChoice(Console.readInt("Your choice ?  "));
+    }
+    
+    public void startMenu() {
+         System.out.println("#####################################");
+        System.out.println("#             SCRABBLE              #");
+        System.out.println("#####################################\n");
+        System.out.println("1: Play now");
+        System.out.println("2: Exit\n");
+        ctrl.startChoice(Console.readInt("Your choice ?  "));
+    }
+    
+    public void playMenu() {
+         System.out.println("#####################################");
+        System.out.println("#             SCRABBLE              #");
+        System.out.println("#####################################\n");
+        System.out.println("1: Place word");
+        System.out.println("2: Save your game\n");
+        System.out.println("3: Exit\n");
+        ctrl.playChoice(Console.readInt("Your choice ?  "));
     }
     
     public void display(String msg) {
@@ -29,6 +58,10 @@ public class View {
     }
 
     public String askName() {
-        return (Console.readLine("What's your name ? "));
+        return (Console.readLine("Enter your username ? "));
+    }
+    
+    public String askPassword() {
+        return (Console.readLine("Enter your password ? "));
     }
 }

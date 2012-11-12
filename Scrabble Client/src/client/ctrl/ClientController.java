@@ -3,6 +3,7 @@ package client.ctrl;
 import client.model.GameBoard;
 import client.view.View;
 import common.GameBoardException;
+import common.Process;
 
 /**
  *
@@ -14,6 +15,7 @@ public class ClientController {
     private GameBoard gameBoard;
     private static String IPaddress = "localhost";
     private static int port = 8189;
+    private Process cProcess;
     
     private boolean debug = true;
     
@@ -23,7 +25,7 @@ public class ClientController {
      */
     public static void main(String[] args) {
         ClientController clientCtrl = new ClientController(args);
-        clientCtrl.initShow();
+        clientCtrl.firstShow();
     }
     
     public ClientController(String[] args) {
@@ -40,16 +42,18 @@ public class ClientController {
         gameBoard = new GameBoard(IPaddress, port);
     }
     
-    public void initShow() {
-        view.initialMenu();
+    public void firstShow() {
+        view.firstMenu();
     }
     
-    public void initialChoice(Integer choice) {
+    public void firstChoice(Integer choice) {
         switch (choice) {
             case 1:
                 String name = view.askName();
+                String password = view.askPassword();
+               // cProcess = new Process("PLAYER", "NEW", "START");
                 try {
-                    gameBoard.newPlayer(name);
+                    gameBoard.newPlayer(name, password);
                     if (debug) {
                         view.display(name + ", you're successfully registered.");
                     } else {
