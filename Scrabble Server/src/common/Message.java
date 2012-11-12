@@ -2,10 +2,13 @@ package common;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class Message {
     
+    private Process cProcess;
+    
+    // ----------------------
     private Integer code = 0;
     private String name = "";
     private String paquet = "";
