@@ -65,7 +65,19 @@ public class ServerProtocol extends Protocol {
 				return new Message(clientRequest, "");
 		}
 
-		public void SendResponse(Message answer) {
-				throw new UnsupportedOperationException("Not yet implemented");
+		public Process SendResponse(Message answer) {
+				//throw new UnsupportedOperationException("Not yet implemented");
+				write(answer);
+				try {
+						Process clientConfirmation = new Process(in.readLine());
+						 if (clientConfirmation.getStatus().equals("SUCCESS")) {
+								return clientConfirmation;
+						} else {
+								clientConfirmation.setStatus("WARNING");
+								return clientConfirmation;
+						}
+				} catch (Exception e) {
+						return new Process("CLIENT", "TREATMENT", "ERROR");
+				}
 		}
 }

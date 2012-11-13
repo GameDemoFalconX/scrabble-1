@@ -46,7 +46,7 @@ public class TileBag {
         }
         char letter;
         int rand = random.nextInt(tileBag[value].size());
-        letter = (char) tileBag[value].get(rand);
+        letter = (char)tileBag[value].get(rand);
         tileBag[value].remove(rand);
         Tile tile = new Tile(letter,value);
         return tile;
