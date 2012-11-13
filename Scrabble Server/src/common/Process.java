@@ -14,10 +14,17 @@ public class Process {
     private String task;
     private String status;
     
-    Process(String object, String task, String status) {
+    public Process(String object, String task, String status) {
         this.object = object;
         this.task = task;
         this.status = status;
+    }
+    
+    public Process(String args) {
+        String [] argsTab = args.split("_");
+        this.object = argsTab[0];
+        this.task = argsTab[1];
+        this.status = argsTab[2];
     }
     
     public String getObject() {
@@ -42,5 +49,9 @@ public class Process {
       
       public void setStatus(String status) {
           this.status = status;
+      }
+      
+      public String formatProcess() {
+          return this.object+"_"+this.task+"_"+this.status;
       }
 }
