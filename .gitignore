@@ -1,4 +1,10 @@
 *.properties
 *.xml
 *.un*
+*.st
+*.rs
+*.spd
+*.netbeans_automatic_build
+
+*.un~
 *.swp

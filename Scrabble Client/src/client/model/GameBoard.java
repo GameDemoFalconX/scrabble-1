@@ -20,6 +20,7 @@ public class GameBoard {
         gameBoardID = newGameBoardID();
         grid = new Grid(gameBoardID);
         rack = new Rack(gameBoardID);
+<<<<<<< HEAD
     }
     
      public GameBoard(String IPaddress, int port) {
@@ -58,6 +59,15 @@ public class GameBoard {
         //return player.getPlayerName();
     //}
         
+=======
+    }
+        
+    public GameBoard(String IPaddress, int port) {
+        this();
+        gbProtocol = new ClientProtocol(IPaddress, port);
+    }
+    
+>>>>>>> develop
     private int newGameBoardID() {
 //        TODO ask the server a new ID (Bernard)
         return 0; // to be changed obviously
