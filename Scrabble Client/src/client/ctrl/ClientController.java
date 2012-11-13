@@ -1,6 +1,7 @@
 package client.ctrl;
 
 import client.model.GameBoard;
+import client.model.Player;
 import client.view.View;
 import common.GameBoardException;
 import common.Process;
@@ -13,6 +14,7 @@ public class ClientController {
     
     private View view;
     private GameBoard gameBoard;
+    private Player player;
     private static String IPaddress = "localhost";
     private static int port = 8189;    
     private boolean debug = true;
@@ -51,7 +53,7 @@ public class ClientController {
                 String password = view.askPassword();
                // cProcess = new Process("PLAYER", "NEW", "START");
                 try {
-                    gameBoard.newPlayer(name, password);
+                    player = gameBoard.newPlayer(name, password);
                     if (debug) {
                         view.display(name + ", you're successfully registered.");
                     } else {

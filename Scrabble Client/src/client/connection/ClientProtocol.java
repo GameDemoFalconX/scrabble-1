@@ -69,7 +69,7 @@ public class ClientProtocol extends Protocol {
     }
     
      private String sendServerRequest (Message request) {
-        write(request);
+        write(request.toString());
         try {
             String [] serverResponse = in.readLine().split("_");
             return serverResponse[2];

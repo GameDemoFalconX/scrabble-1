@@ -6,6 +6,7 @@ package client.model;
  */
 class Rack {
     
+    private int rackID;
     private Tile[] rack = new Tile[7];
     
     public Rack() {
@@ -14,5 +15,9 @@ class Rack {
         }
     }
     
+    public Rack(int gameBoardID) {
+        this();
+        rackID = gameBoardID;
+    }
     
 }

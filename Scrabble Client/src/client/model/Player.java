@@ -7,7 +7,7 @@ import common.GameBoardException;
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Player {
+public class Player {
     
     private String playerName;
     private String playerPassword;

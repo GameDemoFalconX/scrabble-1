@@ -11,27 +11,23 @@ import common.Process;
  */
 public class GameBoard {
     
-    private int gameBoardID;
-    private Player player;
+    private int gameBoardID; // TODO UUID (Bernard)
     private Grid grid;
     private Rack rack;
     private ClientProtocol gbProtocol;
     
-    
-//    private int score = 0; Should be on the server (see Trello)
-//    private Tile [][] gameBoard; GRID
-//    private ArrayList tileBag; Should be on the server (see Trello)
-//    private int [][] scoringBoard; // TODO add here the matrix of point 
-    
-    
-    public GameBoard(String IPaddress, int port) {
-        gbProtocol = new ClientProtocol(IPaddress, port);
-        grid = new Grid();
-        rack = new Rack();
+    private GameBoard() {
         gameBoardID = newGameBoardID();
+        grid = new Grid(gameBoardID);
+        rack = new Rack(gameBoardID);
     }
     
-    public void newPlayer(String name, String password) throws GameBoardException {
+     public GameBoard(String IPaddress, int port) {
+        this();
+        gbProtocol = new ClientProtocol(IPaddress, port);
+    }
+    
+    public Player newPlayer(String name, String password) throws GameBoardException {
         Process cProcess = new Process("PLAYER", "NEW", "START");
         
         // Create new hashMap which contains current args
@@ -44,31 +40,26 @@ public class GameBoard {
         cProcess  = serverResponse.getProcess();
         args = serverResponse.getArgs();
         if (cProcess.getObject() == "PLAYER" && cProcess.getTask() == "NEW" && cProcess.getStatus() == "SUCCESS") {
-            player = new Player(args);
+            return new Player(args);
         } else {
             throw new GameBoardException(cProcess);
         }
     }
     
     public void setPlayerName(String name) {
-        player.setPlayerName(name);
+       // player.setPlayerName(name);
     }
     
      public void setPlayerPassword(String pwd) {
-        player.setPlayerPassword(pwd);
+        //player.setPlayerPassword(pwd);
     }
     
-    public String getPlayerName() {
-        return player.getPlayerName();
-    }
-
+   // public String getPlayerName() {
+        //return player.getPlayerName();
+    //}
+        
     private int newGameBoardID() {
 //        TODO ask the server a new ID (Bernard)
         return 0; // to be changed obviously
     }
-
-    
-
-
-    
 }
