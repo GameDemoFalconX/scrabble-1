@@ -22,5 +22,4 @@ public class Tile {
     public int getValue() {
         return this.value;
     }
-
 }

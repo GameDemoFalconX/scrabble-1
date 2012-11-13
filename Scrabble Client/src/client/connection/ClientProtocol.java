@@ -19,7 +19,7 @@ public class ClientProtocol extends Protocol {
 				this.IPaddress = IPaddress;
 				this.port = port;
 		}
-		
+
 		private Process TCPConnection() {
 				try {
 						socket = new Socket(IPaddress, port);

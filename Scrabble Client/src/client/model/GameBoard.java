@@ -28,7 +28,7 @@ public class GameBoard {
 		}
     
 		public Player newPlayer(String name, String password) throws GameBoardException {
-				Process cProcess = new Process("PLAYER", "NEW", "START");
+				Process cProcess = new Process("PLAYER", "NEW", "START"); // Create a new process for this specific task.
 				String args = "name:"+name+"_password:"+password;
 				Message serverResponse = gbProtocol.sendRequest(new Message(cProcess, args));
 				
