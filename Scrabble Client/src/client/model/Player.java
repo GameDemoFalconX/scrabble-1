@@ -15,7 +15,8 @@ class Player {
     
     public Player(String args) {
         String [] argsTab = args.split("_");
-        this(argsTab[1], argsTab[2]);
+        this.playerName = argsTab[1];
+        this.playerPassword = argsTab[2];
         playerID = Integer.parseInt(argsTab[0]); 
     }
     

@@ -12,12 +12,8 @@ public class GameBoardException extends Exception {
     public GameBoardException(Process errProcess) {
         this.errProcess = errProcess;
     }
-
-    public  getErreur() {
-        return err;
-    }
     
-    public enum typeErreur {CONN_KO,CLIENT_EXISTE, CLIENT_EXISTE_PAS, SOLDE_INSUFFISANT, MONTANT_NEGATIF,AUTRE};
-    private typeErreur err;
-}
+    public Process getError() {
+        return this.errProcess;
+    }  
 }

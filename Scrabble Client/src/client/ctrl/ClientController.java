@@ -70,7 +70,7 @@ public class ClientController {
                 break;
             default:
                 view.display("Bad choice");
-                view.initialMenu();
+                //view.initialMenu();
                 break;
         }
     }
@@ -81,6 +81,19 @@ public class ClientController {
     }
 
     private void processException(GameBoardException gbe) {
+        Process eProcess = gbe.getError();
+        switch(eProcess.getObject()) {
+            case "PLAYER":
+                switch(eProcess.getTask()) {
+                    case "NEW":
+                        switch(eProcess.getStatus()) {
+                            case "SUCCESS":
+                                view.display("Your account have been created.");
+                                view.initMenu();
+                                break;
+                        }
+                }
+        }
         throw new UnsupportedOperationException("Not yet implemented");
 //        TODO processException method body (Bernard)
     }

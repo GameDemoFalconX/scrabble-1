@@ -31,7 +31,7 @@ public class GameBoard {
         gameBoardID = newGameBoardID();
     }
     
-    public void newPlayer(String name, String password) {
+    public void newPlayer(String name, String password) throws GameBoardException {
         Process cProcess = new Process("PLAYER", "NEW", "START");
         
         // Create new hashMap which contains current args
@@ -46,7 +46,7 @@ public class GameBoard {
         if (cProcess.getObject() == "PLAYER" && cProcess.getTask() == "NEW" && cProcess.getStatus() == "SUCCESS") {
             player = new Player(args);
         } else {
-            
+            throw new GameBoardException(cProcess);
         }
     }
     
