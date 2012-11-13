@@ -1,7 +1,8 @@
 package client.ctrl;
 
-import client.view.View;
 import client.model.GameBoard;
+import client.view.View;
+import common.GameBoardException;
 
 /**
  *
@@ -13,6 +14,8 @@ public class ClientController {
     private GameBoard gameBoard;
     private static String IPaddress = "localhost";
     private static int port = 8189;
+    
+    private boolean debug = true;
     
 
     /**
@@ -44,25 +47,39 @@ public class ClientController {
     public void initialChoice(Integer choice) {
         switch (choice) {
             case 1:
-                //clientBanque();
+                String name = view.askName();
+                try {
+                    gameBoard.newPlayer(name);
+                    if (debug) {
+                        view.display(name + ", you're successfully registered.");
+                    } else {
+//                        TODO GUI 
+                    }
+//                  TODO player menu  
+                } catch (GameBoardException gbe) {
+                    processException(gbe);
+                }
                 break;
             case 2:
-                /*String nomClient = vue.demNom();
-                try {
-                    gab.ouvrirCompte(nomClient);
-                    vue.aff("Bienvenue dans notre banque " + nomClient);
-                    vue.menuClient();
-                } catch (ExceptionBanque e) {
-                    traiter_exception(e);
-                }*/
+//                TODO new method for registered player (witch'll do a view.askName()... (Bernard)
                 break;
             case 3:
                 view.display("See you next time !");
                 break;
             default:
-                //vue.aff("Mauvais choix");
-                //vue.menuInitial();
+                view.display("Bad choice");
+                view.initialMenu();
                 break;
         }
+    }
+
+    private void newPlayer() {
+        gameBoard.setPlayerName(view.askName());
+        
+    }
+
+    private void processException(GameBoardException gbe) {
+        throw new UnsupportedOperationException("Not yet implemented");
+//        TODO processException method body (Bernard)
     }
 }

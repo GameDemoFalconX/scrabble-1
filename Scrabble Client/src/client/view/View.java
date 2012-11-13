@@ -15,16 +15,20 @@ public class View {
     }
     
     public void initialMenu() {
+        System.out.println("#####################################");
+        System.out.println("#             SCRABBLE              #");
         System.out.println("#####################################\n");
-        System.out.println("#                               SCRABBLE                              #\n");
-        System.out.println("#####################################\n");
-        System.out.println("\n1: New game\n");
-        System.out.println("2 Load game");
-        System.out.println("3 Exit\n");
+        System.out.println("1: New player");
+        System.out.println("2: Load game");
+        System.out.println("3: Exit\n");
         ctrl.initialChoice(Console.readInt("Your choice ?  "));
     }
     
     public void display(String msg) {
         System.out.println(msg);
+    }
+
+    public String askName() {
+        return (Console.readLine("What's your name ? "));
     }
 }

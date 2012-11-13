@@ -32,12 +32,12 @@ public class ThreadCtrl extends Thread {
            outputPrint("Protocol problem");
            return;
         }
-        // TODO switch
+        // TODO switch (Bernard)
     }
     
-    private void processError(Exception e) {
+    private void processError(Exception e) { // TODO rename into processException (Bernard)
         Message answer = null;
-        // TODO based on the created exception
+        // TODO based on the created exception (Bernard)
     }
     
     private void clientDeconnection() {
