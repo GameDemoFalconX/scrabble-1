@@ -6,53 +6,48 @@ package common;
  */
 public class Message {
     
-    private Process cProcess;
-    private Token cToken;
-    private String args;
-    private String content;
+		private Process cProcess;
+		private Token cToken;
+		private String args;
+		private String content;
+		
+		public Message(Process p, String args) {
+				this.cProcess = p;
+				this.args = args;
+				formatMessage();
+		}
     
-   // Add here message by considering the model : gameboard
+		public Message(Process p, Token t, String args) {
+				this.cProcess = p;
+				this.cToken = t;
+				this.args = args;
+				formatMessage();
+		}
     
-    public Message(Process p, String args) {
-        this.cProcess = p;
-        this.args = args;
-        formatMessage();
-    }
+		public Process getProcess() {
+				return cProcess;
+		}
     
-    public Message(Process p, Token t, String args) {
-        //String[] str = new String[2];
-        //str = msg.split(":");
-        this.cProcess = p;
-        this.cToken = t;
-        this.args = args;
-        formatMessage();
-    }
+		public Token getToken() {
+				return cToken;
+		}
     
-    public Process getProcess() {
-        return cProcess;
-    }
+		public String getArgs() {
+				return args;
+		}
     
-    public Token getToken() {
-        return cToken;
-    }
+		@Override
+		public String toString() {
+				return content;
+		}
     
-    public String getArgs() {
-        return args;
-    }
-    
-    @Override
-    public String toString() {
-        return content;
-    }
-    
-    private void formatMessage() {
-        String t;
-        if (this.cToken != null) {
-          t = cToken.formatToken();  
-        } else {
-            t = "0";
-        }
-        content = cProcess.formatProcess()+"#"+t+"#"+args;
-    }
-    
+		private void formatMessage() {
+				String t;
+				if (this.cToken != null) {
+						t = cToken.formatToken();  
+				} else {
+						t = "0";
+				}
+				content = cProcess.formatProcess()+"#"+t+"#"+args;
+		}
 }

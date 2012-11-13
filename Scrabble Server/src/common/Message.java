@@ -6,23 +6,48 @@ package common;
  */
 public class Message {
     
-    private Process cProcess;
+		private Process cProcess;
+		private Token cToken;
+		private String args;
+		private String content;
+		
+		public Message(Process p, String args) {
+				this.cProcess = p;
+				this.args = args;
+				formatMessage();
+		}
     
-    // ----------------------
-    private Integer code = 0;
-    private String name = "";
-    private String paquet = "";
-    private int score = 0;
+		public Message(Process p, Token t, String args) {
+				this.cProcess = p;
+				this.cToken = t;
+				this.args = args;
+				formatMessage();
+		}
     
-    public static final int M_OK = 1; //OK No problem
-    public static final int M_KO = 2; //KO unknown reason
-
-    public Message(int M_OK, String clientName, int i) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public String getName() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+		public Process getProcess() {
+				return cProcess;
+		}
     
+		public Token getToken() {
+				return cToken;
+		}
+    
+		public String getArgs() {
+				return args;
+		}
+    
+		@Override
+		public String toString() {
+				return content;
+		}
+    
+		private void formatMessage() {
+				String t;
+				if (this.cToken != null) {
+						t = cToken.formatToken();  
+				} else {
+						t = "0";
+				}
+				content = cProcess.formatProcess()+"#"+t+"#"+args;
+		}
 }

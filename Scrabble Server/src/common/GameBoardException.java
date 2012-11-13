@@ -1,9 +1,20 @@
 package common;
 
+import common.Process;
+
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class GameBoardException extends Exception {
-//    TODO the whole class (Bernard)
+		
+		private Process errProcess;
+		
+		public GameBoardException(Process errProcess) {
+				this.errProcess = errProcess;
+		}
+		
+		public Process getError() {
+				return this.errProcess;
+		}  
 }

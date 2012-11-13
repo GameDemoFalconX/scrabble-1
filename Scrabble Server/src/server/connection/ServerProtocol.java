@@ -3,6 +3,7 @@ package server.connection;
 import common.Message;
 import common.Protocol;
 import common.Process;
+import common.Token;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,58 +12,60 @@ import java.net.Socket;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class ServerProtocol extends Protocol {
+		
+		public ServerProtocol(Socket s) throws IOException {
+				socket = s;
+				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				out = new PrintWriter(socket.getOutputStream(), true);
+		}
+		
+		private Process connectionServerScrabble() {
+				try {
+						Process request = new Process(in.readLine());
+						if (request.getObject().equals("CLIENT")  && request.getTask().equals("CONNECT") && request.getStatus().equals("START")) {
+								request.setStatus("SUCCESS");
+								write(request.formatProcess());
+								return request;
+						} else {
+								request.setStatus("WARNING");
+								return request;
+						}
+				} catch (Exception e) {
+						return new Process("CLIENT", "CONNECT", "ERROR");
+				}
+		}
+		
+		private Message waitRequest() {
+				Message response = null;
+				try {
+						String [] requestSend = in.readLine().split("#");
+						Process serverResponse = new Process(requestSend[0]);
+						serverResponse.setStatus("IN_PROGRESS");
+						if (requestSend.length > 2) {
+								response = new Message(serverResponse, new Token(requestSend[1]), requestSend[2]);
+						} else {
+								response = new Message(serverResponse, requestSend[1]);
+						}
+						write(serverResponse.formatProcess());
+						return response;
+				} catch (Exception e) {
+						return null;
+				}
+		}
 
-    public ServerProtocol(Socket s) throws IOException {
-        socket = s;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
-    }
-    
-     private String connectionServerScrabble() {
-        try {
-            Process request = new Process(in.readLine());
-            if (request.getStatus() == "START") {
-                request.setStatus("SUCCESS");
-                write(request.formatProcess());
-                return "SUCCESS";
-            } else {
-                return "WARNING";
-            }
-        } catch (Exception e) {
-            return "ERROR";
-        }
-    }
-     
-    private Message waitRequest() {
-        try {
-            Message request = null;
-            String [] requestSend = in.readLine().split("#");
-            if (requestSend.length > 2) {
-               // serverResponse = new Message(new Process(response[0]), new Token(response[1]), response[2]);
-            } else {
-                //serverResponse = new Message(new Process(response[0]), response[1]);
-            }
-            write("ACK");
-            return request;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+		public Message waitClientRequest() throws UnsupportedOperationException {
+				Message request = null;
+				Process clientRequest = connectionServerScrabble();
+				if (clientRequest.getObject().equals("CLIENT") && clientRequest.getTask().equals("CONNECT") && clientRequest.getStatus().equals("SUCCESS")) {
+						request = waitRequest();
+				}
+				return new Message(clientRequest, "");
+		}
 
-    public Message wait_message() throws UnsupportedOperationException {
-        Message request = null;
-        if (connectionServerScrabble() == "SUCCESS") {
-            request = waitRequest();
-        }
-        return request;
-       // throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public void respond(Message answer) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
+		public void SendResponse(Message answer) {
+				throw new UnsupportedOperationException("Not yet implemented");
+		}
 }
