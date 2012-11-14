@@ -3,7 +3,6 @@ package client.model;
 import client.connection.ClientProtocol;
 import common.GameBoardException;
 import common.Message;
-import common.Process;
 
 /**
  *
@@ -28,18 +27,12 @@ public class GameBoard {
 		}
     
 		public Player newPlayer(String name, String password) throws GameBoardException {
-				Process cProcess = new Process("PLAYER", "NEW", "START"); // Create a new process for this specific task.
 				String args = "name:"+name+"_password:"+password;
-				Message serverResponse = gbProtocol.sendRequest(new Message(cProcess, args));
+				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
 				
 				// Handle response
-				cProcess  = serverResponse.getProcess();
 				args = serverResponse.getArgs();
-				if (cProcess.getObject() == "PLAYER" && cProcess.getTask() == "NEW" && cProcess.getStatus() == "SUCCESS") {
-						return new Player(args);
-				} else {
-						throw new GameBoardException(cProcess);
-				}
+				// Treatment
 		}
 
 		private int newGameBoardID() {

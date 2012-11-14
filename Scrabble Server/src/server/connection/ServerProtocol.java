@@ -2,8 +2,6 @@ package server.connection;
 
 import common.Message;
 import common.Protocol;
-import common.Process;
-import common.Token;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,62 +20,50 @@ public class ServerProtocol extends Protocol {
 				out = new PrintWriter(socket.getOutputStream(), true);
 		}
 		
-		private Process connectionServerScrabble() {
+		private int connectionServerScrabble() {
 				try {
-						Process request = new Process(in.readLine());
-						if (request.getObject().equals("CLIENT")  && request.getTask().equals("CONNECT") && request.getStatus().equals("START")) {
-								request.setStatus("SUCCESS");
-								write(request.formatProcess());
-								return request;
+						String connect = in.readLine();
+						if (connect.equals("RQST")) {
+								write("ACK");
+								return CONN_ACK;
 						} else {
-								request.setStatus("WARNING");
-								return request;
+								return CONN_NOT_SERVER;
 						}
 				} catch (Exception e) {
-						return new Process("CLIENT", "CONNECT", "ERROR");
+						return CONN_KO;
 				}
 		}
 		
 		private Message waitRequest() {
-				Message response = null;
+				Message request = null;
 				try {
-						String [] requestSend = in.readLine().split("#");
-						Process serverResponse = new Process(requestSend[0]);
-						serverResponse.setStatus("IN_PROGRESS");
-						if (requestSend.length > 2) {
-								response = new Message(serverResponse, new Token(requestSend[1]), requestSend[2]);
-						} else {
-								response = new Message(serverResponse, requestSend[1]);
-						}
-						write(serverResponse.formatProcess());
-						return response;
+						request = new Message(in.readLine());
+						write("ACK");
+						return request;
 				} catch (Exception e) {
-						return null;
+						return request;
 				}
 		}
 
 		public Message waitClientRequest() throws UnsupportedOperationException {
 				Message request = null;
-				Process clientRequest = connectionServerScrabble();
-				if (clientRequest.getObject().equals("CLIENT") && clientRequest.getTask().equals("CONNECT") && clientRequest.getStatus().equals("SUCCESS")) {
+				if (connectionServerScrabble() == CONN_ACK) {
 						request = waitRequest();
 				}
-				return new Message(clientRequest, "");
+				return request;
 		}
 
-		public Process SendResponse(Message answer) {
+		public int SendResponse(Message answer) {
 				//throw new UnsupportedOperationException("Not yet implemented");
 				write(answer);
 				try {
-						Process clientConfirmation = new Process(in.readLine());
-						 if (clientConfirmation.getStatus().equals("SUCCESS")) {
-								return clientConfirmation;
+						 if (in.readLine().equals("ACK")) {
+								return Message.SYSOK;
 						} else {
-								clientConfirmation.setStatus("WARNING");
-								return clientConfirmation;
+								return Message.SYSKO;
 						}
 				} catch (Exception e) {
-						return new Process("CLIENT", "TREATMENT", "ERROR");
+						return CONN_KO;
 				}
 		}
 }
