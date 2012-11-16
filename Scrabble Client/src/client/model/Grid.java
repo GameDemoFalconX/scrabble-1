@@ -1,7 +1,5 @@
 package client.model;
 
-import java.awt.Point;
-
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>
@@ -28,4 +26,5 @@ class Grid {
         return gridID;
     }
     
+				
 }

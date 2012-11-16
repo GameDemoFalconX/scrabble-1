@@ -1,7 +1,5 @@
 package client.model;
 
-import java.awt.Point;
-
 /**
  * 
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>

@@ -1,8 +1,6 @@
 package client.model;
 
 import client.connection.ClientProtocol;
-import common.GameBoardException;
-import java.util.ArrayList;
 
 /**
  *
