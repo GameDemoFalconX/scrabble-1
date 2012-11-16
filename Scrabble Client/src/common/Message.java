@@ -6,9 +6,9 @@ package common;
  */
 public class Message {
     
-		private int header;
-		private int size;
-		private String args;
+		private Integer header;
+		private Integer size;
+		private String body;
 		
 		// Server answers
 		public static final int SYSOK = 1; // All is OK
@@ -25,10 +25,10 @@ public class Message {
 		public static final int LOADGAME = 40; // Load game
 		public static final int  LOGOUT = 50;  // Logout
 
-		public Message(Integer header, int size, String args) {
+		public Message(Integer header, int size, String body) {
 				this.header = header;
 				this.size = size;
-				this.args = args;
+				this.body = body;
 		}
 		
 		public Message(String args) {
@@ -36,7 +36,7 @@ public class Message {
 				argsTab = args.split("#");
 				this.header = Integer.parseInt(argsTab[0]);
 				this.size = Integer.parseInt(argsTab[1]);
-				this.args = argsTab[2];
+				this.body = argsTab[2];
 		}
     
 		public int getHeader() {
@@ -47,12 +47,12 @@ public class Message {
 				return size;
 		}
     
-		public String getArgs() {
-				return args;
+		public String getBody() {
+				return body;
 		}
     
 		@Override
 		public String toString() {
-				return args;
+				return header.toString()+"#"+size.toString()+"#"+body;
 		}
 }
