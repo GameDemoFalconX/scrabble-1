@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.properties
 *.st
 *.rs
@@ -6,3 +7,9 @@
 
 *.un~
 *.swp
+=======
+*.properties
+*.un~
+*.swp
+/Scrabble Client/build/
+>>>>>>> develop-bernard
