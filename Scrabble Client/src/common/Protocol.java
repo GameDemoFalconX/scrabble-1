@@ -1,7 +1,8 @@
 package common;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 /**
@@ -11,8 +12,8 @@ import java.net.Socket;
 public abstract class Protocol {
     
 		protected Socket socket;
-		protected BufferedReader in;
-		protected PrintWriter out;
+		protected DataInputStream in;
+		protected DataOutputStream out;
 		protected Message receivedMessage = null;
 		protected String IPaddress;
 		protected int port;
@@ -24,13 +25,21 @@ public abstract class Protocol {
 		public static final int CONN_NOT_SERVER = 402; // TODO Change the BANK name
 		public static final int CONN_NOT_INIT = 500;
 		
-		protected void write(String s) {
-				out.println(s);
-				out.flush();
+		protected void writeInt(int num) {
+				try {
+						out.writeInt(num);
+						out.flush();
+				} catch (IOException e) {
+						// catch error : if an I/O error occurs.
+				}
 		}
 		
-		protected void write(Message m) {
-				out.println(m.toString());
-				out.flush();
+		protected void write(String s) {
+				try {
+						out.write(s.getBytes());
+						out.flush();
+				} catch (IOException e) {
+						// catch error : if an I/O error occurs.
+				}
 		}
 }
