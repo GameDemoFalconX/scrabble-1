@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-*.properties
-*.st
-*.rs
-*.spd
-*.netbeans_automatic_build
-
-*.un~
-*.swp
-=======
 *.properties
 *.un~
 *.swp
-/Scrabble Client/build/
->>>>>>> develop-bernard
