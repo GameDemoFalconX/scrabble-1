@@ -32,7 +32,11 @@ public class ThreadCtrl extends Thread {
 						outputPrint("Protocol problem");
 						return;
 				}
-				// TODO switch (Bernard)
+				switch(request.getHeader()) {
+						case Message.NEWACC:
+								newAccount();
+								break;
+				}
 		}
 		
 		private void processError(Exception e) { // TODO rename into processException (Bernard)
@@ -53,6 +57,20 @@ public class ThreadCtrl extends Thread {
 				}
 		}
 		*/
+		
+		private void newAccount() {
+				String [] argsTab = new String(request.getBody()).split("_");
+				String name = argsTab[0];
+				String pwd = argsTab[1];
+				aff(nomClient + " s'inscrit");
+				try {
+						banque.ouvrirCompte(nomClient);
+						Message reponse = new Message(Message.M_OK, nomClient, 0);
+						proto.respond(reponse);
+				} catch (ExceptionBanque e) {
+						traiter_err(e);
+				}
+		}
 		
 		private void outputPrint(String msg) {
 				System.out.println("SERVER : " + msg);

@@ -38,18 +38,18 @@ public class TileBag {
     /**
      * get a Tile object from the TileBag
      * @return a Tile object
-     */    
+     */
+				/*
     public Tile getTileFromBag() {
         int value = random.nextInt(tileBag.length - 1); 
         while (tileBag[value].isEmpty()) {
             value = random.nextInt(tileBag.length - 1); 
         }
-        char letter;
         int rand = random.nextInt(tileBag[value].size());
-        letter = (char)tileBag[value].get(rand);
+        char letter = tileBag[value].get(rand);
         tileBag[value].remove(rand);
         Tile tile = new Tile(letter,value);
         return tile;
-    }
+    }*/
     
 }

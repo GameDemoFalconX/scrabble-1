@@ -12,7 +12,7 @@ public class PlayerRAM {
     private static Map<Integer, String> playerRAM;
     
     public PlayerRAM() {
-        playerRAM = new HashMap<>();
+        //playerRAM = new HashMap<>();
     }
     
     public PlayerRAM(boolean file) {
