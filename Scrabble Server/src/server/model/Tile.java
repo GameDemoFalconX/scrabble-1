@@ -5,15 +5,21 @@ package server.model;
  * @author Bernard <bernard.debecker@gmail.com>
  */
 public class Tile {
-    
-    private final char letter;
-    private final int value;
-    
-    public Tile(char letter, int value) {
-        this.letter = letter;
-        this.value = value;
-    }
-    
-    
-    
+
+		public final char letter;
+		public final int value;
+
+		public Tile(char letter, int value) {
+				this.letter = letter;
+				this.value = value;
+		}
+
+		/**
+		* Used only for debugging purpose
+		*/
+		@Override
+		public String toString() {
+				return "Letter : " + letter + ", value: " + value;
+		}
+
 }
