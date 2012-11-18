@@ -8,7 +8,7 @@ public class Message {
     
 		private Integer header;
 		private Integer size;
-		private String body;
+		private byte [] body;
 		
 		// Server answers
 		public static final int SYSOK = 1; // All is OK
@@ -25,9 +25,15 @@ public class Message {
 		public static final int LOADGAME = 40; // Load game
 		public static final int  LOGOUT = 50;  // Logout
 
-		public Message(Integer header, int size, String body) {
+		public Message(Integer header, String body) {
 				this.header = header;
-				this.size = size;
+				this.body = body.getBytes();
+				this.size = this.body.length;
+		}
+		
+		public Message(Integer header, Integer length, byte [] body) {
+				this.header = header;
+				this.size = length;
 				this.body = body;
 		}
 		
@@ -35,8 +41,8 @@ public class Message {
 				String [] argsTab = new String[2];
 				argsTab = args.split("#");
 				this.header = Integer.parseInt(argsTab[0]);
-				this.size = Integer.parseInt(argsTab[1]);
-				this.body = argsTab[2];
+				this.body = argsTab[1].getBytes();
+				this.size = this.body.length;
 		}
     
 		public int getHeader() {
@@ -47,12 +53,12 @@ public class Message {
 				return size;
 		}
     
-		public String getBody() {
+		public byte [] getBody() {
 				return body;
 		}
     
 		@Override
 		public String toString() {
-				return header.toString()+"#"+size.toString()+"#"+body;
+				return header.toString()+"&"+size.toString()+"&"+body;
 		}
 }

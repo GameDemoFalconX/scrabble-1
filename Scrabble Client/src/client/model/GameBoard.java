@@ -31,7 +31,7 @@ public class GameBoard {
 				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
 				
 				// Handle response
-				args = serverResponse.getArgs();
+				//args = serverResponse.getArgs();
 				// Treatment
 		}
 

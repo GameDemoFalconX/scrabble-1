@@ -2,10 +2,9 @@ package server.connection;
 
 import common.Message;
 import common.Protocol;
-import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -16,20 +15,19 @@ public class ServerProtocol extends Protocol {
 		
 		public ServerProtocol(Socket s) throws IOException {
 				socket = s;
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				out = new PrintWriter(socket.getOutputStream(), true);
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
 		}
 		
 		private int connectionServerScrabble() {
 				try {
-						String connect = in.readLine();
-						if (connect.equals("RQST")) {
-								write("ACK");
+						if (in.readInt() == RQST) {
+								writeInt(ACK);
 								return CONN_ACK;
 						} else {
 								return CONN_NOT_SERVER;
 						}
-				} catch (Exception e) {
+				} catch (IOException e) {
 						return CONN_KO;
 				}
 		}
@@ -37,10 +35,18 @@ public class ServerProtocol extends Protocol {
 		private Message waitRequest() {
 				Message request = null;
 				try {
-						request = new Message(in.readLine());
-						write("ACK");
+						int header = in.readInt();
+						int length = in.readInt();
+						
+						int downloadedCount = 0;
+						byte [] body = new byte[length];
+						while (downloadedCount < length){
+								downloadedCount += in.read(body, downloadedCount, length-downloadedCount);
+						}
+						request = new Message(header, length, body);
+						out.writeInt(ACK);
 						return request;
-				} catch (Exception e) {
+				} catch (IOException e) {
 						return request;
 				}
 		}
@@ -55,14 +61,16 @@ public class ServerProtocol extends Protocol {
 
 		public int SendResponse(Message answer) {
 				//throw new UnsupportedOperationException("Not yet implemented");
-				write(answer);
 				try {
-						 if (in.readLine().equals("ACK")) {
+						out.writeInt(answer.getHeader());
+						out.writeInt(answer.getSize());
+						out.write(answer.getBody());
+						 if (in.readInt() == ACK) {
 								return Message.SYSOK;
 						} else {
 								return Message.SYSKO;
 						}
-				} catch (Exception e) {
+				} catch (IOException e) {
 						return CONN_KO;
 				}
 		}

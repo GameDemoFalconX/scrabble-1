@@ -30,11 +30,11 @@ public class ClientProtocol extends Protocol {
 		
 		private int  connectionScrabbleServer() {
 				try {
-						write("RQST");
-						if (in.readLine().equals("ACK")) {
+						out.writeInt(RQST);
+						if (in.readInt() == ACK) {
 								return CONN_ACK;
 						}  // throws errors in other cases whether they exist?
-				} catch (IOException ex) {
+				} catch (IOException e) {
 						return CONN_NOT_SERVER;
 				}
 				return CONN_KO;
@@ -45,7 +45,10 @@ public class ClientProtocol extends Protocol {
 				if (TCPConnection() == CONN_OK) {
 						int connect = connectionScrabbleServer();
 						if (connect == CONN_ACK) {
-								int treatment = sendServerRequest(new Message(header, 0, String.valueOf(token)+"#"+args));
+								if (token != 0) {
+										args = String.valueOf(token)+"@"+args;
+								}
+								int treatment = sendServerRequest(new Message(header, args));
 								if (treatment == CONN_ACK){
 										serverResponse = serverResponse();
 								}
@@ -57,9 +60,11 @@ public class ClientProtocol extends Protocol {
 		}
 		
 		private int sendServerRequest (Message request) {
-				write(request.toString());
 				try {
-						if (in.readLine().equals("ACK")) {
+						out.writeInt(request.getHeader()); // Write header
+						out.writeInt(request.getSize()); // Write length of body
+						out.write(request.getBody()); // Write body
+						if (in.readInt() == ACK) {
 								return CONN_ACK;
 						} else {
 								return CONN_NOT_SERVER;
@@ -71,10 +76,18 @@ public class ClientProtocol extends Protocol {
 		
 		private Message serverResponse() {
 				try {
-						Message serverResponse = new Message(in.readLine());
-						write("ACK");
+						int header = in.readInt();
+						int length = in.readInt();
+						
+						int downloadedCount = 0;
+						byte [] body = new byte[length];
+						while (downloadedCount < length){
+								downloadedCount += in.read(body, downloadedCount, length-downloadedCount);
+						}
+						Message serverResponse = new Message(header, length, body);
+						writeInt(ACK);
 						return serverResponse;
-				} catch (Exception e) {
+				} catch (IOException e) {
 						return null;
 				}
 		}
