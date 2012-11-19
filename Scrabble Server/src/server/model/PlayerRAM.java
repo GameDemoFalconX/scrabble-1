@@ -60,7 +60,7 @@ public class PlayerRAM {
 								XMLOutputter xmlOutput = new XMLOutputter();
  
 								xmlOutput.setFormat(Format.getPrettyFormat());
-								xmlOutput.output(doc, new FileWriter("players.xml"));
+								xmlOutput.output(doc, new FileWriter(playerFile));
  
 								System.out.println("File Created!");
 						} catch (IOException e) {

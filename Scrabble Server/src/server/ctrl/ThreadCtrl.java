@@ -39,9 +39,14 @@ public class ThreadCtrl extends Thread {
 				}
 		}
 		
-		private void processError(Exception e) { // TODO rename into processException (Bernard)
+		private void processError(GameBoardException e) { 
 				Message answer = null;
-				// TODO based on the created exception (Bernard)
+				switch(e.getError()) {
+						case PLAYEXISTS:
+								answer = new Message(Message.PLAYEXISTS, "");
+								break;
+				}
+				sProto.sendResponse(answer);
 		}
 		
 		/*
@@ -68,7 +73,7 @@ public class ThreadCtrl extends Thread {
 						game.newAccount(name, pwd);
 						
 						// Return a message with successful status and only player UUID
-						Message response = new Message(Message.SYSOK, game.getLastPlayerAdded());
+						Message response = new Message(Message.PLANEW, game.getLastPlayerAdded());
 						sProto.sendResponse(response);
 				} catch (GameBoardException e) {
 						processError(e);

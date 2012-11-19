@@ -32,17 +32,26 @@ public class GameBoard {
 				try {
 						password = hashPassword(password);
 				} catch (Exception e) {
-						// Throw exception
+						// Throw an exception if the hash function return an error.
+						throw new GameBoardException(GameBoardException.typeErr.PWDKO);
 				}
 				String args = name+"_"+password;
 				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
 				
 				// Handle response
 				if (serverResponse != null) {
-						// Return the new instance of the current player
-						return new Player(name, password, new String(serverResponse.getBody()));
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+								case Message.PLANEW:
+								// Return the new instance of the current player
+								return new Player(name, password, new String(serverResponse.getBody()));
+						}
+				} else {
+						throw new GameBoardException(GameBoardException.typeErr.CONN_KO);
 				}
-				return null;
+				return null; // To update
 		}
 		
 		private String hashPassword(String password) throws Exception {

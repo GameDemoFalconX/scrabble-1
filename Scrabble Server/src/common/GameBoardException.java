@@ -6,14 +6,14 @@ package common;
  */
 public class GameBoardException extends Exception {
 		
-		public enum typeErr {CONN_KO,PLAYEXISTS};
+		public enum typeErr {CONN_KO,PLAYEXISTS, PWDKO, SYSKO};
 		private typeErr err;
 		
 		public GameBoardException(typeErr err) {
 				this.err = err;
 		}
 		
-		public typeErr getErreur() {
+		public typeErr getError() {
 				return err;
 		}
 }

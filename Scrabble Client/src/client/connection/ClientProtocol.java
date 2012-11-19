@@ -44,14 +44,25 @@ public class ClientProtocol extends Protocol {
 				Message serverResponse = null;
 				if (TCPConnection() == CONN_OK) {
 						int connect = connectionScrabbleServer();
-						if (connect == CONN_ACK) {
-								if (token != 0) {
-										args = String.valueOf(token)+"@"+args;
-								}
-								int treatment = sendServerRequest(new Message(header, args));
-								if (treatment == CONN_ACK){
-										serverResponse = serverResponse();
-								}
+						switch(connect) {
+								case CONN_ACK:
+										if (token != 0) {
+												// Add token to the message body
+												args = String.valueOf(token)+"@"+args;
+										}
+										int treatment = sendServerRequest(new Message(header, args));
+										switch (treatment) {
+												case CONN_ACK:
+														serverResponse = serverResponse();
+														break;
+												case CONN_NOT_SERVER:
+														serverResponse =  new Message(Message.SYSKO, "");
+														break;
+										}
+										break;
+								case CONN_NOT_SERVER:
+										serverResponse =  new Message(Message.SYSKO, "");
+										break;
 						}
 						if (connect != CONN_KO)
 								deconnectionTCP();

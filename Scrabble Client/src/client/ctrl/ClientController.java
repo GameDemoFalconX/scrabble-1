@@ -52,9 +52,10 @@ public class ClientController {
 								String password = view.askPassword();
 								try {
 										player = gameBoard.newPlayer(name, password);
-										if (player == null) throw new GameBoardException(GameBoardException.typeErr.PLAYEXISTS);
+										//if (player == null) throw new GameBoardException(GameBoardException.typeErr.PLAYEXISTS);
 										if (debug) {
 												view.display(name + ", you're successfully registered.");
+												view.initMenu();
 										} else {
 												// TODO GUI 
 										}
