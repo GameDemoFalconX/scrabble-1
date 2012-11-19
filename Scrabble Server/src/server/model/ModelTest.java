@@ -1,15 +1,16 @@
 package server.model;
 
 /**
- *
- * @author Bernard <bernard.debecker@gmail.com>
- */
+	*
+	* @author Bernard <bernard.debecker@gmail.com>
+	*/
 public class ModelTest {
-		
+
 		public static void main(String[] args) {
-				testTileBag();
+//				testTileBag();
+				
 		}
-		
+
 		private static void testTileBag() {
 				int number = 102;
 				TileBag bag = new TileBag();
@@ -19,6 +20,5 @@ public class ModelTest {
 						number--;
 				}
 		}
-		
+
 }
- 

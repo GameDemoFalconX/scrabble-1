@@ -28,7 +28,19 @@ class Grid {
 
 		@Override
 		public String toString() {
-				return "GRID";// TODO Grid to String
+				String prtGrid = "";
+				for (int x = 0; x <= 14 ; x++) {
+						if (x < 10) {
+								prtGrid += "Line 0" + x + ": ";
+						} else {
+								prtGrid += "Line " + x + ": ";
+						}
+						for (int y = 0; y <= 14; y++) {
+								prtGrid += grid[x][y] + " ";
+						}
+						prtGrid += "\n";
+				}
+				return prtGrid;
 		}
 		
 }

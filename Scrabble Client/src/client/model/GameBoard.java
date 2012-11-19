@@ -13,7 +13,7 @@ public class GameBoard {
 		private Rack rack;
 		private ClientProtocol gbProtocol;
 
-		private GameBoard() {
+		public GameBoard() { //to be changed as private
 				gameBoardID = newGameBoardID();
 				grid = new Grid(gameBoardID);
 				rack = new Rack(gameBoardID);
@@ -23,6 +23,12 @@ public class GameBoard {
 				this();
 				gbProtocol = new ClientProtocol(IPaddress, port);
 		}
+		
+		public int getGameBoardID() {
+				return this.gameBoardID;
+		}
+		
+		
 
 		private int newGameBoardID() {
 		//        TODO ask the server a new ID (Bernard)
@@ -31,10 +37,23 @@ public class GameBoard {
 
 		@Override
 		public String toString() {
-				return "Grid : " + grid + ", rack : " + rack;
+				return "GameBoardID : " + gameBoardID + "\nGrid \n" + grid + "\nRack : " + rack;
 		}
 
-
+		/**
+			* Used only for debugging purpose
+			*/
+		public void loadRack() {
+				rack.loadTestRack(gameBoardID);
+		}
+		
+		/**
+		 * Used only for debugging purpose
+		 * @return the rack
+		 */
+		public Rack getRack() {
+				return this.rack;
+		}
 
 
     

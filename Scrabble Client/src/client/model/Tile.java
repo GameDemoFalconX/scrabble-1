@@ -5,6 +5,7 @@ package client.model;
 * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
 */
 public class Tile {
+		
 		private final char letter;
 		private final int value;
 
@@ -26,7 +27,7 @@ public class Tile {
 		*/
 		@Override
 		public String toString() {
-				return "Letter : " + letter + ", value: " + value;
+				return  "[" + letter + value + "]";
 		}
 
 }
