@@ -3,6 +3,7 @@ package client.model;
 import client.connection.ClientProtocol;
 import common.GameBoardException;
 import common.Message;
+import java.security.MessageDigest;
 
 /**
  *
@@ -27,7 +28,13 @@ public class GameBoard {
 		}
     
 		public Player newPlayer(String name, String password) throws GameBoardException {
-				String args = name+"_"+password; // Hash password before to send it
+				// Hash password before to send it
+				try {
+						password = hashPassword(password);
+				} catch (Exception e) {
+						// Throw exception
+				}
+				String args = name+"_"+password;
 				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
 				
 				// Handle response
@@ -36,6 +43,19 @@ public class GameBoard {
 						return new Player(name, password, new String(serverResponse.getBody()));
 				}
 				return null;
+		}
+		
+		private String hashPassword(String password) throws Exception {
+				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				md.update(password.getBytes());
+				byte byteData[] = md.digest();
+						
+				// Return the hexadecimal Hash password value under String form
+				StringBuffer sb = new StringBuffer();
+				for (int i = 0; i < byteData.length; i++) {
+						sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+				}
+				return sb.toString();
 		}
 
 		private int newGameBoardID() {
