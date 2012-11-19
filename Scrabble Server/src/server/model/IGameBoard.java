@@ -1,13 +1,12 @@
 package server.model;
 
+import common.GameBoardException;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
-public class IGameBoard {
-
-    public void deconnection(String clientName) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
+public interface IGameBoard {
+		void newAccount(Player pl) throws GameBoardException;
+		void deconnection(String clientName) throws GameBoardException;
 }

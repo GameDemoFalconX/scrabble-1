@@ -13,9 +13,9 @@ public class Message {
 		// Server answers
 		public static final int SYSOK = 1; // All is OK
 		public static final int SYSKO = 2; // Err sys KO
-		public static final int PYREX = 3; // Player exists
+		public static final int PLAYEXISTS = 3; // Player exists
 		public static final int PWDKO = 4; // Password KO
-		public static final int PYRNW = 5; // New player account created
+		public static final int PLANEW = 5; // New player account created
 		// Add other answers + game codes
 		
 		// Tasks codes
