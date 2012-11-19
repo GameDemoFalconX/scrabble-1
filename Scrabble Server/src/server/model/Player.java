@@ -19,6 +19,12 @@ public class Player {
 				playerID = UUID.randomUUID();
 		}
 		
+		public Player(String name, String pwd, String uuid) {
+				playerName = name;
+				playerPassword = pwd;
+				playerID = UUID.fromString(uuid);
+		}
+		
 		public String getPlayerName() {
 				return playerName;
 		}
