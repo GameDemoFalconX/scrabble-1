@@ -12,13 +12,13 @@ import server.model.IGameBoard;
  */
 public class ThreadCtrl extends Thread {
 		
-		private IGameBoard gameBoard;
+		private IGameBoard game;
 		private ServerProtocol sProto;
 		Message request;
 		
 		public ThreadCtrl(ServerProtocol sp) {
 				sProto = sp;
-				gameBoard = GameBoardFactory.getGameBoard();
+				game = GameBoardFactory.getGame();
 		}
 		
 		@Override
@@ -62,13 +62,16 @@ public class ThreadCtrl extends Thread {
 				String [] argsTab = new String(request.getBody()).split("_");
 				String name = argsTab[0];
 				String pwd = argsTab[1];
-				aff(nomClient + " s'inscrit");
+				outputPrint("Current player is trying to create a new account");
 				try {
-						banque.ouvrirCompte(nomClient);
-						Message reponse = new Message(Message.M_OK, nomClient, 0);
-						proto.respond(reponse);
-				} catch (ExceptionBanque e) {
-						traiter_err(e);
+						// Try to create a new player acount
+						game.newAccount(name, pwd);
+						
+						// Return a message with successful status and only player UUID
+						Message response = new Message(Message.SYSOK, game.getLastPlayerAdded());
+						sProto.sendResponse(response);
+				} catch (GameBoardException e) {
+						processError(e);
 				}
 		}
 		

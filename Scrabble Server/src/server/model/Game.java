@@ -13,12 +13,20 @@ import common.GameBoardException;
 
 public abstract class Game implements IGameBoard {
 		 @Override
-		public void newAccount(Player player) throws GameBoardException {
-				if (! (createAccount(player))) {
+		public void newAccount(String pl_name, String pl_pwd) throws GameBoardException {
+				if (! (createAccount(pl_name, pl_pwd))) {
 						throw new GameBoardException(GameBoardException.typeErr.PLAYEXISTS);
 				}
-			}
+		}
+			
+		public String getLastPlayerAdded() {
+				return lastPlayerAdded();
+		}	
+					
+		//Déconnexion - Utile pour les opérations de mise à jour différées
+		public void deconnection(String nom) throws GameBoardException {}
 		
 		// Abstract methods
-		protected abstract boolean createAccount(Player player); 
+		protected abstract boolean createAccount(String pl_name, String pl_pwd); 
+		protected abstract String lastPlayerAdded();
 }

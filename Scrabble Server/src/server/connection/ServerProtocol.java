@@ -59,7 +59,7 @@ public class ServerProtocol extends Protocol {
 				return request;
 		}
 
-		public int SendResponse(Message answer) {
+		public int sendResponse(Message answer) {
 				//throw new UnsupportedOperationException("Not yet implemented");
 				try {
 						out.writeInt(answer.getHeader());

@@ -27,12 +27,14 @@ public class GameBoard {
 		}
     
 		public Player newPlayer(String name, String password) throws GameBoardException {
-				String args = name+"_"+password;
+				String args = name+"_"+password; // Hash password before to send it
 				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
 				
 				// Handle response
-				//args = serverResponse.getArgs();
-				// Treatment
+				if (serverResponse != null) {
+						// Return the new instance of the current player
+						return new Player(name, password, new String(serverResponse.getBody()));
+				}
 				return null;
 		}
 

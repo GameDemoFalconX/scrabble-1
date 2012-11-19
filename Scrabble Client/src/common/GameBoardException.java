@@ -1,20 +1,19 @@
 package common;
 
-import common.Process;
-
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class GameBoardException extends Exception {
 		
-		private Process errProcess;
+		public enum typeErr {CONN_KO,PLAYEXISTS};
+		private typeErr err;
 		
-		public GameBoardException(Process errProcess) {
-				this.errProcess = errProcess;
+		public GameBoardException(typeErr err) {
+				this.err = err;
 		}
 		
-		public Process getError() {
-				return this.errProcess;
-		}  
+		public typeErr getErreur() {
+				return err;
+		}
 }

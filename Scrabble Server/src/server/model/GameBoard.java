@@ -9,15 +9,25 @@ import java.util.Map;
  */
 
 public class GameBoard extends Game {
-    private Map<String, Player> players = new HashMap<String, Player>();
+    private PlayerRAM players = new PlayerRAM();
     
+		/**
+			* Create a new account for the current player.
+			* @param player
+			* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
+			*/
+
 		@Override
-		protected boolean createAccount(Player player) {
-				if (players.containsKey(nom)) {
+		protected boolean createAccount(String pl_name, String pl_pwd) {
+				if (players.playerExists(pl_name)) {
 						return false;
 				}
-				Client client = new Client(nom);
-				clients.put(nom, client);
+				players.addPlayer(new Player(pl_name, pl_pwd));
 				return true;
+		}
+		
+		@Override
+		protected String lastPlayerAdded() {
+				return players.lastPlayerAdded();
 		}
 }

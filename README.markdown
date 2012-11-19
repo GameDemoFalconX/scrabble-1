@@ -18,3 +18,14 @@ Scrabble is a word game in which two to four players score points by forming wor
 	                           args1       args2
 	                                  "_"
 
+### XML Files structure
+*Players*
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<players>
+  		<player uuid="[player-uuid]">
+    		<uuid>[Player-uuid]</uuid>
+    		<name>[player-name]</name>
+    		<password>[player-password]</password>
+   		</player>
+  	</players>
