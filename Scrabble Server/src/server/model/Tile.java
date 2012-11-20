@@ -14,6 +14,11 @@ public class Tile {
         this.value = value;
     }
     
+    public char getLetter() {
+        return this.letter;
+    }
     
-    
+    public int getValue() {
+        return this.value;
+    }
 }
