@@ -1,7 +1,8 @@
 package client.view;
 
 import client.ctrl.ClientController;
-import client.view.Console;
+import client.view.CConsole;
+import java.io.Console;
 
 /**
  *
@@ -21,7 +22,7 @@ public class View {
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
 				System.out.println("3: Exit\n");
-				ctrl.firstChoice(Console.readInt("Your choice ?  "));
+				ctrl.firstChoice(CConsole.readInt("Your choice ?  "));
 		}
     
 		public void initMenu() {
@@ -31,7 +32,7 @@ public class View {
 				System.out.println("1: New game");
 				System.out.println("2: Load game");
 				System.out.println("3: Exit\n");
-				//ctrl.initChoice(Console.readInt("Your choice ?  "));
+				//ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     
 		public void startMenu() {
@@ -40,7 +41,7 @@ public class View {
 				System.out.println("#####################################\n");
 				System.out.println("1: Play now");
 				System.out.println("2: Exit\n");
-				//ctrl.startChoice(Console.readInt("Your choice ?  "));
+				//ctrl.startChoice(CConsole.readInt("Your choice ?  "));
 		}
     
 		public void playMenu() {
@@ -50,7 +51,7 @@ public class View {
 				System.out.println("1: Place word");
 				System.out.println("2: Save your game\n");
 				System.out.println("3: Exit\n");
-				//ctrl.playChoice(Console.readInt("Your choice ?  "));
+				//ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
 		public void display(String msg) {
@@ -58,10 +59,10 @@ public class View {
 		}
 
 		public String askName() {
-				return (Console.readLine("Enter your name ? "));
+				return (CConsole.readLine("Enter your name ? "));
 		}
     
 		public String askPassword() {
-				return (Console.readLine("Enter your password ? "));
+				return CConsole.readPass("Enter your password ? ");
 		}
 }

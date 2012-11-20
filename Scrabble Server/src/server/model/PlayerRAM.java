@@ -21,7 +21,9 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 /**
- *
+ * Important! : The JDOM class must be manually loaded. Click right on the Scrabble server folder > Properties. 
+ * Select Category "Library" and click on "Add .jar Files" after download JDOM binaries here -> http://jdom.org/downloads/index.html.
+ * Please select the 2.0.4 version. 
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class PlayerRAM {
@@ -32,6 +34,7 @@ public class PlayerRAM {
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");
 				if (playerFile.exists()) {
+						System.out.println("File exists!");
 						SAXBuilder builder = new SAXBuilder(); 
 						try {
 								Document document = (Document) builder.build(playerFile);
@@ -41,9 +44,13 @@ public class PlayerRAM {
 										Element node = (Element) list.get(i);
 										// Create new player instance
 										Player loadPlayer = new Player(node.getChildText("name"), node.getChildText("password"), node.getChildText("uuid"));
+										//System.out.println(node.getChildText("name"));
 										// Add this new instance to the map
 										players.put(node.getChildText("name"), loadPlayer);
 								}
+								
+								// Display the players hashmap
+								//displayPlayers();
 								
 								System.out.println("File Loaded!");
 						} catch (IOException e) {
@@ -52,16 +59,17 @@ public class PlayerRAM {
 								System.out.println(jdome.getMessage());
 						}
 				} else {
+						System.out.println("File doesn't exist!");
 						try {
 								Element players = new Element("players");
 								Document doc = new Document(players);
-								doc.setRootElement(players);
  
 								XMLOutputter xmlOutput = new XMLOutputter();
  
 								xmlOutput.setFormat(Format.getPrettyFormat());
 								xmlOutput.output(doc, new FileWriter(playerFile));
- 
+								//xmlOutput.output(doc, System.out);
+								
 								System.out.println("File Created!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
@@ -70,7 +78,7 @@ public class PlayerRAM {
 		} 
 		public boolean playerExists(String name) {
 				if (!players.isEmpty()) {
-						return players.containsValue(name);
+						return players.containsKey(name);
 				} else {
 						return false;
 				}
@@ -80,9 +88,23 @@ public class PlayerRAM {
 				return this.lastPlayerAdded;
 		}
 		
+		private void displayPlayers() {
+				if (players.isEmpty()) System.out.println("Map empty!");
+				Set set = this.players.entrySet(); 
+				Iterator i = set.iterator(); 
+				
+				// Display elements 
+				while(i.hasNext()) { 
+						Map.Entry me = (Map.Entry)i.next(); 
+						System.out.print(me.getKey() + ": "); 
+						System.out.println(me.getValue());
+				}
+		}
+		
 		public void addPlayer(Player player) {
 				// Add new player in the Map
 				players.put(player.getPlayerName(), player);
+				//displayPlayers();
 				
 				// Add its UUID on the lastPlayerAdded variable
 				this.lastPlayerAdded = player.getPlayerID();
@@ -108,6 +130,7 @@ public class PlayerRAM {
 						xmlOutput.output(doc, new FileWriter("players.xml"));
   
 						System.out.println("File Updated!");
+						
 				} catch (IOException e) {
 						e.printStackTrace();
 				} catch (JDOMException jdome) {
@@ -118,8 +141,10 @@ public class PlayerRAM {
 		public void deletePlayer(String name) {
 				if (!players.isEmpty()) {
 						String uuidToDelete = players.get(name).getPlayerID();
+
 						// Delete player from Map
 						players.remove(name);
+						//displayPlayers();
 						
 						// Remove it from the XML File
 						try {
@@ -128,11 +153,13 @@ public class PlayerRAM {
 								Document doc = (Document) builder.build(playerFile);
 								Element rootNode = doc.getRootElement();
  
-								List list = rootNode.getChildren("player");
+								List list = rootNode.getChildren();
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
-										if (node.getAttribute("uuid").getValue() == uuidToDelete) {
-												node.detach();
+										if (node.getAttributeValue("uuid").equals(uuidToDelete)) {
+												//node.detach();
+												list.remove(i);
+												//node.getParent().removeContent(node);
 										}
 								}
 								
