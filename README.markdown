@@ -21,9 +21,9 @@ Scrabble is a word game in which two to four players score points by forming wor
 ### XML Files structure
 ** Warning! Before use XML File, you must load the JDOM library manually.**
 
-	Click right on the Scrabble server folder > Properties.
- 	Select Category "Library" and click on "Add .jar Files" after download JDOM binaries [here][0].
- 	Please select the 2.0.4 version
++ Click right on the Scrabble server folder > Properties.
++ Select Category "Library" and click on "Add .jar Files" after download JDOM binaries [here][0] (You'll find binaries and the bin/ folder in the Scrabble repository).
++ Please select the 2.0.4 version
 
 [0]: http://jdom.org/downloads/index.html
 
@@ -37,3 +37,4 @@ Scrabble is a word game in which two to four players score points by forming wor
     		<password>[player-password]</password>
    		</player>
   	</players>
+
