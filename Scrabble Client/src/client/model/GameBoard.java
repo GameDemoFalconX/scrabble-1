@@ -4,6 +4,7 @@ import client.connection.ClientProtocol;
 import common.GameBoardException;
 import common.Message;
 import java.security.MessageDigest;
+import java.util.UUID;
 
 /**
  *
@@ -11,13 +12,13 @@ import java.security.MessageDigest;
  */
 public class GameBoard {
     
-		private int gameBoardID; // TODO UUID (Bernard)
+		private UUID gameBoardID;
 		private Grid grid;
 		private Rack rack;
 		private ClientProtocol gbProtocol;
     
 		private GameBoard() {
-				//gameBoardID = newGameBoardID();
+				gameBoardID = UUID.randomUUID();
 				grid = new Grid(gameBoardID);
 				rack = new Rack(gameBoardID);
 		}
