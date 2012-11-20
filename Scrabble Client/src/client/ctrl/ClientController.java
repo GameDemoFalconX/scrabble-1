@@ -4,7 +4,7 @@ import client.model.GameBoard;
 import client.model.Player;
 import client.view.View;
 import common.GameBoardException;
-import common.Process;
+import common.Message;
 
 /**
  *
@@ -42,7 +42,7 @@ public class ClientController {
 		}
     
 		public void firstShow() {
-				view.firstMenu();
+				view.firstMenu("");
 		}
     
 		public void firstChoice(Integer choice) {
@@ -52,10 +52,8 @@ public class ClientController {
 								String password = view.askPassword();
 								try {
 										player = gameBoard.newPlayer(name, password);
-										//if (player == null) throw new GameBoardException(GameBoardException.typeErr.PLAYEXISTS);
 										if (debug) {
-												view.display(name + ", you're successfully registered.");
-												view.initMenu();
+												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -65,27 +63,55 @@ public class ClientController {
 								}
 								break;
 						case 2:
-								// TODO new method for registered player (witch'll do a view.askName()... (Bernard)
+								String plname = view.askName();
+								String plpwd = view.askPassword();
+								try {
+										player = gameBoard.loginPlayer(plname, plpwd);
+										if (debug) {
+												view.initMenu(plname, Message.LOGIN_SUCCESS);
+										} else {
+												// TODO GUI 
+										}
+												// TODO player menu  
+								} catch (GameBoardException gbe) {
+										processException(gbe);
+								}
 								break;
 						case 3:
 								view.display("See you next time !");
 								break;
 						default:
-								view.display("Bad choice");
-								//view.initialMenu();
+								view.firstMenu("");
 								break;
 				}
 		}
+		
+		public void initChoice(Integer choice) {
+				
+		}
 
 		private void processException(GameBoardException gbe) {
-				//view.display(errHandler(gbe.getError()));
-				view.initMenu();
-							
-				// throw new UnsupportedOperationException("Not yet implemented");
-				// TODO processException method body (Bernard)
-		}
-		
-		private String errHandler(Process errProcess) {
-				return "";
+				switch(gbe.getErreur()) {
+						case CONN_KO:
+								view.firstMenu("The server connection is not possible! Please try again.");
+								break;
+						case SYSKO:
+								view.firstMenu("An error has been encountered during the server processing! Please try again.");
+								break;
+						case PWDKO:
+								view.firstMenu("An error has been encountered during the data processing! Please try again.");
+								break;
+						case PLAYER_EXISTS:
+								view.firstMenu("This user name is already in use. Please choose another and try again.");
+								break;
+						case PLAYER_NOT_EXISTS:
+								view.firstMenu("This user name does not yet exist! Please enter a valid user name and try again.");
+								break;
+						case LOGIN_ERROR:
+								view.firstMenu("Warning! The password entered is not correct! Please try again.");
+								break;
+						default:
+								view.firstMenu("An error has been encountered during the treatment! Please try again.");
+				}			
 		}
 }

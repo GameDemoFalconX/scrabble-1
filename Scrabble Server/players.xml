@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<players>
+  <player uuid="f5df6320-1756-41d0-b6f8-1549144d38eb">
+    <uuid>f5df6320-1756-41d0-b6f8-1549144d38eb</uuid>
+    <name>romain</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="0a6dc602-90ec-442a-adc0-a5a62ce3f646">
+    <uuid>0a6dc602-90ec-442a-adc0-a5a62ce3f646</uuid>
+    <name>morgane</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+</players>

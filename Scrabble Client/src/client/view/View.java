@@ -15,28 +15,30 @@ public class View {
 				 this.ctrl = ctrl;
 		}
     
-		public void firstMenu() {
-				System.out.println("#####################################");
+		public void firstMenu(String error) {
+				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
+				if (error != "") System.out.println(error+"\n"); // Display error messages in the menu.
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
 				System.out.println("3: Exit\n");
 				ctrl.firstChoice(CConsole.readInt("Your choice ?  "));
 		}
     
-		public void initMenu() {
-				System.out.println("#####################################");
+		public void initMenu(String name, Integer status) {
+				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
+				System.out.println((status == 11) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
 				System.out.println("2: Load game");
 				System.out.println("3: Exit\n");
-				//ctrl.initChoice(CConsole.readInt("Your choice ?  "));
+				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     
 		public void startMenu() {
-				System.out.println("#####################################");
+				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
 				System.out.println("1: Play now");
@@ -45,7 +47,7 @@ public class View {
 		}
     
 		public void playMenu() {
-				System.out.println("#####################################");
+				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
 				System.out.println("1: Place word");

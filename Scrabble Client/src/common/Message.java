@@ -13,14 +13,23 @@ public class Message {
 		// Server answers
 		public static final int SYSOK = 1; // All is OK
 		public static final int SYSKO = 2; // Err sys KO
-		public static final int PLAYEXISTS = 3; // Player exists
-		public static final int PWDKO = 4; // Password KO
-		public static final int PLANEW = 5; // New player account created
+		public static final int PLAYER_EXISTS = 3; // Player exists
+		public static final int PLAYER_NOT_EXISTS = 4; // Player not exists
+		public static final int PWDKO = 5; // Password KO
 		// Add other answers + game codes
 		
 		// Tasks codes
-		public static final int NEWACC = 10;  // Create new  account
+		// NEW_ACCOUNT //
+		public static final int NEW_ACCOUNT = 10;  // Create new account
+		public static final int NEW_ACCOUNT_SUCCESS = 11;  // Create new account with sucess
+		public static final int NEW_ACCOUNT_ERROR = 12;  // Error found during the creation of new account
+		
+		// LOGIN //
 		public static final int LOGIN = 20; // Player login process
+		public static final int LOGIN_SUCCESS = 21; // Player login success
+		public static final int LOGIN_ERROR = 22; // Player login error
+		
+		// NEW_GAME //
 		public static final int NEWGAME = 30;  // New game
 		public static final int LOADGAME = 40; // Load game
 		public static final int  LOGOUT = 50;  // Logout

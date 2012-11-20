@@ -33,8 +33,11 @@ public class ThreadCtrl extends Thread {
 						return;
 				}
 				switch(request.getHeader()) {
-						case Message.NEWACC:
+						case Message.NEW_ACCOUNT:
 								newAccount();
+								break;
+						case Message.LOGIN:
+								login();
 								break;
 				}
 		}
@@ -42,8 +45,21 @@ public class ThreadCtrl extends Thread {
 		private void processError(GameBoardException e) { 
 				Message answer = null;
 				switch(e.getError()) {
-						case PLAYEXISTS:
-								answer = new Message(Message.PLAYEXISTS, "");
+						case SYSKO:
+								answer = new Message(Message.SYSKO, "");
+								outputPrint("Server error : System KO.");
+								break;
+						case PLAYER_EXISTS:
+								answer = new Message(Message.PLAYER_EXISTS, "");
+								outputPrint("Server error : Player already exists.");
+								break;
+						case PLAYER_NOT_EXISTS:
+								answer = new Message(Message.PLAYER_NOT_EXISTS, "");
+								outputPrint("Server error : Player does not yet exist.");
+								break;
+						case LOGIN_ERROR:
+								answer = new Message(Message.LOGIN_ERROR, "");
+								outputPrint("Server error : Login error.");
 								break;
 				}
 				sProto.sendResponse(answer);
@@ -69,12 +85,31 @@ public class ThreadCtrl extends Thread {
 				String pwd = argsTab[1];
 				outputPrint("Current player is trying to create a new account");
 				try {
+						Message response;
 						// Try to create a new player acount
-						game.newAccount(name, pwd);
+						response = game.newAccount(name, pwd);
 						
-						// Return a message with successful status and only player UUID
-						Message response = new Message(Message.PLANEW, game.getLastPlayerAdded());
+						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
 						sProto.sendResponse(response);
+						//outputPrint("Server response status : "+response.getHeader());
+				} catch (GameBoardException e) {
+						processError(e);
+				}
+		}
+		
+		private void login() {
+				String [] argsTab = new String(request.getBody()).split("_");
+				String name = argsTab[0];
+				String pwd = argsTab[1];
+				outputPrint("Current player is trying to login");
+				try {
+						Message response;
+						// Try to log the current player
+						response = game.login(name, pwd);
+						
+						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+						sProto.sendResponse(response);
+						//outputPrint("Server response status : "+response.getHeader());
 				} catch (GameBoardException e) {
 						processError(e);
 				}

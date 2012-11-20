@@ -29,7 +29,6 @@ import org.jdom2.input.SAXBuilder;
 public class PlayerRAM {
 		
 		private  Map<String, Player> players = new HashMap<String, Player>();
-		private String lastPlayerAdded;
 
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");
@@ -84,8 +83,12 @@ public class PlayerRAM {
 				}
 		}
 		
-		public String lastPlayerAdded() {
-				return this.lastPlayerAdded;
+		public Player checkPassword(String pl_name, String pl_pwd) {
+				Player plCheck = players.get(pl_name);
+				if (plCheck.getPlayerPassword().equals(pl_pwd)) {
+						return plCheck;
+				}
+				return null;
 		}
 		
 		private void displayPlayers() {
@@ -105,9 +108,6 @@ public class PlayerRAM {
 				// Add new player in the Map
 				players.put(player.getPlayerName(), player);
 				//displayPlayers();
-				
-				// Add its UUID on the lastPlayerAdded variable
-				this.lastPlayerAdded = player.getPlayerID();
 				
 				// Add this in the XML File
 				try {

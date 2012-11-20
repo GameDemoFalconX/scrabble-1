@@ -36,7 +36,7 @@ public class GameBoard {
 						throw new GameBoardException(GameBoardException.typeErr.PWDKO);
 				}
 				String args = name+"_"+password;
-				Message serverResponse = gbProtocol.sendRequest(Message.NEWACC, 0,  args);
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_ACCOUNT, 0,  args);
 				
 				// Handle response
 				if (serverResponse != null) {
@@ -44,7 +44,9 @@ public class GameBoard {
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameBoardException(GameBoardException.typeErr.SYSKO);
-								case Message.PLANEW:
+								case Message.PLAYER_EXISTS: // Player already exists
+										throw new GameBoardException(GameBoardException.typeErr.PLAYER_EXISTS);
+								case Message.NEW_ACCOUNT_SUCCESS:
 								// Return the new instance of the current player
 								return new Player(name, password, new String(serverResponse.getBody()));
 						}
@@ -65,6 +67,37 @@ public class GameBoard {
 						sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
 				}
 				return sb.toString();
+		}
+		
+		public Player loginPlayer(String name, String password) throws GameBoardException {
+				// Hash password before to send it
+				try {
+						password = hashPassword(password);
+				} catch (Exception e) {
+						// Throw an exception if the hash function return an error.
+						throw new GameBoardException(GameBoardException.typeErr.PWDKO);
+				}
+				String args = name+"_"+password;
+				Message serverResponse = gbProtocol.sendRequest(Message.LOGIN, 0,  args);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+								case Message.LOGIN_SUCCESS:
+										// Return the new instance of the current player
+										return new Player(name, password, new String(serverResponse.getBody()));
+								case Message.PLAYER_NOT_EXISTS:
+										throw new GameBoardException(GameBoardException.typeErr.PLAYER_NOT_EXISTS);
+								case Message.LOGIN_ERROR:
+										throw new GameBoardException(GameBoardException.typeErr.LOGIN_ERROR);
+						}
+				} else {
+						throw new GameBoardException(GameBoardException.typeErr.CONN_KO);
+				}
+				return null; // To update
 		}
 
 		private int newGameBoardID() {

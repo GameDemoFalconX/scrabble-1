@@ -60,7 +60,6 @@ public class ServerProtocol extends Protocol {
 		}
 
 		public int sendResponse(Message answer) {
-				//throw new UnsupportedOperationException("Not yet implemented");
 				try {
 						out.writeInt(answer.getHeader());
 						out.writeInt(answer.getSize());
