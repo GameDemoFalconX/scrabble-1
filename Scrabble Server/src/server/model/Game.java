@@ -40,6 +40,13 @@ public abstract class Game implements IGame {
 				}
 				return null;
 		}
+		
+		// Game -  plays actions
+		/* To implement
+		Message createNewPlay(String pl_id) throws GameException;
+		Message displayUserPlays(String pl_id) throws GameException;
+		Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
+		*/
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
 		public void deconnection(String nom) throws GameException {}

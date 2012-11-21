@@ -31,6 +31,10 @@ public class GameRAM {
 
 		public GameRAM() {}
 		
+		/**
+			* Load all plays for the current player from the games.xml file. Keep only the play attributes without the play objects (grid, rack, bag).
+			* @param playerUUID 
+			*/
 		public void firstLoadGame(String playerUUID) {
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
@@ -75,6 +79,10 @@ public class GameRAM {
 				}
 		} 
 		
+		/**
+			* Simply put the new play in the plays HashMap.
+			* @param play 
+			*/
 		public void addNewPlay(Play play) {
 				plays.put(play.getPlayID(), play);
 		} 
@@ -127,71 +135,18 @@ public class GameRAM {
 				return result;
 		}
 		
-		/*
-		public void addPlayer(Player player) {
-				// Add new player in the Map
-				players.put(player.getPlayerName(), player);
-				//displayPlayers();
-				
-				// Add this in the XML File
-				try {
-						SAXBuilder builder = new SAXBuilder();
-						File playerFile = new File("players.xml");
- 
-						Document doc = (Document) builder.build(playerFile);
-						Element rootNode = doc.getRootElement();
- 	
-						Element pl = new Element("player");
-						pl.setAttribute(new Attribute("uuid", player.getPlayerID()));
-						pl.addContent(new Element("uuid").setText(player.getPlayerID()));
-						pl.addContent(new Element("name").setText(player.getPlayerName()));
-						pl.addContent(new Element("password").setText(player.getPlayerPassword()));
-						doc.getRootElement().addContent(pl);
- 
-						XMLOutputter xmlOutput = new XMLOutputter();
- 
-						xmlOutput.setFormat(Format.getPrettyFormat());
-						xmlOutput.output(doc, new FileWriter("players.xml"));
-  
-						System.out.println("File Updated!");
-						
-				} catch (IOException e) {
-						e.printStackTrace();
-				} catch (JDOMException jdome) {
-						jdome.printStackTrace();
-				}
-		}
+		/**
+			* Allow to load game object for the selected play from the games.xml file.
+			*/
+		public void loadPlay() {}
 		
-		public void deletePlayer(String name) {
-				if (!players.isEmpty()) {
-						String uuidToDelete = players.get(name).getPlayerID();
-
-						// Delete player from Map
-						players.remove(name);
-						//displayPlayers();
-						
-						// Remove it from the XML File
-						try {
-								SAXBuilder builder = new SAXBuilder();
-								File playerFile = new File("players.xml");
-								Document doc = (Document) builder.build(playerFile);
-								Element rootNode = doc.getRootElement();
- 
-								List list = rootNode.getChildren();
-								for (int i = 0; i < list.size(); i++) {
-										Element node = (Element) list.get(i);
-										if (node.getAttributeValue("uuid").equals(uuidToDelete)) {
-												//node.detach();
-												list.remove(i);
-												//node.getParent().removeContent(node);
-										}
-								}
-								
-						} catch (IOException e) {
-								e.printStackTrace();
-						} catch (JDOMException jdome) {
-								jdome.printStackTrace();
-						}
-				}
-		}*/
+		/**
+			* Save the current play in the games.xml file for the current player.
+			*/
+		public void savePlay() {}
+		
+		/**
+			* Remove selected play in the games.xml file for the current player.
+			*/
+		public void removePlay() {}
 }
