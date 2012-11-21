@@ -38,7 +38,7 @@ Scrabble is a word game in which two to four players score points by forming wor
    		</player>
   	</players>
 
-* Games *
+*Games*
 
 	<?xml version="1.0" encoding="UTF-8"?>
 	<plays>
