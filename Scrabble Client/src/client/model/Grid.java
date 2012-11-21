@@ -1,14 +1,15 @@
 package client.model;
 
+import java.util.UUID;
+
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 class Grid {
-
-		private int gridID;
+		private UUID gridID;
 		private Tile[][] grid = new Tile[15][15];
-
+		
 		private Grid() {
 				for (int x = 0; x <= 14; x++) {
 						for (int y= 0; y <= 14; y++) {
@@ -16,16 +17,12 @@ class Grid {
 						}
 				}
 		}
-
-		public Grid(int gameBoardID) {
+		
+		public Grid(UUID gameBoardID) {
 				this();
-				gridID= gameBoardID;        
+				gridID = gameBoardID;        
 		}
-
-		public int getRackID() {
-				return gridID;
-		}
-
+		
 		@Override
 		public String toString() {
 				String prtGrid = "";
@@ -42,5 +39,4 @@ class Grid {
 				}
 				return prtGrid;
 		}
-		
 }
