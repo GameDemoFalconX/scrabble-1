@@ -32,8 +32,12 @@ public class View {
 				System.out.println("#####################################\n");
 				System.out.println((status == 11) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
-				System.out.println("2: Load game");
-				System.out.println("3: Exit\n");
+				if (status == 21) {
+						System.out.println("2: Load game");
+						System.out.println("3: Exit\n");
+				} else {
+						System.out.println("2: Exit\n");
+				}
 				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     

@@ -9,7 +9,7 @@ import common.Message;
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 
-public class GameBoard extends Game {
+public class HAL extends Game {
     private PlayerRAM players = new PlayerRAM();
     
 		/**
