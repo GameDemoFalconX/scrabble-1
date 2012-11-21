@@ -14,8 +14,8 @@ public class ThreadCtrl extends Thread {
 		
 		private IGame game;
 		private ServerProtocol sProto;
-		Message request;
-		
+		private Message request;
+				
 		public ThreadCtrl(ServerProtocol sp) {
 				sProto = sp;
 				game = GameFactory.getGame();

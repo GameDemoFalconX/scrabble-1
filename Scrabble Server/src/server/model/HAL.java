@@ -10,7 +10,12 @@ import common.Message;
  */
 
 public class HAL extends Game {
-    private PlayerRAM players = new PlayerRAM();
+		private PlayerRAM players = new PlayerRAM();
+		private GameRAM plays = new GameRAM();
+		
+		// These two variables must be present within HAL.
+		private Player cPlayer;
+		private Play cPlay;
     
 		/**
 			* Create a new account for the current player.
@@ -25,6 +30,7 @@ public class HAL extends Game {
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
+				cPlayer = newPlayer;
 				// Return the new player ID
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
@@ -35,6 +41,7 @@ public class HAL extends Game {
 				if (players.playerExists(pl_name)) {
 						Player pl = players.checkPassword(pl_name, pl_pwd); 
 						if (pl != null) {
+								cPlayer = pl;
 								// Return the player ID
 								response = new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
 						} else {

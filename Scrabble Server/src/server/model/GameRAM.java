@@ -31,26 +31,37 @@ public class GameRAM {
 
 		public GameRAM() {}
 		
-		public GameRAM(String playerUUID) {
-				File playerFile = new File("players.xml");
-				if (playerFile.exists()) {
+		public void firstLoadGame(String playerUUID) {
+				File gameFile = new File("games.xml");
+				if (gameFile.exists()) {
 						System.out.println("File exists!");
 						SAXBuilder builder = new SAXBuilder(); 
 						try {
-								Document document = (Document) builder.build(playerFile);
+								Document document = (Document) builder.build(gameFile);
 								Element rootNode = document.getRootElement();
 								List list = rootNode.getChildren("player");
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
-										// Create new player instance
-										Player loadPlayer = new Player(node.getChildText("name"), node.getChildText("password"), node.getChildText("uuid"));
-										//System.out.println(node.getChildText("name"));
-										// Add this new instance to the map
-										players.put(node.getChildText("name"), loadPlayer);
+										if (node.getAttributeValue("uuid").equals(playerUUID)) {
+												List playList = node.getChildren("play");
+												for (int j = 0; j < playList.size(); j++) {
+														Element playNode = (Element) playList.get(j);
+														
+														// Get specific children
+														Element uuid = (Element) playNode.getChildren("uuid");
+														Element created = (Element) playNode.getChildren("created");
+														Element modified = (Element) playNode.getChildren("modified");
+														Element score = (Element) playNode.getChildren("score");
+														
+														// Create a new Play instance without the game objects and put it in the plays HashMap
+														Play loadPlay = new Play(playerUUID, playNode.getChildText("uuid"), playNode.getChildText("created"), playNode.getChildText("modified"), Integer.parseInt(playNode.getChildText("uuid")));
+														plays.put(playNode.getChildText("uuid"), loadPlay);
+												}
+										}
+										break; // break the loop.
 								}
-								
-								// Display the players hashmap
-								//displayPlayers();
+								// Display the plays hashmap for the current player
+								//displayPlays();
 								
 								System.out.println("File Loaded!");
 						} catch (IOException e) {
@@ -60,51 +71,63 @@ public class GameRAM {
 						}
 				} else {
 						System.out.println("File doesn't exist!");
-						try {
-								Element players = new Element("players");
-								Document doc = new Document(players);
- 
-								XMLOutputter xmlOutput = new XMLOutputter();
- 
-								xmlOutput.setFormat(Format.getPrettyFormat());
-								xmlOutput.output(doc, new FileWriter(playerFile));
-								//xmlOutput.output(doc, System.out);
-								
-								System.out.println("File Created!");
-						} catch (IOException e) {
-								System.out.println(e.getMessage());
-						}
+						// TODO Improve the way to handle errors.
 				}
 		} 
-		public boolean playerExists(String name) {
-				if (!players.isEmpty()) {
-						return players.containsKey(name);
+		
+		public void addNewPlay(Play play) {
+				plays.put(play.getPlayID(), play);
+		} 
+		
+		/**
+			* Define if the current Plays Map is empty.
+			* @param playID
+			* @return 
+			*/
+		public boolean playExists(String playID) {
+				if (!plays.isEmpty()) {
+						return plays.containsKey(playID);
 				} else {
 						return false;
 				}
 		}
 		
-		public Player checkPassword(String pl_name, String pl_pwd) {
-				Player plCheck = players.get(pl_name);
-				if (plCheck.getPlayerPassword().equals(pl_pwd)) {
-						return plCheck;
-				}
-				return null;
-		}
-		
-		private void displayPlayers() {
-				if (players.isEmpty()) System.out.println("Map empty!");
-				Set set = this.players.entrySet(); 
+		private void displayPlays() {
+				if (plays.isEmpty()) System.out.println("Map empty!");
+				Set set = this.plays.entrySet(); 
 				Iterator i = set.iterator(); 
 				
 				// Display elements 
 				while(i.hasNext()) { 
 						Map.Entry me = (Map.Entry)i.next(); 
 						System.out.print(me.getKey() + ": "); 
-						System.out.println(me.getValue());
+						System.out.println(me.getValue()); // Return the code of this instance. Use it only for debug.
 				}
 		}
 		
+		/**
+			* Format the content of the plays HashMap for send it to the client
+			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score] == play unit
+			* [play unit 1]##[play unit 2]## ...
+			* Two underscore between play attributes and two ## between play units.
+			*/
+		public String formatPlays() { // catch errors
+				String result = "";
+				if (plays.isEmpty()) System.out.println("Map empty!");
+				Set set = this.plays.entrySet(); 
+				Iterator i = set.iterator(); 
+				
+				// Iterate elements 
+				while(i.hasNext()) { 
+						Map.Entry me = (Map.Entry)i.next(); 
+						Play cPlay = (Play) me.getValue();
+						result += cPlay.formatAttr();
+						if (i.hasNext()) result += "##";
+				}
+				return result;
+		}
+		
+		/*
 		public void addPlayer(Player player) {
 				// Add new player in the Map
 				players.put(player.getPlayerName(), player);
@@ -170,5 +193,5 @@ public class GameRAM {
 								jdome.printStackTrace();
 						}
 				}
-		}
+		}*/
 }
