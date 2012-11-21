@@ -1,4 +1,7 @@
-package client.model;
+package server.model;
+
+import server.model.Tile;
+import server.model.TileBag;
 
 /**
  *
@@ -8,9 +11,24 @@ class Rack {
 		
 		private Tile[] rack = new Tile[7];
 		
-		public Rack() {
+		/**
+			* Constructs a new Rack during the new Play process.
+			* @param bag 
+			*/
+		public Rack(TileBag bag) {
 				for (int i = 0; i < rack.length; i++) {
-						rack[i] = null;
+						rack[i] = bag.getTileFromBag();
+				}
+		}
+		
+		/**
+			* Allows to initialize a rack from a String (Tile sequence)
+			* @param bag 
+			*/
+		public Rack(String bag) {
+				String [] tBag = bag.split("__");
+				for (int i = 0; i < rack.length; i++) {
+						rack[i] = new Tile(tBag[i].split(":")[0].charAt(0), Integer.parseInt(tBag[i].split(":")[1]));
 				}
 		}
 		

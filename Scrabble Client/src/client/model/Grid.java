@@ -1,26 +1,18 @@
 package client.model;
 
-import java.util.UUID;
-
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 class Grid {
-		private UUID gridID;
 		private Tile[][] grid = new Tile[15][15];
 		
-		private Grid() {
+		public Grid() {
 				for (int x = 0; x <= 14; x++) {
 						for (int y= 0; y <= 14; y++) {
 								grid[x][y] = null;
 						}
 				}
-		}
-		
-		public Grid(UUID gameBoardID) {
-				this();
-				gridID = gameBoardID;        
 		}
 		
 		@Override

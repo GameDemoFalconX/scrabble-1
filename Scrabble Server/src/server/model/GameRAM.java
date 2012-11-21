@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
-import server.model.Player;
+import server.model.Play;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -27,7 +27,7 @@ import org.jdom2.input.SAXBuilder;
  * @author Romain <ro.foncier@gmail.com>
  */
 public class GameRAM {
-		private  Map<String, Player> players = new HashMap<String, Player>();
+		private  Map<String, Play> plays = new HashMap<String, Play>();
 
 		public GameRAM() {}
 		
