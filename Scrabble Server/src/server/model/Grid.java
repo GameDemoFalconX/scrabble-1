@@ -1,4 +1,4 @@
-package client.model;
+package server.model;
 
 /**
  *
@@ -14,6 +14,10 @@ class Grid {
 								grid[x][y] = null;
 						}
 				}
+		}
+		
+		public Grid(String tileCoord) {
+				
 		}
 		
 		@Override

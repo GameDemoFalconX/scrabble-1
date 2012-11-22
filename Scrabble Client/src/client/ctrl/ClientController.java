@@ -3,7 +3,7 @@ package client.ctrl;
 import client.model.GameBoard;
 import client.model.Player;
 import client.view.View;
-import common.GameBoardException;
+import common.GameException;
 import common.Message;
 
 /**
@@ -58,7 +58,7 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameBoardException gbe) {
+								} catch (GameException gbe) {
 										processException(gbe);
 								}
 								break;
@@ -73,7 +73,7 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameBoardException gbe) {
+								} catch (GameException gbe) {
 										processException(gbe);
 								}
 								break;
@@ -90,7 +90,7 @@ public class ClientController {
 				
 		}
 
-		private void processException(GameBoardException gbe) {
+		private void processException(GameException gbe) {
 				switch(gbe.getErreur()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");

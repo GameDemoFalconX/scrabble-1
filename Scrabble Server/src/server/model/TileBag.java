@@ -4,17 +4,16 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * The TileBag is an Array of LinkedList that contains the letter available.
-	* It's identified by a ID that's the same of the linked GameBoard.
+ *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
-		private int tileBagID;
-		private Random random = new Random();
+    
+		Random random = new Random();
 		private char[][] source = {
 				{' ',' '},
 				{'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'S', 'S', 'T', 'T', 'T', 'T', 'T', 'T', 'U', 'U', 'U', 'U', 'U', 'U', 'L', 'L', 'L', 'L', 'L'},
-				{'D', 'D', 'D', 'G', 'G', 'M', 'M', 'M'},
+				{'D', 'D', 'D',  'G', 'G', 'M', 'M', 'M'},
 				{'B', 'B', 'C', 'C', 'P', 'P'},
 				{'F', 'F', 'H', 'H', 'V', 'V'},
 				{},
@@ -23,44 +22,47 @@ public class TileBag {
 				{'J', 'Q'},
 				{},
 				{'K', 'W', 'X', 'Y', 'Z'}
-		};
-
-		private LinkedList [] tileBag = new LinkedList [source.length]; // initial choice
+		};	
+		private LinkedList [] tileBag = new LinkedList [source.length];
 		
 		/**
-			* Constructs the TileBag with the source.
-			* The index number is the value of the letter.
+			* Create a new TileBag from the source
 			*/
 		public TileBag() {
-				for (int i = 0; i < source.length; i++) {							
-						tileBag[i] = new LinkedList();																	// create a new LinkedList per value
-						for (int j = 0; j < source[i].length; j++) {						
-								tileBag[i].add(source[i][j]);																// add the letter to the LinkedList
+				for (int i = 0; i < source.length; i++) {
+						tileBag[i] = new LinkedList();
+						for (int j = 0; j < source[i].length; j++) {
+								tileBag[i].add(source[i][j]);
 						}
 				}
 		}
 		
 		/**
-			* Calls the default constructor and set the ID
-			* @param gameBoardID The ID of the linked GameBoard
+			* Allows to initialize a TileBag from a String (Tile Sequence) (if we keep that format)
+			* @param bag 
 			*/
-		public TileBag(int gameBoardID) {
-				this();
-				tileBagID = gameBoardID; 
+		public TileBag(String bag) {
+				String [] tBag = bag.split("__");
+				for (int i = 0; i < tBag.length; i++) {
+						int value = Integer.parseInt(tBag[i].split(":")[1]);
+						if (tileBag[value].isEmpty()) {
+								tileBag[value] = new LinkedList();
+						}
+						tileBag[value].add(tBag[i].split(":")[0].charAt(0));
+				}
 		}
-
-		/**
-		* Get a Tile object from the TileBag
-		* @return a Tile created from the TileBag
-		*/    
-		// TODO There's a problem with the rand, the 1 value is out too often.
+		
+  /**
+		 * Get a Tile object from the TileBag
+		 * @return a Tile created from the TileBag
+		 */    
 		public Tile getTileFromBag() {
-				int value = getValue();																								// get a  random value
-				while (tileBag[value].isEmpty()) {																// while that row is empty
+				int value = getValue();																								// get a random value
+				while (tileBag[value].isEmpty()) {																	// while that row is empty
 						value = getValue();																									// get a new random value
 				}
 				char letter;																																						
-				int rand = random.nextInt(tileBag[value].size());					// get a new pseudo random number to select the letter from the row
+				int rand = random.nextInt(tileBag[value].size());					// get a pseudo random number to select the letter from the row
 				letter = (char) tileBag[value].get(rand);												// get the letter from the LinkedList
 				tileBag[value].remove(rand);																			// delete that letter from the LinkedList
 				Tile tile = new Tile(letter,value);																	// call the Tile constructor
@@ -102,5 +104,4 @@ public class TileBag {
 				}
 				return true;
 		}
-		
 }

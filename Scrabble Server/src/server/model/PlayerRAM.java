@@ -28,7 +28,7 @@ import org.jdom2.input.SAXBuilder;
  */
 public class PlayerRAM {
 		
-		private  Map<String, Player> players = new HashMap<String, Player>();
+		private  Map<String, Player> players = new HashMap<>();
 
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");

@@ -6,22 +6,17 @@ package client.model;
 	*/
 public class ModelTest {
 		
-		private static GameBoard gb = new GameBoard();
+//		private static GameBoard gb = new GameBoard();
 
 		public static void main(String[] args) {
-				printGameBoard();
-				loadandPrintRack();
+//				printGameBoard();
+
 		}
 		
-		private static void printGameBoard() {
-				System.out.println(gb);
-		}
+//		private static void printGameBoard() {
+//				System.out.println(gb);
+//		}
 		
-		private static void loadandPrintRack() {
-				int id = gb.getGameBoardID();
-				Rack rack = gb.getRack();
-				rack.loadTestRack(id);
-				System.out.println(rack);
-		}
+		
 	
 }

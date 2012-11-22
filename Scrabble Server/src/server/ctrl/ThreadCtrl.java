@@ -1,10 +1,10 @@
 package server.ctrl;
 
-import common.GameBoardException;
+import common.GameException;
 import common.Message;
 import server.connection.ServerProtocol;
-import server.model.GameBoardFactory;
-import server.model.IGameBoard;
+import server.model.GameFactory;
+import server.model.IGame;
 
 /**
  *
@@ -12,13 +12,13 @@ import server.model.IGameBoard;
  */
 public class ThreadCtrl extends Thread {
 		
-		private IGameBoard game;
+		private IGame game;
 		private ServerProtocol sProto;
-		Message request;
-		
+		private Message request;
+				
 		public ThreadCtrl(ServerProtocol sp) {
 				sProto = sp;
-				game = GameBoardFactory.getGame();
+				game = GameFactory.getGame();
 		}
 		
 		@Override
@@ -42,7 +42,7 @@ public class ThreadCtrl extends Thread {
 				}
 		}
 		
-		private void processError(GameBoardException e) { 
+		private void processError(GameException e) { 
 				Message answer = null;
 				switch(e.getError()) {
 						case SYSKO:
@@ -89,10 +89,10 @@ public class ThreadCtrl extends Thread {
 						// Try to create a new player acount
 						response = game.newAccount(name, pwd);
 						
-						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
 						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameBoardException e) {
+				} catch (GameException e) {
 						processError(e);
 				}
 		}
@@ -107,10 +107,10 @@ public class ThreadCtrl extends Thread {
 						// Try to log the current player
 						response = game.login(name, pwd);
 						
-						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
 						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameBoardException e) {
+				} catch (GameException e) {
 						processError(e);
 				}
 		}
