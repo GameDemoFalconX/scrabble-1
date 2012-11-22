@@ -33,6 +33,11 @@ public class Message {
 		public static final int NEWGAME = 30;  // New game
 		public static final int LOADGAME = 40; // Load game
 		public static final int  LOGOUT = 50;  // Logout
+		
+		// DICTIONNARY //
+		public static final int DICO_LOADED = 60; // Dictionnary loaded
+		public static final int WORD_OK = 61; // Word exist
+		public static final int WORK_KO = 62; // Word doesn't exist
 
 		public Message(Integer header, String body) {
 				this.header = header;

@@ -66,9 +66,4 @@ public class HAL extends Game {
 				throw new UnsupportedOperationException("Not supported yet.");
 		}
 		
-		public Message loadDico() {
-				Message response;
-				
-				return response;
-		}
 }

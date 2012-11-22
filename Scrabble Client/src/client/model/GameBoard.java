@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  *
- * @authors Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class GameBoard {
     

@@ -17,6 +17,7 @@ class Grid {
 		}
 		
 		public Grid(String tileCoord) {
+//		read String or XML ?
 				
 		}
 		
