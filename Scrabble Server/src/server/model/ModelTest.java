@@ -16,7 +16,7 @@ public class ModelTest {
 				TileBag bag = new TileBag();
 				while (!bag.isEmpty()) {
 						System.out.println("N : "+number);
-						System.out.println(bag.getTileFromBag());
+						System.out.println(bag.getTile());
 						number--;
 				}
 		}

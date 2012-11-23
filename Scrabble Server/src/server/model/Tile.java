@@ -1,25 +1,39 @@
 package server.model;
 
 /**
- * 
+ * Model that contains the letter and the value of a Tile.
  * @author Bernard <bernard.debecker@gmail.com>
  */
 public class Tile {
 
-		public final char letter;
-		public final int value;
-
+		private final char letter;
+		private final int value;
+		
+		/**
+			* Creates a Tile base on a char letter and a integer value
+			* @param letter a char
+			* @param value a integer
+			*/
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
 		}
 
+		public char getLetter() {
+				return letter;
+		}
+		
+		public int getValue() {
+				return value;
+		}
+		
 		/**
-		* Used only for debugging purpose
-		*/
+			* Format the tile in a printable String
+			* @return a String
+			*/
 		@Override
 		public String toString() {
-				return "Letter : " + letter + ", value: " + value;
+				return "[" + letter + value + "]";
 		}
 
 }

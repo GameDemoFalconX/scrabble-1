@@ -76,7 +76,7 @@ public class GameRAM {
 		/**
 			* Define if the current Plays Map is empty.
 			* @param playID
-			* @return 
+			* @return Returns true if the play exists, false otherwise.
 			*/
 		public boolean playExists(String playID) {
 				if (!plays.isEmpty()) {

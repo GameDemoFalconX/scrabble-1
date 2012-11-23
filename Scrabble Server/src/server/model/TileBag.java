@@ -4,7 +4,11 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- *
+ * Model that contains the available Tiles during the game.
+	* It's a array of LinkedList. Each LinkedList contains Chars
+	* There's as many of element in the TileBag as there is Tile in the game.
+	* The index of the array is the value of the letters that it contains.
+	* There's                                                                
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
@@ -56,7 +60,7 @@ public class TileBag {
 		 * Get a Tile object from the TileBag
 		 * @return a Tile created from the TileBag
 		 */    
-		public Tile getTileFromBag() {
+		public Tile getTile() {
 				int value = getValue();																								// get a random value
 				while (tileBag[value].isEmpty()) {																	// while that row is empty
 						value = getValue();																									// get a new random value
@@ -67,6 +71,16 @@ public class TileBag {
 				tileBag[value].remove(rand);																			// delete that letter from the LinkedList
 				Tile tile = new Tile(letter,value);																	// call the Tile constructor
 				return tile;																																	// return that tile (to go to the rack)
+		}
+		
+		/**
+			* Put a tile back into the bag
+			* @param tile a Tile
+			*/
+		public void returnTile(Tile tile) {
+				char letter = tile.getLetter();
+				int value = tile.getValue();
+				tileBag[value].add(letter);
 		}
 		
 		/**
@@ -104,4 +118,5 @@ public class TileBag {
 				}
 				return true;
 		}
+		
 }

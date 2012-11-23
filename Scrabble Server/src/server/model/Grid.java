@@ -1,7 +1,8 @@
 package server.model;
 
 /**
- *
+ * Model that contains the Tile used to make words.
+	* It's basically a matrix of Tile
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 class Grid {
@@ -21,6 +22,10 @@ class Grid {
 				
 		}
 		
+		/**
+			* Format the grid in a printable String
+			* @return a String
+			*/
 		@Override
 		public String toString() {
 				String prtGrid = "";

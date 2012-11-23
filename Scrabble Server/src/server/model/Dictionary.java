@@ -11,7 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Model that contains the authorized words in the game.
+	* It's a HashMap of String. The key value is the word. The value itself is null
+	* since it's not used. 
  * @author Bernard <bernard.debecker@gmail.com>
  */
 public class Dictionary {
@@ -31,12 +33,17 @@ public class Dictionary {
     }
 		}
 		
+		/**
+			* Check in the dictionary if the word exist in it.
+			* @param word a String
+			* @return a boolean true if the word is in the dictionary, false otherwise.
+			*/
 		public boolean containsWord(String word) {
 				return dico.containsKey(word);
 		}
 		
 		/**
-			* Used only for debugging purpose
+			* Used only for test purpose
 			* @param args
 			* @throws IOException 
 			*/

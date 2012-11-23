@@ -4,7 +4,8 @@ import common.GameException;
 import common.Message;
 
 /**
- *
+ * HAL (Heuristically programmed ALgorithmic computer) is an artificial intelligence that controls the systems of the Discovery One spacecraft and interacts with the ship's astronaut crew. 
+	* Being a computer, HAL has no distinct physical form, though is visually represented as a red television-camera eye located on equipment panels throughout the ship.
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 
@@ -17,10 +18,11 @@ public class HAL extends Game {
 		private Play cPlay;
     
 		/**
-		 * Create a new account for the current player.
-		 * @param player
-	 	* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
-		 */
+			* Create a new account for the current player.
+			* @param pl_name The player's name.
+			* @param pl_pwd The player's password.
+			* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
+			*/
 		@Override
 		protected Message createAccount(String pl_name, String pl_pwd) {
 				if (players.playerExists(pl_name)) {
