@@ -91,7 +91,7 @@ public class ClientController {
 		}
 
 		private void processException(GameException gbe) {
-				switch(gbe.getErreur()) {
+				switch(gbe.getError()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");
 								break;
