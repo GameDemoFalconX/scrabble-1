@@ -1,8 +1,8 @@
 package client.view;
 
 import client.ctrl.ClientController;
-import client.view.CConsole;
-import java.io.Console;
+import common.Message;
+//import java.io.Console;
 
 /**
  *
@@ -19,7 +19,7 @@ public class View {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
-				if (error != "") System.out.println(error+"\n"); // Display error messages in the menu.
+				if (!"".equals(error)) System.out.println(error+"\n"); // Display error messages in the menu.
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
 				System.out.println("3: Exit\n");
@@ -30,9 +30,9 @@ public class View {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
-				System.out.println((status == 11) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
+				System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
-				if (status == 21) {
+				if (status == Message.LOGIN_SUCCESS) {
 						System.out.println("2: Load game");
 						System.out.println("3: Exit\n");
 				} else {

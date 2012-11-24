@@ -3,6 +3,7 @@ package client.ctrl;
 import client.model.GameBoard;
 import client.model.Player;
 import client.view.View;
+import common.EasterEgg;
 import common.GameException;
 import common.Message;
 
@@ -53,12 +54,14 @@ public class ClientController {
 								try {
 										player = gameBoard.newPlayer(name, password);
 										if (debug) {
+												EasterEgg.playFile(EasterEgg.DOING_WELL);
 												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
 												// TODO player menu  
 								} catch (GameException gbe) {
+										EasterEgg.playFile(EasterEgg.UNKNOWN_ERROR);
 										processException(gbe);
 								}
 								break;
@@ -68,16 +71,19 @@ public class ClientController {
 								try {
 										player = gameBoard.loginPlayer(plname, plpwd);
 										if (debug) {
+												EasterEgg.playFile(EasterEgg.HELLO_FRIEND);
 												view.initMenu(plname, Message.LOGIN_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
 												// TODO player menu  
 								} catch (GameException gbe) {
+										EasterEgg.playFile(EasterEgg.UNKNOWN_ERROR);
 										processException(gbe);
 								}
 								break;
 						case 3:
+								EasterEgg.playFile(EasterEgg.GOODBYE);
 								view.display("See you next time !");
 								break;
 						default:
@@ -87,7 +93,20 @@ public class ClientController {
 		}
 		
 		public void initChoice(Integer choice) {
-				
+				switch (choice) {
+						case 1:
+//								TODO create new game
+								break;
+						case 2:
+//								TODO load new game
+								break;
+						case 3:
+								EasterEgg.playFile(EasterEgg.SHUTDOWN);
+								view.display("See you next time !");
+								break;
+						default:
+//								TODO what to do here ?
+				}
 		}
 
 		private void processException(GameException gbe) {

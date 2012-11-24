@@ -100,23 +100,5 @@ public class GameBoard {
 				}
 				return null; // To update
 		}
-
-		private int newGameBoardID() {
-				// TODO ask the server a new ID (Bernard)
-				return 0; // to be changed obviously
-		}
 		
-/*
-    public void setPlayerName(String name) {
-       // player.setPlayerName(name);
-    }
-    
-     public void setPlayerPassword(String pwd) {
-        //player.setPlayerPassword(pwd);
-    }
-    
-   public String getPlayerName() {
-        //return player.getPlayerName();
-   }
-*/
 }
