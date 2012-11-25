@@ -27,15 +27,15 @@ import org.jdom2.input.SAXBuilder;
  * @author Romain <ro.foncier@gmail.com>
  */
 public class GameRAM {
-		private  Map<String, Play> plays = new HashMap<String, Play>();
+		private  Map<String, Play> plays = new HashMap<String, Play>(); // HashMap which contains player ID like Key and Play instance like Value.
 
 		public GameRAM() {}
 		
 		/**
-			* Load all plays for the current player from the games.xml file. Keep only the play attributes without the play objects (grid, rack, bag).
+			* Load a specific play for the current player from the games.xml file. 
 			* @param playerUUID 
 			*/
-		public void firstLoadGame(String playerUUID) {
+		public void LoadGame(String playerUUID, String playID) {
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
 						System.out.println("File exists!");
@@ -51,15 +51,10 @@ public class GameRAM {
 												for (int j = 0; j < playList.size(); j++) {
 														Element playNode = (Element) playList.get(j);
 														
-														// Get specific children
-														Element uuid = (Element) playNode.getChildren("uuid");
-														Element created = (Element) playNode.getChildren("created");
-														Element modified = (Element) playNode.getChildren("modified");
-														Element score = (Element) playNode.getChildren("score");
-														
-														// Create a new Play instance without the game objects and put it in the plays HashMap
+														// Create a new Play instance
 														Play loadPlay = new Play(playerUUID, playNode.getChildText("uuid"), playNode.getChildText("created"), playNode.getChildText("modified"), Integer.parseInt(playNode.getChildText("uuid")));
-														plays.put(playNode.getChildText("uuid"), loadPlay);
+														// TODO Load words, create the grid, the rack and the tilebag from them
+														// Format these informations for client sending.
 												}
 										}
 										break; // break the loop.
@@ -80,25 +75,27 @@ public class GameRAM {
 		} 
 		
 		/**
-			* Simply put the new play in the plays HashMap.
+			* Simply put the new play in the plays HashMap if the playerID exists.
 			* @param play 
+			* @return true if operation is done.
 			*/
-		public void addNewPlay(Play play) {
-				plays.put(play.getPlayID(), play);
-		} 
-		
-		/**
-			* Define if the current Plays Map is empty.
-			* @param playID
-			* @return 
-			*/
-		public boolean playExists(String playID) {
-				if (!plays.isEmpty()) {
-						return plays.containsKey(playID);
-				} else {
-						return false;
+		public boolean addNewPlay(String playerID, Play play) {
+				Boolean done = false;
+				if (plays.isEmpty()) System.out.println("Map empty!");
+				Set set = this.plays.entrySet(); 
+				Iterator i = set.iterator(); 
+				
+				// Display elements 
+				while(i.hasNext()) { 
+						Map.Entry me = (Map.Entry)i.next(); 
+						if (me.getKey().equals(playerID)) {
+								me.setValue(play);
+								done = true;
+								break;
+						}
 				}
-		}
+				return done;
+		} 
 		
 		private void displayPlays() {
 				if (plays.isEmpty()) System.out.println("Map empty!");
@@ -114,31 +111,47 @@ public class GameRAM {
 		}
 		
 		/**
-			* Format the content of the plays HashMap for send it to the client
+			* Get the list of plays for the current user and format the content of them for send it to the client
 			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score] == play unit
 			* [play unit 1]##[play unit 2]## ...
 			* Two underscore between play attributes and two ## between play units.
 			*/
-		public String formatPlays() { // catch errors
+		public String loadPlayList(String playerUUID) { // catch errors
 				String result = "";
-				if (plays.isEmpty()) System.out.println("Map empty!");
-				Set set = this.plays.entrySet(); 
-				Iterator i = set.iterator(); 
-				
-				// Iterate elements 
-				while(i.hasNext()) { 
-						Map.Entry me = (Map.Entry)i.next(); 
-						Play cPlay = (Play) me.getValue();
-						result += cPlay.formatAttr();
-						if (i.hasNext()) result += "##";
+				File gameFile = new File("games.xml");
+				if (gameFile.exists()) {
+						System.out.println("File exists!");
+						SAXBuilder builder = new SAXBuilder(); 
+						try {
+								Document document = (Document) builder.build(gameFile);
+								Element rootNode = document.getRootElement();
+								List list = rootNode.getChildren("player");
+								for (int i = 0; i < list.size(); i++) {
+										Element node = (Element) list.get(i);
+										if (node.getAttributeValue("uuid").equals(playerUUID)) {
+												List playList = node.getChildren("play");
+												for (int j = 0; j < playList.size(); j++) {
+														Element playNode = (Element) playList.get(j);
+														
+														// Format Play informations without the game objects and concat it to the result variable.
+														result += playNode.getChildText("uuid")+"__"+playNode.getChildText("created")+"__"+playNode.getChildText("modified")+"__"+Integer.parseInt(playNode.getChildText("uuid"));
+														if (j < playList.size()) result += "##";
+												}
+										}
+										break; // break the loop.
+								}
+								System.out.println("Plays Loaded!");
+						} catch (IOException e) {
+								System.out.println(e.getMessage());
+						} catch (JDOMException jdome) {
+								System.out.println(jdome.getMessage());
+						}
+				} else {
+						System.out.println("File doesn't exist!");
+						// TODO Improve the way to handle errors.
 				}
 				return result;
 		}
-		
-		/**
-			* Allow to load game object for the selected play from the games.xml file.
-			*/
-		public void loadPlay() {}
 		
 		/**
 			* Save the current play in the games.xml file for the current player.

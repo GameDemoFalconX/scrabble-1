@@ -39,6 +39,9 @@ public class ThreadCtrl extends Thread {
 						case Message.LOGIN:
 								login();
 								break;
+						case Message.NEW_GAME:
+								newGame();
+								break;
 				}
 		}
 		
@@ -101,6 +104,22 @@ public class ThreadCtrl extends Thread {
 				String [] argsTab = new String(request.getBody()).split("_");
 				String name = argsTab[0];
 				String pwd = argsTab[1];
+				outputPrint("Current player is trying to login");
+				try {
+						Message response;
+						// Try to log the current player
+						response = game.login(name, pwd);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+						sProto.sendResponse(response);
+						//outputPrint("Server response status : "+response.getHeader());
+				} catch (GameException e) {
+						processError(e);
+				}
+		}
+		
+		private void newGame() {
+				String playerID = new String(request.getBody());
 				outputPrint("Current player is trying to login");
 				try {
 						Message response;

@@ -30,7 +30,10 @@ public class Message {
 		public static final int LOGIN_ERROR = 22; // Player login error
 		
 		// NEW_GAME //
-		public static final int NEWGAME = 30;  // New game
+		public static final int NEW_GAME = 30;  // New game
+		public static final int NEW_GAME_SUCCESS = 31;  // New game with success
+		public static final int NEW_GAME_ERROR = 32;  // New game with error
+		
 		public static final int LOADGAME = 40; // Load game
 		public static final int  LOGOUT = 50;  // Logout
 

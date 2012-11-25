@@ -12,10 +12,6 @@ import common.Message;
 public class HAL extends Game {
 		private PlayerRAM players = new PlayerRAM();
 		private GameRAM plays = new GameRAM();
-		
-		// These two variables must be present within HAL.
-		private Player cPlayer;
-		private Play cPlay;
     
 		/**
 			* Create a new account for the current player.
