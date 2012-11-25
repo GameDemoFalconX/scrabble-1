@@ -77,17 +77,50 @@ public class ClientController {
 										processException(gbe);
 								}
 								break;
-						case 3:
+						case 0:
+								view.display("See you next time !");
+								break;
+						default:
+								view.initMenu(player.getPlayerName(), Message.LOGIN_SUCCESS);
+								break;
+				}
+		}
+		
+		public void initChoice(Integer choice) {
+				switch (choice) {
+						case 1:
+								try {
+										//gameBoard.newPlay(player.getPlayerID());
+										if (debug) {
+												
+										} else {
+												// TODO GUI 
+										}
+												// TODO player menu  
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
+						case 2:
+								try {
+								//view.displayPlayList(gameBoard.getPlayList(player.getPlayerID()));
+										if (debug) {
+												
+										} else {
+												// TODO GUI 
+										}
+												// TODO player menu  
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
+						case 0:
 								view.display("See you next time !");
 								break;
 						default:
 								view.firstMenu("");
 								break;
 				}
-		}
-		
-		public void initChoice(Integer choice) {
-				
 		}
 
 		private void processException(GameException gbe) {

@@ -1,3 +1,4 @@
+*.properties
 *.un~
 *.swp
 *.DS_Store

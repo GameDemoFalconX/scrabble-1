@@ -12,15 +12,10 @@ import java.util.UUID;
  */
 public class GameBoard {
     
-		private UUID gameBoardID;
-		private Grid grid;
-		private Rack rack;
 		private ClientProtocol gbProtocol;
+		private Play cPlay;
     
 		private GameBoard() {
-				gameBoardID = UUID.randomUUID();
-				grid = new Grid(gameBoardID);
-				rack = new Rack(gameBoardID);
 		}
     
 		public GameBoard(String IPaddress, int port) {
@@ -101,22 +96,23 @@ public class GameBoard {
 				return null; // To update
 		}
 
-		private int newGameBoardID() {
-				// TODO ask the server a new ID (Bernard)
-				return 0; // to be changed obviously
+		public void loginPlayer(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME, 0,  playerID);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.NEW_GAME_SUCCESS:
+										// Return the new instance of the current player
+										//return new Player(name, password, new String(serverResponse.getBody()));
+								case Message.NEW_GAME_ERROR:
+										throw new GameException(GameException.typeErr.NEW_GAME_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
 		}
-		
-/*
-    public void setPlayerName(String name) {
-       // player.setPlayerName(name);
-    }
-    
-     public void setPlayerPassword(String pwd) {
-        //player.setPlayerPassword(pwd);
-    }
-    
-   public String getPlayerName() {
-        //return player.getPlayerName();
-   }
-*/
 }
