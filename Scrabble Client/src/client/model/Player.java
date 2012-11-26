@@ -1,47 +1,42 @@
 package client.model;
 
 import client.view.View;
-import common.GameBoardException;
+import common.GameException;
+import java.util.UUID;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Player {
-    
-    private String playerName;
-    private int playerID;
-    
-    public Player(String name) {
-        playerName = name;
-        boolean playerExists = true/*ask to server*/;
-        if (playerExists) {
-//            getPlayerID;
-        } else {
-//            newPlayerID
-        }
-    }
-
-    private void newPlayer(String name) throws GameBoardException {
-        playerName = name;
-//        Message answer = gbProtocol.sendMessage(Message.OP_NC,playerName, 0);
-//        TODO continue HERE !!! (Bernard)
-    }
-    
-    public String getPlayerName() {
-        return playerName;
-    }
-    
-    public void setPlayerName(String name) {
-        this.playerName = name;
-    }
-    
-    public int getPlayerID() {
-        return playerID;
-    }
-    
-    public void setPlayerID(int id) {
-        playerID = id;
-    }
-        
+public class Player {
+		
+		private String playerName;
+		private String playerPassword;
+		private UUID playerID;
+		
+		public Player(String name, String pwd, String uuid) {
+				playerName = name;
+				playerPassword = pwd;
+				playerID = UUID.fromString(uuid);
+		}
+		
+		public String getPlayerName() {
+				return playerName;
+		}
+		
+		public void setPlayerName(String name) {
+				this.playerName = name;
+		}
+		
+		public String getPlayerPassword() {
+				return playerPassword;
+		}
+		
+		public void setPlayerPassword(String pwd) {
+				this.playerPassword = pwd;
+		}
+		
+		public String getPlayerID() {
+				return playerID.toString();
+		}
 }

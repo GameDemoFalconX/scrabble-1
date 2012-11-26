@@ -1,1 +1,6 @@
 *.properties
+*.un~
+*.swp
+*.DS_Store
+/Scrabble Client/build/
+/Scrabble Server/build/
