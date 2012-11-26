@@ -97,24 +97,23 @@ public class ClientController {
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException gbe) {
 										processException(gbe);
 								}
 								break;
 						case 2:
-								/*
 								try {
-								//view.displayPlayList(gameBoard.getPlayList(player.getPlayerID()));
+										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
+										int playChoosen = view.displayPlayList(playList);
+										System.out.println("Load in process .");
 										if (debug) {
 												
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException gbe) {
 										processException(gbe);
-								}*/
+								}
 								break;
 						case 0:
 								view.display("See you next time !");

@@ -125,4 +125,24 @@ public class GameBoard {
 				System.out.print("\n");
 				System.out.println(cPlay.displayRack());
 		}
+		
+		public String [] loadPlayList(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.LOAD_GAME_LIST_SUCCESS:
+										String [] args = new String(serverResponse.getBody()).split("##");
+										return args;
+								case Message.LOAD_GAME_LIST_ERROR:
+										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+				return null;
+		}
 }

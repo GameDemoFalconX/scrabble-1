@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
-import server.model.Play;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -137,7 +136,7 @@ public class GameRAM {
 				String result = "";
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
-						System.out.println("File exists!");
+						System.out.println("Game file exists!");
 						SAXBuilder builder = new SAXBuilder(); 
 						try {
 								Document document = (Document) builder.build(gameFile);
@@ -145,13 +144,13 @@ public class GameRAM {
 								List list = rootNode.getChildren("player");
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
-										if (node.getAttributeValue("uuid").equals(playerUUID)) {
+										if (node.getAttributeValue("id").equals(playerUUID)) {
 												List playList = node.getChildren("play");
 												for (int j = 0; j < playList.size(); j++) {
 														Element playNode = (Element) playList.get(j);
 														
 														// Format Play informations without the game objects and concat it to the result variable.
-														result += playNode.getChildText("uuid")+"__"+playNode.getChildText("created")+"__"+playNode.getChildText("modified")+"__"+Integer.parseInt(playNode.getChildText("uuid"));
+														result += playNode.getChildText("uuid")+"__"+playNode.getChildText("created")+"__"+playNode.getChildText("modified")+"__"+Integer.parseInt(playNode.getChildText("score"));
 														if (j < playList.size()) result += "##";
 												}
 										}
@@ -164,9 +163,10 @@ public class GameRAM {
 								System.out.println(jdome.getMessage());
 						}
 				} else {
-						System.out.println("File doesn't exist!");
+						System.out.println("Game file doesn't exist!");
 						// TODO Improve the way to handle errors.
 				}
+				System.out.println(result);
 				return result;
 		}
 		

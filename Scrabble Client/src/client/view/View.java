@@ -58,6 +58,17 @@ public class View {
 				//ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
+		public int displayPlayList(String [] list) {
+				System.out.println("#             GAME LIST              #");
+				System.out.println("_________________________________________\n");
+				for (int i = 0; i < list.length; i++) {
+						String [] args = list[i].split("__");
+						System.out.println(""+Integer.toString(i)+": Created on "+args[1]+" - Modified on "+args[2]+" - Score : "+args[3]);
+				}
+				System.out.println("0: Exit\n");
+				return CConsole.readInt("Select the game you want to play?  ");
+		}
+		
 		public void display(String msg) {
 				System.out.println(msg);
 		}

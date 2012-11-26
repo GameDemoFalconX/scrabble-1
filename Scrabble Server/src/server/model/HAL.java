@@ -60,4 +60,17 @@ public class HAL extends Game {
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
+		
+		@Override
+		protected Message loadPlayLister(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						String list = plays.loadPlayList(pl_id);
+						if (!list.equals("")) {
+								return new Message(Message.LOAD_GAME_LIST_SUCCESS, list);
+						}
+						return new Message(Message.LOAD_GAME_LIST_ERROR, "");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
 }
