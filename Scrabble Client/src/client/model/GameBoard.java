@@ -147,7 +147,7 @@ public class GameBoard {
 		}
 		
 		public void loadGame(String playerID, String playID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"__");
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"_"+playID);
 				// Handle response
 				if (serverResponse != null) {
 						// Handle the server response

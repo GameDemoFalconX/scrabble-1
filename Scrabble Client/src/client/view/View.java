@@ -19,7 +19,7 @@ public class View {
     
 		public void firstMenu(String error) {
 				System.out.println(menuHeader);
-				if (!"".equals(error)) System.out.println(error+"\n"); // Display error messages in the menu.
+				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu.
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
 				System.out.println("0: Exit\n");

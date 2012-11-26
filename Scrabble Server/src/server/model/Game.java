@@ -70,7 +70,9 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		//Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
+		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
+				return null;
+		}
 		
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
