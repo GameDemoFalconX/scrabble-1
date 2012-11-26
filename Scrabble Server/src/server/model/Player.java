@@ -1,6 +1,5 @@
 package server.model;
 
-import common.GameException;
 import java.util.UUID;
 
 /**

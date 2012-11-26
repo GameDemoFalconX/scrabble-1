@@ -1,24 +1,16 @@
 package server.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
-import server.model.Player;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-
-// Import about XML generation, reader and writer
+import java.util.*;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * Important! : The JDOM class must be manually loaded. Click right on the Scrabble server folder > Properties. 
@@ -28,7 +20,7 @@ import org.jdom2.input.SAXBuilder;
  */
 public class PlayerRAM {
 		
-		private  Map<String, Player> players = new HashMap<String, Player>();
+		private  Map<String, Player> players = new HashMap<>();
 
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");

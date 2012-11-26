@@ -100,7 +100,7 @@ public class CConsole {
 		
 		/**
 			* Use the readPassword method from the java.io.Console class. That allows to disable the echoing.
-			* @param
+			* @param String prompt
 			* @return the input value
 			*/
 		

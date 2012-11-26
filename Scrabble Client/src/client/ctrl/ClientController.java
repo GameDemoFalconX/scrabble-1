@@ -18,6 +18,7 @@ public class ClientController {
 		private static String IPaddress = "localhost";
 		private static int port = 8189;    
 		private boolean debug = true;
+		private boolean sound = true;
     
 		/**
 		  * @param args the command line arguments
