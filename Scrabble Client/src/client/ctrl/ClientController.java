@@ -19,6 +19,7 @@ public class ClientController {
 		private static String IPaddress = "localhost";
 		private static int port = 8189;    
 		private boolean debug = true;
+		private boolean sound = true;
     
 		/**
 		  * @param args the command line arguments
@@ -54,14 +55,12 @@ public class ClientController {
 								try {
 										player = gameBoard.newPlayer(name, password);
 										if (debug) {
-												EasterEgg.playFile(EasterEgg.DOING_WELL);
 												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
 												// TODO player menu  
 								} catch (GameException gbe) {
-										EasterEgg.playFile(EasterEgg.UNKNOWN_ERROR);
 										processException(gbe);
 								}
 								break;
@@ -71,19 +70,16 @@ public class ClientController {
 								try {
 										player = gameBoard.loginPlayer(plname, plpwd);
 										if (debug) {
-												EasterEgg.playFile(EasterEgg.HELLO_FRIEND);
 												view.initMenu(plname, Message.LOGIN_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
 												// TODO player menu  
 								} catch (GameException gbe) {
-										EasterEgg.playFile(EasterEgg.UNKNOWN_ERROR);
 										processException(gbe);
 								}
 								break;
 						case 3:
-								EasterEgg.playFile(EasterEgg.GOODBYE);
 								view.display("See you next time !");
 								break;
 						default:
@@ -101,7 +97,6 @@ public class ClientController {
 //								TODO load new game
 								break;
 						case 3:
-								EasterEgg.playFile(EasterEgg.SHUTDOWN);
 								view.display("See you next time !");
 								break;
 						default:

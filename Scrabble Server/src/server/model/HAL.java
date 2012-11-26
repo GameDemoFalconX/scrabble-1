@@ -1,4 +1,4 @@
-package server.model;
+ package server.model;
 
 import common.GameException;
 import common.Message;

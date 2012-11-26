@@ -5,4 +5,29 @@
     <name>Bernard</name>
     <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
   </player>
+  <player uuid="f6174029-84f7-4265-b728-9aa201dbc57d">
+    <uuid>f6174029-84f7-4265-b728-9aa201dbc57d</uuid>
+    <name>Test</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="dfde070c-d596-45fc-b554-2265b1783c15">
+    <uuid>dfde070c-d596-45fc-b554-2265b1783c15</uuid>
+    <name>Test1</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="311c5fe3-2cf0-4a87-a8ce-5112ef969da1">
+    <uuid>311c5fe3-2cf0-4a87-a8ce-5112ef969da1</uuid>
+    <name>test2</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="aa29e196-d497-47e4-9a5f-e4aeab044afe">
+    <uuid>aa29e196-d497-47e4-9a5f-e4aeab044afe</uuid>
+    <name>testa</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="faff7bed-95be-4be6-91c7-9e0104892746">
+    <uuid>faff7bed-95be-4be6-91c7-9e0104892746</uuid>
+    <name>aaa</name>
+    <password>9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0</password>
+  </player>
 </players>

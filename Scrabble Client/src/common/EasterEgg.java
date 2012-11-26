@@ -12,6 +12,7 @@ public class EasterEgg {
 		public static final String HELLO_FRIEND = "HelloFriend.wav";
 		public static final String SHUTDOWN = "Shutdown.wav";
 		public static final String UNKNOWN_ERROR = "UnknownError.wav";
+		public static final String HELLO = "Hello.wav";
 
 		public static void playFile(String file) {
 				AePlayWave aw = new AePlayWave(file);

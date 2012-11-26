@@ -18,11 +18,19 @@ public class Tile {
 				this.letter = letter;
 				this.value = value;
 		}
-
+		
+		/**
+			* Gets the letter from the Tile
+			* @return the letter as a char
+			*/
 		public char getLetter() {
 				return letter;
 		}
 		
+		/**
+			* Gets the value from the Tile
+			* @return the value as an integer
+			*/
 		public int getValue() {
 				return value;
 		}

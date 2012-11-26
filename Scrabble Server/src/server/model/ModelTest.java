@@ -7,13 +7,22 @@ package server.model;
 public class ModelTest {
 
 		public static void main(String[] args) {
-//				testTileBag();
+				testTileBag();
 				
 		}
 
 		private static void testTileBag() {
 				int number = 102;
 				TileBag bag = new TileBag();
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
+				bag.removeTile(new Tile('A',1));
 				while (!bag.isEmpty()) {
 						System.out.println("N : "+number);
 						System.out.println(bag.getTile());

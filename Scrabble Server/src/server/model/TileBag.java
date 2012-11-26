@@ -7,8 +7,7 @@ import java.util.Random;
  * Model that contains the available Tiles during the game.
 	* It's a array of LinkedList. Each LinkedList contains Chars
 	* There's as many of element in the TileBag as there is Tile in the game.
-	* The index of the array is the value of the letters that it contains.
-	* There's                                                                
+	* The index of the array is the value of the letters that it contains.                                                                
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
@@ -71,6 +70,12 @@ public class TileBag {
 				tileBag[value].remove(rand);																			// delete that letter from the LinkedList
 				Tile tile = new Tile(letter,value);																	// call the Tile constructor
 				return tile;																																	// return that tile (to go to the rack)
+		}
+		
+		public void removeTile(Tile tile) {
+				char letter = tile.getLetter();
+				int value = tile.getValue();
+				tileBag[value].removeFirstOccurrence(letter);
 		}
 		
 		/**

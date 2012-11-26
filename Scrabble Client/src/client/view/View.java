@@ -10,15 +10,16 @@ import common.Message;
  */
 public class View {
 		private ClientController ctrl;
+		private String menuHeader =  "\n#####################################"+
+												"\n#             SCRABBLE              #"+
+												"\n#####################################\n";
     
 		public View(ClientController ctrl) {
 				 this.ctrl = ctrl;
 		}
     
 		public void firstMenu(String error) {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
+				System.out.println(menuHeader);
 				if (!"".equals(error)) System.out.println(error+"\n"); // Display error messages in the menu.
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
@@ -27,9 +28,7 @@ public class View {
 		}
     
 		public void initMenu(String name, Integer status) {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
+				System.out.println(menuHeader);
 				System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
 				if (status == Message.LOGIN_SUCCESS) {
@@ -42,18 +41,14 @@ public class View {
 		}
     
 		public void startMenu() {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
+				System.out.println(menuHeader);
 				System.out.println("1: Play now");
 				System.out.println("2: Exit\n");
 				//ctrl.startChoice(CConsole.readInt("Your choice ?  "));
 		}
     
 		public void playMenu() {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
+				System.out.println(menuHeader);
 				System.out.println("1: Place word");
 				System.out.println("2: Save your game\n");
 				System.out.println("3: Exit\n");
