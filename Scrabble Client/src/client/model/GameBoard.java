@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  *
- * @authors Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class GameBoard {
     
@@ -156,7 +156,6 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOAD_GAME_LIST_SUCCESS:
 										String [] args = new String(serverResponse.getBody()).split("##");
-										return args;
 								case Message.LOAD_GAME_LIST_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
 						}

@@ -2,5 +2,5 @@
 *.un~
 *.swp
 *.DS_Store
-/Scrabble Server/build/
 /Scrabble Client/build/
+/Scrabble Server/build/

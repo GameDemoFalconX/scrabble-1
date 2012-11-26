@@ -1,7 +1,5 @@
 package server.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import common.Message;
 
 /**
