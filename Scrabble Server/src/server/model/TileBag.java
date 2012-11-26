@@ -46,7 +46,7 @@ public class TileBag {
 				}
 				char letter;																																						
 				int rand = random.nextInt(tileBag[value].size());					// get a new pseudo random number to select the letter from the row
-				letter = (char) tileBag[value].get(rand);												// get the letter from the LinkedList
+				letter = tileBag[value].get(rand).toString().charAt(0);												// get the letter from the LinkedList
 				tileBag[value].remove(rand);																			// delete that letter from the LinkedList
 				Tile tile = new Tile(letter,value);																	// call the Tile constructor
 				return tile;																																	// return that tile (to go to the rack)

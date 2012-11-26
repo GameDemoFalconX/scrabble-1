@@ -19,6 +19,7 @@ class Rack {
 				for (int i = 0; i < rack.length; i++) {
 						rack[i] = bag.getTileFromBag();
 				}
+				System.out.println(this.toString());
 		}
 		
 		/**
@@ -35,7 +36,12 @@ class Rack {
 		// Methods added by Bernard
 		@Override
 		public String toString() {
-				return rack[0] + " " + rack[1] + " " + rack[2] + " " + rack[3] + " " + rack[4] + " " + rack[5] + " " + rack[6];
+				String result = "";
+				for (int i = 0; i < rack.length; i++) {
+						result += rack[i].getLetter()+":"+rack[i].getValue();
+						if (i < rack.length-1) result += "__";
+				}
+				return result;
 		}
 		
 		public Rack getRack() {

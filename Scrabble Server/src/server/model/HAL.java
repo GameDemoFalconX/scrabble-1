@@ -26,7 +26,7 @@ public class HAL extends Game {
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
-				cPlayer = newPlayer;
+				plays.addStarter(newPlayer.getPlayerID());
 				// Return the new player ID
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
@@ -37,7 +37,7 @@ public class HAL extends Game {
 				if (players.playerExists(pl_name)) {
 						Player pl = players.checkPassword(pl_name, pl_pwd); 
 						if (pl != null) {
-								cPlayer = pl;
+								plays.addStarter(pl.getPlayerID());
 								// Return the player ID
 								response = new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
 						} else {
@@ -47,5 +47,17 @@ public class HAL extends Game {
 						response = new Message(Message.PLAYER_NOT_EXISTS, "");
 				}
 				return response;
+		}
+		
+		@Override
+		protected Message createNewGame(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						// Initialization of the Play on the server side and add it to the GameRAM dict.
+						Play newPlay = new Play(pl_id);
+						plays.addNewPlay(pl_id, newPlay);
+						return new Message(Message.NEW_GAME_SUCCESS, newPlay.getPlayID()+"##"+newPlay.getFormatRack()); // Only return the rack to the client.
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
 }

@@ -96,7 +96,7 @@ public class GameBoard {
 				return null; // To update
 		}
 
-		public void loginPlayer(String playerID) throws GameException {
+		public void createNewPlay(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME, 0,  playerID);
 				
 				// Handle response
@@ -106,13 +106,23 @@ public class GameBoard {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.NEW_GAME_SUCCESS:
-										// Return the new instance of the current player
-										//return new Player(name, password, new String(serverResponse.getBody()));
-								case Message.NEW_GAME_ERROR:
-										throw new GameException(GameException.typeErr.NEW_GAME_ERROR);
+										String [] args = new String(serverResponse.getBody()).split("##");
+										cPlay = new Play(playerID, args[0], args[1]);
+										break;
+								case Message.PLAYER_NOT_LOGGED:
+										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
+		}
+		
+		public void displayGame() {
+				System.out.println("\n#####################################");
+				System.out.println("#             SCRABBLE              #");
+				System.out.println("#####################################\n");
+				System.out.println(cPlay.displayGrid());
+				System.out.print("\n");
+				System.out.println(cPlay.displayRack());
 		}
 }

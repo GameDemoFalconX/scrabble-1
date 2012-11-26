@@ -90,9 +90,10 @@ public class ClientController {
 				switch (choice) {
 						case 1:
 								try {
-										//gameBoard.newPlay(player.getPlayerID());
+										gameBoard.createNewPlay(player.getPlayerID());
 										if (debug) {
-												
+												gameBoard.displayGame();
+												view.playMenu();
 										} else {
 												// TODO GUI 
 										}
@@ -102,6 +103,7 @@ public class ClientController {
 								}
 								break;
 						case 2:
+								/*
 								try {
 								//view.displayPlayList(gameBoard.getPlayList(player.getPlayerID()));
 										if (debug) {
@@ -112,7 +114,7 @@ public class ClientController {
 												// TODO player menu  
 								} catch (GameException gbe) {
 										processException(gbe);
-								}
+								}*/
 								break;
 						case 0:
 								view.display("See you next time !");
@@ -142,6 +144,9 @@ public class ClientController {
 								break;
 						case LOGIN_ERROR:
 								view.firstMenu("Warning! The password entered is not correct! Please try again.");
+								break;
+						case PLAYER_NOT_LOGGED:
+								view.firstMenu("Warning! You are not yet logged!");
 								break;
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");

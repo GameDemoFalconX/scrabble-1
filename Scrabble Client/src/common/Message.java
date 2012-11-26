@@ -16,6 +16,7 @@ public class Message {
 		public static final int PLAYER_EXISTS = 3; // Player exists
 		public static final int PLAYER_NOT_EXISTS = 4; // Player not exists
 		public static final int PWDKO = 5; // Password KO
+		public static final int PLAYER_NOT_LOGGED = 6; // Player doesn't yet logged
 		// Add other answers + game codes
 		
 		// Tasks codes

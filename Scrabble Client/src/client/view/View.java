@@ -51,9 +51,7 @@ public class View {
 		}
     
 		public void playMenu() {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
+				System.out.println("_________________________________________\n");
 				System.out.println("1: Place word");
 				System.out.println("2: Save your game\n");
 				System.out.println("0: Exit\n");

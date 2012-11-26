@@ -29,7 +29,6 @@ public abstract class Game implements IGame {
 		@Override
 		public Message login(String pl_name, String pl_pwd) throws GameException {
 				Message response = loginProcess(pl_name, pl_pwd);
-				System.out.println("Login method in Game : response = "+response);
 				switch (response.getHeader()) {
 						case Message.LOGIN_SUCCESS:
 								return response;
@@ -42,8 +41,19 @@ public abstract class Game implements IGame {
 		}
 		
 		// Game -  plays actions
+		@Override
+		public Message createNewPlay(String pl_id) throws GameException {
+				Message response = createNewGame(pl_id);
+				switch (response.getHeader()) {
+						case Message.NEW_GAME_SUCCESS:
+								return response;
+						case Message.PLAYER_NOT_LOGGED:
+								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+				}
+				return null;
+		}
+		
 		/* To implement
-		Message createNewPlay(String pl_id) throws GameException;
 		Message displayUserPlays(String pl_id) throws GameException;
 		Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
 		*/
@@ -54,4 +64,5 @@ public abstract class Game implements IGame {
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
+		protected abstract Message createNewGame(String pl_id);
 }

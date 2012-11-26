@@ -97,6 +97,23 @@ public class GameRAM {
 				return done;
 		} 
 		
+		/**
+			* Return true if the playerID is contained in the plays Dict (Initialized during the login or create new player)
+			* @param playerID
+			* @return 
+			*/
+		public boolean playerIsLogged(String playerID) {
+				return plays.containsKey(playerID);
+		}
+		
+		/**
+			* Add the new player to the player list and initialize this Play instance to null.
+			* @param playerID 
+			*/
+		public void addStarter(String playerID) {
+				plays.put(playerID, null);
+		}
+		
 		private void displayPlays() {
 				if (plays.isEmpty()) System.out.println("Map empty!");
 				Set set = this.plays.entrySet(); 

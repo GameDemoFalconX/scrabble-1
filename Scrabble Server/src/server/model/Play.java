@@ -1,10 +1,6 @@
 package server.model;
 
 import java.util.UUID;
-import server.model.Player;
-import server.model.Grid;
-import server.model.Rack;
-import server.model.TileBag;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -68,5 +64,13 @@ public class Play {
 			*/
 		public String formatAttr() {
 				return getPlayID()+"__"+formatDate(created)+"__"+formatDate(modified)+"__"+score.toString();
+		}
+		
+		/**
+			* Return a String representation of the rack with the following canvas : [letter] [letter] ...
+			* @return 
+			*/
+		public String getFormatRack() {
+				return this.rack.toString();
 		}
 }

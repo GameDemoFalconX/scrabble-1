@@ -64,6 +64,10 @@ public class ThreadCtrl extends Thread {
 								answer = new Message(Message.LOGIN_ERROR, "");
 								outputPrint("Server error : Login error.");
 								break;
+						case PLAYER_NOT_LOGGED:
+								answer = new Message(Message.PLAYER_NOT_LOGGED, "");
+								outputPrint("Server error : The current player does not yet logged.");
+								break;
 				}
 				sProto.sendResponse(answer);
 		}
@@ -120,11 +124,11 @@ public class ThreadCtrl extends Thread {
 		
 		private void newGame() {
 				String playerID = new String(request.getBody());
-				outputPrint("Current player is trying to login");
+				outputPrint("Current player is trying to create a new game");
 				try {
 						Message response;
-						// Try to log the current player
-						response = game.login(name, pwd);
+						// Try to create a new game for the current player
+						response = game.createNewPlay(playerID);
 						
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
