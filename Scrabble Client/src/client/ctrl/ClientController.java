@@ -3,7 +3,7 @@ package client.ctrl;
 import client.model.GameBoard;
 import client.model.Player;
 import client.view.View;
-import common.GameBoardException;
+import common.GameException;
 import common.Message;
 
 /**
@@ -58,7 +58,7 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameBoardException gbe) {
+								} catch (GameException gbe) {
 										processException(gbe);
 								}
 								break;
@@ -73,11 +73,49 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameBoardException gbe) {
+								} catch (GameException gbe) {
 										processException(gbe);
 								}
 								break;
-						case 3:
+						case 0:
+								view.display("See you next time !");
+								break;
+						default:
+								view.initMenu(player.getPlayerName(), Message.LOGIN_SUCCESS);
+								break;
+				}
+		}
+		
+		public void initChoice(Integer choice) {
+				switch (choice) {
+						case 1:
+								try {
+										gameBoard.createNewPlay(player.getPlayerID());
+										if (debug) {
+												gameBoard.displayGame();
+												view.playMenu();
+										} else {
+												// TODO GUI 
+										}
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
+						case 2:
+								try {
+										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
+										int playChoosen = view.displayPlayList(playList);
+										System.out.println("Load in process .");
+										if (debug) {
+												
+										} else {
+												// TODO GUI 
+										}
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
+						case 0:
 								view.display("See you next time !");
 								break;
 						default:
@@ -85,12 +123,8 @@ public class ClientController {
 								break;
 				}
 		}
-		
-		public void initChoice(Integer choice) {
-				
-		}
 
-		private void processException(GameBoardException gbe) {
+		private void processException(GameException gbe) {
 				switch(gbe.getErreur()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");
@@ -109,6 +143,9 @@ public class ClientController {
 								break;
 						case LOGIN_ERROR:
 								view.firstMenu("Warning! The password entered is not correct! Please try again.");
+								break;
+						case PLAYER_NOT_LOGGED:
+								view.firstMenu("Warning! You are not yet logged!");
 								break;
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");

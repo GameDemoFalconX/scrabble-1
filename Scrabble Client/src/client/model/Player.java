@@ -1,7 +1,7 @@
 package client.model;
 
 import client.view.View;
-import common.GameBoardException;
+import common.GameException;
 import java.util.UUID;
 
 /**

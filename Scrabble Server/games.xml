@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plays>
+    <player id="d035ed64-7bed-4029-ae5b-0d35c94238d5">
+        <play id="d035ed64-7bed-4029-ae5b-0d35c94238d6">
+            <uuid>d035ed64-7bed-4029-ae5b-0d35c94238d6</uuid>
+            <created>2012/11/26</created>
+            <modified>2012/11/26</modified>
+            <score>0</score>
+            <grid>
+                [grid-informations]
+            </grid>
+            <rack>
+                [rack-informations]
+            </rack>
+            <tilebag>
+                [tilebag-informations]
+            </tilebag>
+        </play>
+        <play id="d035ed64-7bed-4029-ae5b-0d35c94238d7">
+            <uuid>d035ed64-7bed-4029-ae5b-0d35c94238d7</uuid>
+            <created>2012/11/25</created>
+            <modified>2012/11/25</modified>
+            <score>100</score>
+            <grid>
+                [grid-informations]
+            </grid>
+            <rack>
+                [rack-informations]
+            </rack>
+            <tilebag>
+                [tilebag-informations]
+            </tilebag>
+        </play>
+    </player>
+</plays>

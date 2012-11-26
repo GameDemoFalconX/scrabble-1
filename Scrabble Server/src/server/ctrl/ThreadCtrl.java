@@ -1,10 +1,10 @@
 package server.ctrl;
 
-import common.GameBoardException;
+import common.GameException;
 import common.Message;
 import server.connection.ServerProtocol;
-import server.model.GameBoardFactory;
-import server.model.IGameBoard;
+import server.model.GameFactory;
+import server.model.IGame;
 
 /**
  *
@@ -12,13 +12,13 @@ import server.model.IGameBoard;
  */
 public class ThreadCtrl extends Thread {
 		
-		private IGameBoard game;
+		private IGame game;
 		private ServerProtocol sProto;
-		Message request;
-		
+		private Message request;
+				
 		public ThreadCtrl(ServerProtocol sp) {
 				sProto = sp;
-				game = GameBoardFactory.getGame();
+				game = GameFactory.getGame();
 		}
 		
 		@Override
@@ -39,10 +39,16 @@ public class ThreadCtrl extends Thread {
 						case Message.LOGIN:
 								login();
 								break;
+						case Message.NEW_GAME:
+								newGame();
+								break;
+						case Message.LOAD_GAME_LIST:
+								loadGameList();
+								break;
 				}
 		}
 		
-		private void processError(GameBoardException e) { 
+		private void processError(GameException e) { 
 				Message answer = null;
 				switch(e.getError()) {
 						case SYSKO:
@@ -60,6 +66,14 @@ public class ThreadCtrl extends Thread {
 						case LOGIN_ERROR:
 								answer = new Message(Message.LOGIN_ERROR, "");
 								outputPrint("Server error : Login error.");
+								break;
+						case PLAYER_NOT_LOGGED:
+								answer = new Message(Message.PLAYER_NOT_LOGGED, "");
+								outputPrint("Server error : The current player does not yet logged.");
+								break;
+						case LOAD_GAME_LIST_ERROR:
+								answer = new Message(Message.LOAD_GAME_LIST_ERROR, "");
+								outputPrint("Server error : The current player does not yet any plays saved on the server.");
 								break;
 				}
 				sProto.sendResponse(answer);
@@ -89,10 +103,10 @@ public class ThreadCtrl extends Thread {
 						// Try to create a new player acount
 						response = game.newAccount(name, pwd);
 						
-						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
 						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameBoardException e) {
+				} catch (GameException e) {
 						processError(e);
 				}
 		}
@@ -107,10 +121,41 @@ public class ThreadCtrl extends Thread {
 						// Try to log the current player
 						response = game.login(name, pwd);
 						
-						if (response == null) throw new GameBoardException(GameBoardException.typeErr.SYSKO);
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
 						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameBoardException e) {
+				} catch (GameException e) {
+						processError(e);
+				}
+		}
+		
+		private void newGame() {
+				String playerID = new String(request.getBody());
+				outputPrint("Current player is trying to create a new game");
+				try {
+						Message response;
+						// Try to create a new game for the current player
+						response = game.createNewPlay(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+						sProto.sendResponse(response);
+						//outputPrint("Server response status : "+response.getHeader());
+				} catch (GameException e) {
+						processError(e);
+				}
+		}
+		
+		private void loadGameList() {
+				String playerID = new String(request.getBody());
+				outputPrint("Current player is trying to load list of games");
+				try {
+						Message response;
+						// Try to create a new game for the current player
+						response = game.loadPlayList(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+						sProto.sendResponse(response);
+				} catch (GameException e) {
 						processError(e);
 				}
 		}
