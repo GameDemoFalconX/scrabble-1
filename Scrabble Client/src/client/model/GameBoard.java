@@ -145,4 +145,23 @@ public class GameBoard {
 				}
 				return null;
 		}
+		
+		public void loadGame(String playerID, String playID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"__");
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.LOAD_GAME_LIST_SUCCESS:
+										String [] args = new String(serverResponse.getBody()).split("##");
+										return args;
+								case Message.LOAD_GAME_LIST_ERROR:
+										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
 }
