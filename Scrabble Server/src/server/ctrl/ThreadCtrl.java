@@ -39,6 +39,12 @@ public class ThreadCtrl extends Thread {
 						case Message.LOGIN:
 								login();
 								break;
+						case Message.NEW_GAME:
+								newGame();
+								break;
+						case Message.LOAD_GAME_LIST:
+								loadGameList();
+								break;
 				}
 		}
 		
@@ -60,6 +66,14 @@ public class ThreadCtrl extends Thread {
 						case LOGIN_ERROR:
 								answer = new Message(Message.LOGIN_ERROR, "");
 								outputPrint("Server error : Login error.");
+								break;
+						case PLAYER_NOT_LOGGED:
+								answer = new Message(Message.PLAYER_NOT_LOGGED, "");
+								outputPrint("Server error : The current player does not yet logged.");
+								break;
+						case LOAD_GAME_LIST_ERROR:
+								answer = new Message(Message.LOAD_GAME_LIST_ERROR, "");
+								outputPrint("Server error : The current player does not yet any plays saved on the server.");
 								break;
 				}
 				sProto.sendResponse(answer);
@@ -110,6 +124,37 @@ public class ThreadCtrl extends Thread {
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 						sProto.sendResponse(response);
 						//outputPrint("Server response status : "+response.getHeader());
+				} catch (GameException e) {
+						processError(e);
+				}
+		}
+		
+		private void newGame() {
+				String playerID = new String(request.getBody());
+				outputPrint("Current player is trying to create a new game");
+				try {
+						Message response;
+						// Try to create a new game for the current player
+						response = game.createNewPlay(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+						sProto.sendResponse(response);
+						//outputPrint("Server response status : "+response.getHeader());
+				} catch (GameException e) {
+						processError(e);
+				}
+		}
+		
+		private void loadGameList() {
+				String playerID = new String(request.getBody());
+				outputPrint("Current player is trying to load list of games");
+				try {
+						Message response;
+						// Try to create a new game for the current player
+						response = game.loadPlayList(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+						sProto.sendResponse(response);
 				} catch (GameException e) {
 						processError(e);
 				}

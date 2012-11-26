@@ -1,28 +1,22 @@
- package server.model;
+package server.model;
 
-import common.GameException;
 import common.Message;
 
 /**
- * HAL (Heuristically programmed ALgorithmic computer) is an artificial intelligence that controls the systems of the Discovery One spacecraft and interacts with the ship's astronaut crew. 
-	* Being a computer, HAL has no distinct physical form, though is visually represented as a red television-camera eye located on equipment panels throughout the ship.
+ *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 
 public class HAL extends Game {
 		private PlayerRAM players = new PlayerRAM();
 		private GameRAM plays = new GameRAM();
-		
-		// These two variables must be present within HAL.
-		private Player cPlayer;
-		private Play cPlay;
     
 		/**
 			* Create a new account for the current player.
-			* @param pl_name The player's name.
-			* @param pl_pwd The player's password.
+			* @param player
 			* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
 			*/
+
 		@Override
 		protected Message createAccount(String pl_name, String pl_pwd) {
 				if (players.playerExists(pl_name)) {
@@ -30,18 +24,18 @@ public class HAL extends Game {
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
-				cPlayer = newPlayer;
+				plays.addStarter(newPlayer.getPlayerID());
 				// Return the new player ID
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
 		
 		@Override
 		protected Message loginProcess(String pl_name, String pl_pwd) {
-				Message response;
+				Message response = null;
 				if (players.playerExists(pl_name)) {
 						Player pl = players.checkPassword(pl_name, pl_pwd); 
 						if (pl != null) {
-								cPlayer = pl;
+								plays.addStarter(pl.getPlayerID());
 								// Return the player ID
 								response = new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
 						} else {
@@ -52,20 +46,29 @@ public class HAL extends Game {
 				}
 				return response;
 		}
-
+		
 		@Override
-		public Message createNewPlay(String pl_id) throws GameException {
-				throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public Message displayUserPlays(String pl_id) throws GameException {
-				throw new UnsupportedOperationException("Not supported yet.");
-		}
-
-		@Override
-		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
-				throw new UnsupportedOperationException("Not supported yet.");
+		protected Message createNewGame(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						// Initialization of the Play on the server side and add it to the GameRAM dict.
+						Play newPlay = new Play(pl_id);
+						plays.addNewPlay(pl_id, newPlay);
+						return new Message(Message.NEW_GAME_SUCCESS, newPlay.getPlayID()+"##"+newPlay.getFormatRack()); // Only return the rack to the client.
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
 		
+		@Override
+		protected Message loadPlayLister(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						String list = plays.loadPlayList(pl_id);
+						if (!list.equals("")) {
+								return new Message(Message.LOAD_GAME_LIST_SUCCESS, list);
+						}
+						return new Message(Message.LOAD_GAME_LIST_ERROR, "");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
 }

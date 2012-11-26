@@ -8,16 +8,19 @@ class Rack {
 		
 		private Tile[] rack = new Tile[7];
 		
-		public Rack() {
+		public Rack(String formatedRack) {
+				String [] tileList = formatedRack.split("__");
 				for (int i = 0; i < rack.length; i++) {
-						rack[i] = null;
+						char letter = tileList[i].split(":")[0].charAt(0);
+						Integer value = Integer.parseInt(tileList[i].split(":")[1]);
+						rack[i] = new Tile(letter, value);
 				}
 		}
 		
 		// Methods added by Bernard
 		@Override
 		public String toString() {
-				return rack[0] + " " + rack[1] + " " + rack[2] + " " + rack[3] + " " + rack[4] + " " + rack[5] + " " + rack[6];
+				return rack[0].getLetter()+" "+rack[1].getLetter()+" "+rack[2].getLetter()+" "+rack[3].getLetter()+" "+rack[4].getLetter()+" "+rack[5].getLetter()+" "+rack[6].getLetter();
 		}
 		
 		public Rack getRack() {

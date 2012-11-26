@@ -1,13 +1,13 @@
 package server.model;
 
+import java.util.UUID;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * 
- * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
+ * @author Romain <ro.foncier@gmail.com>
  */
 public class Play {
 		private UUID playID;
@@ -30,8 +30,8 @@ public class Play {
 		}
 		
 		/**
-			* Allows to initialize a Play object without grid, rack and bag to save memory. 
-			* Thus it become possible to display some attributes of this without to have load the complete object.
+			* Allows to initialize a Play object without grid, rack and bag for save memory. 
+			* Thus It become possible to display some attributes of this without to have load the complete object.
 			* @param playerID
 			* @param playID
 			* @param created
@@ -46,19 +46,6 @@ public class Play {
 				String [] mDate = modified.split("/");
 				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
 				this.score = score;
-		}
-		
-		public void loadPlay(String playerID, String playID, String created, String modified, Integer score, String grid, String bag, String rack) {
-				this.playID = UUID.fromString(playID);
-				this.owner = UUID.fromString(playerID);
-				String [] cDate = created.split("/");
-				this.created = new Date(Integer.parseInt(cDate[0]), Integer.parseInt(cDate[1]), Integer.parseInt(cDate[2]));
-				String [] mDate = modified.split("/");
-				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
-				this.score = score;
-//				this.grid = new Grid(grid);
-				this.bag = new TileBag(bag);
-				this.rack = new Rack(rack);
 		}
 		
 		public String getPlayID() {
@@ -77,5 +64,13 @@ public class Play {
 			*/
 		public String formatAttr() {
 				return getPlayID()+"__"+formatDate(created)+"__"+formatDate(modified)+"__"+score.toString();
+		}
+		
+		/**
+			* Return a String representation of the rack with the following canvas : [letter] [letter] ...
+			* @return 
+			*/
+		public String getFormatRack() {
+				return this.rack.toString();
 		}
 }

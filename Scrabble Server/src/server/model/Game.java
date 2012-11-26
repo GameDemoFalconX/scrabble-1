@@ -29,7 +29,6 @@ public abstract class Game implements IGame {
 		@Override
 		public Message login(String pl_name, String pl_pwd) throws GameException {
 				Message response = loginProcess(pl_name, pl_pwd);
-				System.out.println("Login method in Game : response = "+response);
 				switch (response.getHeader()) {
 						case Message.LOGIN_SUCCESS:
 								return response;
@@ -42,11 +41,37 @@ public abstract class Game implements IGame {
 		}
 		
 		// Game -  plays actions
-		/* To implement
-		Message createNewPlay(String pl_id) throws GameException;
-		Message displayUserPlays(String pl_id) throws GameException;
-		Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
-		*/
+		@Override
+		public Message createNewPlay(String pl_id) throws GameException {
+				Message response = createNewGame(pl_id);
+				switch (response.getHeader()) {
+						case Message.NEW_GAME_SUCCESS:
+								return response;
+						case Message.PLAYER_NOT_LOGGED:
+								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+				}
+				return null;
+		}
+		
+		/**
+			* Return the list of Plays for the current player.
+			* @param pl_id
+			* @return
+			* @throws GameException 
+			*/
+		public Message loadPlayList(String pl_id) throws GameException {
+				Message response = loadPlayLister(pl_id);
+				switch (response.getHeader()) {
+						case Message.LOAD_GAME_LIST_SUCCESS:
+								return response;
+						case Message.LOAD_GAME_LIST_ERROR:
+								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+				}
+				return null;
+		}
+		
+		//Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
+		
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
 		public void deconnection(String nom) throws GameException {}
@@ -54,4 +79,6 @@ public abstract class Game implements IGame {
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
+		protected abstract Message createNewGame(String pl_id);
+		protected abstract Message loadPlayLister(String pl_id);
 }

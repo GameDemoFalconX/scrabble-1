@@ -12,15 +12,10 @@ import java.util.UUID;
  */
 public class GameBoard {
     
-		private UUID gameBoardID;
-		private Grid grid;
-		private Rack rack;
 		private ClientProtocol gbProtocol;
+		private Play cPlay;
     
 		private GameBoard() {
-				gameBoardID = UUID.randomUUID();
-				grid = new Grid();
-				rack = new Rack();
 		}
     
 		public GameBoard(String IPaddress, int port) {
@@ -100,5 +95,54 @@ public class GameBoard {
 				}
 				return null; // To update
 		}
+
+		public void createNewPlay(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME, 0,  playerID);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.NEW_GAME_SUCCESS:
+										String [] args = new String(serverResponse.getBody()).split("##");
+										cPlay = new Play(playerID, args[0], args[1]);
+										break;
+								case Message.PLAYER_NOT_LOGGED:
+										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
 		
+		public void displayGame() {
+				System.out.println("\n#####################################");
+				System.out.println("#             SCRABBLE              #");
+				System.out.println("#####################################\n");
+				System.out.println(cPlay.displayGrid());
+				System.out.print("\n");
+				System.out.println(cPlay.displayRack());
+		}
+		
+		public String [] loadPlayList(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.LOAD_GAME_LIST_SUCCESS:
+										String [] args = new String(serverResponse.getBody()).split("##");
+										return args;
+								case Message.LOAD_GAME_LIST_ERROR:
+										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+				return null;
+		}
 }
