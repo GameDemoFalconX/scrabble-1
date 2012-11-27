@@ -42,6 +42,9 @@ public class ThreadCtrl extends Thread {
 						case Message.NEW_GAME:
 								newGame();
 								break;
+						case Message.NEW_GAME_ANONYM:
+								newAnonymGame();
+								break;
 						case Message.LOAD_GAME_LIST:
 								loadGameList();
 								break;
@@ -72,7 +75,9 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to create a new player acount
 				response = HAL.newAccount(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void login() {
@@ -82,7 +87,9 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to log the current player
 				response = HAL.login(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void newGame() {
@@ -92,7 +99,20 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to create a new game for the current player
 				response = HAL.createNewPlay(playerID);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void newAnonymGame() {
+				outputPrint("Current anonymous player is trying to create a new game");
+				Message response;
+				
+				// Try to log the current player
+				response = HAL.newAnonymGame(new String(request.getBody()));
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void loadGameList() {
@@ -102,7 +122,9 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to load the plays list for the current player
 				response = HAL.loadPlayList(playerID);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void loadGame() {
@@ -112,7 +134,9 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void outputPrint(String msg) {

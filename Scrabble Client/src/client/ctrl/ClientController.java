@@ -78,6 +78,21 @@ public class ClientController {
 										processException(gbe);
 								}
 								break;
+						case 3:
+								try {
+										player = new Player(); // Create an anonymous player.
+										gameBoard.createNewPlayAnonym(player.getPlayerID());
+										if (debug) {
+												gameBoard.displayGame();
+												view.playMenu();
+										} else {
+												// TODO GUI 
+										}
+												// TODO player menu  
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
 						case 0:
 								view.display("See you next time !");
 								break;

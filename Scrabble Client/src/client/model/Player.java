@@ -18,6 +18,15 @@ public class Player {
 				playerID = UUID.fromString(uuid);
 		}
 		
+		/**
+			* Constructor for anonymous player.
+			* @param name
+			*/
+		public Player() {
+				playerID = UUID.randomUUID();
+				playerName = "PA"+playerID.toString();
+		}
+		
 		public String getPlayerName() {
 				return playerName;
 		}
