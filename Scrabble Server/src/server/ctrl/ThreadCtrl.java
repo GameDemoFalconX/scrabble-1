@@ -12,13 +12,13 @@ import server.model.IGame;
  */
 public class ThreadCtrl extends Thread {
 		
-		private IGame game;
+		private ServerScrabble HAL;
 		private ServerProtocol sProto;
 		private Message request;
 				
-		public ThreadCtrl(ServerProtocol sp) {
+		public ThreadCtrl(ServerProtocol sp, ServerScrabble hal) {
 				sProto = sp;
-				game = GameFactory.getGame();
+				HAL = hal;
 		}
 		
 		@Override
@@ -29,7 +29,7 @@ public class ThreadCtrl extends Thread {
 		
 		private void processMessage() {
 				if (request == null) {
-						outputPrint("Protocol problem");
+						outputPrint("Thread ["+this.getName()+"] : Protocol problem");
 						return;
 				}
 				switch(request.getHeader()) {
@@ -45,38 +45,10 @@ public class ThreadCtrl extends Thread {
 						case Message.LOAD_GAME_LIST:
 								loadGameList();
 								break;
-				}
-		}
-		
-		private void processError(GameException e) { 
-				Message answer = null;
-				switch(e.getError()) {
-						case SYSKO:
-								answer = new Message(Message.SYSKO, "");
-								outputPrint("Server error : System KO.");
-								break;
-						case PLAYER_EXISTS:
-								answer = new Message(Message.PLAYER_EXISTS, "");
-								outputPrint("Server error : Player already exists.");
-								break;
-						case PLAYER_NOT_EXISTS:
-								answer = new Message(Message.PLAYER_NOT_EXISTS, "");
-								outputPrint("Server error : Player does not yet exist.");
-								break;
-						case LOGIN_ERROR:
-								answer = new Message(Message.LOGIN_ERROR, "");
-								outputPrint("Server error : Login error.");
-								break;
-						case PLAYER_NOT_LOGGED:
-								answer = new Message(Message.PLAYER_NOT_LOGGED, "");
-								outputPrint("Server error : The current player does not yet logged.");
-								break;
-						case LOAD_GAME_LIST_ERROR:
-								answer = new Message(Message.LOAD_GAME_LIST_ERROR, "");
-								outputPrint("Server error : The current player does not yet any plays saved on the server.");
+						case Message.LOAD_GAME:
+								loadGame();
 								break;
 				}
-				sProto.sendResponse(answer);
 		}
 		
 		/*
@@ -95,72 +67,60 @@ public class ThreadCtrl extends Thread {
 		
 		private void newAccount() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				String name = argsTab[0];
-				String pwd = argsTab[1];
 				outputPrint("Current player is trying to create a new account");
-				try {
-						Message response;
-						// Try to create a new player acount
-						response = game.newAccount(name, pwd);
-						
-						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
-						sProto.sendResponse(response);
-						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameException e) {
-						processError(e);
-				}
+				Message response;
+				
+				// Try to create a new player acount
+				response = HAL.newAccount(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
 		}
 		
 		private void login() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				String name = argsTab[0];
-				String pwd = argsTab[1];
 				outputPrint("Current player is trying to login");
-				try {
-						Message response;
-						// Try to log the current player
-						response = game.login(name, pwd);
-						
-						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
-						sProto.sendResponse(response);
-						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameException e) {
-						processError(e);
-				}
+				Message response;
+				
+				// Try to log the current player
+				response = HAL.login(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
 		}
 		
 		private void newGame() {
 				String playerID = new String(request.getBody());
 				outputPrint("Current player is trying to create a new game");
-				try {
-						Message response;
-						// Try to create a new game for the current player
-						response = game.createNewPlay(playerID);
+				Message response;
 						
-						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
-						sProto.sendResponse(response);
-						//outputPrint("Server response status : "+response.getHeader());
-				} catch (GameException e) {
-						processError(e);
-				}
+				// Try to create a new game for the current player
+				response = HAL.createNewPlay(playerID);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
 		}
 		
 		private void loadGameList() {
 				String playerID = new String(request.getBody());
 				outputPrint("Current player is trying to load list of games");
-				try {
-						Message response;
-						// Try to create a new game for the current player
-						response = game.loadPlayList(playerID);
+				Message response;
+				
+				// Try to load the plays list for the current player
+				response = HAL.loadPlayList(playerID);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+		}
+		
+		private void loadGame() {
+				String [] argsTab = new String(request.getBody()).split("_");
+				outputPrint("Current player is trying to load  an existed game");
+				Message response;
 						
-						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
-						sProto.sendResponse(response);
-				} catch (GameException e) {
-						processError(e);
-				}
+				// Try to load an existed play for the current player
+				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
 		}
 		
 		private void outputPrint(String msg) {
-				System.out.println("SERVER : " + msg);
+				System.out.println("Thread ["+this.getName()+"] : " + msg);
 		}
 }

@@ -106,7 +106,12 @@ public class ClientController {
 								try {
 										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
 										int playChoosen = view.displayPlayList(playList);
-										System.out.println("Load in process .");
+										if (playChoosen != 0) {
+												System.out.print("Load in process .");
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
+										} else {
+												view.display("See you next time !");
+										}
 										if (debug) {
 												
 										} else {

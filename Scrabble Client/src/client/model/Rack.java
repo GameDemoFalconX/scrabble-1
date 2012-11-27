@@ -11,8 +11,9 @@ class Rack {
 		public Rack(String formatedRack) {
 				String [] tileList = formatedRack.split("__");
 				for (int i = 0; i < rack.length; i++) {
-						char letter = tileList[i].split(":")[0].charAt(0);
-						Integer value = Integer.parseInt(tileList[i].split(":")[1]);
+						String [] tileArgs = tileList[i].split(":");
+						char letter = tileArgs[0].charAt(0);
+						Integer value = Integer.parseInt(tileArgs[1]);
 						rack[i] = new Tile(letter, value);
 				}
 		}

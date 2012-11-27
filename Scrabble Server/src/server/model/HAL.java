@@ -20,7 +20,7 @@ public class HAL extends Game {
 		@Override
 		protected Message createAccount(String pl_name, String pl_pwd) {
 				if (players.playerExists(pl_name)) {
-						return new Message(Message.PLAYER_EXISTS, "");
+						return new Message(Message.NEW_ACCOUNT_ERROR, "");
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
