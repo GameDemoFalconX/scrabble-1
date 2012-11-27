@@ -38,20 +38,13 @@ public class View {
 				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     
-		public void startMenu() {
-				System.out.println(menuHeader);
-				System.out.println("1: Play now");
-				System.out.println("0: Exit\n");
-				//ctrl.startChoice(CConsole.readInt("Your choice ?  "));
-		}
-    
-		public void playMenu() {
+		public void playMenu(boolean isAnonymous) {
 				System.out.println(menuHeader);
 				System.out.println("1: Place word");
 				System.out.println("2: Exchange a tile");
-				System.out.println("3: Save your game\n");
+				if (!isAnonymous) System.out.println("3: Save your game\n");
 				System.out.println("0: Exit\n");
-				//ctrl.playChoice(CConsole.readInt("Your choice ?  "));
+				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
 		public int displayPlayList(String [] list) {

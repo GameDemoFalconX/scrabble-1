@@ -90,10 +90,25 @@ public abstract class Game implements IGame {
 		//Déconnexion - Utile pour les opérations de mise à jour différées
 		public void deconnection(String nom) throws GameException {}
 		
+		// Save, Delete or Destroy plays
+		@Override
+		public Message deleteAnonym(String pl_id) throws GameException {
+				Message response = destroyAnonym(pl_id);
+				switch (response.getHeader()) {
+						case Message.DELETE_ANONYM_SUCCESS:
+								return response;
+						case Message.DELETE_ANONYM_ERROR:
+								throw new GameException(GameException.typeErr.DELETE_ANONYM_ERROR);
+				}
+				return null;
+		}
+		
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
 		protected abstract Message createNewGame(String pl_id);
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
+		
+		protected abstract Message destroyAnonym(String pl_id);
 }

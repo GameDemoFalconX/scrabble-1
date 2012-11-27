@@ -113,6 +113,14 @@ public class GameRAM {
 				plays.put(playerID, null);
 		}
 		
+		/**
+			* Remove a player to the player list and destroy this Play instance.
+			* @param playerID 
+			*/
+		public void removeStarter(String playerID) {
+				plays.remove(playerID);
+		}
+		
 		private void displayPlays() {
 				if (plays.isEmpty()) System.out.println("Map empty!");
 				Set set = this.plays.entrySet(); 

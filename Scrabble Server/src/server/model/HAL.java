@@ -91,4 +91,14 @@ public class HAL extends Game {
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
+		
+		@Override
+		protected Message destroyAnonym(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						plays.removeStarter(pl_id);
+						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
+				}
+				return new Message(Message.DELETE_ANONYM_ERROR, "");
+		}
 }

@@ -48,6 +48,11 @@ public class Message {
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
 		
 		public static final int  LOGOUT = 50;  // Logout
+		
+		// DELETE_ANONYM
+		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player
+		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player
+		public static final int DELETE_ANONYM_ERROR = 97; // Send instruction to delete the play of the current anonymous player
 
 		public Message(Integer header, String body) {
 				this.header = header;

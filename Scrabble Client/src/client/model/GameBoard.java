@@ -138,6 +138,23 @@ public class GameBoard {
 				}
 		}
 		
+		public void deleteAnonym(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.DELETE_ANONYM, 0,  playerID);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.DELETE_ANONYM_ERROR:
+										throw new GameException(GameException.typeErr.DELETE_ANONYM_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
 		public void displayGame() {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
