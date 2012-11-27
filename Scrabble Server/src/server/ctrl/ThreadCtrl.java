@@ -42,6 +42,9 @@ public class ThreadCtrl extends Thread {
 						case Message.NEW_GAME:
 								newGame();
 								break;
+						case Message.NEW_GAME_ANONYM:
+								newAnonymGame();
+								break;
 						case Message.LOAD_GAME_LIST:
 								loadGameList();
 								break;
@@ -96,6 +99,17 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to create a new game for the current player
 				response = HAL.createNewPlay(playerID);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void newAnonymGame() {
+				outputPrint("Current anonymous player is trying to create a new game");
+				Message response;
+				
+				// Try to log the current player
+				response = HAL.newAnonymGame(new String(request.getBody()));
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

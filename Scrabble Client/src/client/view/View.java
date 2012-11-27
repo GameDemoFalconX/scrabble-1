@@ -22,6 +22,7 @@ public class View {
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu.
 				System.out.println("1: Create new account");
 				System.out.println("2: Login");
+				System.out.println("3: New game (Quick way without save)");
 				System.out.println("0: Exit\n");
 				ctrl.firstChoice(CConsole.readInt("Your choice ?  "));
 		}

@@ -108,6 +108,24 @@ public class ServerScrabble {
 		}
 		
 		/**
+			* Allows to log an anonymous player/
+			* @param pl_id
+			* @return status
+			*/
+		public synchronized Message newAnonymGame(String pl_id) {
+				Message response = null;
+				try {
+						// Try to log the current player
+						response = game.createNewAnonymPlay(pl_id);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		/**
 			* Allows to load the list of plays for the current player.
 			* @param playerID
 			* @return a formated list of plays for this player.
@@ -175,6 +193,10 @@ public class ServerScrabble {
 						case LOAD_GAME_LIST_ERROR:
 								error = new Message(Message.LOAD_GAME_LIST_ERROR, "");
 								outputPrint("Server error : The current player does not yet any plays saved on the server.");
+								break;
+						case NEW_GAME_ANONYM_ERROR:
+								error = new Message(Message.NEW_GAME_ANONYM_ERROR, "");
+								outputPrint("Server error : The current anonymous player is already logged on the server. No play may be created.");
 								break;
 				}
 				return error;
