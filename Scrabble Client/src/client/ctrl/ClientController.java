@@ -92,7 +92,6 @@ public class ClientController {
 						case 1:
 								try {
 										gameBoard.createNewPlay(player.getPlayerID());
-										System.out.println("ctrller ok");
 										if (debug) {
 												gameBoard.displayGame();
 												view.playMenu();

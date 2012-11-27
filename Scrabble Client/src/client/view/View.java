@@ -47,7 +47,8 @@ public class View {
 		public void playMenu() {
 				System.out.println(menuHeader);
 				System.out.println("1: Place word");
-				System.out.println("2: Save your game\n");
+				System.out.println("2: Exchange a tile");
+				System.out.println("3: Save your game\n");
 				System.out.println("0: Exit\n");
 				//ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}

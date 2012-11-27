@@ -97,7 +97,6 @@ public class GameBoard {
 		}
 
 		public void createNewPlay(String playerID) throws GameException {
-				System.out.println("GB send request");
 				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME, 0,  playerID);
 				
 				// Handle response
