@@ -39,11 +39,13 @@ public class ServerScrabble {
 						ServerSocket server = new ServerSocket(port);
 						while (true) {                
 								System.out.println("Connection(s) established : " + connectionNumber);
+								System.out.println("Current actived thread(s) :" +Thread.activeCount());
 								Socket s = server.accept();
 								connectionNumber++;
 								ServerProtocol sProto = new ServerProtocol(s);
 								Thread clientThread = new ThreadCtrl(sProto, this);
 								clientThread.start();
+								clientThread.interrupt();
 						}
 				} catch (Exception e) {
 						System.out.println("Error : " + e);
@@ -97,6 +99,24 @@ public class ServerScrabble {
 				try {
 						// Try to create a new game for the current player
 						response = game.createNewPlay(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		/**
+			* Allows to log an anonymous player/
+			* @param pl_id
+			* @return status
+			*/
+		public synchronized Message newAnonymGame(String pl_id) {
+				Message response = null;
+				try {
+						// Try to log the current player
+						response = game.createNewAnonymPlay(pl_id);
 						
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 				} catch (GameException e) {
@@ -173,6 +193,10 @@ public class ServerScrabble {
 						case LOAD_GAME_LIST_ERROR:
 								error = new Message(Message.LOAD_GAME_LIST_ERROR, "");
 								outputPrint("Server error : The current player does not yet any plays saved on the server.");
+								break;
+						case NEW_GAME_ANONYM_ERROR:
+								error = new Message(Message.NEW_GAME_ANONYM_ERROR, "");
+								outputPrint("Server error : The current anonymous player is already logged on the server. No play may be created.");
 								break;
 				}
 				return error;

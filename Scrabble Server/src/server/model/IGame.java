@@ -14,6 +14,7 @@ public interface IGame {
 		
 		// Create or load plays
 		Message createNewPlay(String pl_id) throws GameException;
+		Message createNewAnonymPlay(String pl_id) throws GameException;
 		Message loadPlayList(String pl_id) throws GameException;
 		Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
 		

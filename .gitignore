@@ -1,7 +1,16 @@
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
 *.properties
+
+# Class Files #
+*.class
+*.jar
+
+# Vim, OS, ...
 *.un~
 *.swp
 *.DS_Store
-/Scrabble Client/build
-/Scrabble Server/build
-*.class

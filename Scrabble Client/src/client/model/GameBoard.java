@@ -117,6 +117,27 @@ public class GameBoard {
 				}
 		}
 		
+		public void createNewPlayAnonym(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME_ANONYM, 0,  playerID);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.NEW_GAME_ANONYM_SUCCESS:
+										String [] args = new String(serverResponse.getBody()).split("##");
+										cPlay = new Play(playerID, args[0], args[1]);
+										break;
+								case Message.NEW_GAME_ANONYM_ERROR:
+										throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
 		public void displayGame() {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");

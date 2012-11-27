@@ -34,6 +34,10 @@ public class Message {
 		public static final int NEW_GAME = 30;  // New game
 		public static final int NEW_GAME_SUCCESS = 31;  // New game with success
 		public static final int NEW_GAME_ERROR = 32;  // New game with error
+		// NEW_GAME_ANONYM //
+		public static final int NEW_GAME_ANONYM = 35;  // New game for an anonymous user.
+		public static final int NEW_GAME_ANONYM_SUCCESS = 36;  // New game anonym with success
+		public static final int NEW_GAME_ANONYM_ERROR = 37;  // New game anonym with error
 		
 		// LOAD_GAME //
 		public static final int LOAD_GAME = 40; // Load game
