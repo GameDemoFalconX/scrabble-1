@@ -83,6 +83,15 @@ public abstract class Game implements IGame {
 		}
 		
 		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
+				Message response = loadPlay(pl_id, ga_id);
+				switch (response.getHeader()) {
+						case Message.LOAD_GAME_SUCCESS:
+								return response;
+						case Message.LOAD_GAME_ERROR:
+								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+						case Message.XML_FILE_NOT_EXISTS:
+								throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
+				}
 				return null;
 		}
 		
@@ -109,6 +118,7 @@ public abstract class Game implements IGame {
 		protected abstract Message createNewGame(String pl_id);
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
+		protected abstract Message loadPlay(String pl_id, String ga_id);
 		
 		protected abstract Message destroyAnonym(String pl_id);
 }

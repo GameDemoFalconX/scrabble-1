@@ -192,9 +192,9 @@ public class GameBoard {
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.LOAD_GAME_LIST_SUCCESS:
+								case Message.LOAD_GAME_SUCCESS:
 										String [] args = new String(serverResponse.getBody()).split("##");
-								case Message.LOAD_GAME_LIST_ERROR:
+								case Message.LOAD_GAME_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
 						}
 				} else {

@@ -59,6 +59,9 @@ public class Message {
 		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player
 		public static final int DELETE_ANONYM_ERROR = 97; // Send instruction to delete the play of the current anonymous player
 		
+		// XML FILES EXCEPTIONS
+		public static final int XML_FILE_NOT_EXISTS = 550; // 
+		
 		public Message(Integer header, String body) {
 				this.header = header;
 				this.body = body.getBytes();

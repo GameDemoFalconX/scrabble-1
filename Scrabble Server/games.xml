@@ -7,14 +7,19 @@
             <modified>2012/11/26</modified>
             <score>0</score>
             <grid>
-                [grid-informations]
+                <tile>
+                    7:3##S:1
+                </tile>
+                <tile>
+                    7:4##S:1
+                </tile>
+                <tile>
+                    7:5##S:1
+                </tile>
             </grid>
             <rack>
                 [rack-informations]
             </rack>
-            <tilebag>
-                [tilebag-informations]
-            </tilebag>
         </play>
         <play id="d035ed64-7bed-4029-ae5b-0d35c94238d7">
             <uuid>d035ed64-7bed-4029-ae5b-0d35c94238d7</uuid>
@@ -27,9 +32,6 @@
             <rack>
                 [rack-informations]
             </rack>
-            <tilebag>
-                [tilebag-informations]
-            </tilebag>
         </play>
     </player>
 </plays>

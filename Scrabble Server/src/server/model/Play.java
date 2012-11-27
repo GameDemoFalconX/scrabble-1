@@ -46,6 +46,14 @@ public class Play {
 				String [] mDate = modified.split("/");
 				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
 				this.score = score;
+				
+				// Initialize grid and  tilebag
+				bag = new TileBag();
+		}
+		
+		public void loadTile(int x, int y, char letter, int value) {
+				Tile newTile = bag.popTile(letter, value);
+				grid.putInGrid(x, y, newTile);
 		}
 		
 		public String getPlayID() {
@@ -72,5 +80,9 @@ public class Play {
 			*/
 		public String getFormatRack() {
 				return this.rack.toString();
+		}
+		
+		public String getGrid() {
+				return this.grid.toString();
 		}
 }

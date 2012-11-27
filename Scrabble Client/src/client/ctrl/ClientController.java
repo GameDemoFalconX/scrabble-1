@@ -123,7 +123,7 @@ public class ClientController {
 										int playChoosen = view.displayPlayList(playList);
 										if (playChoosen != 0) {
 												System.out.print("Load in process .");
-												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen-1].split("__")[0]);
 										} else {
 												view.display("See you next time !");
 										}

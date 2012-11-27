@@ -43,16 +43,17 @@ public class View {
 				System.out.println("1: Place word");
 				System.out.println("2: Exchange a tile");
 				if (!isAnonymous) System.out.println("3: Save your game\n");
+				System.out.println("9: Back to menu\n");
 				System.out.println("0: Exit\n");
 				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
 		public int displayPlayList(String [] list) {
 				System.out.println("#             GAME LIST              #");
-				System.out.println("_________________________________________\n");
+				System.out.println("______________________________________\n");
 				for (int i = 0; i < list.length; i++) {
 						String [] args = list[i].split("__");
-						System.out.println(""+Integer.toString(i)+": Created on "+args[1]+" - Modified on "+args[2]+" - Score : "+args[3]);
+						System.out.println(""+Integer.toString(i+1)+": Created on "+args[1]+" - Modified on "+args[2]+" - Score : "+args[3]);
 				}
 				System.out.println("0: Exit\n");
 				return CConsole.readInt("Select the game you want to play?  ");
