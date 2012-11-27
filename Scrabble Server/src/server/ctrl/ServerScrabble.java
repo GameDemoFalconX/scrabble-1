@@ -11,7 +11,7 @@ import common.*;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class ServerScrabble {
 

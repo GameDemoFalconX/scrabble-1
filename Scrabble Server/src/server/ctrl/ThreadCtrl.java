@@ -72,6 +72,7 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to create a new player acount
 				response = HAL.newAccount(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
 		}
 		
@@ -82,6 +83,7 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to log the current player
 				response = HAL.login(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
 		}
 		
@@ -92,6 +94,7 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to create a new game for the current player
 				response = HAL.createNewPlay(playerID);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
 		}
 		
@@ -102,6 +105,7 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to load the plays list for the current player
 				response = HAL.loadPlayList(playerID);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
 		}
 		
@@ -112,6 +116,7 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
 				sProto.sendResponse(response);
 		}
 		

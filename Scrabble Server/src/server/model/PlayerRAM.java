@@ -25,7 +25,7 @@ public class PlayerRAM {
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");
 				if (playerFile.exists()) {
-						System.out.println("File exists!");
+						System.out.println("Player file exists!");
 						SAXBuilder builder = new SAXBuilder(); 
 						try {
 								Document document = (Document) builder.build(playerFile);
@@ -43,14 +43,14 @@ public class PlayerRAM {
 								// Display the players hashmap
 								//displayPlayers();
 								
-								System.out.println("File Loaded!");
+								System.out.println("Player file Loaded!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
 						} catch (JDOMException jdome) {
 								System.out.println(jdome.getMessage());
 						}
 				} else {
-						System.out.println("File doesn't exist!");
+						System.out.println("Player file doesn't exist!");
 						try {
 								Element players = new Element("players");
 								Document doc = new Document(players);
@@ -61,7 +61,7 @@ public class PlayerRAM {
 								xmlOutput.output(doc, new FileWriter(playerFile));
 								//xmlOutput.output(doc, System.out);
 								
-								System.out.println("File Created!");
+								System.out.println("Player file Created!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
 						}
@@ -121,7 +121,7 @@ public class PlayerRAM {
 						xmlOutput.setFormat(Format.getPrettyFormat());
 						xmlOutput.output(doc, new FileWriter("players.xml"));
   
-						System.out.println("File Updated!");
+						System.out.println("Player file Updated!");
 						
 				} catch (IOException e) {
 						e.printStackTrace();
