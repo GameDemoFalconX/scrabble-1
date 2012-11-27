@@ -18,7 +18,7 @@ class Grid {
 		@Override
 		public String toString() {
 				String prtGrid = "";
-				for (int x = 0; x <= 14 ; x++) {
+				for (int x = 0; x < 15 ; x++) {
 						if (x < 10) {
 								prtGrid += "Line 0" + x + ": ";
 						} else {

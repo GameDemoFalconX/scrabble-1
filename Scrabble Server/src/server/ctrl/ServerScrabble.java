@@ -39,11 +39,13 @@ public class ServerScrabble {
 						ServerSocket server = new ServerSocket(port);
 						while (true) {                
 								System.out.println("Connection(s) established : " + connectionNumber);
+								System.out.println("Current actived thread(s) :" +Thread.activeCount());
 								Socket s = server.accept();
 								connectionNumber++;
 								ServerProtocol sProto = new ServerProtocol(s);
 								Thread clientThread = new ThreadCtrl(sProto, this);
 								clientThread.start();
+								clientThread.interrupt();
 						}
 				} catch (Exception e) {
 						System.out.println("Error : " + e);
