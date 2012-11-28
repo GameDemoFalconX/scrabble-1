@@ -115,7 +115,7 @@ public class ServerScrabble {
 		public synchronized Message newAnonymGame(String pl_id) {
 				Message response = null;
 				try {
-						// Try to log the current player
+						// Try to create a new game for the current anonymous player
 						response = game.createNewAnonymPlay(pl_id);
 						
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
@@ -162,6 +162,19 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message deleteAnonym(String playerID) {
+				Message response = null;
+				try {
+						// Try to delete an existed play for the current anonymous player
+						response = game.deleteAnonym(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		/**
 			* Handle errors throws during the Game process.
 			* @param e
@@ -197,6 +210,10 @@ public class ServerScrabble {
 						case NEW_GAME_ANONYM_ERROR:
 								error = new Message(Message.NEW_GAME_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player is already logged on the server. No play may be created.");
+								break;
+						case DELETE_ANONYM_ERROR:
+								error = new Message(Message.DELETE_ANONYM_ERROR, "");
+								outputPrint("Server error : The current anonymous player does not yet logged on the server. No play to remove.");
 								break;
 				}
 				return error;

@@ -53,7 +53,15 @@ public class Message {
 		public static final int DICO_LOADED = 60; // Dictionnary loaded
 		public static final int WORD_OK = 61; // Word exist
 		public static final int WORK_KO = 62; // Word doesn't exist
-
+		
+		// DELETE_ANONYM
+		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player
+		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player
+		public static final int DELETE_ANONYM_ERROR = 97; // Send instruction to delete the play of the current anonymous player
+		
+		// XML FILES EXCEPTIONS
+		public static final int XML_FILE_NOT_EXISTS = 550; // 
+		
 		public Message(Integer header, String body) {
 				this.header = header;
 				this.body = body.getBytes();

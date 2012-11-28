@@ -51,6 +51,9 @@ public class ThreadCtrl extends Thread {
 						case Message.LOAD_GAME:
 								loadGame();
 								break;
+						case Message.DELETE_ANONYM:
+								deleteAnonym();
+								break;
 				}
 		}
 		
@@ -108,7 +111,7 @@ public class ThreadCtrl extends Thread {
 				outputPrint("Current anonymous player is trying to create a new game");
 				Message response;
 				
-				// Try to log the current player
+				// Try to create a new play for the current anonymous player
 				response = HAL.newAnonymGame(new String(request.getBody()));
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
@@ -134,6 +137,18 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void deleteAnonym() {
+				String playerID = new String(request.getBody());
+				outputPrint("Try to delete the play for this anonymous player");
+				Message response;
+						
+				// Try to load an existed play for the current player
+				response = HAL.deleteAnonym(playerID);
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

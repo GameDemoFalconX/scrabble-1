@@ -59,8 +59,8 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameException gbe) {
-										processException(gbe);
+								} catch (GameException ge) {
+										processException(ge);
 								}
 								break;
 						case 2:
@@ -74,8 +74,8 @@ public class ClientController {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameException gbe) {
-										processException(gbe);
+								} catch (GameException ge) {
+										processException(ge);
 								}
 								break;
 						case 3:
@@ -84,13 +84,13 @@ public class ClientController {
 										gameBoard.createNewPlayAnonym(player.getPlayerID());
 										if (debug) {
 												gameBoard.displayGame();
-												view.playMenu();
+												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
 										}
 												// TODO player menu  
-								} catch (GameException gbe) {
-										processException(gbe);
+								} catch (GameException ge) {
+										processException(ge);
 								}
 								break;
 						case 0:
@@ -109,12 +109,12 @@ public class ClientController {
 										gameBoard.createNewPlay(player.getPlayerID());
 										if (debug) {
 												gameBoard.displayGame();
-												view.playMenu();
+												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
 										}
-								} catch (GameException gbe) {
-										processException(gbe);
+								} catch (GameException ge) {
+										processException(ge);
 								}
 								break;
 						case 2:
@@ -123,7 +123,7 @@ public class ClientController {
 										int playChoosen = view.displayPlayList(playList);
 										if (playChoosen != 0) {
 												System.out.print("Load in process .");
-												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen-1].split("__")[0]);
 										} else {
 												view.display("See you next time !");
 										}
@@ -132,8 +132,8 @@ public class ClientController {
 										} else {
 												// TODO GUI 
 										}
-								} catch (GameException gbe) {
-										processException(gbe);
+								} catch (GameException ge) {
+										processException(ge);
 								}
 								break;
 						case 0:
@@ -147,14 +147,23 @@ public class ClientController {
 		
 		public void playChoice(Integer choice) {
 				switch (choice) {
-						case 1: // TODO Romain place word
+						case 1:
 								break;
-						case 2: // TODO Bernard exchange tile
-								view.changeTileMainMenu();
+						case 2:
 								break;
-						case 3: // Save the game
+						case 3:
 								break;
-						case 4: // Exit
+						case 0:
+								if (player.isAnonym()) {
+										try {
+												gameBoard.deleteAnonym(player.getPlayerID());
+										} catch (GameException ge) {
+												processException(ge);
+										}
+								} else {
+										// Auto save.
+								}
+								view.display("See you next time !");
 								break;
 						default:
 								view.firstMenu("");
@@ -176,8 +185,8 @@ public class ClientController {
 				}
 		}
 
-		private void processException(GameException gbe) {
-				switch(gbe.getErreur()) {
+		private void processException(GameException ge) {
+				switch(ge.getErreur()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");
 								break;
@@ -198,6 +207,12 @@ public class ClientController {
 								break;
 						case PLAYER_NOT_LOGGED:
 								view.firstMenu("Warning! You are not yet logged!");
+								break;
+						case NEW_GAME_ANONYM_ERROR:
+								view.firstMenu("An error has been encountered during the server processing! Please try again.");
+								break;
+						case DELETE_ANONYM_ERROR:
+								// Pass : because anonymous player isn't logged on the server.
 								break;
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");

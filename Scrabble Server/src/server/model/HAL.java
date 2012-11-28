@@ -1,6 +1,7 @@
 package server.model;
 
 import common.Message;
+import common.GameException;
 
 /**
  *
@@ -90,5 +91,31 @@ public class HAL extends Game {
 						return new Message(Message.LOAD_GAME_LIST_ERROR, "");
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
+		
+		@Override
+		protected Message loadPlay(String pl_id, String ga_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						try {
+								Play lPlay = plays.LoadGame(pl_id, ga_id);
+								plays.addNewPlay(pl_id, lPlay);
+								System.out.println(lPlay.getGrid());
+						} catch (GameException ge) {
+								return new Message(Message.XML_FILE_NOT_EXISTS, "");
+						}
+						return new Message(Message.LOAD_GAME_SUCCESS, "");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
+		
+		@Override
+		protected Message destroyAnonym(String pl_id) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						plays.removeStarter(pl_id);
+						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
+				}
+				return new Message(Message.DELETE_ANONYM_ERROR, "");
 		}
 }
