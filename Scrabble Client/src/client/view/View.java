@@ -46,12 +46,12 @@ public class View {
 		}
     
 		public void playMenu() {
-				System.out.println(menuHeader);
+//				System.out.println(menuHeader);
 				System.out.println("1: Place word");
 				System.out.println("2: Exchange a tile");
 				System.out.println("3: Save your game\n");
 				System.out.println("0: Exit\n");
-				//ctrl.playChoice(CConsole.readInt("Your choice ?  "));
+				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
 		public int displayPlayList(String [] list) {
@@ -63,6 +63,20 @@ public class View {
 				}
 				System.out.println("0: Exit\n");
 				return CConsole.readInt("Select the game you want to play?  ");
+		}
+		
+		public void changeTileMainMenu() {
+				System.out.println("#             EXCHANGE TILE               #");
+				System.out.println("_________________________________________\n");
+				System.out.println("1: Exchange one or more tiles");
+				System.out.println("2: Exchange all tiles");
+				System.out.println("0: Cancel\n");
+				ctrl.tileExchange(CConsole.readInt("Your choice ?  "));
+		}
+		
+		public String changeTileMenu() {
+				System.out.println("Please enter the position of the tile(s) you want to change. \n");
+				return CConsole.readLine("e.g. 2 3 6 :  ");
 		}
 		
 		public void display(String msg) {

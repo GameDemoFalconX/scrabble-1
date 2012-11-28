@@ -147,6 +147,18 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
+		public void changeTiles(String position) {
+				String [] pos = position.split(" ");
+				int [] pos
+				for (int i = 0; i < pos.length; i++) {
+						pos[i] = Integer.parseInt(pos[i]);
+				}
+		}
+		
+		public void changeAllTiles() {
+				
+		}
+		
 		public String [] loadPlayList(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
 				// Handle response

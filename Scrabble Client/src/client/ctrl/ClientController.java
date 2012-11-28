@@ -144,6 +144,37 @@ public class ClientController {
 								break;
 				}
 		}
+		
+		public void playChoice(Integer choice) {
+				switch (choice) {
+						case 1: // TODO Romain place word
+								break;
+						case 2: // TODO Bernard exchange tile
+								view.changeTileMainMenu();
+								break;
+						case 3: // Save the game
+								break;
+						case 4: // Exit
+								break;
+						default:
+								view.firstMenu("");
+								break;
+				}
+		}
+		
+		public void tileExchange(Integer choice) {
+				switch (choice) {
+						case 1: 
+								gameBoard.changeTiles(view.changeTileMenu());
+								break;
+						case 2:
+								gameBoard.changeAllTiles();
+								break;
+						default:
+								view.playMenu();
+								break;
+				}
+		}
 
 		private void processException(GameException gbe) {
 				switch(gbe.getErreur()) {
