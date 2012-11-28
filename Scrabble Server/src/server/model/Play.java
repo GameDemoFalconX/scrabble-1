@@ -16,6 +16,7 @@ public class Play {
 		private Date modified;
 		private Integer score;
 		private Grid grid;
+		private String formatedGrid;
 		private Rack rack;
 		private TileBag bag;
 		
@@ -48,6 +49,7 @@ public class Play {
 				this.score = score;
 				
 				// Initialize grid and  tilebag
+				grid = new Grid();
 				bag = new TileBag();
 		}
 		
@@ -84,5 +86,13 @@ public class Play {
 		
 		public String getGrid() {
 				return this.grid.toString();
+		}
+		
+		public void setFormatedGrid(String fGrid) {
+				this.formatedGrid = fGrid;
+		}
+		
+		public String getFormatedGrid() {
+				return this.formatedGrid;
 		}
 }

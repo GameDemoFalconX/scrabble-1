@@ -57,10 +57,16 @@ public class GameRAM {
 																
 																// Load tiles, create the grid, the rack and update the tilebag in consequence.
 																Element grid = playNode.getChild("grid");
-																List tileList = node.getChildren("tile");
+																List tileList = grid.getChildren("tile");
+																String fGrid = "";
 																for (int k = 0; k < tileList.size(); k++) {
 																		Element tile = (Element) tileList.get(k);
-																		String [] tileAttrs = tile.getValue().split("##");
+																		
+																		// Create formatedGrid
+																		fGrid += tile.getValue();
+																		if (k < tileList.size()-1) fGrid += "##";
+																		
+																		String [] tileAttrs = tile.getValue().split("__");
 																		
 																		// Tile attributes
 																		int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
@@ -69,6 +75,7 @@ public class GameRAM {
 																		int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
 																		loadPlay.loadTile(x, y, letter, value);
 																}
+																loadPlay.setFormatedGrid(fGrid);
 														}
 														break;
 												}
@@ -190,7 +197,6 @@ public class GameRAM {
 						System.out.println("Game file doesn't exist!");
 						// TODO Improve the way to handle errors.
 				}
-				System.out.println(result);
 				return result;
 		}
 		
