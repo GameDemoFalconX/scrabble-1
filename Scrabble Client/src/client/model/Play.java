@@ -1,7 +1,6 @@
 package client.model;
 
 import java.util.UUID;
-import java.util.Date;
 
 /**
  * 
@@ -32,5 +31,10 @@ public class Play {
 		
 		public String displayRack() {
 				return rack.toString();
+		}
+		
+		public String getFormatedTilesFromRack(String pos) {
+				
+				return rack.getFormatedTiles(pos);
 		}
 }

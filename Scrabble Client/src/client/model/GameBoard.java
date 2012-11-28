@@ -155,6 +155,7 @@ public class GameBoard {
 				}
 		}
 		
+//		Shouldn't this be in the View ?
 		public void displayGame() {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
@@ -165,15 +166,13 @@ public class GameBoard {
 		}
 		
 		public void changeTiles(String position) {
-				String [] pos = position.split(" ");
-				int [] pos
-				for (int i = 0; i < pos.length; i++) {
-						pos[i] = Integer.parseInt(pos[i]);
-				}
+				String formatedTiles = cPlay.getFormatedTilesFromRack(position);
+				System.out.println(formatedTiles);
 		}
 		
 		public void changeAllTiles() {
-				
+				String formatedTiles = cPlay.getFormatedTilesFromRack("1 2 3 4 5 6 7");
+				System.out.println(formatedTiles);
 		}
 		
 		public String [] loadPlayList(String playerID) throws GameException {

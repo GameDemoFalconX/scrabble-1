@@ -4,7 +4,7 @@ package client.model;
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Grid {
+public class Grid {
 		private Tile[][] grid = new Tile[15][15];
 		private ScoringGrid scoringGrid = new ScoringGrid();
 		

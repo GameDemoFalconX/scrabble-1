@@ -41,4 +41,17 @@ class Rack {
 				rack[5] = new Tile('F',4);
 				rack[6] = new Tile('G',8);
 		}
+
+		public String getFormatedTiles(String pos) {
+				String formatedTiles = "";
+				String [] source = pos.split(" ");
+				for (int i = 0; i < source.length; i++) {
+						formatedTiles  += rack[Integer.parseInt(source[i])-1].getLetter()+":";
+						formatedTiles  += rack[Integer.parseInt(source[i])-1].getValue();
+						if (i < source.length-1) {
+								formatedTiles += "__";
+						}
+				}
+				return formatedTiles;
+		}
 }

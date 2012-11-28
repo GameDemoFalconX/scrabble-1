@@ -60,7 +60,7 @@ public class View {
 		}
 		
 		public void changeTileMainMenu() {
-				System.out.println("#             EXCHANGE TILE               #");
+				System.out.println("#            EXCHANGE TILE              #");
 				System.out.println("_________________________________________\n");
 				System.out.println("1: Exchange one or more tiles");
 				System.out.println("2: Exchange all tiles");

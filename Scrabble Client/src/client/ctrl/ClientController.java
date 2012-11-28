@@ -18,7 +18,7 @@ public class ClientController {
 		private static String IPaddress = "localhost";
 		private static int port = 8189;    
 		private boolean debug = true;
-		private boolean sound = true;
+//		private boolean sound = true;
     
 		/**
 		  * @param args the command line arguments
@@ -150,6 +150,7 @@ public class ClientController {
 						case 1:
 								break;
 						case 2:
+								view.changeTileMainMenu();
 								break;
 						case 3:
 								break;
@@ -180,7 +181,7 @@ public class ClientController {
 								gameBoard.changeAllTiles();
 								break;
 						default:
-								view.playMenu();
+								view.playMenu(player.isAnonym());
 								break;
 				}
 		}
