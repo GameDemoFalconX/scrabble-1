@@ -7,15 +7,9 @@
             <modified>2012/11/26</modified>
             <score>0</score>
             <grid>
-                <tile>
-                    7:3##S:1
-                </tile>
-                <tile>
-                    7:4##S:1
-                </tile>
-                <tile>
-                    7:5##S:1
-                </tile>
+                <tile>7:3__S:1</tile>
+                <tile>7:4__S:1</tile>
+						<tile>7:5__S:1</tile>
             </grid>
             <rack>
                 [rack-informations]
