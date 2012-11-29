@@ -34,6 +34,10 @@ public class Message {
 		public static final int NEW_GAME = 30;  // New game
 		public static final int NEW_GAME_SUCCESS = 31;  // New game with success
 		public static final int NEW_GAME_ERROR = 32;  // New game with error
+		// NEW_GAME_ANONYM //
+		public static final int NEW_GAME_ANONYM = 35;  // New game for an anonymous user.
+		public static final int NEW_GAME_ANONYM_SUCCESS = 36;  // New game anonym with success
+		public static final int NEW_GAME_ANONYM_ERROR = 37;  // New game anonym with error
 		
 		// LOAD_GAME //
 		public static final int LOAD_GAME = 40; // Load game
@@ -44,6 +48,11 @@ public class Message {
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
 		
 		public static final int  LOGOUT = 50;  // Logout
+		
+		// DICTIONNARY //
+		public static final int DICO_LOADED = 60; // Dictionnary loaded
+		public static final int WORD_OK = 61; // Word exist
+		public static final int WORK_KO = 62; // Word doesn't exist
 
 		public Message(Integer header, String body) {
 				this.header = header;

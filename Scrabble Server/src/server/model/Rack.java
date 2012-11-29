@@ -1,10 +1,7 @@
 package server.model;
 
-import server.model.Tile;
-import server.model.TileBag;
-
 /**
- *
+ * Model that contains the seven Tiles that the player use to make words
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 class Rack {
@@ -17,9 +14,8 @@ class Rack {
 			*/
 		public Rack(TileBag bag) {
 				for (int i = 0; i < rack.length; i++) {
-						rack[i] = bag.getTileFromBag();
+						rack[i] = bag.getTile();
 				}
-				System.out.println(this.toString());
 		}
 		
 		/**
@@ -33,17 +29,23 @@ class Rack {
 				}
 		}
 		
-		// Methods added by Bernard
+		/**
+			* Format the rack in a printable String
+			* @return a String
+			*/
 		@Override
 		public String toString() {
 				String result = "";
-				for (int i = 0; i < rack.length; i++) {
-						result += rack[i].getLetter()+":"+rack[i].getValue();
-						if (i < rack.length-1) result += "__";
+				for (int i = 0; i < 7; i++) {
+						result += rack[i]+"__";
 				}
 				return result;
 		}
 		
+		/**
+			* A rack getter
+			* @return the whole rack
+			*/
 		public Rack getRack() {
 				return this;
 		}

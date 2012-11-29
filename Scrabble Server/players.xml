@@ -5,4 +5,19 @@
     <name>romain</name>
     <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
   </player>
+  <player uuid="b981986d-7cb1-44a3-8328-3eabf455ba70">
+    <uuid>b981986d-7cb1-44a3-8328-3eabf455ba70</uuid>
+    <name>bernard</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="1eef9335-81e5-4e46-b2dc-5f51f8b6e914">
+    <uuid>1eef9335-81e5-4e46-b2dc-5f51f8b6e914</uuid>
+    <name>morgane</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="47482c2f-a7d6-4b7c-a341-cabd26d0a041">
+    <uuid>47482c2f-a7d6-4b7c-a341-cabd26d0a041</uuid>
+    <name>walle</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
 </players>

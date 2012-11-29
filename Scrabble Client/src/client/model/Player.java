@@ -1,7 +1,5 @@
 package client.model;
 
-import client.view.View;
-import common.GameException;
 import java.util.UUID;
 
 /**
@@ -18,6 +16,15 @@ public class Player {
 				playerName = name;
 				playerPassword = pwd;
 				playerID = UUID.fromString(uuid);
+		}
+		
+		/**
+			* Constructor for anonymous player.
+			* @param name
+			*/
+		public Player() {
+				playerID = UUID.randomUUID();
+				playerName = "PA"+playerID.toString();
 		}
 		
 		public String getPlayerName() {
