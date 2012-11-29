@@ -175,6 +175,18 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message exchangeTile(String playerID, String tiles) {
+				Message response = null;
+				outputPrint("ServerScrabble");
+				try {
+						response = game.exchangeTile(playerID,tiles);
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		/**
 			* Handle errors throws during the Game process.
 			* @param e
@@ -215,6 +227,9 @@ public class ServerScrabble {
 								error = new Message(Message.DELETE_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player does not yet logged on the server. No play to remove.");
 								break;
+						case TILE_EXCHANGE_ERROR:
+								error = new Message(Message.TILE_EXCHANGE_ERROR,"");
+								outputPrint("Server error : Something went wrong with the tile exchange. Don't ask me, I don't know what.");
 				}
 				return error;
 		}

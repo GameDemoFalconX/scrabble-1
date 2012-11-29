@@ -47,7 +47,13 @@ public class Message {
 			public static final int LOAD_GAME_LIST_SUCCESS = 46; // Load list of games for current player with success.
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
 		
+		// LOGOUT //
 		public static final int  LOGOUT = 50;  // Logout
+		
+		// TILE_EXCHANGE //
+		public static final int TILE_EXCHANGE = 60; // Exchange tiles
+		public static final int TILE_EXCHANGE_SUCCES = 61; // Exchange tiles with succes
+		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// DICTIONNARY //
 		public static final int DICO_LOADED = 60; // Dictionnary loaded

@@ -30,8 +30,8 @@ public class Play {
 		}
 		
 		/**
-			* Allows to initialize a Play object without grid, rack and bag for save memory. 
-			* Thus It become possible to display some attributes of this without to have load the complete object.
+			* Allows to initialize a Play object without grid, rack and bag to save memory. 
+			* Thus it become possible to display some attributes of this without to have load the complete object.
 			* @param playerID
 			* @param playID
 			* @param created
@@ -85,4 +85,23 @@ public class Play {
 		public String getGrid() {
 				return this.grid.toString();
 		}
+		
+		public String switchTiles(String tiles) {
+				System.out.println("Play");
+				String newTiles = "";
+				String [] oldTiles = tiles.split("__");
+				for (int i = 0; i < oldTiles.length; i++) {
+						Tile tile = this.bag.getTile();
+						newTiles += tile.getLetter() + ":" + tile.getValue();
+						if (i < oldTiles.length-1) {
+								newTiles += "__";
+						}
+				}
+				for (int i = 0; i < oldTiles.length; i++) {
+						String [] tileString = oldTiles[i].split(":");
+						bag.putBackTile(new Tile(tileString[0].charAt(0),Integer.parseInt(tileString[1])));
+				}
+				return newTiles;
+		}
+		
 }

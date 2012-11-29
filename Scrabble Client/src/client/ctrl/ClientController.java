@@ -175,10 +175,19 @@ public class ClientController {
 		public void tileExchange(Integer choice) {
 				switch (choice) {
 						case 1: 
-								gameBoard.changeTiles(view.changeTileMenu());
+								try {
+										gameBoard.changeTiles(view.changeTileMenu());
+								} catch (GameException ge) {
+										processException(ge);
+								}
 								break;
 						case 2:
-								gameBoard.changeAllTiles();
+								try {
+										gameBoard.changeTiles("");
+								} catch (GameException ge) {
+										processException(ge);
+								}
+								
 								break;
 						default:
 								view.playMenu(player.isAnonym());

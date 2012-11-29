@@ -21,7 +21,13 @@ class Rack {
 		// Methods added by Bernard
 		@Override
 		public String toString() {
-				return rack[0].getLetter()+" "+rack[1].getLetter()+" "+rack[2].getLetter()+" "+rack[3].getLetter()+" "+rack[4].getLetter()+" "+rack[5].getLetter()+" "+rack[6].getLetter();
+				String result = "";
+				for (int i = 0; i < 7; i++) {
+						result += rack[i].toString() + " ";
+				}
+				result += "\n____ ____ ____ ____ ____ ____ ____\n"
+											  	+ "  1    2    3    4    5    6    7\n";
+				return result;
 		}
 		
 		public Rack getRack() {
@@ -42,16 +48,28 @@ class Rack {
 				rack[6] = new Tile('G',8);
 		}
 
-		public String getFormatedTiles(String pos) {
+		public String getFormatedTiles(String position) {
 				String formatedTiles = "";
-				String [] source = pos.split(" ");
-				for (int i = 0; i < source.length; i++) {
-						formatedTiles  += rack[Integer.parseInt(source[i])-1].getLetter()+":";
-						formatedTiles  += rack[Integer.parseInt(source[i])-1].getValue();
-						if (i < source.length-1) {
+				String [] positionSource = position.split(" ");
+				for (int i = 0; i < positionSource.length; i++) {
+						formatedTiles  += rack[Integer.parseInt(positionSource[i])-1].getLetter()+":";
+						formatedTiles  += rack[Integer.parseInt(positionSource[i])-1].getValue();
+						if (i < positionSource.length-1) {
 								formatedTiles += "__";
 						}
 				}
 				return formatedTiles;
 		}
+		
+		public void setFormatedTiles(String position, String tiles) {
+				String [] positionSource = position.split(" ");
+				String [] tileList = tiles.split("__");
+				for (int i = 0; i < positionSource.length; i++) {
+						String [] tileArgs = tileList[i].split(":");
+						char letter = tileArgs[0].charAt(0);
+						Integer value = Integer.parseInt(tileArgs[1]);
+						rack[Integer.parseInt(positionSource[i])-1] = new Tile(letter,value);
+				}
+		}
+		
 }

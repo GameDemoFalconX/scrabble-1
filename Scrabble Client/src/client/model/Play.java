@@ -33,8 +33,11 @@ public class Play {
 				return rack.toString();
 		}
 		
-		public String getFormatedTilesFromRack(String pos) {
-				
-				return rack.getFormatedTiles(pos);
+		public String getFormatedTilesFromRack(String position) {
+				return rack.getFormatedTiles(position);
+		}
+		
+		public void setFormatedTilesToRack(String position, String tiles) {
+				rack.setFormatedTiles(position, tiles);
 		}
 }

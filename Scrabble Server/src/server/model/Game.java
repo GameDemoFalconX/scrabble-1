@@ -112,6 +112,19 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		@Override
+		public Message exchangeTile(String pl_id, String tiles) throws GameException {
+				System.out.println("Game");
+				Message response = switchTile(pl_id, tiles); // TODO put in abstract
+				switch (response.getHeader()) {
+						case Message.TILE_EXCHANGE_SUCCES:
+								return response;
+						case Message.TILE_EXCHANGE_ERROR:
+								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+				}
+				return  null;
+		}
+				
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
@@ -121,4 +134,5 @@ public abstract class Game implements IGame {
 		protected abstract Message loadPlay(String pl_id, String ga_id);
 		
 		protected abstract Message destroyAnonym(String pl_id);
+		protected abstract Message switchTile(String pl_id, String tiles);
 }
