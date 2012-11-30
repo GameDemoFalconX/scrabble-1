@@ -187,12 +187,13 @@ public class ClientController {
 								} catch (GameException ge) {
 										processException(ge);
 								}
-								
 								break;
 						default:
 								view.playMenu(player.isAnonym());
 								break;
 				}
+				gameBoard.displayGame();
+				view.playMenu(player.isAnonym());
 		}
 
 		private void processException(GameException ge) {
@@ -223,6 +224,9 @@ public class ClientController {
 								break;
 						case DELETE_ANONYM_ERROR:
 								// Pass : because anonymous player isn't logged on the server.
+								break;
+						case TILE_EXCHANGE_ERROR:
+										view.firstMenu("An error has been encountered during the tile exchange! Please try again.");
 								break;
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");

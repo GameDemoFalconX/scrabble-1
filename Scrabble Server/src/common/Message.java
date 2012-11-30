@@ -56,9 +56,9 @@ public class Message {
 		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// DICTIONNARY //
-		public static final int DICO_LOADED = 60; // Dictionnary loaded
-		public static final int WORD_OK = 61; // Word exist
-		public static final int WORK_KO = 62; // Word doesn't exist
+		public static final int DICO_LOADED = 510; // Dictionnary loaded
+		public static final int WORD_OK = 511; // Word exist
+		public static final int WORK_KO = 512; // Word doesn't exist
 		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player

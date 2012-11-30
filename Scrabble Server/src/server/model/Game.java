@@ -114,8 +114,7 @@ public abstract class Game implements IGame {
 		
 		@Override
 		public Message exchangeTile(String pl_id, String tiles) throws GameException {
-				System.out.println("Game");
-				Message response = switchTile(pl_id, tiles); // TODO put in abstract
+				Message response = switchTile(pl_id, tiles); 
 				switch (response.getHeader()) {
 						case Message.TILE_EXCHANGE_SUCCES:
 								return response;

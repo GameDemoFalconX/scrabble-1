@@ -167,22 +167,20 @@ public class GameBoard {
 		
 		public void changeTiles(String position) throws GameException {
 				String formatedTiles;
-				if (!"".equals(position)) {
-						formatedTiles = cPlay.getFormatedTilesFromRack(position);
-				} else {
-						formatedTiles = cPlay.getFormatedTilesFromRack("1 2 3 4 5 6 7");
+				if ("".equals(position)) {
+						position += "1 2 3 4 5 6 7";
 				}
-				System.out.println(formatedTiles);
-				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getPlayID()
+				formatedTiles = cPlay.getFormatedTilesFromRack(position);
+				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
 												+"##"+formatedTiles);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.TILE_EXCHANGE_SUCCES:
-										String [] args = new String(serverResponse.getBody()).split("##");
-										System.out.println(args);
-										cPlay.setFormatedTilesToRack(position, args[1]);
+										String args = new String(serverResponse.getBody());
+										cPlay.setFormatedTilesToRack(position, args);
+										break;
 								case Message.TILE_EXCHANGE_ERROR:
 										throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
 						}

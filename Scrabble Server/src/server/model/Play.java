@@ -89,7 +89,6 @@ public class Play {
 		}
 		
 		public String switchTiles(String tiles) {
-				System.out.println("Play");
 				String newTiles = "";
 				String [] oldTiles = tiles.split("__");
 				for (int i = 0; i < oldTiles.length; i++) {

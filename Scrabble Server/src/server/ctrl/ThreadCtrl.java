@@ -164,6 +164,9 @@ public class ThreadCtrl extends Thread {
 				String playerID = argsTab[0];
 				String tiles = argsTab[1];
 				response = HAL.exchangeTile(playerID,tiles);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
 		}
 		
 		private void outputPrint(String msg) {

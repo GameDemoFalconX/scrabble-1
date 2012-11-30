@@ -39,7 +39,6 @@ public class View {
 		}
     
 		public void playMenu(boolean isAnonymous) {
-				System.out.println(menuHeader);
 				System.out.println("1: Place word");
 				System.out.println("2: Exchange a tile");
 				if (!isAnonymous) System.out.println("3: Save your game\n");
@@ -60,7 +59,7 @@ public class View {
 		}
 		
 		public void changeTileMainMenu() {
-				System.out.println("#            EXCHANGE TILE              #");
+				System.out.println("\n#            EXCHANGE TILE              #");
 				System.out.println("_________________________________________\n");
 				System.out.println("1: Exchange one or more tiles");
 				System.out.println("2: Exchange all tiles");
@@ -69,7 +68,7 @@ public class View {
 		}
 		
 		public String changeTileMenu() {
-				System.out.println("Please enter the position of the tile(s) you want to change. \n");
+				System.out.println("Please enter the position of the tile(s) you want to exchange.");
 				return CConsole.readLine("e.g. 2 3 6 :  ");
 		}
 		

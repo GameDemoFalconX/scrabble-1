@@ -25,8 +25,8 @@ class Rack {
 				for (int i = 0; i < 7; i++) {
 						result += rack[i].toString() + " ";
 				}
-				result += "\n____ ____ ____ ____ ____ ____ ____\n"
-											  	+ "  1    2    3    4    5    6    7\n";
+				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+											  	+ "  1     2     3     4     5     6     7\n";
 				return result;
 		}
 		
@@ -62,13 +62,14 @@ class Rack {
 		}
 		
 		public void setFormatedTiles(String position, String tiles) {
-				String [] positionSource = position.split(" ");
+				String [] positionSource = position.split(" ");				
 				String [] tileList = tiles.split("__");
 				for (int i = 0; i < positionSource.length; i++) {
 						String [] tileArgs = tileList[i].split(":");
 						char letter = tileArgs[0].charAt(0);
 						Integer value = Integer.parseInt(tileArgs[1]);
-						rack[Integer.parseInt(positionSource[i])-1] = new Tile(letter,value);
+						int index = Integer.parseInt(positionSource[i]) - 1;
+						rack[index] = new Tile(letter,value);
 				}
 		}
 		

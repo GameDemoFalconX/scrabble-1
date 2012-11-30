@@ -177,7 +177,6 @@ public class ServerScrabble {
 		
 		public synchronized Message exchangeTile(String playerID, String tiles) {
 				Message response = null;
-				outputPrint("ServerScrabble");
 				try {
 						response = game.exchangeTile(playerID,tiles);
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);

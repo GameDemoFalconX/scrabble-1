@@ -25,6 +25,10 @@ public class Play {
 				return playID.toString();
 		}
 		
+		public String getOwner() {
+				return owner.toString();
+		}
+		
 		public String displayGrid() {
 				return grid.toString();
 		}

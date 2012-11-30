@@ -18,8 +18,8 @@ public class Grid {
 		
 		@Override
 		public String toString() {
-				String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
-				prtGrid += "      __   __   __   __   __   __   __   __   __   __   __   __   __   __   __\n";
+				String prtGrid = "       1     2     3     4     5     6     7     8     9    10    11    12    13    14    15\n";
+				prtGrid +=       "     _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ _____ \n";
 				for (int x = 0; x <= 14 ; x++) {
 						if (x < 9) {
 								prtGrid += "0"+ (x+1) + " | ";
@@ -33,23 +33,23 @@ public class Grid {
 								} else {
 										switch (scoringGrid.getBonus(x,y)) {
 											 case	ScoringGrid.TRIPLE_WORD : 
-														prtGrid += "[TW] ";
+														prtGrid += "[T W] ";
 														break;
 												case	ScoringGrid.DOUBLE_WORD : 
-														prtGrid += "[DW] ";
+														prtGrid += "[D W] ";
 														break;
 												case	ScoringGrid.TRIPLE_LETTER : 
-														prtGrid += "[TL] ";
+														prtGrid += "[T L] ";
 														break;
 												case	ScoringGrid.DOUBLE_LETTER : 
-														prtGrid += "[DL] ";
+														prtGrid += "[D L] ";
 														break;
 												default :
-														prtGrid += "[  ] ";
+														prtGrid += "[   ] ";
 									 }					
 								}	
 						}		
-						prtGrid += "\n";
+						prtGrid += "\n\n";
 				}
 				return prtGrid;
 		}
