@@ -150,9 +150,12 @@ public class ClientController {
 						case 1:
 								break;
 						case 2:
-								view.changeTileMainMenu();
+								view.tileOrganizerMainMenu();
 								break;
 						case 3:
+								view.changeTileMainMenu();
+								break;
+						case 4:
 								break;
 						case 0:
 								if (player.isAnonym()) {
@@ -170,6 +173,33 @@ public class ClientController {
 								view.firstMenu("");
 								break;
 				}
+		}
+		
+		public void tileOrganizer(Integer choice) {
+				switch (choice) {
+						case 1:
+								try {
+										gameBoard.switchTiles(view.tileSwitcherMenu());
+								} catch (GameException ge) {
+										processException(ge);
+								}
+								break;
+						case 2:
+								try {
+										gameBoard.reorganizeTiles(view.tileReorganizerMenu());
+								} catch (GameException ge) {
+										processException(ge);
+								}
+								break;
+						case 0:
+								view.playMenu(player.isAnonym());
+								break;
+						default:
+								view.playMenu(player.isAnonym());
+								break;
+				}
+				gameBoard.displayGame();
+				view.playMenu(player.isAnonym());
 		}
 		
 		public void tileExchange(Integer choice) {

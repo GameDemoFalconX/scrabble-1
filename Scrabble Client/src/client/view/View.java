@@ -40,8 +40,9 @@ public class View {
     
 		public void playMenu(boolean isAnonymous) {
 				System.out.println("1: Place word");
-				System.out.println("2: Exchange a tile");
-				if (!isAnonymous) System.out.println("3: Save your game\n");
+				System.out.println("2: Organize your letters");
+				System.out.println("3: Exchange a tile");
+				if (!isAnonymous) System.out.println("4: Save your game\n");
 				System.out.println("9: Back to menu\n");
 				System.out.println("0: Exit\n");
 				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
@@ -58,18 +59,37 @@ public class View {
 				return CConsole.readInt("Select the game you want to play?  ");
 		}
 		
+		public void tileOrganizerMainMenu() {
+				System.out.println("\n#            TILES ORGANIZER             #");
+				System.out.println("___________________________________________\n");
+				System.out.println("1: Switch 2 tiles");
+				System.out.println("2: Reorganize all tiles");
+				System.out.println("0: Cancel\n");
+				ctrl.tileOrganizer(CConsole.readInt("Your choice ?  "));
+		}
+		
+		public String tileSwitcherMenu() {
+				System.out.println("Please enter the positions of the two tiles you want to switch");
+				return CConsole.readLine("e.g. 2 6 : ");
+		}
+		
+		public String tileReorganizerMenu() {
+				System.out.println("Please enter the new tiles order you desire");
+				return CConsole.readLine("e.g. 7 6 5 4 3 2 1 : ");
+		}		
+		
 		public void changeTileMainMenu() {
-				System.out.println("\n#            EXCHANGE TILE              #");
+				System.out.println("\n#            TILE EXCHANGE              #");
 				System.out.println("_________________________________________\n");
 				System.out.println("1: Exchange one or more tiles");
 				System.out.println("2: Exchange all tiles");
 				System.out.println("0: Cancel\n");
 				ctrl.tileExchange(CConsole.readInt("Your choice ?  "));
 		}
-		
+				
 		public String changeTileMenu() {
 				System.out.println("Please enter the position of the tile(s) you want to exchange.");
-				return CConsole.readLine("e.g. 2 3 6 :  ");
+				return CConsole.readLine("e.g. 2 3 6 : ");
 		}
 		
 		public void display(String msg) {

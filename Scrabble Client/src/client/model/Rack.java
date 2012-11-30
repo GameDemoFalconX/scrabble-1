@@ -47,6 +47,22 @@ class Rack {
 				rack[5] = new Tile('F',4);
 				rack[6] = new Tile('G',8);
 		}
+		
+		public void switchTiles(String position) {
+				String [] positionSource = position.split(" ");
+				Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
+				rack[Integer.parseInt(positionSource[0])] = rack[Integer.parseInt(positionSource[1])-1];
+				rack[Integer.parseInt(positionSource[1])] = tmp;
+		}
+		
+		public void reorganizeTiles(String position) {
+				Tile[] newRack = new Tile[7];
+				String [] positionSource = position.split(" ");
+				for (int i = 0; i < 7; i++) {
+						newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+				}
+				this.rack = newRack;
+		}
 
 		public String getFormatedTiles(String position) {
 				String formatedTiles = "";

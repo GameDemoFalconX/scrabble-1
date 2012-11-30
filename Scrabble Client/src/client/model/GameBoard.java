@@ -165,6 +165,14 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
+		public void switchTiles(String position) throws GameException {
+				cPlay.switchTiles(position);
+		}
+		
+		public void reorganizeTiles(String position) throws GameException {
+				cPlay.reorganizeTiles(position);
+		}
+		
 		public void changeTiles(String position) throws GameException {
 				String formatedTiles;
 				if ("".equals(position)) {

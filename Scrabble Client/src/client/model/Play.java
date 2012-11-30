@@ -37,6 +37,14 @@ public class Play {
 				return rack.toString();
 		}
 		
+		public void switchTiles(String position) {
+				rack.switchTiles(position);
+		}
+		
+		public void reorganizeTiles(String position) {
+				rack.reorganizeTiles(position);
+		}
+		
 		public String getFormatedTilesFromRack(String position) {
 				return rack.getFormatedTiles(position);
 		}
