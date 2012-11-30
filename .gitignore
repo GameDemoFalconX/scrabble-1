@@ -13,4 +13,3 @@ nbdist/
 # Vim, OS, ...
 *.un~
 *.swp
-*.DS_Store
