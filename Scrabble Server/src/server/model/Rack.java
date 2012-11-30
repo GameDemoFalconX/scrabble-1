@@ -37,7 +37,8 @@ class Rack {
 		public String toString() {
 				String result = "";
 				for (int i = 0; i < 7; i++) {
-						result += rack[i]+"__";
+						result += rack[i];
+						result += (i < 6) ? "__" : "";
 				}
 				return result;
 		}

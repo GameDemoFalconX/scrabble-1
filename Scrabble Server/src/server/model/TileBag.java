@@ -72,17 +72,16 @@ public class TileBag {
 				return tile;																																	// return that tile (to go to the rack)
 		}
 		
-		public void removeTile(Tile tile) {
-				char letter = tile.getLetter();
-				int value = tile.getValue();
+		public Tile popTile(char letter, int value) {
 				tileBag[value].removeFirstOccurrence(letter);
+				return new Tile(letter, value);
 		}
 		
 		/**
 			* Put a tile back into the bag
 			* @param tile a Tile
 			*/
-		public void returnTile(Tile tile) {
+		public void putBackTile(Tile tile) {
 				char letter = tile.getLetter();
 				int value = tile.getValue();
 				tileBag[value].add(letter);

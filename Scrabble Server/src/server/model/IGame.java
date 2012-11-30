@@ -5,7 +5,7 @@ import common.Message;
 
 /**
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public interface IGame {
 		// Player connection
@@ -20,4 +20,10 @@ public interface IGame {
 		
 		// Deconnection
 		void deconnection(String clientName) throws GameException;
+		
+		// Save, Delete or Destroy plays
+		Message deleteAnonym(String pl_id) throws GameException;
+		
+		// Exchange tile
+		Message exchangeTile(String pl_id, String tiles) throws GameException;
 }

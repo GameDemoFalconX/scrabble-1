@@ -16,6 +16,7 @@ public class Play {
 		private Date modified;
 		private Integer score;
 		private Grid grid;
+		private String formatedGrid;
 		private Rack rack;
 		private TileBag bag;
 		
@@ -30,8 +31,8 @@ public class Play {
 		}
 		
 		/**
-			* Allows to initialize a Play object without grid, rack and bag for save memory. 
-			* Thus It become possible to display some attributes of this without to have load the complete object.
+			* Allows to initialize a Play object without grid, rack and bag to save memory. 
+			* Thus it become possible to display some attributes of this without to have load the complete object.
 			* @param playerID
 			* @param playID
 			* @param created
@@ -46,6 +47,15 @@ public class Play {
 				String [] mDate = modified.split("/");
 				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
 				this.score = score;
+				
+				// Initialize grid and  tilebag
+				grid = new Grid();
+				bag = new TileBag();
+		}
+		
+		public void loadTile(int x, int y, char letter, int value) {
+				Tile newTile = bag.popTile(letter, value);
+				grid.putInGrid(x, y, newTile);
 		}
 		
 		public String getPlayID() {
@@ -73,4 +83,34 @@ public class Play {
 		public String getFormatRack() {
 				return this.rack.toString();
 		}
+		
+		public String getGrid() {
+				return this.grid.toString();
+		}
+		
+		public String switchTiles(String tiles) {
+				String newTiles = "";
+				String [] oldTiles = tiles.split("__");
+				for (int i = 0; i < oldTiles.length; i++) {
+						Tile tile = this.bag.getTile();
+						newTiles += tile.getLetter() + ":" + tile.getValue();
+						if (i < oldTiles.length-1) {
+								newTiles += "__";
+						}
+				}
+				for (int i = 0; i < oldTiles.length; i++) {
+						String [] tileString = oldTiles[i].split(":");
+						bag.putBackTile(new Tile(tileString[0].charAt(0),Integer.parseInt(tileString[1])));
+				}
+				return newTiles;
+		}
+		
+		public void setFormatedGrid(String fGrid) {
+				this.formatedGrid = fGrid;
+		}
+		
+		public String getFormatedGrid() {
+				return this.formatedGrid;
+		}
+		
 }

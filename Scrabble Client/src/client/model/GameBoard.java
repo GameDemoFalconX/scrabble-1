@@ -138,6 +138,24 @@ public class GameBoard {
 				}
 		}
 		
+		public void deleteAnonym(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.DELETE_ANONYM, 0,  playerID);
+				
+				// Handle response
+				if (serverResponse != null) {
+						// Handle the server response
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.DELETE_ANONYM_ERROR:
+										throw new GameException(GameException.typeErr.DELETE_ANONYM_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
+//		Shouldn't this be in the View ?
 		public void displayGame() {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
@@ -147,6 +165,36 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
+		public void switchTiles(String position) throws GameException {
+				cPlay.switchTiles(position);
+		}
+		
+		public void reorganizeTiles(String position) throws GameException {
+				cPlay.reorganizeTiles(position);
+		}
+		
+		public void changeTiles(String position) throws GameException {
+				String formatedTiles;
+				if ("".equals(position)) {
+						position += "1 2 3 4 5 6 7";
+				}
+				formatedTiles = cPlay.getFormatedTilesFromRack(position);
+				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
+												+"##"+formatedTiles);
+				if (serverResponse != null) {
+						switch (serverResponse.getHeader()) {
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.TILE_EXCHANGE_SUCCES:
+										String args = new String(serverResponse.getBody());
+										cPlay.setFormatedTilesToRack(position, args);
+										break;
+								case Message.TILE_EXCHANGE_ERROR:
+										throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+						}
+				}
+		}
+				
 		public String [] loadPlayList(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
 				// Handle response
@@ -175,9 +223,9 @@ public class GameBoard {
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.LOAD_GAME_LIST_SUCCESS:
+								case Message.LOAD_GAME_SUCCESS:
 										String [] args = new String(serverResponse.getBody()).split("##");
-								case Message.LOAD_GAME_LIST_ERROR:
+								case Message.LOAD_GAME_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
 						}
 				} else {

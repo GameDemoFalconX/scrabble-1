@@ -1,5 +1,6 @@
 package server.model;
 
+import common.GameException;
 import common.Message;
 
 /**
@@ -49,7 +50,6 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message createNewGame(String pl_id) {
-				Message response = null;
 				if (plays.playerIsLogged(pl_id)) {
 						// Initialization of the Play on the server side and add it to the GameRAM dict.
 						Play newPlay = new Play(pl_id);
@@ -66,7 +66,6 @@ public class HAL extends Game {
 			*/
 		@Override
 		protected Message createNewAnonymGame(String pl_id) {
-				Message response = null;
 				if (!plays.playerIsLogged(pl_id)) {
 						// Add this anonymous player to the server players list.
 						plays.addStarter(pl_id);
@@ -81,7 +80,6 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message loadPlayLister(String pl_id) {
-				Message response = null;
 				if (plays.playerIsLogged(pl_id)) {
 						String list = plays.loadPlayList(pl_id);
 						if (!list.equals("")) {
@@ -90,5 +88,39 @@ public class HAL extends Game {
 						return new Message(Message.LOAD_GAME_LIST_ERROR, "");
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
+		
+		@Override
+		protected Message loadPlay(String pl_id, String ga_id) {
+				if (plays.playerIsLogged(pl_id)) {
+						try {
+								Play lPlay = plays.LoadGame(pl_id, ga_id);
+								plays.addNewPlay(pl_id, lPlay);
+								return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@");
+						} catch (GameException ge) {
+								return new Message(Message.XML_FILE_NOT_EXISTS, "");
+						}
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED, "");
+		}
+		
+		@Override
+		protected Message destroyAnonym(String pl_id) {
+				if (plays.playerIsLogged(pl_id)) {
+						plays.removeStarter(pl_id);
+						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
+				}
+				return new Message(Message.DELETE_ANONYM_ERROR, "");
+		}
+		
+		@Override
+		protected Message switchTile(String pl_id, String tiles) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						Play play = plays.getPlay(pl_id);
+						String newTiles = play.switchTiles(tiles);
+						return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
 }

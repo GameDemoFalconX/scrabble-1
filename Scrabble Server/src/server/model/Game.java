@@ -83,6 +83,15 @@ public abstract class Game implements IGame {
 		}
 		
 		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
+				Message response = loadPlay(pl_id, ga_id);
+				switch (response.getHeader()) {
+						case Message.LOAD_GAME_SUCCESS:
+								return response;
+						case Message.LOAD_GAME_ERROR:
+								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+						case Message.XML_FILE_NOT_EXISTS:
+								throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
+				}
 				return null;
 		}
 		
@@ -90,10 +99,39 @@ public abstract class Game implements IGame {
 		//Déconnexion - Utile pour les opérations de mise à jour différées
 		public void deconnection(String nom) throws GameException {}
 		
+		// Save, Delete or Destroy plays
+		@Override
+		public Message deleteAnonym(String pl_id) throws GameException {
+				Message response = destroyAnonym(pl_id);
+				switch (response.getHeader()) {
+						case Message.DELETE_ANONYM_SUCCESS:
+								return response;
+						case Message.DELETE_ANONYM_ERROR:
+								throw new GameException(GameException.typeErr.DELETE_ANONYM_ERROR);
+				}
+				return null;
+		}
+		
+		@Override
+		public Message exchangeTile(String pl_id, String tiles) throws GameException {
+				Message response = switchTile(pl_id, tiles); 
+				switch (response.getHeader()) {
+						case Message.TILE_EXCHANGE_SUCCES:
+								return response;
+						case Message.TILE_EXCHANGE_ERROR:
+								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+				}
+				return  null;
+		}
+				
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
 		protected abstract Message createNewGame(String pl_id);
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
+		protected abstract Message loadPlay(String pl_id, String ga_id);
+		
+		protected abstract Message destroyAnonym(String pl_id);
+		protected abstract Message switchTile(String pl_id, String tiles);
 }

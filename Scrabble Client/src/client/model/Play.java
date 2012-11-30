@@ -1,7 +1,6 @@
 package client.model;
 
 import java.util.UUID;
-import java.util.Date;
 
 /**
  * 
@@ -26,11 +25,31 @@ public class Play {
 				return playID.toString();
 		}
 		
+		public String getOwner() {
+				return owner.toString();
+		}
+		
 		public String displayGrid() {
 				return grid.toString();
 		}
 		
 		public String displayRack() {
 				return rack.toString();
+		}
+		
+		public void switchTiles(String position) {
+				rack.switchTiles(position);
+		}
+		
+		public void reorganizeTiles(String position) {
+				rack.reorganizeTiles(position);
+		}
+		
+		public String getFormatedTilesFromRack(String position) {
+				return rack.getFormatedTiles(position);
+		}
+		
+		public void setFormatedTilesToRack(String position, String tiles) {
+				rack.setFormatedTiles(position, tiles);
 		}
 }

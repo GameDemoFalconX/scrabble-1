@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import common.GameException;
 
 // Import about XML generation, reader and writer
 import org.jdom2.Attribute;
@@ -34,43 +35,65 @@ public class GameRAM {
 			* Load a specific play for the current player from the games.xml file. 
 			* @param playerUUID 
 			*/
-		public void LoadGame(String playerUUID, String playID) {
+		public Play LoadGame(String playerUUID, String playID) throws GameException {
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
-						System.out.println("File exists!");
+						System.out.println("Games file exists!");
 						SAXBuilder builder = new SAXBuilder(); 
+						Play loadPlay = null;
 						try {
 								Document document = (Document) builder.build(gameFile);
 								Element rootNode = document.getRootElement();
 								List list = rootNode.getChildren("player");
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
-										if (node.getAttributeValue("uuid").equals(playerUUID)) {
+										if (node.getAttributeValue("id").equals(playerUUID)) {
 												List playList = node.getChildren("play");
 												for (int j = 0; j < playList.size(); j++) {
 														Element playNode = (Element) playList.get(j);
-														
-														// Create a new Play instance
-														Play loadPlay = new Play(playerUUID, playNode.getChildText("uuid"), playNode.getChildText("created"), playNode.getChildText("modified"), Integer.parseInt(playNode.getChildText("uuid")));
-														// TODO Load words, create the grid, the rack and the tilebag from them
-														// Format these informations for client sending.
+														if (playNode.getAttributeValue("id").equals(playID)) {
+																// Create a new Play instance
+																loadPlay = new Play(playerUUID, playNode.getChildText("uuid"), playNode.getChildText("created"), playNode.getChildText("modified"), Integer.parseInt(playNode.getChildText("score")));
+																
+																// Load tiles, create the grid, the rack and update the tilebag in consequence.
+																Element grid = playNode.getChild("grid");
+																List tileList = grid.getChildren("tile");
+																String fGrid = "";
+																for (int k = 0; k < tileList.size(); k++) {
+																		Element tile = (Element) tileList.get(k);
+																		
+																		// Create formatedGrid
+																		fGrid += tile.getValue();
+																		if (k < tileList.size()-1) fGrid += "##";
+																		
+																		String [] tileAttrs = tile.getValue().split("__");
+																		
+																		// Tile attributes
+																		int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
+																		int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
+																		char letter = tileAttrs[1].split(":")[0].charAt(0);
+																		int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
+																		loadPlay.loadTile(x, y, letter, value);
+																}
+																loadPlay.setFormatedGrid(fGrid);
+														}
+														break;
 												}
 										}
 										break; // break the loop.
 								}
-								// Display the plays hashmap for the current player
-								//displayPlays();
-								
-								System.out.println("File Loaded!");
+								System.out.println("Games file Loaded!");
+								return loadPlay;
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
 						} catch (JDOMException jdome) {
 								System.out.println(jdome.getMessage());
 						}
 				} else {
-						System.out.println("File doesn't exist!");
-						// TODO Improve the way to handle errors.
+						System.out.println("Games file doesn't exist!");
+						throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
 				}
+				return null;
 		} 
 		
 		/**
@@ -111,6 +134,14 @@ public class GameRAM {
 			*/
 		public void addStarter(String playerID) {
 				plays.put(playerID, null);
+		}
+		
+		/**
+			* Remove a player to the player list and destroy this Play instance.
+			* @param playerID 
+			*/
+		public void removeStarter(String playerID) {
+				plays.remove(playerID);
 		}
 		
 		private void displayPlays() {
@@ -166,7 +197,6 @@ public class GameRAM {
 						System.out.println("Game file doesn't exist!");
 						// TODO Improve the way to handle errors.
 				}
-				System.out.println(result);
 				return result;
 		}
 		
@@ -179,4 +209,13 @@ public class GameRAM {
 			* Remove selected play in the games.xml file for the current player.
 			*/
 		public void removePlay() {}
+		
+		public Play getPlay(String playerID) {
+				if (!plays.isEmpty()) {
+						System.out.println("GameRAM not empty " + playerID);
+						return plays.get(playerID);
+				}
+				return null;
+		}
+		
 }

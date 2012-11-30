@@ -51,6 +51,12 @@ public class ThreadCtrl extends Thread {
 						case Message.LOAD_GAME:
 								loadGame();
 								break;
+						case Message.DELETE_ANONYM:
+								deleteAnonym();
+								break;
+						case Message.TILE_EXCHANGE:
+								exchangeTile();
+								break;
 				}
 		}
 		
@@ -108,7 +114,7 @@ public class ThreadCtrl extends Thread {
 				outputPrint("Current anonymous player is trying to create a new game");
 				Message response;
 				
-				// Try to log the current player
+				// Try to create a new play for the current anonymous player
 				response = HAL.newAnonymGame(new String(request.getBody()));
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
@@ -129,11 +135,35 @@ public class ThreadCtrl extends Thread {
 		
 		private void loadGame() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				outputPrint("Current player is trying to load  an existed game");
+				outputPrint("Current player is trying to load an existed game");
 				Message response;
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void deleteAnonym() {
+				String playerID = new String(request.getBody());
+				outputPrint("Try to delete the play for this anonymous player");
+				Message response;
+						
+				// Try to load an existed play for the current player
+				response = HAL.deleteAnonym(playerID);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void exchangeTile() {
+				String [] argsTab = new String(request.getBody()).split("##");
+				outputPrint("Current player is trying to exchange tiles");
+				Message response;
+				String playerID = argsTab[0];
+				String tiles = argsTab[1];
+				response = HAL.exchangeTile(playerID,tiles);
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

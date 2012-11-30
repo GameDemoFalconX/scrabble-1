@@ -11,6 +11,7 @@ public class Player {
 		private String playerName;
 		private String playerPassword;
 		private UUID playerID;
+		private boolean isAnonymous = false;
 		
 		public Player(String name, String pwd, String uuid) {
 				playerName = name;
@@ -23,6 +24,7 @@ public class Player {
 			* @param name
 			*/
 		public Player() {
+				isAnonymous = true;
 				playerID = UUID.randomUUID();
 				playerName = "PA"+playerID.toString();
 		}
@@ -45,5 +47,9 @@ public class Player {
 		
 		public String getPlayerID() {
 				return playerID.toString();
+		}
+		
+		public boolean isAnonym() {
+				return isAnonymous;
 		}
 }
