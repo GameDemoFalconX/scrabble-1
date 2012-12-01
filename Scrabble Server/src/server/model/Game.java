@@ -53,6 +53,18 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		@Override
+		public Message createNewAnonymPlay(String pl_id) throws GameException {
+				Message response = createNewAnonymGame(pl_id);
+				switch (response.getHeader()) {
+						case Message.NEW_GAME_ANONYM_SUCCESS:
+								return response;
+						case Message.NEW_GAME_ANONYM_ERROR:
+								throw new GameException(GameException.typeErr.LOGIN_ERROR);
+				}
+				return null;
+		}
+		
 		/**
 			* Return the list of Plays for the current player.
 			* @param pl_id
@@ -70,7 +82,9 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		//Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
+		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
+				return null;
+		}
 		
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
@@ -80,5 +94,6 @@ public abstract class Game implements IGame {
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
 		protected abstract Message createNewGame(String pl_id);
+		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
 }

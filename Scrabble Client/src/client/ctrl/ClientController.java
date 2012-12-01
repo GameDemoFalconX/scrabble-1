@@ -18,6 +18,7 @@ public class ClientController {
 		private static String IPaddress = "localhost";
 		private static int port = 8189;    
 		private boolean debug = true;
+		private boolean sound = true;
     
 		/**
 		  * @param args the command line arguments
@@ -77,6 +78,21 @@ public class ClientController {
 										processException(gbe);
 								}
 								break;
+						case 3:
+								try {
+										player = new Player(); // Create an anonymous player.
+										gameBoard.createNewPlayAnonym(player.getPlayerID());
+										if (debug) {
+												gameBoard.displayGame();
+												view.playMenu();
+										} else {
+												// TODO GUI 
+										}
+												// TODO player menu  
+								} catch (GameException gbe) {
+										processException(gbe);
+								}
+								break;
 						case 0:
 								view.display("See you next time !");
 								break;
@@ -105,7 +121,12 @@ public class ClientController {
 								try {
 										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
 										int playChoosen = view.displayPlayList(playList);
-										System.out.println("Load in process .");
+										if (playChoosen != 0) {
+												System.out.print("Load in process .");
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
+										} else {
+												view.display("See you next time !");
+										}
 										if (debug) {
 												
 										} else {

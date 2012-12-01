@@ -1,24 +1,16 @@
 package server.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
-import server.model.Player;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-
-// Import about XML generation, reader and writer
+import java.util.*;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * Important! : The JDOM class must be manually loaded. Click right on the Scrabble server folder > Properties. 
@@ -28,12 +20,12 @@ import org.jdom2.input.SAXBuilder;
  */
 public class PlayerRAM {
 		
-		private  Map<String, Player> players = new HashMap<String, Player>();
+		private  Map<String, Player> players = new HashMap<>();
 
 		public PlayerRAM() {
 				File playerFile = new File("players.xml");
 				if (playerFile.exists()) {
-						System.out.println("File exists!");
+						System.out.println("Player file exists!");
 						SAXBuilder builder = new SAXBuilder(); 
 						try {
 								Document document = (Document) builder.build(playerFile);
@@ -51,14 +43,14 @@ public class PlayerRAM {
 								// Display the players hashmap
 								//displayPlayers();
 								
-								System.out.println("File Loaded!");
+								System.out.println("Player file Loaded!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
 						} catch (JDOMException jdome) {
 								System.out.println(jdome.getMessage());
 						}
 				} else {
-						System.out.println("File doesn't exist!");
+						System.out.println("Player file doesn't exist!");
 						try {
 								Element players = new Element("players");
 								Document doc = new Document(players);
@@ -69,7 +61,7 @@ public class PlayerRAM {
 								xmlOutput.output(doc, new FileWriter(playerFile));
 								//xmlOutput.output(doc, System.out);
 								
-								System.out.println("File Created!");
+								System.out.println("Player file Created!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
 						}
@@ -129,7 +121,7 @@ public class PlayerRAM {
 						xmlOutput.setFormat(Format.getPrettyFormat());
 						xmlOutput.output(doc, new FileWriter("players.xml"));
   
-						System.out.println("File Updated!");
+						System.out.println("Player file Updated!");
 						
 				} catch (IOException e) {
 						e.printStackTrace();

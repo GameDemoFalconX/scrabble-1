@@ -4,14 +4,17 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- *
+ * Model that contains the available Tiles during the game.
+	* It's a array of LinkedList. Each LinkedList contains Chars
+	* There's as many of element in the TileBag as there is Tile in the game.
+	* The index of the array is the value of the letters that it contains.                                                                
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
     
 		Random random = new Random();
 		private char[][] source = {
-				{' ',' '},
+				{'?','?'},
 				{'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'S', 'S', 'T', 'T', 'T', 'T', 'T', 'T', 'U', 'U', 'U', 'U', 'U', 'U', 'L', 'L', 'L', 'L', 'L'},
 				{'D', 'D', 'D',  'G', 'G', 'M', 'M', 'M'},
 				{'B', 'B', 'C', 'C', 'P', 'P'},
@@ -25,6 +28,9 @@ public class TileBag {
 		};	
 		private LinkedList [] tileBag = new LinkedList [source.length];
 		
+		/**
+			* Create a new TileBag from the source
+			*/
 		public TileBag() {
 				for (int i = 0; i < source.length; i++) {
 						tileBag[i] = new LinkedList();
@@ -34,22 +40,52 @@ public class TileBag {
 				}
 		}
 		
-    /**
-		* Get a Tile object from the TileBag
-		* @return a Tile created from the TileBag
-		*/    
-		// TODO There's a problem with the rand, the 1 value is out too often.
-		public Tile getTileFromBag() {
-				int value = getValue();																								// get a  random value
+		/**
+			* Allows to initialize a TileBag from a String (Tile Sequence) (if we keep that format)
+			* @param bag 
+			*/
+		public TileBag(String bag) {
+				String [] tBag = bag.split("__");
+				for (int i = 0; i < tBag.length; i++) {
+						int value = Integer.parseInt(tBag[i].split(":")[1]);
+						if (tileBag[value].isEmpty()) {
+								tileBag[value] = new LinkedList();
+						}
+						tileBag[value].add(tBag[i].split(":")[0].charAt(0));
+				}
+		}
+		
+  /**
+		 * Get a Tile object from the TileBag
+		 * @return a Tile created from the TileBag
+		 */    
+		public Tile getTile() {
+				int value = getValue();																								// get a random value
 				while (tileBag[value].isEmpty()) {																	// while that row is empty
 						value = getValue();																									// get a new random value
 				}
 				char letter;																																						
-				int rand = random.nextInt(tileBag[value].size());					// get a new pseudo random number to select the letter from the row
-				letter = tileBag[value].get(rand).toString().charAt(0);												// get the letter from the LinkedList
+				int rand = random.nextInt(tileBag[value].size());					// get a pseudo random number to select the letter from the row
+				letter = (char) tileBag[value].get(rand);												// get the letter from the LinkedList
 				tileBag[value].remove(rand);																			// delete that letter from the LinkedList
 				Tile tile = new Tile(letter,value);																	// call the Tile constructor
 				return tile;																																	// return that tile (to go to the rack)
+		}
+		
+		public void removeTile(Tile tile) {
+				char letter = tile.getLetter();
+				int value = tile.getValue();
+				tileBag[value].removeFirstOccurrence(letter);
+		}
+		
+		/**
+			* Put a tile back into the bag
+			* @param tile a Tile
+			*/
+		public void returnTile(Tile tile) {
+				char letter = tile.getLetter();
+				int value = tile.getValue();
+				tileBag[value].add(letter);
 		}
 		
 		/**
@@ -87,4 +123,5 @@ public class TileBag {
 				}
 				return true;
 		}
+		
 }
