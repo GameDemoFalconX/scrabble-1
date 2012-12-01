@@ -56,6 +56,11 @@ public class Message {
 		public static final int TILE_EXCHANGE_SUCCES = 61; // Exchange tiles with succes
 		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
+		// PLACE_WORD //
+		public static final int PLACE_WORD = 70; // Place word
+		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes
+		public static final int PLACE_WORD_ERROR = 72; // Place word with error
+		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player
 		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player

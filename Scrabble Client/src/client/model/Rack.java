@@ -51,8 +51,8 @@ class Rack {
 		public void switchTiles(String position) {
 				String [] positionSource = position.split(" ");
 				Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
-				rack[Integer.parseInt(positionSource[0])] = rack[Integer.parseInt(positionSource[1])-1];
-				rack[Integer.parseInt(positionSource[1])] = tmp;
+				rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
+				rack[Integer.parseInt(positionSource[1])-1] = tmp;
 		}
 		
 		public void reorganizeTiles(String position) {
@@ -62,6 +62,11 @@ class Rack {
 						newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
 				}
 				this.rack = newRack;
+		}
+		
+		public String getFormatedTile(Integer position) {
+				String formatedTile = rack[position-1].getLetter()+":"+rack[position-1].getValue();
+				return formatedTile;
 		}
 
 		public String getFormatedTiles(String position) {

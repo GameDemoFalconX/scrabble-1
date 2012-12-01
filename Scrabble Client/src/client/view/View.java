@@ -59,6 +59,26 @@ public class View {
 				return CConsole.readInt("Select the game you want to play?  ");
 		}
 		
+		public void tileUsherMainMenu() {
+				System.out.println("\n#            TILES USHER             #");
+				System.out.println("_______________________________________\n");
+				System.out.println("Please enter the number of tiles you want to place.");
+				ctrl.tileUsher(CConsole.readInt("e.g. 3 : "));
+		}
+		
+		public String tileUsherMenu(Integer letterNumber) {
+				switch (letterNumber) {
+						case 1: System.out.println("Enter the position of the 1st letter and the coordinate :  ");
+														return CConsole.readLine ("e.g. 1 (place on the rack) 10 (x) 12 (y) : ");
+					 case 2: System.out.println("Enter the position of the 2nd letter and the coordinate :  ");
+														return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) 12 (y) : ");
+						case 3: System.out.println("Enter the position of the 3rd letter and the coordinate :  ");
+														return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) 12 (y) : ");
+						default: System.out.println("Enter the position of the "+letterNumber+"th letter and the coordinate :  ");
+														 return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) 12 (y) : ");								
+				}
+		}
+		
 		public void tileOrganizerMainMenu() {
 				System.out.println("\n#            TILES ORGANIZER             #");
 				System.out.println("___________________________________________\n");

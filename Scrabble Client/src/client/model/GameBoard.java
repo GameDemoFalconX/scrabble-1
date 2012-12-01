@@ -165,6 +165,33 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
+		public void addWord(String unformatedWord) throws GameException {
+				String formatedWord = "";
+				String [] unformatedLetters = unformatedWord.split("##");
+				for (int i = 0; i < unformatedLetters.length; i++) {
+						String [] oneLetter = unformatedLetters[i].split(" ");
+						formatedWord += oneLetter[1]+":"+oneLetter[2]+"__";
+						formatedWord += cPlay.getFormatedTileFromRack(Integer.parseInt(oneLetter[0]));
+						formatedWord += "##";
+				}
+				System.out.println(formatedWord);
+//				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
+//												+"##"+formatedWord);
+				cPlay.addWord(formatedWord);
+//				if (serverResponse != null) {
+//						switch (serverResponse.getHeader()) {
+//								case Message.SYSKO:
+//										throw new GameException(GameException.typeErr.SYSKO);
+//								case Message.PLACE_WORD_SUCCES:
+//										String args = new String(serverResponse.getBody());
+//										cPlay.addWord(formatedWord);
+//										break;
+//								case Message.PLACE_WORD_ERROR:
+//										throw new GameException(GameException.typeErr.PLACE_WORD_ERROR);
+//						}
+//				}
+		}
+		
 		public void switchTiles(String position) throws GameException {
 				cPlay.switchTiles(position);
 		}

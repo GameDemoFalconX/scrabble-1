@@ -148,6 +148,7 @@ public class ClientController {
 		public void playChoice(Integer choice) {
 				switch (choice) {
 						case 1:
+								view.tileUsherMainMenu();
 								break;
 						case 2:
 								view.tileOrganizerMainMenu();
@@ -173,6 +174,23 @@ public class ClientController {
 								view.firstMenu("");
 								break;
 				}
+		}
+		
+		public void tileUsher(Integer number) {
+				String unformatedWord = "";
+				if (number > 0) {
+						for (int i = 1; i <= number; i++) {
+								unformatedWord += view.tileUsherMenu(i);
+								unformatedWord += "##";
+						}
+				}
+				try {
+						gameBoard.addWord(unformatedWord);
+				} catch (GameException ge) {
+						processException(ge);
+				}
+				gameBoard.displayGame();
+				view.playMenu(player.isAnonym());
 		}
 		
 		public void tileOrganizer(Integer choice) {
