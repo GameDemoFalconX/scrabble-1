@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * 
- * @author Romain <ro.foncier@gmail.com>
+ * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
 		private UUID playID;

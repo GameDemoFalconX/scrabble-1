@@ -5,7 +5,7 @@ import client.model.Player;
 import client.view.View;
 import common.GameException;
 import common.Message;
-
+import java.util.Arrays;
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain<ro.foncier@gmail.com>
@@ -49,12 +49,12 @@ public class ClientController {
 		public void firstChoice(Integer choice) {
 				switch (choice) {
 						case 1:
-								String name = view.askName();
-								String password = view.askPassword();
 								try {
-										player = gameBoard.newPlayer(name, password);
+										player = new Player(); // Create an anonymous player.
+										gameBoard.createNewPlayAnonym(player.getPlayerID());
 										if (debug) {
-												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
+												gameBoard.displayGame();
+												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
 										}
@@ -79,12 +79,12 @@ public class ClientController {
 								}
 								break;
 						case 3:
+								String name = view.askName();
+								String password = view.askPassword();
 								try {
-										player = new Player(); // Create an anonymous player.
-										gameBoard.createNewPlayAnonym(player.getPlayerID());
+										player = gameBoard.newPlayer(name, password);
 										if (debug) {
-												gameBoard.displayGame();
-												view.playMenu(player.isAnonym());
+												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -178,20 +178,62 @@ public class ClientController {
 		
 		public void tileUsher(Integer number) {
 				String unformatedWord = "";
+				String x1 = "";
+				String x2 = "";
+				String y = "";
+				boolean vertical = false;
 				if (number > 0) {
 						for (int i = 1; i <= number; i++) {
-								unformatedWord += view.tileUsherMenu(i);
-								unformatedWord += "##";
+								boolean threeArgs;
+								boolean argOneIsOK;
+								boolean argTwoIsOK;
+								boolean argThreeIsOK;
+								String [] unformatedLetter = new String[3];
+								do {
+										unformatedLetter = view.tileUsherMenu(i,vertical).split(" ");
+										if ((i >= 3) && vertical) {
+												unformatedLetter = addElement(unformatedLetter,y);
+										} else if (i >= 3 && !vertical) {
+												String tmp = unformatedLetter[1];
+												unformatedLetter[1] = x1;
+												unformatedLetter = addElement(unformatedLetter, tmp);
+										}
+										threeArgs = unformatedLetter.length == 3;
+										argOneIsOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 8);
+										argTwoIsOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
+										argThreeIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 16);
+								} while (!threeArgs || !argOneIsOK || !argTwoIsOK || !argThreeIsOK);
+								switch (i) {
+										case 1: x1 = unformatedLetter[1];
+																		y = unformatedLetter[2]; 
+																		break;
+										case 2: x2 = unformatedLetter[1];
+																		if (x1.equals(x2)) {
+																				vertical = true;
+																		}
+										default: break;
+								}
+								unformatedWord += unformatedLetter[0]+" "+unformatedLetter[1]+" "+unformatedLetter[2];
+								if (i < number) {
+										unformatedWord += "##";
+								}
+						} 
+						System.out.println(unformatedWord);
+						try {
+								gameBoard.addWord(unformatedWord);
+						} catch (GameException ge) {
+								processException(ge);
 						}
-				}
-				try {
-						gameBoard.addWord(unformatedWord);
-				} catch (GameException ge) {
-						processException(ge);
 				}
 				gameBoard.displayGame();
 				view.playMenu(player.isAnonym());
 		}
+		
+		private String[] addElement(String[] array, String toAdd) {
+    String[] result = Arrays.copyOf(array, array.length +1);
+    result[array.length] = toAdd;
+    return result;
+}
 		
 		public void tileOrganizer(Integer choice) {
 				switch (choice) {
