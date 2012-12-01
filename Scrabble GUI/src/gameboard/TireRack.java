@@ -1,30 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gameboard;
 
+import dragndrop.MouseGlassListener;
+import dragndrop.MouseGlassMotionListener;
+import dragndrop.MyGlassPane;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.TransferHandler;
 
 /**
  * 
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
-public class TireRack extends JPanel implements ActionListener {
+public class TireRack extends JPanel {
     
-    public TireRack(int ratingOfGUI){
+//    PictureTransferHandler picHandler;
+    private MyGlassPane glass;
+    
+    public TireRack(int ratingOfGUI, MyGlassPane glasss){
+        glass = glasss;
+//        picHandler = new PictureTransferHandler();
+        
         ImageIcon icon = createImageIcon("images/Tile_600ppp.jpg","Tile");
         icon = new ImageIcon(getScaledImage(icon.getImage(), 35,
                      getProportionnalHeight(icon, 35)));
+        
         JLabel JLabTile1 = new JLabel(icon);
         JLabel JLabTile2 = new JLabel(icon);
         JLabel JLabTile3 = new JLabel(icon);
@@ -33,8 +37,13 @@ public class TireRack extends JPanel implements ActionListener {
         JLabel JLabTile6 = new JLabel(icon);
         JLabel JLabTile7 = new JLabel(icon);
         
-        //setLayout(new java.awt.GridLayout(1, 1, 1, 1)); //Allow to get rid of the gap between JPanel and JLabel
-        setBounds( 200, ratingOfGUI*100 + 40, icon.getIconWidth()*7, icon.getIconHeight()+10);
+        JLabTile1.addMouseListener(new MouseGlassListener(glass));
+        JLabTile1.addMouseMotionListener(new MouseGlassMotionListener(glass));
+        JLabTile1.setTransferHandler(new TransferHandler("icon"));
+        //JLabTile1.setTransferHandler(null);
+                
+        setLayout(new java.awt.GridLayout(1, 7, 0, 0));
+        setBounds( 200, ratingOfGUI*100 + 40, icon.getIconWidth()*8, icon.getIconHeight()+10);
         add(JLabTile1);
         add(JLabTile2);
         add(JLabTile3);
@@ -83,6 +92,4 @@ public class TireRack extends JPanel implements ActionListener {
         g2.dispose();
         return resizedImg;
     }
-
-    public void actionPerformed(ActionEvent e) {}
 }
