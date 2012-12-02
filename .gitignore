@@ -8,8 +8,8 @@ nbdist/
 
 # Class Files #
 *.class
+*.jar
 
 # Vim, OS, ...
 *.un~
 *.swp
-*.DS_Store

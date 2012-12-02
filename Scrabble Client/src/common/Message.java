@@ -34,6 +34,7 @@ public class Message {
 		public static final int NEW_GAME = 30;  // New game
 		public static final int NEW_GAME_SUCCESS = 31;  // New game with success
 		public static final int NEW_GAME_ERROR = 32;  // New game with error
+		
 		// NEW_GAME_ANONYM //
 		public static final int NEW_GAME_ANONYM = 35;  // New game for an anonymous user.
 		public static final int NEW_GAME_ANONYM_SUCCESS = 36;  // New game anonym with success
@@ -48,7 +49,13 @@ public class Message {
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
 		public static final int GAME_IDENT_ERROR = 48; // If player isn't logged to play a specific game.
 		
+		// LOGOUT //
 		public static final int  LOGOUT = 50;  // Logout
+		
+		// TILE_EXCHANGE //
+		public static final int TILE_EXCHANGE = 60; // Exchange tiles
+		public static final int TILE_EXCHANGE_SUCCES = 61; // Exchange tiles with succes
+		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// PLACE_WORD //
 		public static final int PLACE_WORD = 70; // Place word

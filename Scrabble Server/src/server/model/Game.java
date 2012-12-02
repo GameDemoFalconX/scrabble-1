@@ -126,6 +126,18 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		@Override
+		public Message exchangeTile(String pl_id, String tiles) throws GameException {
+				Message response = switchTile(pl_id, tiles); 
+				switch (response.getHeader()) {
+						case Message.TILE_EXCHANGE_SUCCES:
+								return response;
+						case Message.TILE_EXCHANGE_ERROR:
+								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+				}
+				return  null;
+		}
+				
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
@@ -138,4 +150,5 @@ public abstract class Game implements IGame {
 		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
 		
 		protected abstract Message destroyAnonym(String pl_id);
+		protected abstract Message switchTile(String pl_id, String tiles);
 }

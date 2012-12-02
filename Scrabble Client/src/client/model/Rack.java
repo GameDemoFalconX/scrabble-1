@@ -21,7 +21,13 @@ class Rack {
 		// Methods added by Bernard
 		@Override
 		public String toString() {
-				return rack[0].getLetter()+" "+rack[1].getLetter()+" "+rack[2].getLetter()+" "+rack[3].getLetter()+" "+rack[4].getLetter()+" "+rack[5].getLetter()+" "+rack[6].getLetter();
+				String result = "";
+				for (int i = 0; i < 7; i++) {
+						result += rack[i].toString() + " ";
+				}
+				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+											  	+ "  1     2     3     4     5     6     7\n";
+				return result;
 		}
 		
 		public Rack getRack() {
@@ -41,4 +47,51 @@ class Rack {
 				rack[5] = new Tile('F',4);
 				rack[6] = new Tile('G',8);
 		}
+		
+		public void switchTiles(String position) {
+				String [] positionSource = position.split(" ");
+				Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
+				rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
+				rack[Integer.parseInt(positionSource[1])-1] = tmp;
+		}
+		
+		public void reorganizeTiles(String position) {
+				Tile[] newRack = new Tile[7];
+				String [] positionSource = position.split(" ");
+				for (int i = 0; i < 7; i++) {
+						newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+				}
+				this.rack = newRack;
+		}
+		
+		public String getFormatedTile(Integer position) {
+				String formatedTile = rack[position-1].getLetter()+":"+rack[position-1].getValue();
+				return formatedTile;
+		}
+
+		public String getFormatedTiles(String position) {
+				String formatedTiles = "";
+				String [] positionSource = position.split(" ");
+				for (int i = 0; i < positionSource.length; i++) {
+						formatedTiles  += rack[Integer.parseInt(positionSource[i])-1].getLetter()+":";
+						formatedTiles  += rack[Integer.parseInt(positionSource[i])-1].getValue();
+						if (i < positionSource.length-1) {
+								formatedTiles += "__";
+						}
+				}
+				return formatedTiles;
+		}
+		
+		public void setFormatedTiles(String position, String tiles) {
+				String [] positionSource = position.split(" ");				
+				String [] tileList = tiles.split("__");
+				for (int i = 0; i < positionSource.length; i++) {
+						String [] tileArgs = tileList[i].split(":");
+						char letter = tileArgs[0].charAt(0);
+						Integer value = Integer.parseInt(tileArgs[1]);
+						int index = Integer.parseInt(positionSource[i]) - 1;
+						rack[index] = new Tile(letter,value);
+				}
+		}
+		
 }

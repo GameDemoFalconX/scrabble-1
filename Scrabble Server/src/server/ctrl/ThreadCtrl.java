@@ -57,6 +57,9 @@ public class ThreadCtrl extends Thread {
 						case Message.PLACE_WORD:
 								gameTreatment();
 								break;
+						case Message.TILE_EXCHANGE:
+								exchangeTile();
+								break;
 				}
 		}
 		
@@ -135,7 +138,7 @@ public class ThreadCtrl extends Thread {
 		
 		private void loadGame() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				outputPrint("Current player is trying to load  an existed game");
+				outputPrint("Current player is trying to load an existed game");
 				Message response;
 						
 				// Try to load an existed play for the current player
@@ -168,6 +171,19 @@ public class ThreadCtrl extends Thread {
 						
 				// Check if the player's game is correct.
 				response = HAL.gameTreatment(playerID, playID, gameInformations);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void exchangeTile() {
+				String [] argsTab = new String(request.getBody()).split("##");
+				outputPrint("Current player is trying to exchange tiles");
+				Message response;
+				String playerID = argsTab[0];
+				String tiles = argsTab[1];
+				response = HAL.exchangeTile(playerID,tiles);
+
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

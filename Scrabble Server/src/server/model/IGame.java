@@ -26,4 +26,7 @@ public interface IGame {
 		
 		// Save, Delete or Destroy plays
 		Message deleteAnonym(String pl_id) throws GameException;
+		
+		// Exchange tile
+		Message exchangeTile(String pl_id, String tiles) throws GameException;
 }

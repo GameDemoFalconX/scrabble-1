@@ -48,17 +48,23 @@ public class Message {
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
 		public static final int GAME_IDENT_ERROR = 48; // If player isn't logged to play a specific game.
 		
+		// LOGOUT //
 		public static final int  LOGOUT = 50;  // Logout
 		
-		// DICTIONNARY //
-		public static final int DICO_LOADED = 60; // Dictionnary loaded
-		public static final int WORD_OK = 61; // Word exist
-		public static final int WORK_KO = 62; // Word doesn't exist
+		// TILE_EXCHANGE //
+		public static final int TILE_EXCHANGE = 60; // Exchange tiles
+		public static final int TILE_EXCHANGE_SUCCES = 61; // Exchange tiles with succes
+		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// PLACE_WORD //
 		public static final int PLACE_WORD = 70; // Place word
 		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes
 		public static final int PLACE_WORD_ERROR = 72; // Place word with error
+		
+		// DICTIONNARY //
+		public static final int DICO_LOADED = 510; // Dictionnary loaded
+		public static final int WORD_OK = 511; // Word exist
+		public static final int WORK_KO = 512; // Word doesn't exist
 		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player

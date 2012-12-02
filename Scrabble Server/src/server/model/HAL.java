@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 import common.Message;
 import common.GameException;
+import common.Message;
 
 /**
  *
@@ -178,5 +179,16 @@ public class HAL extends Game {
 						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
 				}
 				return new Message(Message.DELETE_ANONYM_ERROR, "");
+		}
+		
+		@Override
+		protected Message switchTile(String pl_id, String tiles) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						Play play = plays.getPlay(pl_id);
+						String newTiles = play.switchTiles(tiles);
+						return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
 }

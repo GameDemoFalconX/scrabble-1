@@ -1,4 +1,4 @@
-package server.model;
+ package server.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -222,4 +222,13 @@ public class GameRAM {
 			* Remove selected play in the games.xml file for the current player.
 			*/
 		public void removePlay() {}
+		
+		public Play getPlay(String playerID) {
+				if (!plays.isEmpty()) {
+						System.out.println("GameRAM not empty " + playerID);
+						return plays.get(playerID);
+				}
+				return null;
+		}
+		
 }

@@ -155,6 +155,7 @@ public class GameBoard {
 				}
 		}
 		
+//		Shouldn't this be in the View ?
 		public void displayGame() {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
@@ -164,6 +165,63 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
+		public void addWord(String unformatedWord) throws GameException {
+				String formatedWord = "";
+				String [] unformatedLetters = unformatedWord.split("##");
+				for (int i = 0; i < unformatedLetters.length; i++) {
+						String [] oneLetter = unformatedLetters[i].split(" ");
+						formatedWord += oneLetter[1]+":"+oneLetter[2]+"__";
+						formatedWord += cPlay.getFormatedTileFromRack(Integer.parseInt(oneLetter[0]));
+						formatedWord += "##";
+				}
+				System.out.println(formatedWord);
+//				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
+//												+"##"+formatedWord);
+				cPlay.addWord(formatedWord);
+//				if (serverResponse != null) {
+//						switch (serverResponse.getHeader()) {
+//								case Message.SYSKO:
+//										throw new GameException(GameException.typeErr.SYSKO);
+//								case Message.PLACE_WORD_SUCCES:
+//										String args = new String(serverResponse.getBody());
+//										cPlay.addWord(formatedWord);
+//										break;
+//								case Message.PLACE_WORD_ERROR:
+//										throw new GameException(GameException.typeErr.PLACE_WORD_ERROR);
+//						}
+//				}
+		}
+		
+		public void switchTiles(String position) throws GameException {
+				cPlay.switchTiles(position);
+		}
+		
+		public void reorganizeTiles(String position) throws GameException {
+				cPlay.reorganizeTiles(position);
+		}
+		
+		public void changeTiles(String position) throws GameException {
+				String formatedTiles;
+				if ("".equals(position)) {
+						position += "1 2 3 4 5 6 7";
+				}
+				formatedTiles = cPlay.getFormatedTilesFromRack(position);
+				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
+												+"##"+formatedTiles);
+				if (serverResponse != null) {
+						switch (serverResponse.getHeader()) {
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.TILE_EXCHANGE_SUCCES:
+										String args = new String(serverResponse.getBody());
+										cPlay.setFormatedTilesToRack(position, args);
+										break;
+								case Message.TILE_EXCHANGE_ERROR:
+										throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+						}
+				}
+		}
+				
 		public String [] loadPlayList(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
 				// Handle response
