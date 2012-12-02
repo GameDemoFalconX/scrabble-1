@@ -54,6 +54,9 @@ public class ThreadCtrl extends Thread {
 						case Message.DELETE_ANONYM:
 								deleteAnonym();
 								break;
+						case Message.PLACE_WORD:
+								gameTreatment();
+								break;
 						case Message.TILE_EXCHANGE:
 								exchangeTile();
 								break;
@@ -157,6 +160,22 @@ public class ThreadCtrl extends Thread {
 				Thread.currentThread().interrupt();
 		}
 		
+		private void gameTreatment() {
+				// Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
+				String [] argsTab = new String(request.getBody()).split("_");
+				String playerID = argsTab[0];
+				String playID = argsTab[1];
+				String gameInformations = argsTab[2];
+				outputPrint("Start game treatment for the current player");
+				Message response;
+						
+				// Check if the player's game is correct.
+				response = HAL.gameTreatment(playerID, playID, gameInformations);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
 		private void exchangeTile() {
 				String [] argsTab = new String(request.getBody()).split("##");
 				outputPrint("Current player is trying to exchange tiles");
@@ -164,6 +183,7 @@ public class ThreadCtrl extends Thread {
 				String playerID = argsTab[0];
 				String tiles = argsTab[1];
 				response = HAL.exchangeTile(playerID,tiles);
+
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

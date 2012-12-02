@@ -18,6 +18,9 @@ public interface IGame {
 		Message loadPlayList(String pl_id) throws GameException;
 		Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
 		
+		// Game
+		Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException;
+		
 		// Deconnection
 		void deconnection(String clientName) throws GameException;
 		

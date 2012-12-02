@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 /**
  * Model that contains the authorized words in the game.
@@ -26,20 +27,39 @@ public class Dictionary {
 		public Dictionary() throws IOException {
 				Path path = Paths.get(filename);
 				try (BufferedReader reader = Files.newBufferedReader(path, ENCODING)){
-      String line;
-      while ((line = reader.readLine()) != null) {
-        dico.put(line, null);
-      }      
-    }
+						String line;
+						while ((line = reader.readLine()) != null) {
+								dico.put(line, null);
+						}      
+				} catch (IOException e) {
+						dico = null;
+				}
 		}
-		
+
 		/**
 			* Check in the dictionary if the word exist in it.
 			* @param word a String
 			* @return a boolean true if the word is in the dictionary, false otherwise.
 			*/
-		public boolean containsWord(String word) {
+		private boolean containsWord(String word) {
 				return dico.containsKey(word);
+		}
+		
+		/**
+			* Check the validity of words list in the dictionary 
+			* @param wordsList
+			* @return True if all words are contained in the dico, False otherwise.
+			*/
+		protected boolean checkValidity(List wordsList) {
+				boolean done = true;
+				int i = 0;
+				while(done && i < wordsList.size()) {
+						if (!dico.containsKey(wordsList.get(i))) {
+								done = false;
+						}
+						i += 1;
+				}
+				return done;
 		}
 		
 		/**

@@ -1,8 +1,6 @@
 package server.ctrl;
 
-
-import common.GameException;
-import common.Message;
+import common.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -176,10 +174,24 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
+				Message response = null;
+				try {
+						// Check if the player's game is correct.
+						response = game.checkGame(playerID, playID, gameInfos);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		public synchronized Message exchangeTile(String playerID, String tiles) {
 				Message response = null;
 				try {
 						response = game.exchangeTile(playerID,tiles);
+
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
 				} catch (GameException e) {
 						response = processError(e);
@@ -227,9 +239,14 @@ public class ServerScrabble {
 								error = new Message(Message.DELETE_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player does not yet logged on the server. No play to remove.");
 								break;
+						case GAME_IDENT_ERROR:
+								error = new Message(Message.GAME_IDENT_ERROR, "");
+								outputPrint("Server error : The current player does not yet logged on the server or can't play at specific game.");
+								break;
 						case TILE_EXCHANGE_ERROR:
 								error = new Message(Message.TILE_EXCHANGE_ERROR,"");
 								outputPrint("Server error : Something went wrong with the tile exchange. Don't ask me, I don't know what.");
+								break;
 				}
 				return error;
 		}

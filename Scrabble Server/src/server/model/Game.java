@@ -95,6 +95,20 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		// *** GAME *** //
+		@Override
+		public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
+				Message response = scrabbleValidator(pl_id, ga_id, ga_infos);
+				switch (response.getHeader()) {
+						case Message.PLACE_WORD_SUCCES:
+								return response;
+						case Message.PLACE_WORD_ERROR:
+								return response;
+						case Message.GAME_IDENT_ERROR:
+								throw new GameException(GameException.typeErr.GAME_IDENT_ERROR);
+				}
+				return null;
+		}
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
 		public void deconnection(String nom) throws GameException {}
@@ -131,6 +145,9 @@ public abstract class Game implements IGame {
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
 		protected abstract Message loadPlay(String pl_id, String ga_id);
+		
+		// Game
+		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
 		
 		protected abstract Message destroyAnonym(String pl_id);
 		protected abstract Message switchTile(String pl_id, String tiles);

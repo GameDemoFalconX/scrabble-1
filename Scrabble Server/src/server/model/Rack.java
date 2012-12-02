@@ -30,6 +30,24 @@ class Rack {
 		}
 		
 		/**
+			* Get Tile at the specific index in the rack.
+			* @param i
+			* @return 
+			*/
+		protected Tile getTile(int i) {
+				return rack[i];
+		}
+		
+		/**
+			* Set a new Tile in the specific index in the rack.
+			* @param i
+			* @param newTile 
+			*/
+		protected void setTile(int i, Tile newTile) {
+				rack[i] = newTile;
+		}
+		
+		/**
 			* Format the rack in a printable String
 			* @return a String
 			*/
