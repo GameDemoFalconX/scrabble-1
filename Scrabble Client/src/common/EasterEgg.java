@@ -15,7 +15,12 @@ public class EasterEgg {
 		public static final String HELLO = "Hello.wav";
 
 		public static void playFile(String file) {
-				AePlayWave aw = new AePlayWave(file);
-				aw.start();
+				AePlayWave player = new AePlayWave(file);
+				player.start();
 		}
 }
+
+JarFile jar = new JarFile(path);  
+JarEntry jen;  
+jen = new JarEntry("sounds/" + fileName);  
+audioInputStream = AudioSystem.getAudioInputStream( jar.getInputStream(jen) );  

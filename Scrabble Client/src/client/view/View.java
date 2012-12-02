@@ -1,6 +1,7 @@
 package client.view;
 
 import client.ctrl.ClientController;
+import common.EasterEgg;
 import common.Message;
 
 /**
@@ -20,6 +21,7 @@ public class View {
 		public void firstMenu(String error) {
 				System.out.println(menuHeader);
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu.
+				EasterEgg.playFile(EasterEgg.DOING_WELL);
 				System.out.println("1: Play as guest");
 				System.out.println("2: Log in");
 				System.out.println("3: Sign up");
