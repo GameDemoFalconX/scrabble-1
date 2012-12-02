@@ -19,8 +19,3 @@ public class EasterEgg {
 				player.start();
 		}
 }
-
-JarFile jar = new JarFile(path);  
-JarEntry jen;  
-jen = new JarEntry("sounds/" + fileName);  
-audioInputStream = AudioSystem.getAudioInputStream( jar.getInputStream(jen) );  

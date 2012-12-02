@@ -177,50 +177,29 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
-				String unformatedWord = "";
-				String x1 = "";
-				String x2 = "";
-				String y = "";
-				boolean vertical = false;
+				String formatedWord = "";
 				if (number > 0) {
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
-								boolean argOneIsOK;
-								boolean argTwoIsOK;
-								boolean argThreeIsOK;
-								String [] unformatedLetter = new String[3];
+								boolean argXisOK;
+								boolean argYisOK;
+								boolean argPosIsOK;
+								String[] unformatedLetter;
 								do {
-										unformatedLetter = view.tileUsherMenu(i,vertical).split(" ");
-										if ((i >= 3) && vertical) {
-												unformatedLetter = addElement(unformatedLetter,y);
-										} else if (i >= 3 && !vertical) {
-												String tmp = unformatedLetter[1];
-												unformatedLetter[1] = x1;
-												unformatedLetter = addElement(unformatedLetter, tmp);
-										}
+										unformatedLetter = view.tileUsherMenu(i).split(" ");
 										threeArgs = unformatedLetter.length == 3;
-										argOneIsOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 8);
-										argTwoIsOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
-										argThreeIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 16);
-								} while (!threeArgs || !argOneIsOK || !argTwoIsOK || !argThreeIsOK);
-								switch (i) {
-										case 1: x1 = unformatedLetter[1];
-																		y = unformatedLetter[2]; 
-																		break;
-										case 2: x2 = unformatedLetter[1];
-																		if (x1.equals(x2)) {
-																				vertical = true;
-																		}
-										default: break;
-								}
-								unformatedWord += unformatedLetter[0]+" "+unformatedLetter[1]+" "+unformatedLetter[2];
+										argXisOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 16);
+										argYisOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
+										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 8);
+								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
+								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"__"+unformatedLetter[2];
 								if (i < number) {
-										unformatedWord += "##";
+										formatedWord += "##";
 								}
 						} 
-						System.out.println(unformatedWord);
+						System.out.println(formatedWord);
 						try {
-								gameBoard.addWord(unformatedWord);
+								gameBoard.addWord(formatedWord);
 						} catch (GameException ge) {
 								processException(ge);
 						}
@@ -228,12 +207,6 @@ public class ClientController {
 				gameBoard.displayGame();
 				view.playMenu(player.isAnonym());
 		}
-		
-		private String[] addElement(String[] array, String toAdd) {
-    String[] result = Arrays.copyOf(array, array.length +1);
-    result[array.length] = toAdd;
-    return result;
-}
 		
 		public void tileOrganizer(Integer choice) {
 				switch (choice) {

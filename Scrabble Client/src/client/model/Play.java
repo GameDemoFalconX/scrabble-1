@@ -42,9 +42,8 @@ public class Play {
 				for (int i = 0; i < formatedLetters.length; i++) {
 						String [] coordAndTile = formatedLetters[i].split("__");
 						String [] coord = coordAndTile[0].split(":");
-						String [] tile = coordAndTile[1].split(":");
-						String letter = tile[0];
-						grid.putInGrid(Integer.parseInt(coord[0])-1, Integer.parseInt(coord[1])-1, new Tile(letter.charAt(0), Integer.parseInt(tile[1])));
+						Tile tile = rack.getTile(Integer.parseInt(coordAndTile[1]));
+						grid.putInGrid(Integer.parseInt(coord[0])-1, Integer.parseInt(coord[1])-1, tile);
 				}
 		}
 		
