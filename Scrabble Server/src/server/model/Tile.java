@@ -51,6 +51,13 @@ public class Tile {
 		}
 		
 		/**
+			* Set the tile status to true before its adding on the grid.
+			*/
+		public void upStatus() {
+				this.status = true;
+		}
+		
+		/**
 			* Set the tile status to false when it is considered.
 			*/
 		public void downStatus() {

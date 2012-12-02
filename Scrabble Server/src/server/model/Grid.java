@@ -22,6 +22,15 @@ class Grid {
 				grid[x][y] = tile;
 		}
 		
+		/**
+			* Remove the tile at [x;y] coordinates in the grid.
+			* @param x
+			* @param y 
+			*/
+		protected void removeInGrid(int x, int y) {
+				grid[x][y] = null;
+		}
+		
 		protected Tile getTile(int x, int y) {
 				return this.grid[x][y];
 		}

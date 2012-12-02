@@ -1,5 +1,6 @@
 package server.model;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Date;
@@ -80,7 +81,7 @@ public class Play {
 		/**
 			* Put the player's tiles on the gameboard.
 			* @param args
-			* @return a List which contains the tiles coordinates.
+			* @return a List which contains the tiles coordinates and their index in the rack.
 			*/
 		protected ArrayList tilesSetUp(String args) {
 				String [] tilesList = args.split("##");
@@ -88,17 +89,30 @@ public class Play {
 				
 				for (int i = 0; i < tilesList.length; i++) {
 						String [] tileAttrs = tilesList[i].split("__");
-						result.add(tileAttrs[0]); // Put the tile coordinates in a list
+						result.add(tileAttrs[0]+":"+tileAttrs[1]); // Put the tile coordinates and index in the list. (format)
 						int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
 						int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
-						char letter = tileAttrs[1].split(":")[0].charAt(0);
-						int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
+						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[1]));
+						cTile.upStatus();
 						
-						this.grid.putInGrid(x, y, new Tile(letter, value, true)); // Put this tile on the gameboard.
+						this.grid.putInGrid(x, y, cTile); // Put this tile on the gameboard.
 				}
 				return result;
 		}
 		
+		protected void removeBadTiles(List tilesList) {
+				for (int i = 0; i < tilesList.size(); i++) {
+						String [] coords = tilesList.get(i).toString().split(":");
+						grid.removeInGrid(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+				}
+		}
+		
+		/**
+			* Check neighbors tiles of the current tile, create a word form their letters and count the score of 
+			* this new word by considering the orientation given in parameter.
+			* @param coords
+			* @param orientation 
+			*/
 		protected void wordTreatment(String coords, char orientation) {
 				// Initialize values
 				lastWordScore = 0;
@@ -238,6 +252,38 @@ public class Play {
 		}
 		
 		/**
+			* Set the score of the player game.
+			* @param score 
+			*/
+		protected void setScore(int score) {
+				this.score += score;
+		}
+		
+		/**
+			* Get the score for this play.
+			* @return 
+			*/
+		protected int getScore() {
+				return this.score;
+		}
+		
+		/**
+			* Update the rack on the server side by adding new tiles from the bag and format them to send on the client.
+			* @param tilesList
+			* @return Formated list of tile with the following canvas : L:V__[index of tile in rack]##L:V__ ...
+			*/
+		protected String getNewTiles(List tilesList) {
+				String result = "";
+				for (int i = 0; i < tilesList.size(); i++) {
+						int ind = Integer.parseInt(tilesList.get(i).toString().split(":")[2]);
+						rack.setTile(i, bag.getTile());
+						result += rack.getTile(i).toString()+"__"+i;
+						if (i > 1) result += "##";
+				}
+				return result;
+		}
+		
+		/**
 			* Format the content of the play object
 			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score]
 			* Two underscore between play attributes.
@@ -264,5 +310,18 @@ public class Play {
 		
 		public String getFormatedGrid() {
 				return this.formatedGrid;
+		}
+		
+		//*** Stats Section ***//
+		protected void newTest() {
+				this.nbTests += 1;
+		}
+		
+		protected void testWithSuccess() {
+				this.testsWithSuccess += 1;
+		}
+		
+		protected void testWithError() {
+				this.testsWithError += 1;
 		}
 }
