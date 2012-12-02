@@ -179,6 +179,8 @@ public class ClientController {
 		public void tileUsher(Integer number) {
 				String formatedWord = "";
 				if (number > 0) {
+						char orientation = 'H'; // By default
+						int lastX = 0;
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
 								boolean argXisOK;
@@ -191,15 +193,22 @@ public class ClientController {
 										argXisOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 16);
 										argYisOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
 										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 8);
+										
+										// Determine the orientation of the main word.
+										if (i == 1) lastX = Integer.parseInt(unformatedLetter[0]);
+										if (i == 2) {
+												orientation = (Integer.parseInt(unformatedLetter[0]) == lastX) ? 'V' : 'H';
+										}
+										
+										// Add check here for tile and these neighbors.
 								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
 								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"__"+unformatedLetter[2];
 								if (i < number) {
 										formatedWord += "##";
 								}
 						} 
-						System.out.println(formatedWord);
 						try {
-								gameBoard.addWord(formatedWord);
+								gameBoard.addWord(formatedWord, orientation);
 						} catch (GameException ge) {
 								processException(ge);
 						}

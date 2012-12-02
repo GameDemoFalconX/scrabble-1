@@ -165,10 +165,10 @@ public class GameBoard {
 				System.out.println(cPlay.displayRack());
 		}
 		
-		public void addWord(String formatedWord) throws GameException {
-				System.out.println(formatedWord);
+		public void addWord(String formatedWord, char orientation) throws GameException {
+				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
-												+"##"+formatedWord);
+												+"_"+cPlay.getPlayID()+"_"+orientation+"@@"+formatedWord);
 //				cPlay.addWord(formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
