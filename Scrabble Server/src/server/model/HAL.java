@@ -105,6 +105,20 @@ public class HAL extends Game {
 		}
 		
 		@Override
+		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
+				if (plays.playIdentification(pl_id, ga_id)) {
+						String [] gameArgs = ga_infos.split("@@");
+						
+						// Get orientation of the main word
+						char orientation = (char) gameArgs[0].charAt(0);
+						
+						// Place tiles on the grid and get the list of coordinates
+						List tileList = tilesSetUp(gameArgs[1]);
+				}
+				return new Message(Message.GAME_IDENT_ERROR, "");
+		}
+		
+		@Override
 		protected Message destroyAnonym(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
 						plays.removeStarter(pl_id);

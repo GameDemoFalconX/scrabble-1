@@ -175,6 +175,19 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
+				Message response = null;
+				try {
+						// Check if the player's game is correct.
+						response = game.checkGame(playerID, playID, gameInfos);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		/**
 			* Handle errors throws during the Game process.
 			* @param e

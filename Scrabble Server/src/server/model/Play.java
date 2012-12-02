@@ -19,6 +19,9 @@ public class Play {
 		private String formatedGrid;
 		private Rack rack;
 		private TileBag bag;
+		private int nbTests = 0;
+		private int testsWithSuccess = 0;
+		private int testsWithError = 0;
 		
 		public Play(String playerID) {
 				playID = UUID.randomUUID();

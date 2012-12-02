@@ -144,6 +144,16 @@ public class GameRAM {
 				plays.remove(playerID);
 		}
 		
+		/**
+			* Check if the current player is logged to play this specific game.
+			* @param pl_id
+			* @param ga_id
+			* @return True if player can play this game and False otherwise.
+			*/
+		public boolean playIdentification(String pl_id, String ga_id) {
+				return playerIsLogged(pl_id) && plays.get(pl_id).getPlayID().equals(ga_id);
+		}
+		
 		private void displayPlays() {
 				if (plays.isEmpty()) System.out.println("Map empty!");
 				Set set = this.plays.entrySet(); 

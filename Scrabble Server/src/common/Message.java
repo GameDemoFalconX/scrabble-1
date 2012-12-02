@@ -44,8 +44,9 @@ public class Message {
 		public static final int LOAD_GAME_SUCCESS = 41; // Load game with success
 		public static final int LOAD_GAME_ERROR = 42; // Load game wit errors
 		public static final int LOAD_GAME_LIST = 45; // Load list of games for current player.
-			public static final int LOAD_GAME_LIST_SUCCESS = 46; // Load list of games for current player with success.
+		public static final int LOAD_GAME_LIST_SUCCESS = 46; // Load list of games for current player with success.
 		public static final int LOAD_GAME_LIST_ERROR = 47; // Load list of games for current player with errors.
+		public static final int GAME_IDENT_ERROR = 48; // If player isn't logged to play a specific game.
 		
 		public static final int  LOGOUT = 50;  // Logout
 		
@@ -53,6 +54,11 @@ public class Message {
 		public static final int DICO_LOADED = 60; // Dictionnary loaded
 		public static final int WORD_OK = 61; // Word exist
 		public static final int WORK_KO = 62; // Word doesn't exist
+		
+		// PLACE_WORD //
+		public static final int PLACE_WORD = 70; // Place word
+		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes
+		public static final int PLACE_WORD_ERROR = 72; // Place word with error
 		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player
