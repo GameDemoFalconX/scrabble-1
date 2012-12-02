@@ -8,7 +8,7 @@ package server.model;
 class Grid {
 		
 		private Tile[][] grid = new Tile[15][15];
-		private ScoringGrid scoringGrid = new ScoringGrid();
+		protected ScoringGrid scoringGrid = new ScoringGrid();
 		
 		public Grid() {
 				for (int x = 0; x <= 14; x++) {
@@ -18,8 +18,12 @@ class Grid {
 				}
 		}
 		
-		public void putInGrid(int x, int y, Tile tile) {
+		protected void putInGrid(int x, int y, Tile tile) {
 				grid[x][y] = tile;
+		}
+		
+		protected Tile getTile(int x, int y) {
+				return this.grid[x][y];
 		}
 		
 		/**

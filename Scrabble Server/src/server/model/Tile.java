@@ -8,6 +8,7 @@ public class Tile {
 
 		private final char letter;
 		private final int value;
+		private boolean status;
 		
 		/**
 			* Creates a Tile base on a char letter and a integer value
@@ -17,6 +18,12 @@ public class Tile {
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
+		}
+		
+		public Tile(char letter, int value, boolean status) {
+				this.letter = letter;
+				this.value = value;
+				this.status = status;
 		}
 		
 		/**
@@ -33,6 +40,21 @@ public class Tile {
 			*/
 		public int getValue() {
 				return value;
+		}
+		
+		/**
+			* Gets the status of this tile
+			* @return True if the tile has just been placed on the gameboard.
+			*/
+		public boolean getStatus() {
+				return status;
+		}
+		
+		/**
+			* Set the tile status to false when it is considered.
+			*/
+		public void downStatus() {
+				this.status = false;
 		}
 		
 		/**

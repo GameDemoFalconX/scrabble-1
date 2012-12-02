@@ -148,10 +148,13 @@ public class GameRAM {
 			* Check if the current player is logged to play this specific game.
 			* @param pl_id
 			* @param ga_id
-			* @return True if player can play this game and False otherwise.
+			* @return Play instance if player can play this game and null otherwise.
 			*/
-		public boolean playIdentification(String pl_id, String ga_id) {
-				return playerIsLogged(pl_id) && plays.get(pl_id).getPlayID().equals(ga_id);
+		public Play playIdentification(String pl_id, String ga_id) {
+				if (playerIsLogged(pl_id) && plays.get(pl_id).getPlayID().equals(ga_id)) {
+						return plays.get(pl_id);
+				}
+				return null;
 		}
 		
 		private void displayPlays() {

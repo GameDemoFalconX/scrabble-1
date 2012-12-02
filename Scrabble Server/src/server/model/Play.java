@@ -1,5 +1,6 @@
 package server.model;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Date;
 import java.text.DateFormat;
@@ -19,6 +20,12 @@ public class Play {
 		private String formatedGrid;
 		private Rack rack;
 		private TileBag bag;
+		
+		// Game variables
+		protected String lastWord;
+		protected int lastWordScore; 
+		
+		// Stats variables
 		private int nbTests = 0;
 		private int testsWithSuccess = 0;
 		private int testsWithError = 0;
@@ -68,6 +75,166 @@ public class Play {
 		private String formatDate(Date d) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 				return dateFormat.format(d);
+		}
+		
+		/**
+			* Put the player's tiles on the gameboard.
+			* @param args
+			* @return a List which contains the tiles coordinates.
+			*/
+		protected ArrayList tilesSetUp(String args) {
+				String [] tilesList = args.split("##");
+				ArrayList result = new ArrayList();
+				
+				for (int i = 0; i < tilesList.length; i++) {
+						String [] tileAttrs = tilesList[i].split("__");
+						result.add(tileAttrs[0]); // Put the tile coordinates in a list
+						int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
+						int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
+						char letter = tileAttrs[1].split(":")[0].charAt(0);
+						int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
+						
+						this.grid.putInGrid(x, y, new Tile(letter, value, true)); // Put this tile on the gameboard.
+				}
+				return result;
+		}
+		
+		protected void wordTreatment(String coords, char orientation) {
+				// Initialize values
+				lastWordScore = 0;
+				lastWord = "";
+				
+				String [] coordArgs = coords.split(":");
+				int x = Integer.parseInt(coordArgs[0]);
+				int y = Integer.parseInt(coordArgs[1]);
+				
+				// Double and triple word flags
+				boolean wd = false;
+				boolean wt = false;
+				
+				switch(grid.scoringGrid.getBonus(x, y)) {
+						case 4:
+								wd = true;
+								break;
+						case 5:
+								wt = true;
+								break;
+						default:
+								lastWordScore += grid.getTile(x, y).getValue()*grid.scoringGrid.getBonus(x, y);
+				}
+				lastWord += grid.getTile(x, y).getLetter();
+				
+				if (orientation == 'H') {
+						int pmoved = x-1;
+						int nmoved = x+1;
+						// Get the previous and next tile of the current tile.
+						Tile previous = grid.getTile(pmoved, y);
+						Tile next = grid.getTile(nmoved, y);
+						String p = "";
+						String n = "";
+						
+						// Run through the gameboard in both direction.
+						//// Direction : previous tiles
+						while(previous != null || next != null) {
+								if (previous != null) {
+										p = previous.getLetter()+p;
+										if (previous.getStatus()) {
+												switch(grid.scoringGrid.getBonus(pmoved, y)) {
+														case 4:
+																wd = true;
+																break;
+														case 5:
+																wt = true;
+																break;
+														default:
+																lastWordScore += previous.getValue()*grid.scoringGrid.getBonus(pmoved, y);
+												}
+												previous.downStatus(); // set the status of this tile to false.
+										} else {
+												lastWordScore += next.getValue();
+										}
+										pmoved -= 1;
+										previous = grid.getTile(pmoved, y);
+								}
+								if (next != null) {
+										n = n+next.getLetter();
+										if (next.getStatus()) {
+												switch(grid.scoringGrid.getBonus(nmoved, y)) {
+														case 4:
+																wd = true;
+																break;
+														case 5:
+																wt = true;
+																break;
+														default:
+																lastWordScore += next.getValue()*grid.scoringGrid.getBonus(nmoved, y);
+												}
+												next.downStatus();
+										} else {
+												lastWordScore += next.getValue();
+										}
+										nmoved += 1;
+										next = grid.getTile(nmoved, y);
+								}
+						}
+						lastWord = p+lastWord+n;
+						lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
+				} else {
+						int pmoved = y-1;
+						int nmoved = y+1;
+						// Get the previous and next tile of the current tile.
+						Tile previous = grid.getTile(x, pmoved);
+						Tile next = grid.getTile(x, nmoved);
+						String p = "";
+						String n = "";
+						
+						// Run through the gameboard in both direction.
+						//// Direction : previous tiles
+						while(previous != null || next != null) {
+								if (previous != null) {
+										p = previous.getLetter()+p;
+										if (previous.getStatus()) {
+												switch(grid.scoringGrid.getBonus(x, pmoved)) {
+														case 4:
+																wd = true;
+																break;
+														case 5:
+																wt = true;
+																break;
+														default:
+																lastWordScore += previous.getValue()*grid.scoringGrid.getBonus(x, pmoved);
+												}
+												previous.downStatus();
+										} else {
+												lastWordScore += next.getValue();
+										}
+										pmoved -= 1;
+										previous = grid.getTile(x, pmoved);
+								}
+								if (next != null) {
+										n = n+next.getLetter();
+										if (next.getStatus()) {
+												switch(grid.scoringGrid.getBonus(x, nmoved)) {
+														case 4:
+																wd = true;
+																break;
+														case 5:
+																wt = true;
+																break;
+														default:
+																lastWordScore += next.getValue()*grid.scoringGrid.getBonus(x, nmoved);
+												}
+												next.downStatus();
+										} else {
+												lastWordScore += next.getValue();
+										}
+										nmoved += 1;
+										next = grid.getTile(x, nmoved);
+								}
+						}
+						lastWord = p+lastWord+n;
+						lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
+				}
 		}
 		
 		/**

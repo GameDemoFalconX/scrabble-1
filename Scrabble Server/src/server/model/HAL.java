@@ -1,5 +1,7 @@
 package server.model;
 
+import java.util.List;
+import java.util.ArrayList;
 import common.Message;
 import common.GameException;
 
@@ -106,14 +108,39 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
-				if (plays.playIdentification(pl_id, ga_id)) {
+				Play cPlay = plays.playIdentification(pl_id, ga_id);
+				if (cPlay != null) {
 						String [] gameArgs = ga_infos.split("@@");
 						
-						// Get orientation of the main word
+						// Step 1 - Get orientation of the main word
 						char orientation = (char) gameArgs[0].charAt(0);
 						
-						// Place tiles on the grid and get the list of coordinates
-						List tileList = tilesSetUp(gameArgs[1]);
+						// Step 2 - Place tiles on the grid and get the list of coordinates
+						List tileList = cPlay.tilesSetUp(gameArgs[1]);
+						
+						// Step 3 - Check tiles on the grid and get a list of words and a new score.
+						int score = 0;
+						int bestWord = 0;
+						List wordsList = new ArrayList(); // List of words to check in dico.
+						
+						//// Step 3.1 - Check the first tile on the main orientation.
+						cPlay.wordTreatment(tileList.get(0), orientation);
+						if (!cPlay.lastWord.equals("")) {
+								wordsList.add(cPlay.lastWord);
+								score += cPlay.lastWordScore;
+								if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
+						}
+						
+						//// Step 3.2 - Check all tiles (include the first) on the opposite orientation.
+						orientation = (orientation == 'H') ? 'V' : 'H'; // Set the new orientation
+						for (int i = 0; i < tileList.size(); i++) {
+								cPlay.wordTreatment(tileList.get(i), orientation);
+								if (!cPlay.lastWord.equals("")) {
+										wordsList.add(cPlay.lastWord);
+										score += cPlay.lastWordScore;
+										if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
+								}
+						}
 				}
 				return new Message(Message.GAME_IDENT_ERROR, "");
 		}
