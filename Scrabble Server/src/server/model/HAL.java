@@ -141,6 +141,7 @@ public class HAL extends Game {
 								wordsList.add(cPlay.lastWord);
 								score += cPlay.lastWordScore;
 								if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
+								cPlay.updateTileStatus(tileList.get(0).toString()); // Down the status of this first tile.
 						}
 						
 						//// Step 3.2 - Check all tiles (include the first) on the opposite orientation.

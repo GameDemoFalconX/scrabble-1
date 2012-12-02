@@ -93,18 +93,31 @@ public class Play {
 						int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
 						int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
 						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[1]));
-						cTile.upStatus();
+						cTile.upStatus(); // Set this tile like a new add in the grid.
 						
-						this.grid.putInGrid(x, y, cTile); // Put this tile on the gameboard.
+						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard.
 				}
 				return result;
 		}
 		
+		/**
+			* Remove the tiles added if the test contains some errors.
+			* @param tilesList 
+			*/
 		protected void removeBadTiles(List tilesList) {
 				for (int i = 0; i < tilesList.size(); i++) {
 						String [] coords = tilesList.get(i).toString().split(":");
 						grid.removeInGrid(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 				}
+		}
+		
+		/**
+			* Update the status of the first  new tile added.
+			* @param tile 
+			*/
+		protected void updateTileStatus(String tile) {
+				String [] coords = tile.split(":");
+				grid.getTile(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])).downStatus();
 		}
 		
 		/**

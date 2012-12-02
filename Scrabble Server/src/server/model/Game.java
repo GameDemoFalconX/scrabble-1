@@ -104,6 +104,8 @@ public abstract class Game implements IGame {
 								return response;
 						case Message.PLACE_WORD_ERROR:
 								return response;
+						case Message.GAME_IDENT_ERROR:
+								throw new GameException(GameException.typeErr.GAME_IDENT_ERROR);
 				}
 				return null;
 		}

@@ -228,6 +228,10 @@ public class ServerScrabble {
 								error = new Message(Message.DELETE_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player does not yet logged on the server. No play to remove.");
 								break;
+						case GAME_IDENT_ERROR:
+								error = new Message(Message.GAME_IDENT_ERROR, "");
+								outputPrint("Server error : The current player does not yet logged on the server or can't play at specific game.");
+								break;
 				}
 				return error;
 		}
