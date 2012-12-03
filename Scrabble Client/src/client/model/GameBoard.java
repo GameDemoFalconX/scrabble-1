@@ -160,6 +160,7 @@ public class GameBoard {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
+				System.out.println("Score : " + cPlay.getScore());
 				System.out.println(cPlay.displayGrid());
 				System.out.print("\n");
 				System.out.println(cPlay.displayRack());

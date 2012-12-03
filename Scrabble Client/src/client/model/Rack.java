@@ -65,7 +65,7 @@ class Rack {
 		}
 		
 		public void setTile(Integer position, Tile tile) {
-				rack[position-1] = tile;
+				rack[position] = tile;
 		}
 		
 		public Tile getTile(Integer position) {
