@@ -164,8 +164,9 @@ public class GameBoard {
 				System.out.print("\n");
 				System.out.println(cPlay.displayRack());
 		}
-		
+
 		public void addWord(String formatedWord) throws GameException {
+				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+formatedWord);
 //				cPlay.addWord(formatedWord);
@@ -178,7 +179,8 @@ public class GameBoard {
 										cPlay.addWord(args, formatedWord);
 										break;
 								case Message.PLACE_WORD_ERROR:
-										throw new GameException(GameException.typeErr.PLACE_WORD_ERROR);
+										String [] error = new String(serverResponse.getBody()).split("_");
+										System.out.println("Sorry, this word doesn't exist! Your new score is :"+error[2]);
 						}
 				}
 		}

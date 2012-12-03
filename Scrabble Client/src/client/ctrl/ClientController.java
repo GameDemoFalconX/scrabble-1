@@ -181,6 +181,8 @@ public class ClientController {
 				String result = "";
 				String x1 = ""; String x2 = "";
 				if (number > 0) {
+						char orientation = 'H'; // By default in case where there would be only one tile placed.
+						int lastX = 0;
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
 								boolean argXisOK;
@@ -302,6 +304,9 @@ public class ClientController {
 						case TILE_EXCHANGE_ERROR:
 										view.firstMenu("An error has been encountered during the tile exchange! Please try again.");
 								break;
+						case GAME_IDENT_ERROR:
+								view.firstMenu("You are not yet logged on the server or can't play at specific game.");
+								break;								
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");
 				}			
