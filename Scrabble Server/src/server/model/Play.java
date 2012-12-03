@@ -133,24 +133,26 @@ public class Play {
 				String p = "";
 				String n = "";
 				
+				// Display Grid and Rack
+				System.out.println(grid.toString());
+				System.out.println(rack.displayRack());
+				
 				String [] coordArgs = coords.split(":");
-				int x = Integer.parseInt(coordArgs[0]);
-				int y = Integer.parseInt(coordArgs[1]);
+				Tile cTile = grid.getTile(Integer.parseInt(coordArgs[0]),Integer.parseInt(coordArgs[1]));
 				
-				// Double and triple word flags
-				int wordCounter = 0;
-				
-				wordCounter = grid.scoringGrid.checkBonus(x, y, grid.getTile(x, y).getValue(), this);
-				lastWord += grid.getTile(x, y).getLetter();
+				// Initialization from current tile.
+				int wordCounter = grid.scoringGrid.checkBonus(cTile, this);				
+				lastWord += cTile.getLetter();
 								
-				Tile prev = grid.previousTile(grid.getTile(x, y), orientation);
-				Tile next = grid.nextTile(grid.getTile(x, y), orientation);
+				Tile prev = grid.previousTile(cTile, orientation);
+				Tile next = grid.nextTile(cTile, orientation);
 				
 				while(prev != null || next != null) {
 						if (prev != null) {
 								p = prev.getLetter()+p;
 								if (prev.getStatus()) {
-										wordCounter = grid.scoringGrid.checkBonus(prev.getX(), prev.getY(), prev.getValue(), this);
+										int nScore = grid.scoringGrid.checkBonus(prev, this);
+										wordCounter = (wordCounter < nScore) ? nScore : wordCounter; // If wordCounter == 3 (Triple word) and the prev is placed on double word case, wordCounter keep this initial value (i.e 3).
 										prev.downStatus(); // set the status of this tile to false.
 								} else {
 										lastWordScore += prev.getValue();
@@ -160,7 +162,10 @@ public class Play {
 						if (next != null) {
 								n = n+next.getLetter();
 								if (next.getStatus()) {
-										wordCounter = grid.scoringGrid.checkBonus(next.getX(), next.getY(), next.getValue(), this);
+										System.out.print("LWS - before :"+lastWordScore+" | ");
+										int nScore = grid.scoringGrid.checkBonus(next, this);
+										System.out.print("LWS - after :"+lastWordScore+"\n");
+										wordCounter = (wordCounter < nScore) ? nScore : wordCounter;
 										next.downStatus();
 								} else {
 										lastWordScore += next.getValue();
@@ -170,11 +175,15 @@ public class Play {
 				}
 				lastWord = p+lastWord+n;
 				lastWordScore *= wordCounter;
-				if (lastWord.length() < 2) lastWord = ""; // In case where there would be only one character.
+				if (lastWord.length() < 2) { // In case where there would be only one character.
+						lastWord = "";
+						lastWordScore = 0;
+				}
 		}
 		
 		protected void setLastWordScore(int score) {
 				lastWordScore += score;
+				System.out.println(lastWordScore);
 		}
 		
 		/**

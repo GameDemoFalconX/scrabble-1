@@ -131,7 +131,7 @@ public class HAL extends Game {
 						// Step 2 - Place tiles on the grid and get the list of coordinates.
 						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
 						List tileList = cPlay.tilesSetUp(gameArgs[1]);
-						
+												
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
 						int score = 0;
 						int bestWord = 0;

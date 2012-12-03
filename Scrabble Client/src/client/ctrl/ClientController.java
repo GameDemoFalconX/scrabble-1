@@ -181,26 +181,29 @@ public class ClientController {
 				String result = "";
 				String x1 = ""; String x2 = "";
 				if (number > 0) {
-						char orientation = 'H'; // By default in case where there would be only one tile placed.
-						int lastX = 0;
 						for (int i = 1; i <= number; i++) {
-								boolean threeArgs;
-								boolean argXisOK;
-								boolean argYisOK;
-								boolean argPosIsOK;
-								String[] unformatedLetter;
+								boolean threeArgs; boolean argXisOK; boolean argYisOK; boolean argPosIsOK;
+								int x; int y; int pos;
 								do {
-										unformatedLetter = view.tileUsherMenu(i).split(" ");
+										String [] unformatedLetter = view.tileUsherMenu(i).split(" ");
+										
+										// Player data
+										x = Integer.parseInt(unformatedLetter[0])-1;
+										y = Integer.parseInt(unformatedLetter[1])-1;
+										pos = Integer.parseInt(unformatedLetter[2]);
+										
+										// Check integrity
 										threeArgs = unformatedLetter.length == 3;
-										argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
-										argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
-										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
+										argXisOK = (x >= 1) && (x <= 15);
+										argYisOK = (y >= 1) && (y <= 15);
+										argPosIsOK = (pos >= 1) && (pos <= 7);
+										
 								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
-								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
+								formatedWord += x+":"+y+"--"+pos;
 								if (i == 1) {
-										x1 = unformatedLetter[0];
+										x1 = ""+x;
 								} else if (i == 2) {
-										x2 = unformatedLetter[0];
+										x2 = ""+x;
 								}
 								if (i < number) {
 										formatedWord += "##";

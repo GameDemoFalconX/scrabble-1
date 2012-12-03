@@ -87,5 +87,12 @@ public class Tile {
 		public String toString() {
 				return letter+":"+value;
 		}
-
+		
+		public String displayTile() {
+				if (value < 10) {
+						return  "[" + letter + " " +value + "]";
+				} else {
+						return  "[" + letter + value + "]";
+				}
+		}
 }
