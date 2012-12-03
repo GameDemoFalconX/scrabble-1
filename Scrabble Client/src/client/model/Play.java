@@ -62,7 +62,7 @@ public class Play {
 								String [] coordAndTile = formatedLetters[i].split("--");
 								String [] coord = coordAndTile[0].split(":");
 								Tile tile = rack.getTile(Integer.parseInt(coordAndTile[1]));
-								grid.putInGrid(Integer.parseInt(coord[0])-1, Integer.parseInt(coord[1])-1, tile);
+								grid.putInGrid(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]), tile);
 						}
 						String[] splitedScoreAndTiles = scoreAndTiles.split("@@");
 						setScore(Integer.parseInt(splitedScoreAndTiles[0]));
