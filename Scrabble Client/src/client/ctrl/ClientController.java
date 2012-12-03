@@ -177,42 +177,53 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
+				System.out.println(number);
 				String formatedWord = "";
 				String result = "";
 				String x1 = ""; String x2 = "";
+				Integer i = 0;
+				boolean cancel = false;
 				if (number > 0) {
-						char orientation = 'H'; // By default in case where there would be only one tile placed.
-						int lastX = 0;
-						for (int i = 1; i <= number; i++) {
-								boolean threeArgs;
-								boolean argXisOK;
-								boolean argYisOK;
-								boolean argPosIsOK;
-								String[] unformatedLetter;
+						while (!(i >= number) && !cancel) {										
+								i++;
+								boolean threeArgs = false;
+								boolean argXisOK = false;
+								boolean argYisOK = false;
+								boolean argPosIsOK = false;
+								String[] unformatedLetter = null;
 								do {
-										unformatedLetter = view.tileUsherMenu(i).split(" ");
-										threeArgs = unformatedLetter.length == 3;
-										argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
-										argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
-										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
-								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
-								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
-								if (i == 1) {
-										x1 = unformatedLetter[0];
-								} else if (i == 2) {
-										x2 = unformatedLetter[0];
-								}
-								if (i < number) {
-										formatedWord += "##";
-								}
-								if (x1.equals(x2)) {
-										result = "V@@"+formatedWord;
-								} else {
-										result = "H@@"+formatedWord;
+										String answer = view.tileUsherMenu(i);
+										if (answer.length() == 1 && answer.equals("0")) {
+												cancel = true;
+										} else {
+												unformatedLetter = answer.split(" ");
+												threeArgs = unformatedLetter.length == 3;
+												argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
+												argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
+												argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
+										}
+								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
+								if (!cancel) {
+										formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
+										if (i == 1) {
+												x1 = unformatedLetter[0];
+										} else if (i == 2) {
+												x2 = unformatedLetter[0];
+										}
+										if (i < number) {
+												formatedWord += "##";
+										}
+										if (x1.equals(x2)) {
+												result = "V@@"+formatedWord;
+										} else {
+												result = "H@@"+formatedWord;
+										}
 								}
 						}
 						try {
-								gameBoard.addWord(result);
+								if (!cancel) {
+										gameBoard.addWord(result);
+								}
 						} catch (GameException ge) {
 								processException(ge);
 						}

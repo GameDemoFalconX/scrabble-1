@@ -318,20 +318,20 @@ public class Play {
 				return this.grid.toString();
 		}
 		
-		public String switchTiles(String tiles) {
+		public String switchTiles(String position) {
 				String newTiles = "";
-				String [] oldTiles = tiles.split("__");
-				for (int i = 0; i < oldTiles.length; i++) {
+				String [] positions = position.split(" ");
+				for (int i = 0; i < positions.length; i++) {
 						Tile tile = this.bag.getTile();
 						newTiles += tile.getLetter() + ":" + tile.getValue();
-						if (i < oldTiles.length-1) {
+						if (i < positions.length-1) {
 								newTiles += "__";
 						}
 				}
-				for (int i = 0; i < oldTiles.length; i++) {
-						String [] tileString = oldTiles[i].split(":");
-						bag.putBackTile(new Tile(tileString[0].charAt(0),Integer.parseInt(tileString[1])));
+				for (int i = 0; i < positions.length; i++) {
+						bag.putBackTile(rack.getTile(i));
 				}
+				rack = new Rack(newTiles);
 				return newTiles;
 		}
 		

@@ -183,8 +183,8 @@ public class ThreadCtrl extends Thread {
 				outputPrint("Current player is trying to exchange tiles");
 				Message response;
 				String playerID = argsTab[0];
-				String tiles = argsTab[1];
-				response = HAL.exchangeTile(playerID,tiles);
+				String position = argsTab[1];
+				response = HAL.exchangeTile(playerID,position);
 
 				outputPrint("Send Response");
 				sProto.sendResponse(response);

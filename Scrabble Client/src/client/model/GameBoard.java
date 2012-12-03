@@ -199,9 +199,8 @@ public class GameBoard {
 				if ("".equals(position)) {
 						position += "1 2 3 4 5 6 7";
 				}
-				formatedTiles = cPlay.getFormatedTilesFromRack(position);
 				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
-												+"##"+formatedTiles);
+												+"##"+position);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
