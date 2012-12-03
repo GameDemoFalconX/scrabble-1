@@ -66,7 +66,6 @@ public class Play {
 		
 		public void loadTile(int x, int y, char letter, int value) {
 				Tile newTile = bag.popTile(letter, value);
-				newTile.setCoordinates(x, y);
 				grid.putInGrid(x, y, newTile);
 		}
 		
@@ -139,10 +138,9 @@ public class Play {
 				int y = Integer.parseInt(coordArgs[1]);
 				
 				// Double and triple word flags
-				boolean wd = false;
-				boolean wt = false;
+				int wordCounter = 0;
 				
-				grid.scoringGrid.checkBonus(x, y, grid.getTile(x, y).getValue(), wd, wt, lastWordScore);
+				wordCounter = grid.scoringGrid.checkBonus(x, y, grid.getTile(x, y).getValue(), this);
 				lastWord += grid.getTile(x, y).getLetter();
 								
 				Tile prev = grid.previousTile(grid.getTile(x, y), orientation);
@@ -152,7 +150,7 @@ public class Play {
 						if (prev != null) {
 								p = prev.getLetter()+p;
 								if (prev.getStatus()) {
-										grid.scoringGrid.checkBonus(prev.getX(), prev.getY(), prev.getValue(), wd, wt, lastWordScore);
+										wordCounter = grid.scoringGrid.checkBonus(prev.getX(), prev.getY(), prev.getValue(), this);
 										prev.downStatus(); // set the status of this tile to false.
 								} else {
 										lastWordScore += prev.getValue();
@@ -162,7 +160,7 @@ public class Play {
 						if (next != null) {
 								n = n+next.getLetter();
 								if (next.getStatus()) {
-										grid.scoringGrid.checkBonus(next.getX(), next.getY(), next.getValue(), wd, wt, lastWordScore);
+										wordCounter = grid.scoringGrid.checkBonus(next.getX(), next.getY(), next.getValue(), this);
 										next.downStatus();
 								} else {
 										lastWordScore += next.getValue();
@@ -171,8 +169,12 @@ public class Play {
 						}
 				}
 				lastWord = p+lastWord+n;
-				lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
+				lastWordScore *= wordCounter;
 				if (lastWord.length() < 2) lastWord = ""; // In case where there would be only one character.
+		}
+		
+		protected void setLastWordScore(int score) {
+				lastWordScore += score;
 		}
 		
 		/**

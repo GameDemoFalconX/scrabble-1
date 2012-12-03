@@ -19,14 +19,17 @@ class Grid {
 		}
 		
 		protected Tile previousTile(Tile t, char orientation) {
+				System.out.println(t.getX()+"-"+t.getY());
 				return (orientation == 'H') ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
 		}
 		
 		protected Tile nextTile(Tile t, char orientation) {
+				System.out.println(t.getX()+"-"+t.getY());
 				return (orientation == 'H') ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
 		}
 		
 		protected void putInGrid(int x, int y, Tile tile) {
+				tile.setCoordinates(x, y);
 				grid[x][y] = tile;
 		}
 		

@@ -46,16 +46,15 @@ public class ScoringGrid {
 				return scoringGrid[x][y];
 		}
 		
-		public void checkBonus(int x, int y, int val, boolean wd, boolean wt, int cScore) {
+		public int checkBonus(int x, int y, int val, Play cPlay) {
 				switch(getBonus(x, y)) {
-						case 4:
-								wd = true;
-								break;
-						case 5:
-								wt = true;
-								break;
+						case DOUBLE_WORD:
+								return 2;
+						case TRIPLE_WORD:
+								return 3;
 						default:
-								cScore += val*getBonus(x, y);
+								cPlay.setLastWordScore( val*getBonus(x, y));
+								return 1;
 				}
 		}
 }
