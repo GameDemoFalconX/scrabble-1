@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
@@ -19,9 +20,11 @@ public class MouseGlassListener extends MouseAdapter{
 
   private MyGlassPane myGlass;
   private BufferedImage image;
+  private JLabel jlab;
 
-  public MouseGlassListener(MyGlassPane glass){
+  public MouseGlassListener(MyGlassPane glass, JLabel JLab){
     myGlass = glass;
+    jlab = JLab;
   }
    
     @Override
@@ -29,7 +32,8 @@ public class MouseGlassListener extends MouseAdapter{
     //On récupère le composant pour en déduire sa position
     Component composant = event.getComponent();
     Point location = (Point)event.getPoint().clone();
-      
+    jlab.setVisible(false);
+    
     //Les méthodes ci-dessous permettent, dans l'ordre, 
     //de convertir un point en coordonnées d'écran
     //et de reconvertir ce point en coordonnées fenêtres
