@@ -8,6 +8,8 @@ public class Tile {
 
 		private final char letter;
 		private final int value;
+		private int  x;
+		private int y;
 		private boolean status;
 		
 		/**
@@ -40,6 +42,19 @@ public class Tile {
 			*/
 		public int getValue() {
 				return value;
+		}
+		
+		protected void setCoordinates(int x, int y) {
+				this.x = x;
+				this.y = y;
+		}
+		
+		protected int getX() {
+				return this.x;
+		}
+		
+		protected int getY() {
+				return this.y;
 		}
 		
 		/**

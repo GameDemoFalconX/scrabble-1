@@ -129,7 +129,7 @@ public class HAL extends Game {
 						char orientation = (char) gameArgs[0].charAt(0);
 						
 						// Step 2 - Place tiles on the grid and get the list of coordinates.
-						//// Important! The list of tiles from clinet must be formated like the following canva : x:y__[index of tile in the rack]##...
+						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
 						List tileList = cPlay.tilesSetUp(gameArgs[1]);
 						
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
@@ -162,7 +162,7 @@ public class HAL extends Game {
 						// Step 4 - Dictionary validation and return args
 						if (dico.checkValidity(wordsList)) {
 								cPlay.setScore(score); // Update score
-								String newTiles = cPlay.getNewTiles(tileList); // Get a fmorated list of tile with their index in the rack
+								String newTiles = cPlay.getNewTiles(tileList); // Get a formated list of tile with their index in the rack
 								cPlay.testWithSuccess(); // Increase the number of tests with success
 								return new Message(Message.PLACE_WORD_SUCCES, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
 						} else {

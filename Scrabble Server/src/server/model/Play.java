@@ -66,6 +66,7 @@ public class Play {
 		
 		public void loadTile(int x, int y, char letter, int value) {
 				Tile newTile = bag.popTile(letter, value);
+				newTile.setCoordinates(x, y);
 				grid.putInGrid(x, y, newTile);
 		}
 		
@@ -130,6 +131,8 @@ public class Play {
 				// Initialize values
 				lastWordScore = 0;
 				lastWord = "";
+				String p = "";
+				String n = "";
 				
 				String [] coordArgs = coords.split(":");
 				int x = Integer.parseInt(coordArgs[0]);
@@ -139,129 +142,36 @@ public class Play {
 				boolean wd = false;
 				boolean wt = false;
 				
-				switch(grid.scoringGrid.getBonus(x, y)) {
-						case 4:
-								wd = true;
-								break;
-						case 5:
-								wt = true;
-								break;
-						default:
-								lastWordScore += grid.getTile(x, y).getValue()*grid.scoringGrid.getBonus(x, y);
-				}
+				grid.scoringGrid.checkBonus(x, y, grid.getTile(x, y).getValue(), wd, wt, lastWordScore);
 				lastWord += grid.getTile(x, y).getLetter();
+								
+				Tile prev = grid.previousTile(grid.getTile(x, y), orientation);
+				Tile next = grid.nextTile(grid.getTile(x, y), orientation);
 				
-				if (orientation == 'H') {
-						int pmoved = x-1;
-						int nmoved = x+1;
-						// Get the previous and next tile of the current tile.
-						Tile previous = grid.getTile(pmoved, y);
-						Tile next = grid.getTile(nmoved, y);
-						String p = "";
-						String n = "";
-						
-						// Run through the gameboard in both direction.
-						//// Direction : previous tiles
-						while(previous != null || next != null) {
-								if (previous != null) {
-										p = previous.getLetter()+p;
-										if (previous.getStatus()) {
-												switch(grid.scoringGrid.getBonus(pmoved, y)) {
-														case 4:
-																wd = true;
-																break;
-														case 5:
-																wt = true;
-																break;
-														default:
-																lastWordScore += previous.getValue()*grid.scoringGrid.getBonus(pmoved, y);
-												}
-												previous.downStatus(); // set the status of this tile to false.
-										} else {
-												lastWordScore += next.getValue();
-										}
-										pmoved -= 1;
-										previous = grid.getTile(pmoved, y);
+				while(prev != null || next != null) {
+						if (prev != null) {
+								p = prev.getLetter()+p;
+								if (prev.getStatus()) {
+										grid.scoringGrid.checkBonus(prev.getX(), prev.getY(), prev.getValue(), wd, wt, lastWordScore);
+										prev.downStatus(); // set the status of this tile to false.
+								} else {
+										lastWordScore += prev.getValue();
 								}
-								if (next != null) {
-										n = n+next.getLetter();
-										if (next.getStatus()) {
-												switch(grid.scoringGrid.getBonus(nmoved, y)) {
-														case 4:
-																wd = true;
-																break;
-														case 5:
-																wt = true;
-																break;
-														default:
-																lastWordScore += next.getValue()*grid.scoringGrid.getBonus(nmoved, y);
-												}
-												next.downStatus();
-										} else {
-												lastWordScore += next.getValue();
-										}
-										nmoved += 1;
-										next = grid.getTile(nmoved, y);
-								}
+								prev = grid.previousTile(prev, orientation);
 						}
-						lastWord = p+lastWord+n;
-						lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
-				} else {
-						int pmoved = y-1;
-						int nmoved = y+1;
-						// Get the previous and next tile of the current tile.
-						Tile previous = grid.getTile(x, pmoved);
-						Tile next = grid.getTile(x, nmoved);
-						String p = "";
-						String n = "";
-						
-						// Run through the gameboard in both direction.
-						//// Direction : previous tiles
-						while(previous != null || next != null) {
-								if (previous != null) {
-										p = previous.getLetter()+p;
-										if (previous.getStatus()) {
-												switch(grid.scoringGrid.getBonus(x, pmoved)) {
-														case 4:
-																wd = true;
-																break;
-														case 5:
-																wt = true;
-																break;
-														default:
-																lastWordScore += previous.getValue()*grid.scoringGrid.getBonus(x, pmoved);
-												}
-												previous.downStatus();
-										} else {
-												lastWordScore += next.getValue();
-										}
-										pmoved -= 1;
-										previous = grid.getTile(x, pmoved);
+						if (next != null) {
+								n = n+next.getLetter();
+								if (next.getStatus()) {
+										grid.scoringGrid.checkBonus(next.getX(), next.getY(), next.getValue(), wd, wt, lastWordScore);
+										next.downStatus();
+								} else {
+										lastWordScore += next.getValue();
 								}
-								if (next != null) {
-										n = n+next.getLetter();
-										if (next.getStatus()) {
-												switch(grid.scoringGrid.getBonus(x, nmoved)) {
-														case 4:
-																wd = true;
-																break;
-														case 5:
-																wt = true;
-																break;
-														default:
-																lastWordScore += next.getValue()*grid.scoringGrid.getBonus(x, nmoved);
-												}
-												next.downStatus();
-										} else {
-												lastWordScore += next.getValue();
-										}
-										nmoved += 1;
-										next = grid.getTile(x, nmoved);
-								}
+								next = grid.nextTile(next, orientation);
 						}
-						lastWord = p+lastWord+n;
-						lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
 				}
+				lastWord = p+lastWord+n;
+				lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
 				if (lastWord.length() < 2) lastWord = ""; // In case where there would be only one character.
 		}
 		

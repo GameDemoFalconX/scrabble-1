@@ -18,6 +18,14 @@ class Grid {
 				}
 		}
 		
+		protected Tile previousTile(Tile t, char orientation) {
+				return (orientation == 'H') ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
+		}
+		
+		protected Tile nextTile(Tile t, char orientation) {
+				return (orientation == 'H') ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
+		}
+		
 		protected void putInGrid(int x, int y, Tile tile) {
 				grid[x][y] = tile;
 		}

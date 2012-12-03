@@ -45,5 +45,17 @@ public class ScoringGrid {
 		public int getBonus(int x, int y) {
 				return scoringGrid[x][y];
 		}
- 
+		
+		public void checkBonus(int x, int y, int val, boolean wd, boolean wt, int cScore) {
+				switch(getBonus(x, y)) {
+						case 4:
+								wd = true;
+								break;
+						case 5:
+								wt = true;
+								break;
+						default:
+								cScore += val*getBonus(x, y);
+				}
+		}
 }
