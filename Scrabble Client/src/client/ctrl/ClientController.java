@@ -179,7 +179,7 @@ public class ClientController {
 		public void tileUsher(Integer number) {
 				String formatedWord = "";
 				if (number > 0) {
-						char orientation = 'H'; // By default
+						char orientation = 'H'; // By default in case where there would be only one tile placed.
 						int lastX = 0;
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
@@ -195,14 +195,14 @@ public class ClientController {
 										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 8);
 										
 										// Determine the orientation of the main word.
-										if (i == 1) lastX = Integer.parseInt(unformatedLetter[0]);
+										if (i == 1) lastX = Integer.parseInt(unformatedLetter[0]); // Save the x position of the first tile.
 										if (i == 2) {
-												orientation = (Integer.parseInt(unformatedLetter[0]) == lastX) ? 'V' : 'H';
+												orientation = (Integer.parseInt(unformatedLetter[0]) == lastX) ? 'V' : 'H'; // Get the orientation of the word if there is more than one tile.
 										}
 										
 										// Add check here for tile and these neighbors.
 								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
-								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"__"+unformatedLetter[2];
+								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
 								if (i < number) {
 										formatedWord += "##";
 								}
@@ -300,6 +300,9 @@ public class ClientController {
 						case TILE_EXCHANGE_ERROR:
 										view.firstMenu("An error has been encountered during the tile exchange! Please try again.");
 								break;
+						case GAME_IDENT_ERROR:
+								view.firstMenu("You are not yet logged on the server or can't play at specific game.");
+								break;								
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");
 				}			

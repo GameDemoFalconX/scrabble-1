@@ -169,7 +169,6 @@ public class GameBoard {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+orientation+"@@"+formatedWord);
-//				cPlay.addWord(formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
@@ -179,7 +178,8 @@ public class GameBoard {
 										cPlay.addWord(formatedWord);
 										break;
 								case Message.PLACE_WORD_ERROR:
-										throw new GameException(GameException.typeErr.PLACE_WORD_ERROR);
+										String [] error = new String(serverResponse.getBody()).split("_");
+										System.out.println("Sorry, this word doesn't exist! Your new score is :"+error[2]);
 						}
 				}
 		}
