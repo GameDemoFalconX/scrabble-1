@@ -31,9 +31,9 @@ public class Grid {
 								prtGrid += (x+1) + " | ";
 						}
 						for (int y = 0; y <= 14; y++) {
-								Tile tile = grid[x][y];
+								Tile tile = grid[y][x];
 								if (tile != null) {
-										prtGrid += grid[x][y] + "";
+										prtGrid += grid[y][x] + "";
 								} else {
 										switch (scoringGrid.getBonus(x,y)) {
 											 case	ScoringGrid.TRIPLE_WORD : 

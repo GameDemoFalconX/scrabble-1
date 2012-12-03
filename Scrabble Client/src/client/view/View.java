@@ -1,6 +1,7 @@
 package client.view;
 
 import client.ctrl.ClientController;
+import common.EasterEgg;
 import common.Message;
 
 /**
@@ -19,7 +20,7 @@ public class View {
     
 		public void firstMenu(String error) {
 				System.out.println(menuHeader);
-				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu.
+				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu
 				System.out.println("1: Play as guest");
 				System.out.println("2: Log in");
 				System.out.println("3: Sign up");
@@ -66,27 +67,16 @@ public class View {
 				ctrl.tileUsher(CConsole.readInt("e.g. 3 : "));
 		}
 		
-		public String tileUsherMenu(Integer letterNumber, boolean vertical) {
+		public String tileUsherMenu(Integer letterNumber) {
 				switch (letterNumber) {
-						case 1: System.out.println("Enter the position of the 1st letter and the coordinate :  ");
-														return CConsole.readLine ("e.g. 1 (place on the rack) 10 (x) 12 (y) : ");
-					 case 2: System.out.println("Enter the position of the 2nd letter and the coordinate :  ");
-														return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) 12 (y) : ");
-						case 3: if (!vertical) {
-																System.out.println("Enter the position of the 3rd letter and the x coordinate :  ");
-																return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) : ");
-														} else {
-																System.out.println("Enter the position of the 3rd letter and the y coordinate :  ");
-																return CConsole.readLine ("e.g. 2 (place on the rack) 12 (y) : ");
-														}	
-														
-						default: if (!vertical) {
-																System.out.println("Enter the position of the "+letterNumber+"th letter and the x coordinate :  ");
-																return CConsole.readLine ("e.g. 2 (place on the rack) 11 (x) : ");
-														} else {
-																System.out.println("Enter the position of the "+letterNumber+"th letter and the y coordinate :  ");
-																return CConsole.readLine ("e.g. 2 (place on the rack) 12 (y) : ");
-														}
+						case 1: System.out.println("Enter the coordinate of the 1st letter and it's position on the rack : ");
+														return CConsole.readLine ("e.g. x y pos : ");
+					 case 2: System.out.println("Enter the coordinate of the 2nd letter and it's position on the rack : ");
+														return CConsole.readLine ("e.g. x y pos : ");
+						case 3: System.out.println("Enter the coordinate of the 3rd letter and it's position on the rack : ");
+														return CConsole.readLine ("e.g. x y pos : ");
+						default: System.out.println("Enter the coordinate of the "+letterNumber+"th letter and it's position on the rack : ");
+																return CConsole.readLine ("e.g. x y pos : ");
 				}
 		}
 		

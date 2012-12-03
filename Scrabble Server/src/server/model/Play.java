@@ -88,11 +88,11 @@ public class Play {
 				ArrayList result = new ArrayList();
 				
 				for (int i = 0; i < tilesList.length; i++) {
-						String [] tileAttrs = tilesList[i].split("__");
+						String [] tileAttrs = tilesList[i].split("--");
 						result.add(tileAttrs[0]+":"+tileAttrs[1]); // Put the tile coordinates and index in the list. (format)
 						int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
 						int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
-						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[1]));
+						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[1])-1);
 						cTile.upStatus(); // Set this tile like a new add in the grid.
 						
 						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard.
@@ -262,6 +262,7 @@ public class Play {
 						lastWord = p+lastWord+n;
 						lastWordScore = (wd) ? lastWordScore*2 : (wt) ? lastWordScore*3 : lastWordScore;
 				}
+				if (lastWord.length() < 2) lastWord = ""; // In case where there would be only one character.
 		}
 		
 		/**
@@ -290,8 +291,8 @@ public class Play {
 				for (int i = 0; i < tilesList.size(); i++) {
 						int ind = Integer.parseInt(tilesList.get(i).toString().split(":")[2]);
 						rack.setTile(i, bag.getTile());
-						result += rack.getTile(i).toString()+"__"+i;
-						if (i > 1) result += "##";
+						result += rack.getTile(i).toString()+"--"+i;
+						if (i < tilesList.size() - 1) result += "##";
 				}
 				return result;
 		}

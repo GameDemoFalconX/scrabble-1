@@ -5,7 +5,7 @@ import client.model.Player;
 import client.view.View;
 import common.GameException;
 import common.Message;
-import java.util.Arrays;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain<ro.foncier@gmail.com>
@@ -177,50 +177,42 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
-				String unformatedWord = "";
-				String x1 = "";
-				String x2 = "";
-				String y = "";
-				boolean vertical = false;
+				String formatedWord = "";
+				String result = "";
+				String x1 = ""; String x2 = "";
 				if (number > 0) {
+						char orientation = 'H'; // By default in case where there would be only one tile placed.
+						int lastX = 0;
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
-								boolean argOneIsOK;
-								boolean argTwoIsOK;
-								boolean argThreeIsOK;
-								String [] unformatedLetter = new String[3];
+								boolean argXisOK;
+								boolean argYisOK;
+								boolean argPosIsOK;
+								String[] unformatedLetter;
 								do {
-										unformatedLetter = view.tileUsherMenu(i,vertical).split(" ");
-										if ((i >= 3) && vertical) {
-												unformatedLetter = addElement(unformatedLetter,y);
-										} else if (i >= 3 && !vertical) {
-												String tmp = unformatedLetter[1];
-												unformatedLetter[1] = x1;
-												unformatedLetter = addElement(unformatedLetter, tmp);
-										}
+										unformatedLetter = view.tileUsherMenu(i).split(" ");
 										threeArgs = unformatedLetter.length == 3;
-										argOneIsOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 8);
-										argTwoIsOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
-										argThreeIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 16);
-								} while (!threeArgs || !argOneIsOK || !argTwoIsOK || !argThreeIsOK);
-								switch (i) {
-										case 1: x1 = unformatedLetter[1];
-																		y = unformatedLetter[2]; 
-																		break;
-										case 2: x2 = unformatedLetter[1];
-																		if (x1.equals(x2)) {
-																				vertical = true;
-																		}
-										default: break;
+										argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
+										argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
+										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
+								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
+								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
+								if (i == 1) {
+										x1 = unformatedLetter[0];
+								} else if (i == 2) {
+										x2 = unformatedLetter[0];
 								}
-								unformatedWord += unformatedLetter[0]+" "+unformatedLetter[1]+" "+unformatedLetter[2];
 								if (i < number) {
-										unformatedWord += "##";
+										formatedWord += "##";
 								}
-						} 
-						System.out.println(unformatedWord);
+								if (x1.equals(x2)) {
+										result = "V@@"+formatedWord;
+								} else {
+										result = "H@@"+formatedWord;
+								}
+						}
 						try {
-								gameBoard.addWord(unformatedWord);
+								gameBoard.addWord(result);
 						} catch (GameException ge) {
 								processException(ge);
 						}
@@ -228,12 +220,6 @@ public class ClientController {
 				gameBoard.displayGame();
 				view.playMenu(player.isAnonym());
 		}
-		
-		private String[] addElement(String[] array, String toAdd) {
-    String[] result = Arrays.copyOf(array, array.length +1);
-    result[array.length] = toAdd;
-    return result;
-}
 		
 		public void tileOrganizer(Integer choice) {
 				switch (choice) {
@@ -318,6 +304,9 @@ public class ClientController {
 						case TILE_EXCHANGE_ERROR:
 										view.firstMenu("An error has been encountered during the tile exchange! Please try again.");
 								break;
+						case GAME_IDENT_ERROR:
+								view.firstMenu("You are not yet logged on the server or can't play at specific game.");
+								break;								
 						default:
 								view.firstMenu("An error has been encountered during the treatment! Please try again.");
 				}			

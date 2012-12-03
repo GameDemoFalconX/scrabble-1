@@ -119,6 +119,7 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
+				System.out.println(ga_infos);
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
 						cPlay.newTest(); // Increase the number of tests for this player.
@@ -139,6 +140,7 @@ public class HAL extends Game {
 						//// Step 3.1 - Check the first tile on the main orientation.
 						cPlay.wordTreatment(tileList.get(0).toString(), orientation);
 						if (!cPlay.lastWord.equals("")) {
+								System.out.println(cPlay.lastWord);
 								wordsList.add(cPlay.lastWord);
 								score += cPlay.lastWordScore;
 								if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
@@ -150,6 +152,7 @@ public class HAL extends Game {
 						for (int i = 0; i < tileList.size(); i++) {
 								cPlay.wordTreatment(tileList.get(i).toString(), orientation);
 								if (!cPlay.lastWord.equals("")) {
+										System.out.println(cPlay.lastWord);
 										wordsList.add(cPlay.lastWord);
 										score += cPlay.lastWordScore;
 										if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
