@@ -64,6 +64,10 @@ class Rack {
 				this.rack = newRack;
 		}
 		
+		public void setTile(Integer position, Tile tile) {
+				rack[position-1] = tile;
+		}
+		
 		public Tile getTile(Integer position) {
 				return rack[position-1];
 		}

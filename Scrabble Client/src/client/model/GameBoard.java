@@ -166,9 +166,8 @@ public class GameBoard {
 		}
 		
 		public void addWord(String formatedWord) throws GameException {
-				System.out.println(formatedWord);
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
-												+"##"+formatedWord);
+												+"_"+cPlay.getPlayID()+"_"+formatedWord);
 //				cPlay.addWord(formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
@@ -176,7 +175,7 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.PLACE_WORD_SUCCES:
 										String args = new String(serverResponse.getBody());
-										cPlay.addWord(formatedWord);
+										cPlay.addWord(args, formatedWord);
 										break;
 								case Message.PLACE_WORD_ERROR:
 										throw new GameException(GameException.typeErr.PLACE_WORD_ERROR);

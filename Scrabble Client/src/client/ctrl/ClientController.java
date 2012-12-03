@@ -5,7 +5,7 @@ import client.model.Player;
 import client.view.View;
 import common.GameException;
 import common.Message;
-import java.util.Arrays;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain<ro.foncier@gmail.com>
@@ -178,6 +178,8 @@ public class ClientController {
 		
 		public void tileUsher(Integer number) {
 				String formatedWord = "";
+				String result = "";
+				String x1 = ""; String x2 = "";
 				if (number > 0) {
 						for (int i = 1; i <= number; i++) {
 								boolean threeArgs;
@@ -188,18 +190,27 @@ public class ClientController {
 								do {
 										unformatedLetter = view.tileUsherMenu(i).split(" ");
 										threeArgs = unformatedLetter.length == 3;
-										argXisOK = (Integer.parseInt(unformatedLetter[0]) > 0) && (Integer.parseInt(unformatedLetter[0]) < 16);
-										argYisOK = (Integer.parseInt(unformatedLetter[1]) > 0) && (Integer.parseInt(unformatedLetter[1]) < 16);
-										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) > 0) && (Integer.parseInt(unformatedLetter[2]) < 8);
+										argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
+										argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
+										argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
 								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
-								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"__"+unformatedLetter[2];
+								formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
+								if (i == 1) {
+										x1 = unformatedLetter[0];
+								} else if (i == 2) {
+										x2 = unformatedLetter[0];
+								}
 								if (i < number) {
 										formatedWord += "##";
 								}
-						} 
-						System.out.println(formatedWord);
+								if (x1.equals(x2)) {
+										result = "V@@"+formatedWord;
+								} else {
+										result = "H@@"+formatedWord;
+								}
+						}
 						try {
-								gameBoard.addWord(formatedWord);
+								gameBoard.addWord(result);
 						} catch (GameException ge) {
 								processException(ge);
 						}

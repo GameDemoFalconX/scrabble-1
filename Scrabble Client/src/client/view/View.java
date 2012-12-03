@@ -74,7 +74,7 @@ public class View {
 					 case 2: System.out.println("Enter the coordinate of the 2nd letter and it's position on the rack : ");
 														return CConsole.readLine ("e.g. x y pos : ");
 						case 3: System.out.println("Enter the coordinate of the 3rd letter and it's position on the rack : ");
-														return CConsole.readLine ("x y pos : ");
+														return CConsole.readLine ("e.g. x y pos : ");
 						default: System.out.println("Enter the coordinate of the "+letterNumber+"th letter and it's position on the rack : ");
 																return CConsole.readLine ("e.g. x y pos : ");
 				}
