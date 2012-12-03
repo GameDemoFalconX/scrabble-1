@@ -160,22 +160,24 @@ public class GameBoard {
 				System.out.println("\n#####################################");
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
+				System.out.println("Score : " + cPlay.getScore());
 				System.out.println(cPlay.displayGrid());
 				System.out.print("\n");
 				System.out.println(cPlay.displayRack());
 		}
-		
-		public void addWord(String formatedWord, char orientation) throws GameException {
+
+		public void addWord(String formatedWord) throws GameException {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
-												+"_"+cPlay.getPlayID()+"_"+orientation+"@@"+formatedWord);
+												+"_"+cPlay.getPlayID()+"_"+formatedWord);
+//				cPlay.addWord(formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.PLACE_WORD_SUCCES:
 										String args = new String(serverResponse.getBody());
-										cPlay.addWord(formatedWord);
+										cPlay.addWord(args, formatedWord);
 										break;
 								case Message.PLACE_WORD_ERROR:
 										String [] error = new String(serverResponse.getBody()).split("_");

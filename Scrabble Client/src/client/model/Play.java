@@ -28,6 +28,18 @@ public class Play {
 		public String getOwner() {
 				return owner.toString();
 		}
+
+		public Grid getGrid() {
+				return grid;
+		}
+		
+		public void setScore(Integer score) {
+				this.score = score;
+		}
+		
+	 public Integer getScore() {
+				return score;
+		}
 		
 		public String displayGrid() {
 				return grid.toString();
@@ -37,13 +49,32 @@ public class Play {
 				return rack.toString();
 		}
 		
-		public void addWord(String formatedWord) {
-				String [] formatedLetters = formatedWord.split("##");
-				for (int i = 0; i < formatedLetters.length; i++) {
-						String [] coordAndTile = formatedLetters[i].split("__");
-						String [] coord = coordAndTile[0].split(":");
-						Tile tile = rack.getTile(Integer.parseInt(coordAndTile[1]));
-						grid.putInGrid(Integer.parseInt(coord[0])-1, Integer.parseInt(coord[1])-1, tile);
+		public void addWord(String args, String formatedWord) {
+				System.out.println("args : " + args + " formatedword : " + formatedWord);
+				String [] infos = args.split("_");
+				String playerID = infos[0];
+				String gameID = infos[1];
+				String scoreAndTiles = infos[2];
+				if ((playerID.equals(owner.toString())) && (gameID.equals(playID.toString()))) {
+						String[] tempWord = formatedWord.split("@@");
+						String [] formatedLetters = tempWord[1].split("##");
+						for (int i = 0; i < formatedLetters.length; i++) {
+								String [] coordAndTile = formatedLetters[i].split("--");
+								String [] coord = coordAndTile[0].split(":");
+								Tile tile = rack.getTile(Integer.parseInt(coordAndTile[1]));
+								grid.putInGrid(Integer.parseInt(coord[0])-1, Integer.parseInt(coord[1])-1, tile);
+						}
+						String[] splitedScoreAndTiles = scoreAndTiles.split("@@");
+						setScore(Integer.parseInt(splitedScoreAndTiles[0]));
+						String[] formatedRack = splitedScoreAndTiles[1].split("##");
+						for (int i = 0; i < formatedRack.length; i++) {
+								String[] tile = formatedRack[i].split("--");
+								Integer position = Integer.parseInt(tile[1]);
+								String[] letterAndValue = tile[0].split(":");
+								rack.setTile(position, new Tile(letterAndValue[0].charAt(0),Integer.parseInt(letterAndValue[1])));
+						}
+				} else {
+						 System.out.println("The gameID or the playerID is not correct.") ;
 				}
 		}
 		

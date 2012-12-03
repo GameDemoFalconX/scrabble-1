@@ -201,8 +201,8 @@ public class Play {
 				for (int i = 0; i < tilesList.size(); i++) {
 						int ind = Integer.parseInt(tilesList.get(i).toString().split(":")[2]);
 						rack.setTile(i, bag.getTile());
-						result += rack.getTile(i).toString()+"__"+i;
-						if (i > 1) result += "##";
+						result += rack.getTile(i).toString()+"--"+i;
+						if (i < tilesList.size() - 1) result += "##";
 				}
 				return result;
 		}
