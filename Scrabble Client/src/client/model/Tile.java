@@ -28,9 +28,9 @@ public class Tile {
 		@Override
 		public String toString() {
 				if (value < 10) {
-						return  "[" + letter + " " +value + "]";
+						return "[" + letter + " " + value + "]";
 				} else {
-						return  "[" + letter + value + "]";
+						return "[" + letter + "" + value+ "]";
 				}
 		}
 

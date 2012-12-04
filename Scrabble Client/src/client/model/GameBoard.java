@@ -4,7 +4,7 @@ import client.connection.ClientProtocol;
 import common.GameException;
 import common.Message;
 import java.security.MessageDigest;
-import java.util.UUID;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  *
@@ -161,9 +161,11 @@ public class GameBoard {
 				System.out.println("#             SCRABBLE              #");
 				System.out.println("#####################################\n");
 				System.out.println("Score : " + cPlay.getScore());
-				System.out.println(cPlay.displayGrid());
+				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(cPlay.displayGrid());
 				System.out.print("\n");
 				System.out.println(cPlay.displayRack());
+				AnsiConsole.systemInstall();
 		}
 
 		public void addWord(String formatedWord) throws GameException {
