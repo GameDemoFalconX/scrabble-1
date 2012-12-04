@@ -59,19 +59,17 @@ public class Play {
 						String[] tempWord = formatedWord.split("@@");
 						String [] formatedLetters = tempWord[1].split("##");
 						for (int i = 0; i < formatedLetters.length; i++) {
-								String [] coordAndTile = formatedLetters[i].split("--");
-								String [] coord = coordAndTile[0].split(":");
-								Tile tile = rack.getTile(Integer.parseInt(coordAndTile[1]));
-								grid.putInGrid(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]), tile);
+								String [] coordAndTile = formatedLetters[i].split(":");
+								Tile tile = rack.getTile(Integer.parseInt(coordAndTile[2])+1);
+								grid.putInGrid(Integer.parseInt(coordAndTile[0]), Integer.parseInt(coordAndTile[1]), tile);
 						}
 						String[] splitedScoreAndTiles = scoreAndTiles.split("@@");
 						setScore(Integer.parseInt(splitedScoreAndTiles[0]));
 						String[] formatedRack = splitedScoreAndTiles[1].split("##");
 						for (int i = 0; i < formatedRack.length; i++) {
-								String[] tile = formatedRack[i].split("--");
-								Integer position = Integer.parseInt(tile[1]);
-								String[] letterAndValue = tile[0].split(":");
-								rack.setTile(position, new Tile(letterAndValue[0].charAt(0),Integer.parseInt(letterAndValue[1])));
+								String[] tile = formatedRack[i].split(":");
+								Integer position = Integer.parseInt(tile[2]);
+								rack.setTile(position, new Tile(tile[0].charAt(0),Integer.parseInt(tile[1])));
 						}
 				} else {
 						 System.out.println("The gameID or the playerID is not correct.") ;

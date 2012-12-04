@@ -177,6 +177,7 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
+				System.out.println("number of tiles to add : "+number);
 				String formatedWord = ""; String orientation = "";
 				int  firstX = -1;
 				Integer i = 1;
