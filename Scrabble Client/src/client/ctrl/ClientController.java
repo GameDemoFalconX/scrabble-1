@@ -182,12 +182,12 @@ public class ClientController {
 				Integer i = 1;
 				boolean cancel = false;
 				if (number > 0) {
-						while ((number <= i) && !cancel) {																
+						while ((number+1 > i) && !cancel) {																
 								boolean threeArgs = false; boolean argXisOK = false; boolean argYisOK = false; boolean argPosIsOK = false;
 								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
 										String [] answer = view.tileUsherMenu(i).split(" ");
-										cancel = (answer.length == 1 && answer.equals("0"));
+										cancel = (answer.length == 1 && answer[0].equals("0"));
 										
 										if (!cancel) {
 												// Player data
@@ -202,17 +202,20 @@ public class ClientController {
 												argPosIsOK = (pos >= 1) && (pos <= 7);
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
-								formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
 								if (!cancel) {
+										formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
 										firstX = (i == 1) ? x : firstX;
 										if (i == 2) {
 												orientation = (firstX == x) ? "V" : "H";
 										}
 										formatedWord += (i < number) ? "##" : "";
 								}
+								i++;
 						}
 						try {
-								gameBoard.addWord(orientation+"@@"+formatedWord);
+								if (!cancel) {
+										gameBoard.addWord(orientation+"@@"+formatedWord);
+								}
 						} catch (GameException ge) {
 								processException(ge);
 						}
