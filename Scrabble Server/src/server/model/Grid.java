@@ -18,7 +18,22 @@ class Grid {
 				}
 		}
 		
+		protected Tile previousTile(Tile t, char orientation) {
+				if (t.getX()-1 < 0 || t.getY()-1 < 0) {
+						return null;
+				}
+				return (orientation == 'H') ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
+		}
+		
+		protected Tile nextTile(Tile t, char orientation) {
+				if (t.getX()+1 > 14 || t.getY()+1 > 14) {
+						return null;
+				}
+				return (orientation == 'H') ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
+		}
+		
 		protected void putInGrid(int x, int y, Tile tile) {
+				tile.setCoordinates(x, y);
 				grid[x][y] = tile;
 		}
 		
@@ -42,7 +57,7 @@ class Grid {
 		@Override
 		public String toString() {
 				String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
-				prtGrid += "      __   __   __   __   __   __   __   __   __   __   __   __   __   __   __\n";
+				prtGrid +=       "     ___________________________________________________________________________ \n";
 				for (int x = 0; x <= 14 ; x++) {
 						if (x < 9) {
 								prtGrid += "0"+ (x+1) + " | ";
@@ -50,25 +65,25 @@ class Grid {
 								prtGrid += (x+1) + " | ";
 						}
 						for (int y = 0; y <= 14; y++) {
-								Tile tile = grid[x][y];
+								Tile tile = grid[y][x];
 								if (tile != null) {
-										prtGrid += grid[x][y] + " ";
+										prtGrid += grid[y][x].displayTile() + "";
 								} else {
 										switch (scoringGrid.getBonus(x,y)) {
 											 case	ScoringGrid.TRIPLE_WORD : 
-														prtGrid += "[TW] ";
+														prtGrid += "[T W]";
 														break;
 												case	ScoringGrid.DOUBLE_WORD : 
-														prtGrid += "[DW] ";
+														prtGrid += "[D W]";
 														break;
 												case	ScoringGrid.TRIPLE_LETTER : 
-														prtGrid += "[TL] ";
+														prtGrid += "[T L]";
 														break;
 												case	ScoringGrid.DOUBLE_LETTER : 
-														prtGrid += "[DL] ";
+														prtGrid += "[D L]";
 														break;
 												default :
-														prtGrid += "[  ] ";
+														prtGrid += "[   ]";
 									 }					
 								}	
 						}		

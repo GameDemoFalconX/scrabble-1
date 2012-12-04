@@ -177,52 +177,45 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
-				System.out.println(number);
-				String formatedWord = "";
-				String result = "";
-				String x1 = ""; String x2 = "";
-				Integer i = 0;
+				System.out.println("number of tiles to add : "+number);
+				String formatedWord = ""; String orientation = "";
+				int  firstX = -1;
+				Integer i = 1;
 				boolean cancel = false;
 				if (number > 0) {
-						while (!(i >= number) && !cancel) {										
-								i++;
-								boolean threeArgs = false;
-								boolean argXisOK = false;
-								boolean argYisOK = false;
-								boolean argPosIsOK = false;
-								String[] unformatedLetter = null;
+						while ((number+1 > i) && !cancel) {																
+								boolean threeArgs = false; boolean argXisOK = false; boolean argYisOK = false; boolean argPosIsOK = false;
+								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
-										String answer = view.tileUsherMenu(i);
-										if (answer.length() == 1 && answer.equals("0")) {
-												cancel = true;
-										} else {
-												unformatedLetter = answer.split(" ");
-												threeArgs = unformatedLetter.length == 3;
-												argXisOK = (Integer.parseInt(unformatedLetter[0]) >= 1) && (Integer.parseInt(unformatedLetter[0]) <= 15);
-												argYisOK = (Integer.parseInt(unformatedLetter[1]) >= 1) && (Integer.parseInt(unformatedLetter[1]) <= 15);
-												argPosIsOK = (Integer.parseInt(unformatedLetter[2]) >= 1) && (Integer.parseInt(unformatedLetter[2]) <= 7);
+										String [] answer = view.tileUsherMenu(i).split(" ");
+										cancel = (answer.length == 1 && answer[0].equals("0"));
+										
+										if (!cancel) {
+												// Player data
+												x = Integer.parseInt(answer[0])-1;
+												y = Integer.parseInt(answer[1])-1;
+												pos = Integer.parseInt(answer[2])-1;
+
+												// Check integrity
+												threeArgs = answer.length == 3;
+												argXisOK = (x >= 1) && (x <= 15);
+												argYisOK = (y >= 1) && (y <= 15);
+												argPosIsOK = (pos >= 1) && (pos <= 7);
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
-										formatedWord += unformatedLetter[0]+":"+unformatedLetter[1]+"--"+unformatedLetter[2];
-										if (i == 1) {
-												x1 = unformatedLetter[0];
-										} else if (i == 2) {
-												x2 = unformatedLetter[0];
+										formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
+										firstX = (i == 1) ? x : firstX;
+										if (i == 2) {
+												orientation = (firstX == x) ? "V" : "H";
 										}
-										if (i < number) {
-												formatedWord += "##";
-										}
-										if (x1.equals(x2)) {
-												result = "V@@"+formatedWord;
-										} else {
-												result = "H@@"+formatedWord;
-										}
+										formatedWord += (i < number) ? "##" : "";
 								}
+								i++;
 						}
 						try {
 								if (!cancel) {
-										gameBoard.addWord(result);
+										gameBoard.addWord(orientation+"@@"+formatedWord);
 								}
 						} catch (GameException ge) {
 								processException(ge);

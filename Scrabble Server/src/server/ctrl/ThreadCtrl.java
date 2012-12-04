@@ -162,7 +162,6 @@ public class ThreadCtrl extends Thread {
 		
 		private void gameTreatment() {
 				// Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
-				System.out.println(new String(request.getBody()));
 				String [] argsTab = new String(request.getBody()).split("_");
 				String playerID = argsTab[0];
 				String playID = argsTab[1];

@@ -8,6 +8,9 @@ public class Tile {
 
 		private final char letter;
 		private final int value;
+		private int  x;
+		private int y;
+		private int rackPosition = -1; // By default, this value equals -1 (i.e not in the rack)
 		private boolean status;
 		
 		/**
@@ -42,6 +45,27 @@ public class Tile {
 				return value;
 		}
 		
+		protected void setCoordinates(int x, int y) {
+				this.x = x;
+				this.y = y;
+		}
+		
+		protected int getX() {
+				return this.x;
+		}
+		
+		protected int getY() {
+				return this.y;
+		}
+		
+		protected int getRackPosition() {
+				return this.rackPosition;
+		}
+		
+		protected void setRackPosition(int index) {
+				this.rackPosition = index;
+		}
+		
 		/**
 			* Gets the status of this tile
 			* @return True if the tile has just been placed on the gameboard.
@@ -72,5 +96,12 @@ public class Tile {
 		public String toString() {
 				return letter+":"+value;
 		}
-
+		
+		public String displayTile() {
+				if (value < 10) {
+						return  "[" + letter + " " +value + "]";
+				} else {
+						return  "[" + letter + value + "]";
+				}
+		}
 }

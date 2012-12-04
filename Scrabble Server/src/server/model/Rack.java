@@ -47,6 +47,16 @@ class Rack {
 				rack[i] = newTile;
 		}
 		
+		protected String displayRack() {
+				String result = "";
+				for (int i = 0; i < 7; i++) {
+						result += rack[i].toString() + " ";
+				}
+				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+											  	+ "  1     2     3     4     5     6     7\n";
+				return result;
+		}
+		
 		/**
 			* Format the rack in a printable String
 			* @return a String
