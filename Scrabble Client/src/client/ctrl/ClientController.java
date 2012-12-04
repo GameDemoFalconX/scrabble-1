@@ -177,16 +177,24 @@ public class ClientController {
 		}
 		
 		public void tileUsher(Integer number) {
+				System.out.println(number);
 				String formatedWord = "";
 				String result = "";
 				String x1 = ""; String x2 = "";
+				Integer i = 0;
+				boolean cancel = false;
 				if (number > 0) {
 						for (int i = 1; i <= number; i++) {
+						while (!(i >= number) && !cancel) {										
+								i++;		
+						
 								boolean threeArgs; boolean argXisOK; boolean argYisOK; boolean argPosIsOK;
 								int x; int y; int pos;
 								do {
 										String [] unformatedLetter = view.tileUsherMenu(i).split(" ");
-										
+										if (answer.length() == 1 && answer.equals("0")) {
+												cancel = true;
+										} else {
 										// Player data
 										x = Integer.parseInt(unformatedLetter[0])-1;
 										y = Integer.parseInt(unformatedLetter[1])-1;
@@ -197,25 +205,29 @@ public class ClientController {
 										argXisOK = (x >= 1) && (x <= 15);
 										argYisOK = (y >= 1) && (y <= 15);
 										argPosIsOK = (pos >= 1) && (pos <= 7);
-										
-								} while (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK);
+										}
+								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								formatedWord += x+":"+y+"--"+pos;
-								if (i == 1) {
-										x1 = ""+x;
-								} else if (i == 2) {
-										x2 = ""+x;
-								}
-								if (i < number) {
-										formatedWord += "##";
-								}
-								if (x1.equals(x2)) {
-										result = "V@@"+formatedWord;
-								} else {
-										result = "H@@"+formatedWord;
+								if (!cancel) {
+										if (i == 1) {
+												x1 = ""+x;
+										} else if (i == 2) {
+												x2 = ""+x;
+										}
+										if (i < number) {
+												formatedWord += "##";
+										}
+										if (x1.equals(x2)) {
+												result = "V@@"+formatedWord;
+										} else {
+												result = "H@@"+formatedWord;
+										}
 								}
 						}
 						try {
-								gameBoard.addWord(result);
+								if (!cancel) {
+										gameBoard.addWord(result);
+								}
 						} catch (GameException ge) {
 								processException(ge);
 						}

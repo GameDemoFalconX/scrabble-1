@@ -127,8 +127,8 @@ public abstract class Game implements IGame {
 		}
 		
 		@Override
-		public Message exchangeTile(String pl_id, String tiles) throws GameException {
-				Message response = switchTile(pl_id, tiles); 
+		public Message exchangeTile(String pl_id, String position) throws GameException {
+				Message response = switchTile(pl_id, position); 
 				switch (response.getHeader()) {
 						case Message.TILE_EXCHANGE_SUCCES:
 								return response;
@@ -150,5 +150,5 @@ public abstract class Game implements IGame {
 		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
 		
 		protected abstract Message destroyAnonym(String pl_id);
-		protected abstract Message switchTile(String pl_id, String tiles);
+		protected abstract Message switchTile(String pl_id, String position);
 }

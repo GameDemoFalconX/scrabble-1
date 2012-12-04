@@ -1,5 +1,7 @@
 package client.model;
 
+import static org.fusesource.jansi.Ansi.ansi;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
@@ -33,20 +35,20 @@ public class Grid {
 						for (int y = 0; y <= 14; y++) {
 								Tile tile = grid[y][x];
 								if (tile != null) {
-										prtGrid += grid[y][x] + "";
-								} else {
+										prtGrid += ansi().render("@|yellow "+grid[y][x]+"|@");
+								} else { 
 										switch (scoringGrid.getBonus(x,y)) {
 											 case	ScoringGrid.TRIPLE_WORD : 
-														prtGrid += "[T W]";
+														prtGrid += ansi().render("@|red [T W]|@");
 														break;
 												case	ScoringGrid.DOUBLE_WORD : 
-														prtGrid += "[D W]";
+														prtGrid += ansi().render("@|magenta [D W]|@");
 														break;
 												case	ScoringGrid.TRIPLE_LETTER : 
-														prtGrid += "[T L]";
+														prtGrid += ansi().render("@|blue [T L]|@");
 														break;
 												case	ScoringGrid.DOUBLE_LETTER : 
-														prtGrid += "[D L]";
+														prtGrid += ansi().render("@|cyan [D W]|@");
 														break;
 												default :
 														prtGrid += "[   ]";

@@ -71,7 +71,7 @@ public class View {
 				switch (letterNumber) {
 						case 1: System.out.println("Enter the coordinate of the 1st letter and it's position on the rack : ");
 														return CConsole.readLine ("e.g. x y pos : ");
-					 case 2: System.out.println("Enter the coordinate of the 2nd letter and it's position on the rack : ");
+						case 2: System.out.println("Enter the coordinate of the 2nd letter and it's position on the rack : ");
 														return CConsole.readLine ("e.g. x y pos : ");
 						case 3: System.out.println("Enter the coordinate of the 3rd letter and it's position on the rack : ");
 														return CConsole.readLine ("e.g. x y pos : ");
