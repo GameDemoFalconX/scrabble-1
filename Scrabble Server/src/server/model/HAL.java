@@ -130,7 +130,7 @@ public class HAL extends Game {
 						
 						// Step 2 - Place tiles on the grid and get the list of coordinates.
 						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
-						List tileList = cPlay.tilesSetUp(gameArgs[1]);
+						ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
 												
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
 						int score = 0;
@@ -138,26 +138,25 @@ public class HAL extends Game {
 						List wordsList = new ArrayList(); // List of words to check in dico.
 						
 						//// Step 3.1 - Check the first tile on the main orientation.
-						cPlay.wordTreatment(tileList.get(0).toString(), orientation);
-						if (!cPlay.lastWord.equals("")) {
-								System.out.println(cPlay.lastWord);
-								wordsList.add(cPlay.lastWord);
-								score += cPlay.lastWordScore;
-								if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
-								cPlay.updateTileStatus(tileList.get(0).toString()); // Down the status of this first tile.
-						}
-						
 						//// Step 3.2 - Check all tiles (include the first) on the opposite orientation.
-						orientation = (orientation == 'H') ? 'V' : 'H'; // Set the new orientation
-						for (int i = 0; i < tileList.size(); i++) {
-								cPlay.wordTreatment(tileList.get(i).toString(), orientation);
+						int i = 0;
+						boolean first = true;
+						do {
+								cPlay.wordTreatment(tileList.get(i), orientation);
+								if (first) {
+										first = false; // Flag for the first loop (First tile in the main orientation).
+										tileList.get(i).downStatus(); // Down the status of this first tile.
+										orientation = (orientation == 'H') ? 'V' : 'H'; // Set the new orientation
+								} else {
+										i++;
+								}
 								if (!cPlay.lastWord.equals("")) {
 										System.out.println(cPlay.lastWord);
 										wordsList.add(cPlay.lastWord);
 										score += cPlay.lastWordScore;
 										if (bestWord < cPlay.lastWordScore) bestWord = cPlay.lastWordScore;
 								}
-						}
+						} while (i < tileList.size());
 						
 						// Step 4 - Dictionary validation and return args
 						if (dico.checkValidity(wordsList)) {

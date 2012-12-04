@@ -56,7 +56,6 @@ public class ScoringGrid {
 			*/
 		public int checkBonus(Tile t, Play cPlay) {
 				int bonus = getBonus(t.getX(), t.getY());
-				System.out.println("Value : "+t.getValue()+" - bonus : "+bonus);
 				switch(bonus) {
 						case DOUBLE_WORD:
 								cPlay.setLastWordScore(t.getValue());
@@ -65,7 +64,6 @@ public class ScoringGrid {
 								cPlay.setLastWordScore(t.getValue());
 								return 3;
 						default:
-								System.out.println("Score calculated with bonus :"+t.getValue()*bonus);
 								cPlay.setLastWordScore(t.getValue()*bonus);
 								return 1;
 				}

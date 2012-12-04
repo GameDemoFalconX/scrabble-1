@@ -1,6 +1,5 @@
 package server.model;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Date;
@@ -83,19 +82,21 @@ public class Play {
 			* @param args
 			* @return a List which contains the tiles coordinates and their index in the rack.
 			*/
-		protected ArrayList tilesSetUp(String args) {
+		protected ArrayList<Tile> tilesSetUp(String args) {
 				String [] tilesList = args.split("##");
 				ArrayList result = new ArrayList();
 				
 				for (int i = 0; i < tilesList.length; i++) {
-						String [] tileAttrs = tilesList[i].split("--");
-						result.add(tileAttrs[0]+":"+tileAttrs[1]); // Put the tile coordinates and index in the list. (format)
-						int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
-						int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
-						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[1])-1);
-						cTile.upStatus(); // Set this tile like a new add in the grid.
+						String [] tileAttrs = tilesList[i].split(":");
+						int x = Integer.parseInt(tileAttrs[0]);
+						int y = Integer.parseInt(tileAttrs[1]);
+						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));
+						result.add(cTile); 
 						
-						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard.
+						// Tile treatment
+						cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
+						cTile.upStatus(); // Set this tile like a new add in the grid.
+						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard and add it its coordinates.
 				}
 				return result;
 		}
@@ -104,20 +105,10 @@ public class Play {
 			* Remove the tiles added if the test contains some errors.
 			* @param tilesList 
 			*/
-		protected void removeBadTiles(List tilesList) {
+		protected void removeBadTiles(ArrayList<Tile> tilesList) {
 				for (int i = 0; i < tilesList.size(); i++) {
-						String [] coords = tilesList.get(i).toString().split(":");
-						grid.removeInGrid(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+						grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY());
 				}
-		}
-		
-		/**
-			* Update the status of the first  new tile added.
-			* @param tile 
-			*/
-		protected void updateTileStatus(String tile) {
-				String [] coords = tile.split(":");
-				grid.getTile(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])).downStatus();
 		}
 		
 		/**
@@ -126,7 +117,7 @@ public class Play {
 			* @param coords
 			* @param orientation 
 			*/
-		protected void wordTreatment(String coords, char orientation) {
+		protected void wordTreatment(Tile cTile, char orientation) {
 				// Initialize values
 				lastWordScore = 0;
 				lastWord = "";
@@ -136,9 +127,6 @@ public class Play {
 				// Display Grid and Rack
 				System.out.println(grid.toString());
 				System.out.println(rack.displayRack());
-				
-				String [] coordArgs = coords.split(":");
-				Tile cTile = grid.getTile(Integer.parseInt(coordArgs[0]),Integer.parseInt(coordArgs[1]));
 				
 				// Initialization from current tile.
 				int wordCounter = grid.scoringGrid.checkBonus(cTile, this);				
@@ -162,9 +150,7 @@ public class Play {
 						if (next != null) {
 								n = n+next.getLetter();
 								if (next.getStatus()) {
-										System.out.print("LWS - before :"+lastWordScore+" | ");
 										int nScore = grid.scoringGrid.checkBonus(next, this);
-										System.out.print("LWS - after :"+lastWordScore+"\n");
 										wordCounter = (wordCounter < nScore) ? nScore : wordCounter;
 										next.downStatus();
 								} else {
@@ -183,7 +169,6 @@ public class Play {
 		
 		protected void setLastWordScore(int score) {
 				lastWordScore += score;
-				System.out.println(lastWordScore);
 		}
 		
 		/**
@@ -207,12 +192,12 @@ public class Play {
 			* @param tilesList
 			* @return Formated list of tile with the following canvas : L:V__[index of tile in rack]##L:V__ ...
 			*/
-		protected String getNewTiles(List tilesList) {
+		protected String getNewTiles(ArrayList<Tile> tilesList) {
 				String result = "";
 				for (int i = 0; i < tilesList.size(); i++) {
-						int ind = Integer.parseInt(tilesList.get(i).toString().split(":")[2]);
-						rack.setTile(i, bag.getTile());
-						result += rack.getTile(i).toString()+"--"+i;
+						int index = tilesList.get(i).getRackPosition();
+						rack.setTile(index, bag.getTile());
+						result += rack.getTile(index).toString()+":"+index;
 						if (i < tilesList.size() - 1) result += "##";
 				}
 				return result;

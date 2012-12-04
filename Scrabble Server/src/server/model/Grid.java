@@ -19,11 +19,16 @@ class Grid {
 		}
 		
 		protected Tile previousTile(Tile t, char orientation) {
-				// Index out of bound
+				if (t.getX()-1 < 0 || t.getY()-1 < 0) {
+						return null;
+				}
 				return (orientation == 'H') ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
 		}
 		
 		protected Tile nextTile(Tile t, char orientation) {
+				if (t.getX()+1 > 14 || t.getY()+1 > 14) {
+						return null;
+				}
 				return (orientation == 'H') ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
 		}
 		

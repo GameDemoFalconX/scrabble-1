@@ -10,6 +10,7 @@ public class Tile {
 		private final int value;
 		private int  x;
 		private int y;
+		private int rackPosition = -1; // By default, this value equals -1 (i.e not in the rack)
 		private boolean status;
 		
 		/**
@@ -55,6 +56,14 @@ public class Tile {
 		
 		protected int getY() {
 				return this.y;
+		}
+		
+		protected int getRackPosition() {
+				return this.rackPosition;
+		}
+		
+		protected void setRackPosition(int index) {
+				this.rackPosition = index;
 		}
 		
 		/**

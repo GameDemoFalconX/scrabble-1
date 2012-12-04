@@ -170,7 +170,6 @@ public class GameBoard {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+formatedWord);
-//				cPlay.addWord(formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:

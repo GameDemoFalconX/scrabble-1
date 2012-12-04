@@ -193,7 +193,7 @@ public class ClientController {
 												// Player data
 												x = Integer.parseInt(answer[0])-1;
 												y = Integer.parseInt(answer[1])-1;
-												pos = Integer.parseInt(answer[2]);
+												pos = Integer.parseInt(answer[2])-1;
 
 												// Check integrity
 												threeArgs = answer.length == 3;
