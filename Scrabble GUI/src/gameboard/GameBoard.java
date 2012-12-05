@@ -15,17 +15,17 @@ import javax.swing.JPanel;
 public class GameBoard extends JPanel{
     
   public GameBoard(int ratingOfGUI){
-    ImageIcon icon = createImageIcon("images/Grid_72ppp.jpg","Game Grid");
+    ImageIcon icon = createImageIcon("images/Grid_72ppp.jpg","GameBoard");
     icon = new ImageIcon(getScaledImage(icon.getImage(), ratingOfGUI*100,
                  getProportionnalHeight(icon, ratingOfGUI*100)));
-    JLabel JLabGameBoard = new JLabel(icon);
+    JLabel JLabelGameBoard = new JLabel(icon);
     setLayout(new java.awt.GridLayout(1, 1, 1, 1)); //Allow to get rid of the gap between JPanel and JLabel
     setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
-    add(JLabGameBoard);
+    add(JLabelGameBoard);
     setVisible(true);
   }
-    
-  /** Returns an ImageIcon, or null if the path was invalid. */
+     
+ /** Returns an ImageIcon, or null if the path was invalid. */
   final protected ImageIcon createImageIcon(String path, String description) {
     java.net.URL imgURL = getClass().getResource(path);
     if (imgURL != null) {

@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 public class GameGrid extends JPanel{
 		private MyGlassPane glass;
 		
-		public GameGrid(MyGlassPane glasss){
-				glass = glasss;
+		public GameGrid(MyGlassPane glass){
+				this.glass = glass;
 				setOpaque(false);
 				for(int i=0;i<225;i++){
 						add(new GameGridSquare(glass),i);
