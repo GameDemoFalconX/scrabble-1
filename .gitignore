@@ -13,3 +13,5 @@ nbdist/
 # Vim, OS, ...
 *.un~
 *.swp
+/Scrabble Server/nbproject/private/
+/Scrabble Client/nbproject/private/
