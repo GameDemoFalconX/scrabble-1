@@ -184,7 +184,8 @@ public class ClientController {
 				boolean cancel = false;
 				if (number > 0) {
 						while ((number+1 > i) && !cancel) {																
-								boolean threeArgs = false; boolean argXisOK = false; boolean argYisOK = false; boolean argPosIsOK = false;
+								boolean threeArgs = false; boolean argXisOK = false; 
+								boolean argYisOK = false; boolean argPosIsOK = false;
 								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
 										String [] answer = view.tileUsherMenu(i).split(" ");
