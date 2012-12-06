@@ -1,6 +1,5 @@
 package gameboard;
 
-import dragndrop.MyGlassPane;
 import java.awt.*;
 import javax.swing.*;
 
@@ -20,9 +19,9 @@ class MainFrame {
     Container contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
 
-    GameBoard gameGrid = new GameBoard(ratingOfGUI);
+    GameBoard gameboard = new GameBoard(ratingOfGUI);
     TireRack tireRack = new TireRack(ratingOfGUI, glass);
-    contentPane.add(gameGrid, 0);
+    contentPane.add(gameboard, 0);
     contentPane.add(tireRack, 0);
     contentPane.add(new GameGrid(glass), 0);
 
@@ -30,8 +29,8 @@ class MainFrame {
     double FrHeight = (double)ratingOfGUI*120;
     System.out.println("Height of the frame : " + FrHeight);
 
-    frame.setSize(gameGrid.getWidth() + gameGrid.getInsets().left
-                + gameGrid.getInsets().right+15, (int)FrHeight);
+    frame.setSize(gameboard.getWidth() + gameboard.getInsets().left
+                + gameboard.getInsets().right+15, (int)FrHeight);
     contentPane.setVisible(true);
     frame.setContentPane(contentPane);
     frame.setGlassPane(glass);
