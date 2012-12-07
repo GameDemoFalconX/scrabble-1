@@ -1,11 +1,10 @@
 package server.model;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.io.IOException;
-import common.Message;
 import common.GameException;
 import common.Message;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
