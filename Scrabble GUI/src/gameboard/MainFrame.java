@@ -11,7 +11,11 @@ import javax.swing.JFrame;
 class MainFrame {
     
   public int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
+		
+		
   private MyGlassPane glass = new MyGlassPane();
+		private MainPopUp mainPopUp;
+		private String playerName = "";
 
   public MainFrame()  {
     JFrame frame = new JFrame("Scrabble");
@@ -40,7 +44,16 @@ class MainFrame {
     frame.setGlassPane(glass);
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
+				mainPopUp = new MainPopUp();
   }
+		
+		public void setPlayerName(String playerName) {
+				this.playerName = playerName;
+		}
+		
+		public String getPlayerName() {
+				return playerName;
+		}
 
   /**
    * @param args the command line arguments

@@ -10,13 +10,14 @@ import javax.swing.*;
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
-public class MainPopUp extends  JDialog {
+public class MainPopUp {
 		
 		private static final String TITLE = "Welcome to Scrabble";
 		
 		private static final int WIDTH_DIM = 500;
 		private static final int HEIGHT_DIM = 300;
 		
+		private static JDialog popUp;
 		private JLabel iconLabel, nameLabel, passwordLabel;
 		private JTextField nameField;
 		private JPasswordField passwordField;
@@ -26,12 +27,12 @@ public class MainPopUp extends  JDialog {
 		private JPanel playPanel, fieldsPanel, buttonsPanel;
 
 		public MainPopUp()	{
-				super(null,TITLE,null);
-				this.setSize(WIDTH_DIM,HEIGHT_DIM);
-				this.setLocationRelativeTo(null);
-				this.setResizable(false);
-				this.setVisible(true);
-				this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+				popUp = new JDialog(null,TITLE,null);
+				popUp.setSize(WIDTH_DIM,HEIGHT_DIM);
+				popUp.setLocationRelativeTo(null);
+				popUp.setResizable(false);
+				popUp.setVisible(true);
+				popUp.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 				this.initComponent();
 		}
 
@@ -62,7 +63,7 @@ public class MainPopUp extends  JDialog {
 						@Override
       public void actionPerformed(ActionEvent arg0) {        
 //        TODO call the anonymous new game function
-								
+								setVisible(false);
       }
 				});
 				
@@ -95,6 +96,8 @@ public class MainPopUp extends  JDialog {
 								password = passwordField.getPassword();
 //								TODO logIn(name,password);
 								JOptionPane.showMessageDialog(null, "Name : "+name+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
+								Menu.setPlayerName(name);
+								popUp.setVisible(false);
       }
 				});
 				signUpButton = new JButton("Sign up");
@@ -120,13 +123,13 @@ public class MainPopUp extends  JDialog {
 				buttonsPanel.add(signUpButton);
 				buttonsPanel.add(exitButton);
 				
-				this.getContentPane().add(playPanel, BorderLayout.NORTH);
-				this.getContentPane().add(fieldsPanel, BorderLayout.CENTER); 
-				this.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
-							
-				
+				popUp.getContentPane().add(playPanel, BorderLayout.NORTH);
+				popUp.getContentPane().add(fieldsPanel, BorderLayout.CENTER); 
+				popUp.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);	
 		}
 		
-		
+		public static void setVisible(boolean visible) {
+				popUp.setVisible(visible);
+		}
 		
 }
