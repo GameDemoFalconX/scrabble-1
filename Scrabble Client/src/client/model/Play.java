@@ -95,4 +95,8 @@ public class Play {
 		public void setFormatedTilesToRack(String position, String tiles) {
 				rack.setFormatedTiles(position, tiles);
 		}
+		
+		public boolean isTileBlank(Integer pos) {
+				return rack.isTileBlank(pos);
+		}
 }

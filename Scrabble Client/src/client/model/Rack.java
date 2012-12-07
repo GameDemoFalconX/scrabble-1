@@ -102,4 +102,8 @@ class Rack {
 				}
 		}
 		
+		public boolean isTileBlank(Integer pos) {
+				return rack[pos-1].getValue() == 0;
+		}
+		
 }

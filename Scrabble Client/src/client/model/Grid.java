@@ -26,7 +26,7 @@ public class Grid {
 		@Override
 		public String toString() {
 				String prtGrid = Colors.ANSI_BLACKONWHITE + "      1    2    3    4    5    "
-												+ "6    7    8    9   10   11   12   13   14   15   " + Colors.ANSI_NORMAL;
+												+ "6    7    8    9   10   11   12   13   14   15   \n" + Colors.ANSI_NORMAL;
 				prtGrid +=  Colors.ANSI_BLACKONWHITE +  "    _______________________________"
 												+ "____________________________________________ \n" + Colors.ANSI_NORMAL;
 				for (int x = 0; x <= 14 ; x++) {

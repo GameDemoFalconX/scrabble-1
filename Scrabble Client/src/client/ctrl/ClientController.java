@@ -206,6 +206,13 @@ public class ClientController {
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
 										formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
+										if (gameBoard.isTileBlank(pos)) {
+												String blank;
+												do {
+														 blank = view.blankTileManager();
+												} while (blank.length() != 0);
+												 formatedWord += ":"+blank;
+										}
 										firstX = (i == 1) ? x : firstX;
 										if (i == 2) {
 												orientation = (firstX == x) ? "V" : "H";

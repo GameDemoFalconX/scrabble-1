@@ -187,6 +187,10 @@ public class GameBoard {
 				}
 		}
 		
+		public boolean isTileBlank(Integer pos) {
+				return cPlay.isTileBlank(pos);
+		}
+		
 		public void switchTiles(String position) throws GameException {
 				cPlay.switchTiles(position);
 		}
