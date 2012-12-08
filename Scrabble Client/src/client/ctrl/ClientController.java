@@ -120,15 +120,17 @@ public class ClientController {
 						case 2:
 								try {
 										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
-										int playChoosen = view.displayPlayList(playList);
-										if (playChoosen != 0) {
+										int playChoosen = view.displayPlayList(playList)-1;
+										if (playChoosen >= 0) {
 												System.out.print("Load in process .");
-												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen-1].split("__")[0]);
+												
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
 										} else {
 												view.display("See you next time !");
 										}
 										if (debug) {
-												
+												gameBoard.displayGame();
+												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
 										}

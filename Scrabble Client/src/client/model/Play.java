@@ -49,6 +49,14 @@ public class Play {
 				return rack.toString();
 		}
 		
+		public void loadTile(int x, int y, char letter, int value) {
+				grid.putInGrid(x, y, new Tile(letter, value));
+		}
+		
+		public void loadRackTile(int index, char letter, int value) {
+				rack.setTile(index, new Tile(letter, value));
+		}
+		
 		public void addWord(String args, String formatedWord) {
 				System.out.println("args : " + args + " formatedword : " + formatedWord);
 				String [] infos = args.split("_");

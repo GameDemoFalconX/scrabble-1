@@ -332,7 +332,35 @@ public class GameBoard {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOAD_GAME_SUCCESS:
-										String [] args = new String(serverResponse.getBody()).split("##");
+										System.out.println(new String(serverResponse.getBody()));
+										System.out.print(" . "); // Simulate loading process ;-)
+										// TODO : Check play identity.
+										String [] args = new String(serverResponse.getBody()).split("@@");
+										
+										// Load tiles on grid
+										String [] tileList = args[0].split("##");
+										for (int i = 0; i < tileList.length; i++) {
+												String [] tileAttrs = tileList[i].split(":");
+																		
+												// Tile attributes
+												int x = Integer.parseInt(tileAttrs[0]);
+												int y = Integer.parseInt(tileAttrs[1]);
+												char letter = tileAttrs[2].charAt(0);
+												int value = Integer.parseInt(tileAttrs[3]);
+												cPlay.loadTile(x, y, letter, value);
+										}
+										
+										// Load tiles on rack
+										String [] rTileList = args[1].split("__");
+										for (int j = 0; j < rTileList.length; j++) {
+												String [] rTileAttrs = rTileList[j].split(":");
+																		
+												// Tile attributes
+												char letter = rTileAttrs[0].charAt(0);
+												int value = Integer.parseInt(rTileAttrs[1]);
+												cPlay.loadRackTile(j, letter, value);
+												System.out.print(" . "); // Simulate loading process ;-)
+										}
 								case Message.LOAD_GAME_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
 						}
