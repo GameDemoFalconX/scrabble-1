@@ -1,7 +1,6 @@
 package client.view;
 
 import client.ctrl.ClientController;
-import common.EasterEgg;
 import common.Message;
 
 /**
