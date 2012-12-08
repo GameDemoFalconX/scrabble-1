@@ -18,3 +18,4 @@ build-impl.xml
 *.swp
 /Scrabble Server/nbproject/private/
 /Scrabble Client/nbproject/private/
+/Scrabble GUI/nbproject/private/
