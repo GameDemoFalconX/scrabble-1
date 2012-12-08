@@ -6,7 +6,7 @@ package server.model;
  */
 public class Tile {
 
-		private final char letter;
+		private char letter;
 		private final int value;
 		private int  x;
 		private int y;
@@ -35,6 +35,10 @@ public class Tile {
 			*/
 		public char getLetter() {
 				return letter;
+		}
+		
+		public void setLetter(char letter) {
+				this.letter = letter;
 		}
 		
 		/**
@@ -87,6 +91,7 @@ public class Tile {
 		public void downStatus() {
 				this.status = false;
 		}
+		
 		
 		/**
 			* Format the tile in a printable String

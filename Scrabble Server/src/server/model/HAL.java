@@ -127,9 +127,17 @@ public class HAL extends Game {
 						// Step 1 - Get orientation of the main word
 						char orientation = (char) gameArgs[0].charAt(0);
 						
-						// Step 2 - Place tiles on the grid and get the list of coordinates.
+						// Step 2 - Add the letter the player choose to the blank tiles
+						if (gameArgs.length > 2) {
+								String regulatedTiles = cPlay.blankTreatment(gameArgs[2]);
+								gameArgs[1] += "##" + regulatedTiles;
+								System.out.println("gameArgs[1] = " + gameArgs[1]);
+						}
+						
+						// Step 2.1 - Place tiles on the grid and get the list of coordinates.
 						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
 						ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
+						
 												
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
 						int score = 0;

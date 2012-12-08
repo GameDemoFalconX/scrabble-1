@@ -178,19 +178,18 @@ public class ClientController {
 		
 		public void tileUsher(Integer number) {
 				System.out.println("number of tiles to add : "+number);
-				String formatedWord = ""; String orientation = "";
+				String formatedWord = ""; String orientation = ""; String blankTiles = "";
 				int  firstX = -1;
 				Integer i = 1;
 				boolean cancel = false;
 				if (number > 0) {
-						while ((number+1 > i) && !cancel) {																
+						while ((number+1 > i) && !cancel) {						
 								boolean threeArgs = false; boolean argXisOK = false; 
 								boolean argYisOK = false; boolean argPosIsOK = false;
 								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
 										String [] answer = view.tileUsherMenu(i).split(" ");
 										cancel = (answer.length == 1 && answer[0].equals("0"));
-										
 										if (!cancel) {
 												// Player data
 												x = Integer.parseInt(answer[0])-1;
@@ -199,31 +198,39 @@ public class ClientController {
 
 												// Check integrity
 												threeArgs = answer.length == 3;
-												argXisOK = (x >= 1) && (x <= 15);
-												argYisOK = (y >= 1) && (y <= 15);
-												argPosIsOK = (pos >= 1) && (pos <= 7);
+												argXisOK = (x >= 0) && (x <= 14);
+												argYisOK = (y >= 0) && (y <= 14);
+												argPosIsOK = (pos >= 0) && (pos <= 6);
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
-										formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
 										if (gameBoard.isTileBlank(pos)) {
 												String blank;
 												do {
 														 blank = view.blankTileManager();
-												} while (blank.length() != 0);
-												 formatedWord += ":"+blank;
+												} while (blank.length() == 0);
+												if (blankTiles.length() > 0) {
+														blankTiles += "##";
+												}
+												 blankTiles += x+":"+y+":"+pos+":"+blank;
+										} else {
+												formatedWord += ((i > 1) && (formatedWord.length()>0)) ? "##" : "";
+												formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
 										}
 										firstX = (i == 1) ? x : firstX;
 										if (i == 2) {
 												orientation = (firstX == x) ? "V" : "H";
 										}
-										formatedWord += (i < number) ? "##" : "";
 								}
 								i++;
 						}
 						try {
 								if (!cancel) {
-										gameBoard.addWord(orientation+"@@"+formatedWord);
+										if (blankTiles.length() > 0) {
+												gameBoard.addWord(orientation+"@@"+formatedWord+"@@"+blankTiles);
+										} else {
+												gameBoard.addWord(orientation+"@@"+formatedWord);
+										}
 								}
 						} catch (GameException ge) {
 								processException(ge);
