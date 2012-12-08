@@ -26,9 +26,9 @@ public class Grid {
 		@Override
 		public String toString() {
 				String prtGrid = Colors.ANSI_BLACKONWHITE + "      1    2    3    4    5    "
-												+ "6    7    8    9   10   11   12   13   14   15   \n" + Colors.ANSI_NORMAL;
+												+ "6    7    8    9   10   11   12   13   14   15  " + Colors.ANSI_NORMAL + "\n";
 				prtGrid +=  Colors.ANSI_BLACKONWHITE +  "    _______________________________"
-												+ "____________________________________________ \n" + Colors.ANSI_NORMAL;
+												+ "____________________________________________" + Colors.ANSI_NORMAL + "\n";
 				for (int x = 0; x <= 14 ; x++) {
 						if (x < 9) {
 								prtGrid += Colors.ANSI_BLACKONWHITE +  "0"+ (x+1) + " |" + Colors.ANSI_NORMAL;
@@ -58,7 +58,7 @@ public class Grid {
 									 }					
 								}	
 						}		
-						prtGrid +=  Colors.ANSI_NORMAL + "" + Colors.ANSI_WHITEONWHITE + "\n" + Colors.ANSI_NORMAL;
+						prtGrid +=  Colors.ANSI_NORMAL + "\n";
 				}
 				return prtGrid;
 		}

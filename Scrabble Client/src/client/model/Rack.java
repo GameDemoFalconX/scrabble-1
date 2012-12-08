@@ -1,5 +1,7 @@
 package client.model;
 
+import common.Colors;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
@@ -21,12 +23,12 @@ class Rack {
 		// Methods added by Bernard
 		@Override
 		public String toString() {
-				String result = "";
+				String result = Colors.ANSI_BLACKONWHITE + " " + Colors.ANSI_NORMAL;
 				for (int i = 0; i < 7; i++) {
-						result += rack[i].toString() + " ";
+						result += Colors.ANSI_BLACKONWHITE + rack[i].toString() + " " + Colors.ANSI_NORMAL;
 				}
-				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
-											  	+ "  1     2     3     4     5     6     7\n";
+				result += "\n" + Colors.ANSI_WHITEONYELLOW + " _____ _____ _____ _____ _____ _____ _____ "+ Colors.ANSI_NORMAL +"\n" 
+											  	+ Colors.ANSI_WHITEONYELLOW + "   1     2     3     4     5     6     7   " +Colors.ANSI_NORMAL +"\n";
 				return result;
 		}
 		

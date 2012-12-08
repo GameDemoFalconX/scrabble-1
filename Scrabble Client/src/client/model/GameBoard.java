@@ -1,6 +1,7 @@
 package client.model;
 
 import client.connection.ClientProtocol;
+import common.Colors;
 import common.GameException;
 import common.Message;
 import java.security.MessageDigest;
@@ -201,14 +202,12 @@ public class GameBoard {
 			* Will be moved to the view.
 			*/
 		public void displayGame() {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
-				System.out.println("Score : " + cPlay.getScore());
 				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(Colors.ANSI_BLACKONWHITE + "Score :" + Colors.ANSI_NORMAL + " " +
+												Colors.ANSI_WHITEONRED + cPlay.getScore() + Colors.ANSI_NORMAL);
 				AnsiConsole.out.println(cPlay.displayGrid());
 				System.out.print("\n");
-				System.out.println(cPlay.displayRack());
+				AnsiConsole.out.println(cPlay.displayRack());
 				AnsiConsole.systemInstall();
 		}
 

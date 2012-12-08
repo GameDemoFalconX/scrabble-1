@@ -1,7 +1,9 @@
 package client.view;
 
 import client.ctrl.ClientController;
+import common.Colors;
 import common.Message;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  *
@@ -9,16 +11,17 @@ import common.Message;
  */
 public class View {
 		private ClientController ctrl;
-		private String menuHeader =  "\n#####################################"+
-												"\n#             SCRABBLE              #"+
-												"\n#####################################\n";
+		private String menuHeader =  "\n" + Colors.ANSI_WHITEONRED + "#####################################" + Colors.ANSI_NORMAL +
+												"\n"+Colors.ANSI_WHITEONRED + "#             SCRABBLE              #" + Colors.ANSI_NORMAL +
+												"\n"+Colors.ANSI_WHITEONRED + "#####################################"+Colors.ANSI_NORMAL + "\n";
     
 		public View(ClientController ctrl) {
 				 this.ctrl = ctrl;
 		}
     
 		public void firstMenu(String error) {
-				System.out.println(menuHeader);
+				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(menuHeader);
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu
 				System.out.println("1: Play as guest");
 				System.out.println("2: Log in");
@@ -28,7 +31,8 @@ public class View {
 		}
     
 		public void initMenu(String name, Integer status) {
-				System.out.println(menuHeader);
+				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(menuHeader);
 				System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
 				if (status == Message.LOGIN_SUCCESS) {
