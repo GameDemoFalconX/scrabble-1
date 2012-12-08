@@ -98,4 +98,20 @@ class Rack {
 				rack[pos].setLetter(letter.charAt(0));
 		}
 		
+		public void tileSwitch(String position) {
+				String [] positionSource = position.split(" ");
+				Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
+				rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
+				rack[Integer.parseInt(positionSource[1])-1] = tmp;
+		}
+		
+		public void tileReorganize(String position) {
+				Tile[] newRack = new Tile[7];
+				String [] positionSource = position.split(" ");
+				for (int i = 0; i < 7; i++) {
+						newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+				}
+				this.rack = newRack;
+		}
+		
 }

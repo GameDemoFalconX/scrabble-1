@@ -191,13 +191,36 @@ public class HAL extends Game {
 		}
 		
 		@Override
-		protected Message switchTile(String pl_id, String position) {
+		protected Message tileExchange(String pl_id, String position) {
 				Message response = null;
 				if (plays.playerIsLogged(pl_id)) {
 						Play play = plays.getPlay(pl_id);
-						String newTiles = play.switchTiles(position);
+						String newTiles = play.tileExchange(position);
 						return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
+		
+		@Override
+		protected Message tileSwitch(String pl_id, String position) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						Play play = plays.getPlay(pl_id);
+						play.tileSwitch(position);
+						return new Message(Message.TILE_SWITCH_SUCCES,"");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED,"");
+		}
+		
+		@Override
+		protected Message tileReorganize(String pl_id, String position) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						Play play = plays.getPlay(pl_id);
+						play.tileReorganize(position);
+						return new Message(Message.TILE_REORGANIZE_SUCCES,"");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED,"");
+		}
+		
 }

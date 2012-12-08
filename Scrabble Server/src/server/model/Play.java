@@ -237,7 +237,7 @@ public class Play {
 				return this.grid.toString();
 		}
 		
-		public String switchTiles(String position) {
+		public String tileExchange(String position) {
 				String newTiles = "";
 				String [] positions = position.split(" ");
 				for (int i = 0; i < positions.length; i++) {
@@ -252,6 +252,14 @@ public class Play {
 				}
 				rack = new Rack(newTiles);
 				return newTiles;
+		}
+		
+		public void tileSwitch(String position) {
+				rack.tileSwitch(position);
+		}
+		
+		public void tileReorganize(String position) {
+				rack.tileReorganize(position);
 		}
 		
 		public void setFormatedGrid(String fGrid) {
