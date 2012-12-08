@@ -178,7 +178,7 @@ public class ClientController {
 		
 		public void tileUsher(Integer number) {
 				System.out.println("number of tiles to add : "+number);
-				String formatedWord = ""; String orientation = ""; String blankTiles = "";
+				String formatedWord = ""; String orientation = "";
 				int  firstX = -1;
 				Integer i = 1;
 				boolean cancel = false;
@@ -204,19 +204,14 @@ public class ClientController {
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
+										String blank = "";
 										if (gameBoard.isTileBlank(pos)) {
-												String blank;
 												do {
 														 blank = view.blankTileManager();
-												} while (blank.length() == 0);
-												if (blankTiles.length() > 0) {
-														blankTiles += "##";
-												}
-												 blankTiles += x+":"+y+":"+pos+":"+blank;
-										} else {
-												formatedWord += ((i > 1) && (formatedWord.length()>0)) ? "##" : "";
-												formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
+												} while ((blank.matches("[a-zA-Z]")) && (blank.length() < 1 || blank.length() > 1));
 										}
+										formatedWord += ((i > 1) && (formatedWord.length()>0)) ? "##" : "";
+										formatedWord += (blank.equals("")) ? x+":"+y+":"+pos : x+":"+y+":"+pos+":"+blank; // New format, easier to split over the both side.
 										firstX = (i == 1) ? x : firstX;
 										if (i == 2) {
 												orientation = (firstX == x) ? "V" : "H";
@@ -226,11 +221,7 @@ public class ClientController {
 						}
 						try {
 								if (!cancel) {
-										if (blankTiles.length() > 0) {
-												gameBoard.addWord(orientation+"@@"+formatedWord+"@@"+blankTiles);
-										} else {
-												gameBoard.addWord(orientation+"@@"+formatedWord);
-										}
+										gameBoard.addWord(orientation+"@@"+formatedWord);
 								}
 						} catch (GameException ge) {
 								processException(ge);

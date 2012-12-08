@@ -118,7 +118,6 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
-				System.out.println(ga_infos);
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
 						cPlay.newTest(); // Increase the number of tests for this player.
@@ -126,13 +125,6 @@ public class HAL extends Game {
 						
 						// Step 1 - Get orientation of the main word
 						char orientation = (char) gameArgs[0].charAt(0);
-						
-						// Step 2 - Add the letter the player choose to the blank tiles
-						if (gameArgs.length > 2) {
-								String regulatedTiles = cPlay.blankTreatment(gameArgs[2]);
-								gameArgs[1] += "##" + regulatedTiles;
-								System.out.println("gameArgs[1] = " + gameArgs[1]);
-						}
 						
 						// Step 2.1 - Place tiles on the grid and get the list of coordinates.
 						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...

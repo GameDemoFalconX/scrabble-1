@@ -77,6 +77,7 @@ public class Play {
 				return dateFormat.format(d);
 		}
 		
+		/*
 		protected String blankTreatment(String blankTiles) {
 				String regulatedTiles = "";
 				String[] blankTilesArray = blankTiles.split("##");
@@ -88,6 +89,7 @@ public class Play {
 				System.out.println("regulatedTiles = " + regulatedTiles);
 				return regulatedTiles;
 		}
+		* /
 		
 		/**
 			* Put the player's tiles on the gameboard.
@@ -103,6 +105,7 @@ public class Play {
 						System.out.println("tilesList["+i+"] : " + tilesList[i]);
 						int x = Integer.parseInt(tileAttrs[0]);
 						int y = Integer.parseInt(tileAttrs[1]);
+						if (tileAttrs.length > 3) rack.setLetter(Integer.parseInt(tileAttrs[2]), tileAttrs[3]); // Set the letter of this tile before referencing.
 						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));
 						result.add(cTile); 
 						
