@@ -8,6 +8,12 @@ class Rack {
 		
 		private Tile[] rack = new Tile[7];
 		
+		public Rack() {
+				for (int i = 0; i < rack.length; i++) {
+						rack[i] = null;
+				}
+		}
+		
 		/**
 			* Constructs a new Rack during the new Play process.
 			* @param bag 

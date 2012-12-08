@@ -108,7 +108,9 @@ public class HAL extends Game {
 						try {
 								Play lPlay = plays.LoadGame(pl_id, ga_id);
 								plays.addNewPlay(pl_id, lPlay);
-								return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@");
+								System.out.println(lPlay.getGrid());
+								System.out.println(lPlay.getFormatRack());
+								return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@"+lPlay.getFormatRack());
 						} catch (GameException ge) {
 								return new Message(Message.XML_FILE_NOT_EXISTS, "");
 						}

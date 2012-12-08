@@ -66,16 +66,29 @@ public class GameRAM {
 																		fGrid += tile.getValue();
 																		if (k < tileList.size()-1) fGrid += "##";
 																		
-																		String [] tileAttrs = tile.getValue().split("__");
+																		String [] tileAttrs = tile.getValue().split(":");
 																		
 																		// Tile attributes
-																		int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
-																		int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
-																		char letter = tileAttrs[1].split(":")[0].charAt(0);
-																		int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
+																		int x = Integer.parseInt(tileAttrs[0]);
+																		int y = Integer.parseInt(tileAttrs[1]);
+																		char letter = tileAttrs[2].charAt(0);
+																		int value = Integer.parseInt(tileAttrs[3]);
 																		loadPlay.loadTile(x, y, letter, value);
 																}
 																loadPlay.setFormatedGrid(fGrid);
+																
+																// Load rack
+																Element rack = playNode.getChild("rack");
+																List rTileList = rack.getChildren("tile");
+																for (int l = 0; l < rTileList.size(); l++) {
+																		Element tile = (Element) rTileList.get(l);	
+																		String [] tileAttrs = tile.getValue().split(":");
+																		
+																		// Tile attributes
+																		char letter = tileAttrs[0].charAt(0);
+																		int value = Integer.parseInt(tileAttrs[1]);
+																		loadPlay.loadRackTile(l, letter, value);
+																}
 														}
 														break;
 												}

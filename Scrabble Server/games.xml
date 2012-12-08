@@ -7,12 +7,20 @@
 						<modified>2012/11/26</modified>
 						<score>0</score>
 						<grid>
-								<tile>7:3__S:1</tile>
-								<tile>7:4__S:1</tile>
-								<tile>7:5__S:1</tile>
+								<tile>6:8:H:4</tile>
+								<tile>7:8:E:1</tile>
+								<tile>8:8:L:1</tile>
+								<tile>9:8:L:1</tile>
+								<tile>10:8:O:1</tile>
 						</grid>
 						<rack>
-								
+								<tile>H:4</tile>
+								<tile>P:3</tile>
+								<tile>M:2</tile>
+								<tile>E:1</tile>
+								<tile>S:1</tile>
+								<tile>T:1</tile>
+								<tile>J:8</tile>
 						</rack>
 				</play>
 				<play id="d035ed64-7bed-4029-ae5b-0d35c94238d7">
