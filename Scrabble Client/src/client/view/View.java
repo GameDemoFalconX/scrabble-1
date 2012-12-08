@@ -1,7 +1,6 @@
 package client.view;
 
 import client.ctrl.ClientController;
-import common.EasterEgg;
 import common.Message;
 
 /**
@@ -54,7 +53,8 @@ public class View {
 				System.out.println("______________________________________\n");
 				for (int i = 0; i < list.length; i++) {
 						String [] args = list[i].split("__");
-						System.out.println(""+Integer.toString(i+1)+": Created on "+args[1]+" - Modified on "+args[2]+" - Score : "+args[3]);
+						System.out.println(""+Integer.toString(i+1)+": Created on "+args[1]+
+														" - Modified on "+args[2]+" - Score : "+args[3]);
 				}
 				System.out.println("0: Exit\n");
 				return CConsole.readInt("Select the game you want to play?  ");
@@ -78,6 +78,11 @@ public class View {
 						default: System.out.println("Enter the coordinate of the "+letterNumber+"th letter and it's position on the rack : ");
 								return CConsole.readLine ("e.g. x y pos : ");
 				}
+		}
+		
+		public String blankTileManager() {
+				System.out.println("Enter the letter you want for the blank tile you selected : ");
+				return CConsole.readLine("e.g. A : ");
 		}
 		
 		public void tileOrganizerMainMenu() {

@@ -69,11 +69,15 @@ class Rack {
 		}
 		
 		public Tile getTile(Integer position) {
-				return rack[position-1];
+				return rack[position];
+		}
+		
+		public void setLetter(Integer pos, String letter) {
+				rack[pos].setLetter(letter.charAt(0));
 		}
 		
 		public String getFormatedTile(Integer position) {
-				String formatedTile = rack[position-1].getLetter()+":"+rack[position-1].getValue();
+				String formatedTile = rack[position].getLetter()+":"+rack[position-1].getValue();
 				return formatedTile;
 		}
 
@@ -100,6 +104,10 @@ class Rack {
 						int index = Integer.parseInt(positionSource[i]) - 1;
 						rack[index] = new Tile(letter,value);
 				}
+		}
+		
+		public boolean isTileBlank(Integer pos) {
+				return rack[pos].getValue() == 0;
 		}
 		
 }

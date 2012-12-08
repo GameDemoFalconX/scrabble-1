@@ -1,6 +1,7 @@
 package server.ctrl;
 
-import common.*;
+import common.GameException;
+import common.Message;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;

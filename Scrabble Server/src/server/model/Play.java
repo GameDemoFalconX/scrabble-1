@@ -1,10 +1,10 @@
 package server.model;
 
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
@@ -77,6 +77,18 @@ public class Play {
 				return dateFormat.format(d);
 		}
 		
+		protected String blankTreatment(String blankTiles) {
+				String regulatedTiles = "";
+				String[] blankTilesArray = blankTiles.split("##");
+				for (int i = 0; i < blankTilesArray.length; i++) {
+						String[] singleBlankTile = blankTilesArray[i].split(":");
+						rack.setLetter(Integer.parseInt(singleBlankTile[2]),singleBlankTile[3]);
+						regulatedTiles += singleBlankTile[0]+":"+singleBlankTile[1]+":"+singleBlankTile[2]+"##";
+				}
+				System.out.println("regulatedTiles = " + regulatedTiles);
+				return regulatedTiles;
+		}
+		
 		/**
 			* Put the player's tiles on the gameboard.
 			* @param args
@@ -88,6 +100,7 @@ public class Play {
 				
 				for (int i = 0; i < tilesList.length; i++) {
 						String [] tileAttrs = tilesList[i].split(":");
+						System.out.println("tilesList["+i+"] : " + tilesList[i]);
 						int x = Integer.parseInt(tileAttrs[0]);
 						int y = Integer.parseInt(tileAttrs[1]);
 						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));

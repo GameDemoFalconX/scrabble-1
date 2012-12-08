@@ -92,4 +92,10 @@ class Rack {
 				rack[5] = new Tile('F',4);
 				rack[6] = new Tile('G',8);
 		}
+
+		
+		public void setLetter(Integer pos, String letter) {
+				rack[pos].setLetter(letter.charAt(0));
+		}
+		
 }
