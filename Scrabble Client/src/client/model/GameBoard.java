@@ -203,7 +203,7 @@ public class GameBoard {
 			*/
 		public void displayGame() {
 				AnsiConsole.systemInstall();
-				AnsiConsole.out.println(Colors.ANSI_BLACKONWHITE + "Score :" + Colors.ANSI_NORMAL + " " +
+				AnsiConsole.out.println("\n\n" + Colors.ANSI_BLACKONWHITE + "Score :" + Colors.ANSI_NORMAL + " " +
 												Colors.ANSI_WHITEONRED + cPlay.getScore() + Colors.ANSI_NORMAL);
 				AnsiConsole.out.println(cPlay.displayGrid());
 				System.out.print("\n");
