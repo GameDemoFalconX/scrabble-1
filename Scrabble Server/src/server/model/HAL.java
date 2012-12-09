@@ -80,7 +80,7 @@ public class HAL extends Game {
 		protected Message createNewAnonymGame(String pl_id) {
 				if (!plays.playerIsLogged(pl_id)) {
 						// Add this anonymous player to the server players list.
-						plays.addStarter(pl_id);
+						plays.addPlayer(pl_id);
 						// Initialization of the Play on the server side and add it to the GameRAM dict.
 						Play newPlay = new Play(pl_id);
 						plays.addNewPlay(pl_id, newPlay);
@@ -182,7 +182,7 @@ public class HAL extends Game {
 		@Override
 		protected Message destroyAnonym(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
-						plays.removeStarter(pl_id);
+						plays.removePlayer(pl_id);
 						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
 				}
 				return new Message(Message.DELETE_ANONYM_ERROR, "");

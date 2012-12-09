@@ -120,13 +120,11 @@ public class GameRAM {
 				Set set = this.plays.entrySet(); 
 				Iterator i = set.iterator(); 
 				
-				// Display elements 
-				while(i.hasNext()) { 
+				while(!done && i.hasNext()) { 
 						Map.Entry me = (Map.Entry)i.next(); 
 						if (me.getKey().equals(playerID)) {
 								me.setValue(play);
 								done = true;
-								break;
 						}
 				}
 				return done;
@@ -142,18 +140,18 @@ public class GameRAM {
 		}
 		
 		/**
-			* Add the new player to the player list and initialize this Play instance to null.
+			* Add the current player to the player list and initialize this Play instance to null.
 			* @param playerID 
 			*/
-		public void addStarter(String playerID) {
+		public void addPlayer(String playerID) {
 				plays.put(playerID, null);
 		}
 		
 		/**
-			* Remove a player to the player list and destroy this Play instance.
+			* Remove the current player to the player list and destroy this Play instance (Garbage collector).
 			* @param playerID 
 			*/
-		public void removeStarter(String playerID) {
+		public void removePlayer(String playerID) {
 				plays.remove(playerID);
 		}
 		

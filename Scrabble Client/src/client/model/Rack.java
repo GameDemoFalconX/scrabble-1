@@ -24,6 +24,10 @@ class Rack {
 				}
 		}
 		
+		/**
+			* Load tiles on the rack from formated data.
+			* @param formatedRack 
+			*/
 		protected void loadRack(String formatedRack) {
 				String [] tileList = formatedRack.split("__");
 				for (int i = 0; i < rack.length; i++) {

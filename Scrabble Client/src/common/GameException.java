@@ -18,7 +18,7 @@ public class GameException extends Exception {
 				this.err = err;
 		}
 		
-		public typeErr getErreur() {
+		public typeErr getError() {
 				return err;
 		}
 }

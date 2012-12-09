@@ -162,6 +162,11 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		/**
+			* Try to delete all informations which belong to the current anonymous user.
+			* @param playerID
+			* @return status
+			*/
 		public synchronized Message deleteAnonym(String playerID) {
 				Message response = null;
 				try {

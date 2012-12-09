@@ -1,7 +1,9 @@
 package client.view;
 
+import client.model.Play;
 import client.ctrl.ClientController;
 import common.Message;
+import org.fusesource.jansi.AnsiConsole;
 
 /**
  *
@@ -15,6 +17,16 @@ public class View {
     
 		public View(ClientController ctrl) {
 				 this.ctrl = ctrl;
+		}
+		
+		public void displayGame(Play cPlay) {
+				System.out.println(menuHeader);
+				System.out.println("Score : " + cPlay.getScore());
+				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(cPlay.displayGrid());
+				System.out.print("\n");
+				System.out.println(cPlay.displayRack());
+				AnsiConsole.systemInstall();
 		}
     
 		public void firstMenu(String error) {

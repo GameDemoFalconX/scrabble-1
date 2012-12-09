@@ -30,6 +30,10 @@ public class Play {
 		private int testsWithSuccess = 0;
 		private int testsWithError = 0;
 		
+		/**
+			* Constructor for Play instance from simply playerID.
+			* @param playerID 
+			*/
 		public Play(String playerID) {
 				playID = UUID.randomUUID();
 				owner = UUID.fromString(playerID);
@@ -74,6 +78,9 @@ public class Play {
 				rack.setTile(index, newTile);
 		}
 		
+		/**
+			* @return string representation of Play ID.
+			*/
 		public String getPlayID() {
 				return playID.toString();
 		}

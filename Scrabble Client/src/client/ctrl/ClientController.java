@@ -53,12 +53,11 @@ public class ClientController {
 										player = new Player(); // Create an anonymous player.
 										gameBoard.createNewPlayAnonym(player.getPlayerID());
 										if (debug) {
-												gameBoard.displayGame();
+												view.displayGame(gameBoard.getPlay());
 												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}
@@ -283,7 +282,7 @@ public class ClientController {
 		}
 
 		private void processException(GameException ge) {
-				switch(ge.getErreur()) {
+				switch(ge.getError()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");
 								break;

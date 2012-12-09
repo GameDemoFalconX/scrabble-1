@@ -27,6 +27,13 @@ public class GameBoard {
 				this();
 				gbProtocol = new ClientProtocol(IPaddress, port);
 		}
+		
+		/**
+			* @return current Play instance.
+			*/
+		public Play getPlay() {
+				return this.cPlay;
+		}
     
 		/**
 			* Ask the server to log or create a new Player.
@@ -154,11 +161,9 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public void createNewPlayAnonym(String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME_ANONYM, 0,  playerID);
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID);
 				
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -181,11 +186,9 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public void deleteAnonym(String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.DELETE_ANONYM, 0,  playerID);
+				Message serverResponse = gbProtocol.sendRequest(Message.DELETE_ANONYM,  playerID);
 				
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -195,23 +198,6 @@ public class GameBoard {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-		}
-		
-//		TODO move the displayGame method to the View (Bernard)
-		/**
-			* Display the formated game.
-			* Will be moved to the view.
-			*/
-		public void displayGame() {
-				System.out.println("\n#####################################");
-				System.out.println("#             SCRABBLE              #");
-				System.out.println("#####################################\n");
-				System.out.println("Score : " + cPlay.getScore());
-				AnsiConsole.systemInstall();
-				AnsiConsole.out.println(cPlay.displayGrid());
-				System.out.print("\n");
-				System.out.println(cPlay.displayRack());
-				AnsiConsole.systemInstall();
 		}
 
 		/**

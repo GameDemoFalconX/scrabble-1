@@ -60,7 +60,7 @@ public abstract class Game implements IGame {
 						case Message.NEW_GAME_ANONYM_SUCCESS:
 								return response;
 						case Message.NEW_GAME_ANONYM_ERROR:
-								throw new GameException(GameException.typeErr.LOGIN_ERROR);
+								throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
 				}
 				return null;
 		}
