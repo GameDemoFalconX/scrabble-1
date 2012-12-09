@@ -1,5 +1,7 @@
 package client.model;
 
+import common.Colors;
+
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
@@ -38,12 +40,12 @@ class Rack {
 		
 		@Override
 		public String toString() {
-				String result = "";
+				String result = Colors.ANSI_BLACKONWHITE + " " + Colors.ANSI_NORMAL;
 				for (int i = 0; i < 7; i++) {
-						result += rack[i].toString() + " ";
+						result += Colors.ANSI_BLACKONWHITE + rack[i].toString() + " " + Colors.ANSI_NORMAL;
 				}
-				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
-											  	+ "  1     2     3     4     5     6     7\n";
+				result += "\n" + Colors.ANSI_WHITEONYELLOW + " _____ _____ _____ _____ _____ _____ _____ "+ Colors.ANSI_NORMAL +"\n" 
+											  	+ Colors.ANSI_WHITEONYELLOW + "   1     2     3     4     5     6     7   " +Colors.ANSI_NORMAL +"\n";
 				return result;
 		}
 		
@@ -53,18 +55,17 @@ class Rack {
 				
 		public void switchTiles(String position) {
 				String [] positionSource = position.split(" ");
-				Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
-				rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
-				rack[Integer.parseInt(positionSource[1])-1] = tmp;
-		}
-		
-		public void reorganizeTiles(String position) {
-				Tile[] newRack = new Tile[7];
-				String [] positionSource = position.split(" ");
-				for (int i = 0; i < 7; i++) {
-						newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+				if (positionSource.length > 2) {
+						Tile[] newRack = new Tile[7];
+						for (int i = 0; i < 7; i++) {
+								newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+						}
+						this.rack = newRack;
+				} else {
+						Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
+						rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
+						rack[Integer.parseInt(positionSource[1])-1] = tmp;
 				}
-				this.rack = newRack;
 		}
 		
 		public void setTile(Integer position, Tile tile) {

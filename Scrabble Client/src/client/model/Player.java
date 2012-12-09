@@ -19,10 +19,6 @@ public class Player {
 				playerID = UUID.fromString(uuid);
 		}
 		
-		/**
-			* Constructor for anonymous player.
-			* @param name
-			*/
 		public Player() {
 				isAnonymous = true;
 				playerID = UUID.randomUUID();

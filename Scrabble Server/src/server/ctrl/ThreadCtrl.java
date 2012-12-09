@@ -60,6 +60,9 @@ public class ThreadCtrl extends Thread {
 						case Message.TILE_EXCHANGE:
 								exchangeTile();
 								break;
+						case Message.TILE_SWITCH:
+								switchTile();
+								break;
 				}
 		}
 		
@@ -192,6 +195,19 @@ public class ThreadCtrl extends Thread {
 				String playerID = argsTab[0];
 				String position = argsTab[1];
 				response = HAL.exchangeTile(playerID,position);
+
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void switchTile() {
+				String [] argsTab = new String(request.getBody()).split("##");
+				outputPrint("Current player is trying to switch tiles");
+				Message response;
+				String playerID = argsTab[0];
+				String position = argsTab[1];
+				response = HAL.switchTile(playerID,position);
 
 				outputPrint("Send Response");
 				sProto.sendResponse(response);

@@ -27,7 +27,7 @@ public class ClientController {
 				ClientController clientCtrl = new ClientController(args);
 				clientCtrl.firstShow();
 		}
-    
+  
 		public ClientController(String[] args) {
 				switch (args.length) {
 						case 1:
@@ -41,11 +41,11 @@ public class ClientController {
 				view = new View(this);
 				gameBoard = new GameBoard(IPaddress, port);
 		}
-    
+ 
 		public void firstShow() {
 				view.firstMenu("");
 		}
-    
+
 		public void firstChoice(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -249,7 +249,7 @@ public class ClientController {
 								break;
 						case 2:
 								try {
-										gameBoard.reorganizeTiles(view.tileReorganizerMenu());
+										gameBoard.switchTiles(view.tileReorganizerMenu());
 								} catch (GameException ge) {
 										processException(ge);
 								}

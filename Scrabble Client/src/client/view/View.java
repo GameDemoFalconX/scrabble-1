@@ -2,6 +2,7 @@ package client.view;
 
 import client.model.Play;
 import client.ctrl.ClientController;
+import common.Colors;
 import common.Message;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -11,10 +12,10 @@ import org.fusesource.jansi.AnsiConsole;
  */
 public class View {
 		private ClientController ctrl;
-		private String menuHeader =  "\n#####################################"+
-												"\n#             SCRABBLE              #"+
-												"\n#####################################\n";
-    
+		private String menuHeader =  "\n" + Colors.ANSI_WHITEONRED + "#####################################" + Colors.ANSI_NORMAL +
+												"\n"+Colors.ANSI_WHITEONRED + "#             SCRABBLE              #" + Colors.ANSI_NORMAL +
+												"\n"+Colors.ANSI_WHITEONRED + "#####################################"+Colors.ANSI_NORMAL + "\n";
+
 		public View(ClientController ctrl) {
 				 this.ctrl = ctrl;
 		}
@@ -27,9 +28,10 @@ public class View {
 				System.out.println(cPlay.displayRack());
 				AnsiConsole.systemInstall();
 		}
-    
+
 		public void firstMenu(String error) {
-				System.out.println(menuHeader);
+				AnsiConsole.systemInstall();
+				AnsiConsole.out.println(menuHeader);
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu
 				System.out.println("1: Play as guest");
 				System.out.println("2: Log in");
@@ -58,7 +60,7 @@ public class View {
 				System.out.println("0: Exit\n");
 				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
-		
+
 		public int displayPlayList(String [] list) {
 				System.out.println("#             GAME LIST              #");
 				System.out.println("______________________________________\n");
@@ -77,7 +79,7 @@ public class View {
 				System.out.println("Please enter the number of tiles you want to place. Type 0 to cancel and back to the menu.");
 				return CConsole.readInt("e.g. 3 : ");
 		}
-		
+
 		public String tileUsherMenu(Integer letterNumber) {
 				switch (letterNumber) {
 						case 1: System.out.println("Enter the coordinate of the 1st letter and it's position on the rack : ");
@@ -90,12 +92,12 @@ public class View {
 								return CConsole.readLine ("e.g. x y pos : ");
 				}
 		}
-		
+
 		public String blankTileManager() {
 				System.out.println("Enter the letter you want for the blank tile you selected : ");
 				return CConsole.readLine("e.g. A : ");
 		}
-		
+
 		public void tileOrganizerMainMenu() {
 				System.out.println("\n#            TILES ORGANIZER             #");
 				System.out.println("___________________________________________\n");
@@ -104,17 +106,17 @@ public class View {
 				System.out.println("0: Cancel\n");
 				ctrl.tileOrganizer(CConsole.readInt("Your choice ?  "));
 		}
-		
+
 		public String tileSwitcherMenu() {
 				System.out.println("Please enter the positions of the two tiles you want to switch");
 				return CConsole.readLine("e.g. 2 6 : ");
 		}
-		
+
 		public String tileReorganizerMenu() {
 				System.out.println("Please enter the new tiles order you desire");
 				return CConsole.readLine("e.g. 7 6 5 4 3 2 1 : ");
 		}		
-		
+
 		public void changeTileMainMenu() {
 				System.out.println("\n#            TILE EXCHANGE              #");
 				System.out.println("_________________________________________\n");
@@ -123,12 +125,12 @@ public class View {
 				System.out.println("0: Cancel\n");
 				ctrl.tileExchange(CConsole.readInt("Your choice ?  "));
 		}
-				
+		
 		public String changeTileMenu() {
 				System.out.println("Please enter the position of the tile(s) you want to exchange.");
 				return CConsole.readLine("e.g. 2 3 6 : ");
 		}
-		
+
 		public void display(String msg) {
 				System.out.println(msg);
 		}
@@ -136,7 +138,7 @@ public class View {
 		public String askName() {
 				return (CConsole.readLine("Enter your name ? "));
 		}
-    
+
 		public String askPassword() {
 				return CConsole.readPass("Enter your password ? ");
 		}

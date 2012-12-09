@@ -223,6 +223,18 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message switchTile(String playerID, String position) {
+				Message response = null;
+				try {
+						response = game.switchTile(playerID,position);
+
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		/**
 			* Handle errors throws during the Game process.
 			* @param e

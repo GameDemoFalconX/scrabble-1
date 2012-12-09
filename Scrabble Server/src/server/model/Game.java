@@ -13,7 +13,7 @@ import common.Message;
  */
 
 public abstract class Game implements IGame {
-		 
+		
 		@Override
 		public Message newAccount(String pl_name, String pl_pwd) throws GameException {
 				Message response = createAccount(pl_name, pl_pwd);
@@ -146,7 +146,7 @@ public abstract class Game implements IGame {
 		
 		@Override
 		public Message exchangeTile(String pl_id, String position) throws GameException {
-				Message response = switchTile(pl_id, position); 
+				Message response = tileExchange(pl_id, position); 
 				switch (response.getHeader()) {
 						case Message.TILE_EXCHANGE_SUCCES:
 								return response;
@@ -156,6 +156,18 @@ public abstract class Game implements IGame {
 				return  null;
 		}
 				
+		@Override
+		public Message switchTile(String pl_id, String position) throws GameException {
+				Message response = tileSwitch(pl_id, position); 
+				switch (response.getHeader()) {
+						case Message.TILE_SWITCH_SUCCES:
+								return response;
+						case Message.TILE_SWITCH_ERROR:
+								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+				}
+				return  null;
+		}		
+		
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
@@ -169,5 +181,6 @@ public abstract class Game implements IGame {
 		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
 		
 		protected abstract Message destroyAnonym(String pl_id);
-		protected abstract Message switchTile(String pl_id, String position);
+		protected abstract Message tileExchange(String pl_id, String position);
+		protected abstract Message tileSwitch(String pl_id, String position);
 }

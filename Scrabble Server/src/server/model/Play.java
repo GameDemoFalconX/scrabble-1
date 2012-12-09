@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  * 
- * @author Romain <ro.foncier@gmail.com>
+ * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
 		private UUID playID;
@@ -47,11 +47,6 @@ public class Play {
 		/**
 			* Allows to initialize a Play object without grid, rack and bag to save memory. 
 			* Thus it become possible to display some attributes of this without to have load the complete object.
-			* @param playerID
-			* @param playID
-			* @param created
-			* @param modified
-			* @param score 
 			*/
 		public Play(String playerID, String playID, String created, String modified, Integer score) {
 				this.playID = UUID.fromString(playID);
@@ -128,7 +123,7 @@ public class Play {
 		/**
 			* Check neighbors tiles of the current tile, create a word form their letters and count the score of 
 			* this new word by considering the orientation given in parameter.
-			* @param coords
+			* @param cTile 
 			* @param orientation 
 			*/
 		protected void wordTreatment(Tile cTile, char orientation) {
@@ -238,7 +233,7 @@ public class Play {
 				return this.grid.toString();
 		}
 		
-		public String switchTiles(String position) {
+		public String tileExchange(String position) {
 				String newTiles = "";
 				String [] positions = position.split(" ");
 				for (int i = 0; i < positions.length; i++) {
@@ -253,6 +248,10 @@ public class Play {
 				}
 				rack = new Rack(newTiles);
 				return newTiles;
+		}
+		
+		public void tileSwitch(String position) {
+				rack.tileSwitch(position);
 		}
 		
 		public void setFormatedGrid(String fGrid) {

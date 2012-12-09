@@ -33,7 +33,10 @@ public class GameRAM {
 		
 		/**
 			* Load a specific play for the current player from the games.xml file. 
-			* @param playerUUID 
+			* @param playerUUID
+			* @param playID 
+			* @return
+			* @throws GameException  
 			*/
 		public Play LoadGame(String playerUUID, String playID) throws GameException {
 				File gameFile = new File("games.xml");
@@ -111,6 +114,7 @@ public class GameRAM {
 		
 		/**
 			* Simply put the new play in the plays HashMap if the playerID exists.
+			* @param playerID 
 			* @param play 
 			* @return true if operation is done.
 			*/
@@ -183,6 +187,7 @@ public class GameRAM {
 		
 		/**
 			* Get the list of plays for the current user and format the content of them for send it to the client
+			* @param playerUUID 
 			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score] == play unit
 			* [play unit 1]@@[play unit 2]@@ ...
 			* Two underscore between play attributes and two ## between play units.
@@ -234,6 +239,11 @@ public class GameRAM {
 			*/
 		public void removePlay() {}
 		
+		/**
+			* 
+			* @param playerID
+			* @return
+			*/
 		public Play getPlay(String playerID) {
 				if (!plays.isEmpty()) {
 						System.out.println("GameRAM not empty " + playerID);

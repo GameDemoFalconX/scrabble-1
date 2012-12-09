@@ -1,6 +1,7 @@
 package client.model;
 
 import client.connection.ClientProtocol;
+import common.Colors;
 import common.GameException;
 import common.Message;
 import java.security.MessageDigest;
@@ -235,17 +236,19 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public void switchTiles(String position) throws GameException {
-				cPlay.switchTiles(position);
-		}
-		
-		/**
-			* Ask the Play to reorganize the tiles on the rack based on the wished position.
-			* Like "6 3 2 4 7 1 5"
-			* @param position the desired position as a String
-			* @throws GameException 
-			*/
-		public void reorganizeTiles(String position) throws GameException {
-				cPlay.reorganizeTiles(position);
+				Message serverResponse = gbProtocol.sendRequest(Message.TILE_SWITCH,  cPlay.getOwner()
+												+"##"+position);
+				if (serverResponse != null) {
+						switch (serverResponse.getHeader()) {
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.TILE_SWITCH_SUCCES:
+										cPlay.switchTiles(position);
+										break;
+								case Message.TILE_SWITCH_ERROR:
+										throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+						}
+				}
 		}
 		
 		/**
@@ -254,7 +257,6 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public void changeTiles(String position) throws GameException {
-				String formatedTiles;
 				if ("".equals(position)) {
 						position += "1 2 3 4 5 6 7";
 				}
