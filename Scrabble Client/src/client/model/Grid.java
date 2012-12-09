@@ -19,7 +19,17 @@ public class Grid {
 				}
 		}
 		
-		public void putInGrid(int x, int y, Tile tile) {
+		protected void loadGrid(String formatedGrid) {
+				String [] tileList = formatedGrid.split("##");
+				for (int i = 0; i < tileList.length; i++) {
+						String [] tileAttrs = tileList[i].split(":");
+						
+						// Create new tile and pull it in the grid
+						this.putInGrid(Integer.parseInt(tileAttrs[0]), Integer.parseInt(tileAttrs[1]), new Tile (tileAttrs[2].charAt(0), Integer.parseInt(tileAttrs[3])));
+				}
+		}
+		
+		protected void putInGrid(int x, int y, Tile tile) {
 				grid[x][y] = tile;
 		}
 		

@@ -137,7 +137,8 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.NEW_GAME_SUCCESS:
 										String [] args = new String(serverResponse.getBody()).split("##");
-										cPlay = new Play(playerID, args[0], args[1]);
+										cPlay = new Play(playerID, args[0]);
+										cPlay.loadRack(args[1]); 
 										break;
 								case Message.PLAYER_NOT_LOGGED:
 										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
@@ -163,7 +164,8 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.NEW_GAME_ANONYM_SUCCESS:
 										String [] args = new String(serverResponse.getBody()).split("##");
-										cPlay = new Play(playerID, args[0], args[1]);
+										cPlay = new Play(playerID, args[0]);
+										cPlay.loadRack(args[1]);
 										break;
 								case Message.NEW_GAME_ANONYM_ERROR:
 										throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
@@ -323,8 +325,9 @@ public class GameBoard {
 			* @param playID the ID of the play as a String
 			* @throws GameException 
 			*/
-		public void loadGame(String playerID, String playID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"_"+playID);
+		public void loadGame(String playerID, String playInfos) throws GameException {
+				String [] playArgs = playInfos.split("__");
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"_"+playArgs[0]);
 				// Handle response
 				if (serverResponse != null) {
 						// Handle the server response
@@ -332,37 +335,18 @@ public class GameBoard {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOAD_GAME_SUCCESS:
-										System.out.println(new String(serverResponse.getBody()));
-										System.out.print(" . "); // Simulate loading process ;-)
-										// TODO : Check play identity.
+										// Create a new play instance
+										cPlay = new Play(playerID, playArgs[0]);
 										String [] args = new String(serverResponse.getBody()).split("@@");
-										
-										// Load tiles on grid
-										String [] tileList = args[0].split("##");
-										for (int i = 0; i < tileList.length; i++) {
-												String [] tileAttrs = tileList[i].split(":");
-																		
-												// Tile attributes
-												int x = Integer.parseInt(tileAttrs[0]);
-												int y = Integer.parseInt(tileAttrs[1]);
-												char letter = tileAttrs[2].charAt(0);
-												int value = Integer.parseInt(tileAttrs[3]);
-												cPlay.loadTile(x, y, letter, value);
-										}
-										
-										// Load tiles on rack
-										String [] rTileList = args[1].split("__");
-										for (int j = 0; j < rTileList.length; j++) {
-												String [] rTileAttrs = rTileList[j].split(":");
-																		
-												// Tile attributes
-												char letter = rTileAttrs[0].charAt(0);
-												int value = Integer.parseInt(rTileAttrs[1]);
-												cPlay.loadRackTile(j, letter, value);
-												System.out.print(" . "); // Simulate loading process ;-)
-										}
+										// Load tiles on grid and rack
+										cPlay.loadGrid(args[0]);
+										cPlay.loadRack(args[1]);
+										cPlay.setScore(Integer.parseInt(playArgs[3]));
+										break;
 								case Message.LOAD_GAME_ERROR:
-										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+										throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
+								case Message.PLAYER_NOT_LOGGED:
+										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);

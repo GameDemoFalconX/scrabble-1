@@ -13,12 +13,12 @@ public class Play {
 		private Grid grid;
 		private Rack rack;
 		
-		public Play(String playerID, String playSID, String formatedRack) {
-				playID = UUID.fromString(playSID);
+		public Play(String playerID, String playID) {
+				this.playID = UUID.fromString(playID);
 				owner = UUID.fromString(playerID);
 				score = 0;
 				grid = new Grid();
-				rack = new Rack(formatedRack);
+				rack = new Rack();
 		}
 		
 		public String getPlayID() {
@@ -55,6 +55,14 @@ public class Play {
 		
 		public void loadRackTile(int index, char letter, int value) {
 				rack.setTile(index, new Tile(letter, value));
+		}
+		
+		protected void loadGrid(String formatedGrid) {
+				grid.loadGrid(formatedGrid);
+		}
+		
+		protected void loadRack( String formatedRack) {
+				rack.loadRack(formatedRack);
 		}
 		
 		public void addWord(String args, String formatedWord) {

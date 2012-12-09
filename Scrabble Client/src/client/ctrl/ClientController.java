@@ -69,7 +69,7 @@ public class ClientController {
 								try {
 										player = gameBoard.loginPlayer(plname, plpwd);
 										if (debug) {
-												view.initMenu(plname, Message.LOGIN_SUCCESS);
+												view.initMenu("", plname, Message.LOGIN_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -84,7 +84,7 @@ public class ClientController {
 								try {
 										player = gameBoard.newPlayer(name, password);
 										if (debug) {
-												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
+												view.initMenu("", name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -97,7 +97,7 @@ public class ClientController {
 								view.display("See you next time !");
 								break;
 						default:
-								view.initMenu(player.getPlayerName(), Message.LOGIN_SUCCESS);
+								view.initMenu("", player.getPlayerName(), Message.LOGIN_SUCCESS);
 								break;
 				}
 		}
@@ -122,9 +122,7 @@ public class ClientController {
 										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
 										int playChoosen = view.displayPlayList(playList)-1;
 										if (playChoosen >= 0) {
-												System.out.print("Load in process .");
-												
-												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen].split("__")[0]);
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen]);
 										} else {
 												view.display("See you next time !");
 										}
@@ -308,6 +306,9 @@ public class ClientController {
 								view.firstMenu("Warning! You are not yet logged!");
 								break;
 						case NEW_GAME_ANONYM_ERROR:
+								view.firstMenu("An error has been encountered during the server processing! Please try again.");
+								break;
+						case LOAD_GAME_ERROR:
 								view.firstMenu("An error has been encountered during the server processing! Please try again.");
 								break;
 						case DELETE_ANONYM_ERROR:
