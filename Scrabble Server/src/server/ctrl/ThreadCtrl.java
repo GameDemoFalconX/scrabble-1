@@ -13,6 +13,11 @@ public class ThreadCtrl extends Thread {
 		private ServerProtocol sProto;
 		private Message request;
 				
+		/**
+			* 
+			* @param sp
+			* @param hal
+			*/
 		public ThreadCtrl(ServerProtocol sp, ServerScrabble hal) {
 				sProto = sp;
 				HAL = hal;

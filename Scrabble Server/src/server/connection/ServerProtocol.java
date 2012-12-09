@@ -13,6 +13,11 @@ import java.net.Socket;
  */
 public class ServerProtocol extends Protocol {
 		
+		/**
+			* 
+			* @param s
+			* @throws IOException
+			*/
 		public ServerProtocol(Socket s) throws IOException {
 				socket = s;
 				in = new DataInputStream(socket.getInputStream());
@@ -51,6 +56,11 @@ public class ServerProtocol extends Protocol {
 				}
 		}
 
+		/**
+			* 
+			* @return
+			* @throws UnsupportedOperationException
+			*/
 		public Message waitClientRequest() throws UnsupportedOperationException {
 				Message request = null;
 				if (connectionServerScrabble() == CONN_ACK) {
@@ -59,6 +69,11 @@ public class ServerProtocol extends Protocol {
 				return request;
 		}
 
+		/**
+			* 
+			* @param answer
+			* @return
+			*/
 		public int sendResponse(Message answer) {
 				try {
 						out.writeInt(answer.getHeader());

@@ -9,19 +9,36 @@ public class Tile {
 		private char letter;
 		private final int value;
 
+		/**
+			* 
+			* @param letter
+			* @param value
+			*/
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
 		}
 
+		/**
+			* 
+			* @return
+			*/
 		public char getLetter() {
 			return letter;
 		}
 
+		/**
+			* 
+			* @return
+			*/
 		public int getValue() {
 				return value;
 		}
 		
+		/**
+			* 
+			* @param letter
+			*/
 		public void setLetter(char letter) {
 				this.letter = letter;
 		}

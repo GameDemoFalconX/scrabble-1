@@ -22,7 +22,13 @@ public class Play {
 		private TileBag bag;
 		
 		// Game variables
+		/**
+			* 
+			*/
 		protected String lastWord;
+		/**
+			* 
+			*/
 		protected int lastWordScore; 
 		
 		// Stats variables
@@ -30,6 +36,10 @@ public class Play {
 		private int testsWithSuccess = 0;
 		private int testsWithError = 0;
 		
+		/**
+			* 
+			* @param playerID
+			*/
 		public Play(String playerID) {
 				playID = UUID.randomUUID();
 				owner = UUID.fromString(playerID);
@@ -63,11 +73,22 @@ public class Play {
 				bag = new TileBag();
 		}
 		
+		/**
+			* 
+			* @param x
+			* @param y
+			* @param letter
+			* @param value
+			*/
 		public void loadTile(int x, int y, char letter, int value) {
 				Tile newTile = bag.popTile(letter, value);
 				grid.putInGrid(x, y, newTile);
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String getPlayID() {
 				return playID.toString();
 		}
@@ -77,6 +98,11 @@ public class Play {
 				return dateFormat.format(d);
 		}
 		
+		/**
+			* 
+			* @param blankTiles
+			* @return
+			*/
 		protected String blankTreatment(String blankTiles) {
 				String regulatedTiles = "";
 				String[] blankTilesArray = blankTiles.split("##");
@@ -127,7 +153,7 @@ public class Play {
 		/**
 			* Check neighbors tiles of the current tile, create a word form their letters and count the score of 
 			* this new word by considering the orientation given in parameter.
-			* @param coords
+			* @param cTile 
 			* @param orientation 
 			*/
 		protected void wordTreatment(Tile cTile, char orientation) {
@@ -180,6 +206,10 @@ public class Play {
 				}
 		}
 		
+		/**
+			* 
+			* @param score
+			*/
 		protected void setLastWordScore(int score) {
 				lastWordScore += score;
 		}
@@ -233,10 +263,19 @@ public class Play {
 				return this.rack.toString();
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String getGrid() {
 				return this.grid.toString();
 		}
 		
+		/**
+			* 
+			* @param position
+			* @return
+			*/
 		public String tileExchange(String position) {
 				String newTiles = "";
 				String [] positions = position.split(" ");
@@ -254,31 +293,56 @@ public class Play {
 				return newTiles;
 		}
 		
+		/**
+			* 
+			* @param position
+			*/
 		public void tileSwitch(String position) {
 				rack.tileSwitch(position);
 		}
 		
+		/**
+			* 
+			* @param position
+			*/
 		public void tileReorganize(String position) {
 				rack.tileReorganize(position);
 		}
 		
+		/**
+			* 
+			* @param fGrid
+			*/
 		public void setFormatedGrid(String fGrid) {
 				this.formatedGrid = fGrid;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String getFormatedGrid() {
 				return this.formatedGrid;
 		}
 		
 		//*** Stats Section ***//
+		/**
+			* 
+			*/
 		protected void newTest() {
 				this.nbTests += 1;
 		}
 		
+		/**
+			* 
+			*/
 		protected void testWithSuccess() {
 				this.testsWithSuccess += 1;
 		}
 		
+		/**
+			* 
+			*/
 		protected void testWithError() {
 				this.testsWithError += 1;
 		}

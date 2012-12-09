@@ -86,18 +86,33 @@ public class Message {
 		// XML FILES EXCEPTIONS
 		public static final int XML_FILE_NOT_EXISTS = 550; // 
 		
+		/**
+			* 
+			* @param header
+			* @param body
+			*/
 		public Message(Integer header, String body) {
 				this.header = header;
 				this.body = body.getBytes();
 				this.size = this.body.length;
 		}
 		
+		/**
+			* 
+			* @param header
+			* @param length
+			* @param body
+			*/
 		public Message(Integer header, Integer length, byte [] body) {
 				this.header = header;
 				this.size = length;
 				this.body = body;
 		}
 		
+		/**
+			* 
+			* @param args
+			*/
 		public Message(String args) {
 				String [] argsTab = new String[2];
 				argsTab = args.split("#");
@@ -106,14 +121,26 @@ public class Message {
 				this.size = this.body.length;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public int getHeader() {
 				return header;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public int getSize() {
 				return size;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public byte [] getBody() {
 				return body;
 		}

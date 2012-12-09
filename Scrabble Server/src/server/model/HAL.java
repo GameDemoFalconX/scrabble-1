@@ -26,7 +26,8 @@ public class HAL extends Game {
 		
 		/**
 			* Create a new account for the current player.
-			* @param player
+			* @param pl_name 
+			* @param pl_pwd 
 			* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
 			*/
 
@@ -42,6 +43,12 @@ public class HAL extends Game {
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
 		
+		/**
+			* 
+			* @param pl_name
+			* @param pl_pwd
+			* @return
+			*/
 		@Override
 		protected Message loginProcess(String pl_name, String pl_pwd) {
 				Message response = null;
@@ -60,6 +67,11 @@ public class HAL extends Game {
 				return response;
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @return
+			*/
 		@Override
 		protected Message createNewGame(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
@@ -90,6 +102,11 @@ public class HAL extends Game {
 				return new Message(Message.NEW_GAME_ANONYM_ERROR, "");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @return
+			*/
 		@Override
 		protected Message loadPlayLister(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
@@ -102,6 +119,12 @@ public class HAL extends Game {
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @param ga_id
+			* @return
+			*/
 		@Override
 		protected Message loadPlay(String pl_id, String ga_id) {
 				if (plays.playerIsLogged(pl_id)) {
@@ -116,6 +139,13 @@ public class HAL extends Game {
 				return new Message(Message.PLAYER_NOT_LOGGED, "");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @param ga_id
+			* @param ga_infos
+			* @return
+			*/
 		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
 				System.out.println(ga_infos);
@@ -181,6 +211,11 @@ public class HAL extends Game {
 				return new Message(Message.GAME_IDENT_ERROR, "");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @return
+			*/
 		@Override
 		protected Message destroyAnonym(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
@@ -190,6 +225,12 @@ public class HAL extends Game {
 				return new Message(Message.DELETE_ANONYM_ERROR, "");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @param position
+			* @return
+			*/
 		@Override
 		protected Message tileExchange(String pl_id, String position) {
 				Message response = null;
@@ -201,6 +242,12 @@ public class HAL extends Game {
 				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @param position
+			* @return
+			*/
 		@Override
 		protected Message tileSwitch(String pl_id, String position) {
 				Message response = null;
@@ -212,6 +259,12 @@ public class HAL extends Game {
 				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
 		
+		/**
+			* 
+			* @param pl_id
+			* @param position
+			* @return
+			*/
 		@Override
 		protected Message tileReorganize(String pl_id, String position) {
 				Message response = null;

@@ -11,11 +11,29 @@ import java.net.Socket;
  */
 public abstract class Protocol {
     
+		/**
+			* 
+			*/
 		protected Socket socket;
+		/**
+			* 
+			*/
 		protected DataInputStream in;
+		/**
+			* 
+			*/
 		protected DataOutputStream out;
+		/**
+			* 
+			*/
 		protected Message receivedMessage = null;
+		/**
+			* 
+			*/
 		protected String IPaddress;
+		/**
+			* 
+			*/
 		protected int port;
 		
 		// Request status
@@ -27,6 +45,10 @@ public abstract class Protocol {
 		public static final int CONN_NOT_SERVER = 402; // TODO Change the BANK name
 		public static final int CONN_NOT_INIT = 500;
 		
+		/**
+			* 
+			* @param num
+			*/
 		protected void writeInt(int num) {
 				try {
 						out.writeInt(num);
@@ -36,6 +58,10 @@ public abstract class Protocol {
 				}
 		}
 		
+		/**
+			* 
+			* @param s
+			*/
 		protected void write(byte [] s) {
 				try {
 						out.write(s);

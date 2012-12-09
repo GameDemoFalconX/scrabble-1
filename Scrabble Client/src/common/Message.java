@@ -79,18 +79,33 @@ public class Message {
 		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player
 		public static final int DELETE_ANONYM_ERROR = 97; // Send instruction to delete the play of the current anonymous player
 
+		/**
+			* 
+			* @param header
+			* @param body
+			*/
 		public Message(Integer header, String body) {
 				this.header = header;
 				this.body = body.getBytes();
 				this.size = this.body.length;
 		}
 		
+		/**
+			* 
+			* @param header
+			* @param length
+			* @param body
+			*/
 		public Message(Integer header, Integer length, byte [] body) {
 				this.header = header;
 				this.size = length;
 				this.body = body;
 		}
 		
+		/**
+			* 
+			* @param args
+			*/
 		public Message(String args) {
 				String [] argsTab = new String[2];
 				argsTab = args.split("#");
@@ -99,14 +114,26 @@ public class Message {
 				this.size = this.body.length;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public int getHeader() {
 				return header;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public int getSize() {
 				return size;
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public byte [] getBody() {
 				return body;
 		}

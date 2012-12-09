@@ -8,6 +8,10 @@ package server.model;
 public class GameFactory {
 		private static IGame game = null;
 
+		/**
+			* 
+			* @return
+			*/
 		public static synchronized IGame getGame() {
 				if (game == null) {
 						game = new HAL();

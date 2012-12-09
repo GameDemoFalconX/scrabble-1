@@ -15,10 +15,18 @@ public class View {
 												"\n"+Colors.ANSI_WHITEONRED + "#             SCRABBLE              #" + Colors.ANSI_NORMAL +
 												"\n"+Colors.ANSI_WHITEONRED + "#####################################"+Colors.ANSI_NORMAL + "\n";
     
+		/**
+			* 
+			* @param ctrl
+			*/
 		public View(ClientController ctrl) {
 				 this.ctrl = ctrl;
 		}
     
+		/**
+			* 
+			* @param error
+			*/
 		public void firstMenu(String error) {
 				AnsiConsole.systemInstall();
 				AnsiConsole.out.println(menuHeader);
@@ -30,6 +38,11 @@ public class View {
 				ctrl.firstChoice(CConsole.readInt("Your choice ?  "));
 		}
     
+		/**
+			* 
+			* @param name
+			* @param status
+			*/
 		public void initMenu(String name, Integer status) {
 				AnsiConsole.systemInstall();
 				AnsiConsole.out.println(menuHeader);
@@ -42,6 +55,10 @@ public class View {
 				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     
+		/**
+			* 
+			* @param isAnonymous
+			*/
 		public void playMenu(boolean isAnonymous) {
 				System.out.println("1: Place word");
 				System.out.println("2: Organize your letters");
@@ -52,6 +69,11 @@ public class View {
 				ctrl.playChoice(CConsole.readInt("Your choice ?  "));
 		}
 		
+		/**
+			* 
+			* @param list
+			* @return
+			*/
 		public int displayPlayList(String [] list) {
 				System.out.println("#             GAME LIST              #");
 				System.out.println("______________________________________\n");
@@ -64,6 +86,9 @@ public class View {
 				return CConsole.readInt("Select the game you want to play?  ");
 		}
 		
+		/**
+			* 
+			*/
 		public void tileUsherMainMenu() {
 				System.out.println("\n#            TILES USHER             #");
 				System.out.println("_______________________________________\n");
@@ -71,6 +96,11 @@ public class View {
 				ctrl.tileUsher(CConsole.readInt("e.g. 3 : "));
 		}
 		
+		/**
+			* 
+			* @param letterNumber
+			* @return
+			*/
 		public String tileUsherMenu(Integer letterNumber) {
 				switch (letterNumber) {
 						case 1: System.out.println("Enter the coordinate of the 1st letter and it's position on the rack : ");
@@ -84,11 +114,18 @@ public class View {
 				}
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String blankTileManager() {
 				System.out.println("Enter the letter you want for the blank tile you selected : ");
 				return CConsole.readLine("e.g. A : ");
 		}
 		
+		/**
+			* 
+			*/
 		public void tileOrganizerMainMenu() {
 				System.out.println("\n#            TILES ORGANIZER             #");
 				System.out.println("___________________________________________\n");
@@ -98,16 +135,27 @@ public class View {
 				ctrl.tileOrganizer(CConsole.readInt("Your choice ?  "));
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String tileSwitcherMenu() {
 				System.out.println("Please enter the positions of the two tiles you want to switch");
 				return CConsole.readLine("e.g. 2 6 : ");
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String tileReorganizerMenu() {
 				System.out.println("Please enter the new tiles order you desire");
 				return CConsole.readLine("e.g. 7 6 5 4 3 2 1 : ");
 		}		
 		
+		/**
+			* 
+			*/
 		public void changeTileMainMenu() {
 				System.out.println("\n#            TILE EXCHANGE              #");
 				System.out.println("_________________________________________\n");
@@ -117,19 +165,35 @@ public class View {
 				ctrl.tileExchange(CConsole.readInt("Your choice ?  "));
 		}
 				
+		/**
+			* 
+			* @return
+			*/
 		public String changeTileMenu() {
 				System.out.println("Please enter the position of the tile(s) you want to exchange.");
 				return CConsole.readLine("e.g. 2 3 6 : ");
 		}
 		
+		/**
+			* 
+			* @param msg
+			*/
 		public void display(String msg) {
 				System.out.println(msg);
 		}
 
+		/**
+			* 
+			* @return
+			*/
 		public String askName() {
 				return (CConsole.readLine("Enter your name ? "));
 		}
     
+		/**
+			* 
+			* @return
+			*/
 		public String askPassword() {
 				return CConsole.readPass("Enter your password ? ");
 		}

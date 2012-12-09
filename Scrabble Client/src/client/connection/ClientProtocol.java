@@ -12,6 +12,11 @@ import java.net.Socket;
  * @author Bernard <bernard.debecker@gmail.com>, Romain<ro.foncier@gmail.com>
  */
 public class ClientProtocol extends Protocol {
+		/**
+			* 
+			* @param IPaddress
+			* @param port
+			*/
 		public ClientProtocol(String IPaddress, int port) {
 				this.IPaddress = IPaddress;
 				this.port = port;
@@ -40,6 +45,13 @@ public class ClientProtocol extends Protocol {
 				return CONN_KO;
 		}
 		
+		/**
+			* 
+			* @param header
+			* @param token
+			* @param args
+			* @return
+			*/
 		public Message sendRequest(int header, int token, String args) {
 				Message serverResponse = null;
 				if (TCPConnection() == CONN_OK) {

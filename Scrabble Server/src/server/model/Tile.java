@@ -23,6 +23,12 @@ public class Tile {
 				this.value = value;
 		}
 		
+		/**
+			* 
+			* @param letter
+			* @param value
+			* @param status
+			*/
 		public Tile(char letter, int value, boolean status) {
 				this.letter = letter;
 				this.value = value;
@@ -37,6 +43,10 @@ public class Tile {
 				return letter;
 		}
 		
+		/**
+			* 
+			* @param letter
+			*/
 		public void setLetter(char letter) {
 				this.letter = letter;
 		}
@@ -49,23 +59,44 @@ public class Tile {
 				return value;
 		}
 		
+		/**
+			* 
+			* @param x
+			* @param y
+			*/
 		protected void setCoordinates(int x, int y) {
 				this.x = x;
 				this.y = y;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		protected int getX() {
 				return this.x;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		protected int getY() {
 				return this.y;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		protected int getRackPosition() {
 				return this.rackPosition;
 		}
 		
+		/**
+			* 
+			* @param index
+			*/
 		protected void setRackPosition(int index) {
 				this.rackPosition = index;
 		}
@@ -102,6 +133,10 @@ public class Tile {
 				return letter+":"+value;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String displayTile() {
 				if (value < 10) {
 						return  "[" + letter + " " +value + "]";

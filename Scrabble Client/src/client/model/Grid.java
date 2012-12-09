@@ -11,6 +11,9 @@ public class Grid {
 		private Tile[][] grid = new Tile[15][15];
 		private ScoringGrid scoringGrid = new ScoringGrid();
 		
+		/**
+			* 
+			*/
 		public Grid() {
 				for (int x = 0; x <= 14; x++) {
 						for (int y= 0; y <= 14; y++) {
@@ -19,6 +22,12 @@ public class Grid {
 				}
 		}
 		
+		/**
+			* 
+			* @param x
+			* @param y
+			* @param tile
+			*/
 		public void putInGrid(int x, int y, Tile tile) {
 				grid[x][y] = tile;
 		}
