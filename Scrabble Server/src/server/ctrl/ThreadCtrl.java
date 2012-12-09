@@ -135,7 +135,7 @@ public class ThreadCtrl extends Thread {
 		
 		private void loadGame() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				outputPrint("Current player is trying to load an existed game");
+				outputPrint("Current player is trying to load an existed game - game ID : "+argsTab[1]);
 				Message response;
 						
 				// Try to load an existed play for the current player

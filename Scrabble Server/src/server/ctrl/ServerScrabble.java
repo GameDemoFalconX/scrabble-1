@@ -232,6 +232,14 @@ public class ServerScrabble {
 								error = new Message(Message.LOAD_GAME_LIST_ERROR, "");
 								outputPrint("Server error : The current player does not yet any plays saved on the server.");
 								break;
+						case LOAD_GAME_ERROR:
+								error = new Message(Message.LOAD_GAME_ERROR, "");
+								outputPrint("Server error : The current player can not load play saved on the server.");
+								break;
+						case XML_FILE_NOT_EXISTS:
+								error = new Message(Message.LOAD_GAME_ERROR, ""); // Send this error because the client side must ignore how data are saved on the server. This error concerned a data loading error. (from file or DB, ...)
+								outputPrint("Server error : The current player can not load play saved on the server.");
+								break;
 						case NEW_GAME_ANONYM_ERROR:
 								error = new Message(Message.NEW_GAME_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player is already logged on the server. No play may be created.");

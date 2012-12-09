@@ -5,13 +5,13 @@
 						<uuid>d035ed64-7bed-4029-ae5b-0d35c94238d6</uuid>
 						<created>2012/11/26</created>
 						<modified>2012/11/26</modified>
-						<score>0</score>
+						<score>16</score>
 						<grid>
-								<tile>6:8:H:4</tile>
-								<tile>7:8:E:1</tile>
-								<tile>8:8:L:1</tile>
-								<tile>9:8:L:1</tile>
-								<tile>10:8:O:1</tile>
+								<tile>5:7:H:4</tile>
+								<tile>6:7:E:1</tile>
+								<tile>7:7:L:1</tile>
+								<tile>8:7:L:1</tile>
+								<tile>9:7:O:1</tile>
 						</grid>
 						<rack>
 								<tile>H:4</tile>

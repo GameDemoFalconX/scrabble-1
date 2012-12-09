@@ -88,6 +88,8 @@ public abstract class Game implements IGame {
 						case Message.LOAD_GAME_SUCCESS:
 								return response;
 						case Message.LOAD_GAME_ERROR:
+								throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
+						case Message.PLAYER_NOT_LOGGED:
 								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						case Message.XML_FILE_NOT_EXISTS:
 								throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
