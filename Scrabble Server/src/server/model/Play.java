@@ -253,10 +253,6 @@ public class Play {
 				rack.tileSwitch(position);
 		}
 		
-		public void tileReorganize(String position) {
-				rack.tileReorganize(position);
-		}
-		
 		public void setFormatedGrid(String fGrid) {
 				this.formatedGrid = fGrid;
 		}

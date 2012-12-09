@@ -60,9 +60,6 @@ public class ThreadCtrl extends Thread {
 						case Message.TILE_SWITCH:
 								switchTile();
 								break;
-						case Message.TILE_REORGANIZE:
-								reorganizeTile();
-								break;
 				}
 		}
 		
@@ -200,19 +197,6 @@ public class ThreadCtrl extends Thread {
 				String playerID = argsTab[0];
 				String position = argsTab[1];
 				response = HAL.switchTile(playerID,position);
-
-				outputPrint("Send Response");
-				sProto.sendResponse(response);
-				Thread.currentThread().interrupt();
-		}
-		
-		private void reorganizeTile() {
-				String [] argsTab = new String(request.getBody()).split("##");
-				outputPrint("Current player is trying to reorganize tiles");
-				Message response;
-				String playerID = argsTab[0];
-				String position = argsTab[1];
-				response = HAL.reorganizeTile(playerID,position);
 
 				outputPrint("Send Response");
 				sProto.sendResponse(response);

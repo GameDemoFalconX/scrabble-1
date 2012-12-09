@@ -251,7 +251,7 @@ public class ClientController {
 								break;
 						case 2:
 								try {
-										gameBoard.reorganizeTiles(view.tileReorganizerMenu());
+										gameBoard.switchTiles(view.tileReorganizerMenu());
 								} catch (GameException ge) {
 										processException(ge);
 								}

@@ -148,21 +148,7 @@ public abstract class Game implements IGame {
 								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
 				}
 				return  null;
-		}
-		
-		@Override
-		public Message reorganizeTile(String pl_id, String position) throws GameException {
-				Message response = tileReorganize(pl_id, position); 
-				switch (response.getHeader()) {
-						case Message.TILE_REORGANIZE_SUCCES:
-								return response;
-						case Message.TILE_REORGANIZE_ERROR:
-								throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
-				}
-				return  null;
-		}
-		
-		
+		}		
 		
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
@@ -178,5 +164,4 @@ public abstract class Game implements IGame {
 		protected abstract Message destroyAnonym(String pl_id);
 		protected abstract Message tileExchange(String pl_id, String position);
 		protected abstract Message tileSwitch(String pl_id, String position);
-		protected abstract Message tileReorganize(String pl_id, String position);
 }

@@ -94,10 +94,6 @@ public class Play {
 				rack.switchTiles(position);
 		}
 		
-		public void reorganizeTiles(String position) {
-				rack.reorganizeTiles(position);
-		}
-		
 		public String getFormatedTileFromRack(Integer position) {
 				return rack.getFormatedTile(position);
 		}

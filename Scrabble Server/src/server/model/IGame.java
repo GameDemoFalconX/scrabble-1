@@ -31,6 +31,4 @@ public interface IGame {
 		Message exchangeTile(String pl_id, String position) throws GameException;
 		
 		Message switchTile(String pl_id, String position) throws GameException;
-		
-		Message reorganizeTile(String pl_id, String position) throws GameException;
 }

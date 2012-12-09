@@ -267,28 +267,6 @@ public class GameBoard {
 		}
 		
 		/**
-			* Ask the Play to reorganize the tiles on the rack based on the wished position.
-			* Like "6 3 2 4 7 1 5"
-			* @param position the desired position as a String
-			* @throws GameException 
-			*/
-		public void reorganizeTiles(String position) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
-												+"##"+position);
-				if (serverResponse != null) {
-						switch (serverResponse.getHeader()) {
-								case Message.SYSKO:
-										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.TILE_REORGANIZE_SUCCES:
-										cPlay.reorganizeTiles(position);
-										break;
-								case Message.TILE_REORGANIZE_ERROR:
-										throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
-						}
-				}
-		}
-		
-		/**
 			* Ask the server to change some or all the tiles.
 			* @param position the position(s) of the tiles the player want to exchange as a String.
 			* @throws GameException 

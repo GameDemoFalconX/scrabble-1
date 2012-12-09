@@ -63,12 +63,6 @@ public class Message {
 		public static final int TILE_SWITCH_SUCCES = 64; // Exchange tiles with succes
 		public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
 		
-		// TILE_REORGANIZE //
-		
-		public static final int TILE_REORGANIZE = 66; // Exchange tiles
-		public static final int TILE_REORGANIZE_SUCCES = 67; // Exchange tiles with succes
-		public static final int TILE_REORGANIZE_ERROR = 68; // Exchange tiles with error
-		
 		// PLACE_WORD //
 		public static final int PLACE_WORD = 70; // Place word
 		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes

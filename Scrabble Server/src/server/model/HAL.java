@@ -213,15 +213,4 @@ public class HAL extends Game {
 				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
 		
-		@Override
-		protected Message tileReorganize(String pl_id, String position) {
-				Message response = null;
-				if (plays.playerIsLogged(pl_id)) {
-						Play play = plays.getPlay(pl_id);
-						play.tileReorganize(position);
-						return new Message(Message.TILE_REORGANIZE_SUCCES,"");
-				}
-				return new Message(Message.PLAYER_NOT_LOGGED,"");
-		}
-		
 }
