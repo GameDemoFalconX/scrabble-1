@@ -50,13 +50,25 @@ Scrabble is a word game in which two to four players score points by forming wor
 				<score>[play-score]</score>
 				<grid>
 					<tile>
-                    	[x:y__L:V]
-                    	...
-                	</tile>
+						[x:y:L:V]
+						...
+					</tile>
 				</grid>
 				<rack>
-					[rack-informations]
+					<tile>
+						[x:y:L:V]
+						...
+					</tile>
 				</rack>
 			</play>
 		</player>
 	</plays>
+
+### Colors in view
+** Warning! Before playing, you must load the Jansi library manually.**
+
++ Click right on the Scrabble Client folder > Properties.
++ Select Category "Library" and click on "Add .jar Files" after download Jansi binaries [here][1] (You'll find binaries and the bin/ folder in the Scrabble repository).
++ Please select the 1.9 version
+
+[1]: http://jansi.fusesource.org/download.html

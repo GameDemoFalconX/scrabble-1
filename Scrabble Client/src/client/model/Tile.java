@@ -1,35 +1,41 @@
 package client.model;
 
-import java.awt.Point;
-
 /**
- * 
- * @author Romain <ro.foncier@gmail.com>
- */
+* 
+* @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
+*/
 public class Tile {
-    private final String letter;
-    private final int value;
-    private Point coordinates;
-    
-    public Tile(String letter, int value) {
-        this.letter = letter;
-        this.value = value;
-        this.coordinates = new Point(-1, -1); // By default, tiles have coordinates which are equal to (-1, -1), meaning that this state is equal to be in the tiles bag.
-    }
-    
-    public String getLetter() {
-        return this.letter;
-    }
-    
-    public int getValue() {
-        return this.value;
-    }
-    
-    public Point getCoordinates() {
-        return this.coordinates;
-    }
-    
-    public void setCoordinates(Point newPoint) {
-        this.coordinates = newPoint;
-    }
+		
+		private char letter;
+		private final int value;
+
+		public Tile(char letter, int value) {
+				this.letter = letter;
+				this.value = value;
+		}
+
+		public char getLetter() {
+			return letter;
+		}
+
+		public int getValue() {
+				return value;
+		}
+		
+		public void setLetter(char letter) {
+				this.letter = letter;
+		}
+
+		/**
+		* Used only for debugging purpose
+		*/
+		@Override
+		public String toString() {
+				if (value < 10) {
+						return "[" + letter + " " + value + "]";
+				} else {
+						return "[" + letter + "" + value+ "]";
+				}
+		}
+
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<players>
+  <player uuid="d035ed64-7bed-4029-ae5b-0d35c94238d5">
+    <uuid>d035ed64-7bed-4029-ae5b-0d35c94238d5</uuid>
+    <name>romain</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="b981986d-7cb1-44a3-8328-3eabf455ba70">
+    <uuid>b981986d-7cb1-44a3-8328-3eabf455ba70</uuid>
+    <name>bernard</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="1eef9335-81e5-4e46-b2dc-5f51f8b6e914">
+    <uuid>1eef9335-81e5-4e46-b2dc-5f51f8b6e914</uuid>
+    <name>morgane</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="47482c2f-a7d6-4b7c-a341-cabd26d0a041">
+    <uuid>47482c2f-a7d6-4b7c-a341-cabd26d0a041</uuid>
+    <name>walle</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="04cac3cc-b784-4dcd-afcd-d4fe38dc7159">
+    <uuid>04cac3cc-b784-4dcd-afcd-d4fe38dc7159</uuid>
+    <name>Test</name>
+    <password>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</password>
+  </player>
+  <player uuid="bc52cfaf-3df1-4c91-850c-a1abbc7f15e3">
+    <uuid>bc52cfaf-3df1-4c91-850c-a1abbc7f15e3</uuid>
+    <name>nom</name>
+    <password>5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8</password>
+  </player>
+  <player uuid="fff80896-2b1c-41b2-b703-40a9c94e9256">
+    <uuid>fff80896-2b1c-41b2-b703-40a9c94e9256</uuid>
+    <name>albert</name>
+    <password>79ea9358181884637163fbd61c06b22150f429636bdded87bdc70067db2396a4</password>
+  </player>
+</players>
