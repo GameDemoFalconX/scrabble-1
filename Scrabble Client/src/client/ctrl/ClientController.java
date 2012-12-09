@@ -150,7 +150,11 @@ public class ClientController {
 		public void playChoice(Integer choice) {
 				switch (choice) {
 						case 1:
-								String request = tileUsher(view.tileUsherMainMenu());
+								Integer letterNumber;
+								do {
+										letterNumber = view.tileUsherMainMenu();
+								} while (letterNumber < 0 || letterNumber > 7); // integrity check
+								String request = tileUsher(letterNumber);
 								int newScore = -1;
 								if (!request.equals("")) {
 										try {
@@ -196,25 +200,28 @@ public class ClientController {
 				int  firstX = -1;
 				Integer i = 0;
 				boolean cancel = false;
-				if (number > 0) {
+				if ((number > 0) && (number < 8)) {
 						while ((number > i) && !cancel) {						
 								boolean threeArgs = false; boolean argXisOK = false; 
 								boolean argYisOK = false; boolean argPosIsOK = false;
 								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
-										String [] answer = view.tileUsherMenu(i+1).split(" ");
+										String response;
+										response = view.tileUsherMenu(i+1);
+										String [] answer = response.split(" ");
 										cancel = (answer.length == 1 && answer[0].equals("0"));
 										if (!cancel) {
-												// Player data
-												x = Integer.parseInt(answer[0])-1;
-												y = Integer.parseInt(answer[1])-1;
-												pos = Integer.parseInt(answer[2])-1;
-
-												// Check integrity
 												threeArgs = answer.length == 3;
-												argXisOK = (x >= 0) && (x <= 14);
-												argYisOK = (y >= 0) && (y <= 14);
-												argPosIsOK = (pos >= 0) && (pos <= 6);
+												if (threeArgs) {
+														// Player data
+														x = Integer.parseInt(answer[0])-1;
+														y = Integer.parseInt(answer[1])-1;
+														pos = Integer.parseInt(answer[2])-1;
+														// Check integrity
+														argXisOK = (x >= 0) && (x <= 14);
+														argYisOK = (y >= 0) && (y <= 14);
+														argPosIsOK = (pos >= 0) && (pos <= 6);
+												}
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
