@@ -90,6 +90,24 @@ public class ServerScrabble {
 		}
 		
 		/**
+			* Allows to logout the current user.
+			* @param pl_id
+			* @return 
+			*/
+		public synchronized Message logout(String pl_id) {
+				Message response = null;
+				try {
+						// Try to log the current player
+						response = game.logout(pl_id);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		/**
 			* Allows to create a new Play instance.
 			* @param playerID
 			* @return the new playID and the formatedRack.
@@ -228,6 +246,10 @@ public class ServerScrabble {
 						case LOGIN_ERROR:
 								error = new Message(Message.LOGIN_ERROR, "");
 								outputPrint("Server error : Login error.");
+								break;
+						case LOGOUT_ERROR:
+								error = new Message(Message.LOGOUT_ERROR, "");
+								outputPrint("Server error : Logout error.");
 								break;
 						case PLAYER_NOT_LOGGED:
 								error = new Message(Message.PLAYER_NOT_LOGGED, "");

@@ -37,27 +37,32 @@ public class HAL extends Game {
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
-				plays.addStarter(newPlayer.getPlayerID());
+				plays.addPlayer(newPlayer.getPlayerID());
 				// Return the new player ID
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
 		
 		@Override
 		protected Message loginProcess(String pl_name, String pl_pwd) {
-				Message response = null;
 				if (players.playerExists(pl_name)) {
 						Player pl = players.checkPassword(pl_name, pl_pwd); 
 						if (pl != null) {
-								plays.addStarter(pl.getPlayerID());
-								// Return the player ID
-								response = new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
+								plays.addPlayer(pl.getPlayerID());
+								return new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
 						} else {
-								response = new Message(Message.LOGIN_ERROR, "");
+								return new Message(Message.LOGIN_ERROR, "");
 						}
-				} else {
-						response = new Message(Message.PLAYER_NOT_EXISTS, "");
 				}
-				return response;
+				return new Message(Message.PLAYER_NOT_EXISTS, "");
+		}
+		
+		@Override
+		protected Message logoutProcess(String pl_id) {
+				if (plays.playerIsLogged(pl_id)) {
+						plays.removePlayer(pl_id);
+						return new Message(Message.LOGOUT_SUCCESS, "");
+				}
+				return new Message(Message.LOGOUT_ERROR, "");
 		}
 		
 		@Override
@@ -93,7 +98,12 @@ public class HAL extends Game {
 		@Override
 		protected Message loadPlayLister(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
-						String list = plays.loadPlayList(pl_id);
+						String list = "";
+						try {
+								list = plays.loadPlayList(pl_id);
+						} catch (GameException ge) {
+								return new Message(Message.XML_FILE_NOT_EXISTS, "");
+						}
 						if (!list.equals("")) {
 								return new Message(Message.LOAD_GAME_LIST_SUCCESS, list);
 						}

@@ -18,6 +18,10 @@ public class Player {
 				playerID = UUID.randomUUID();
 		}
 		
+		/**
+			* Create a new instance of player.
+			* @param name, pwd, uuid.
+			*/
 		public Player(String name, String pwd, String uuid) {
 				playerName = name;
 				playerPassword = pwd;

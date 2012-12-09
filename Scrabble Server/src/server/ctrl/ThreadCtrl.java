@@ -36,6 +36,9 @@ public class ThreadCtrl extends Thread {
 						case Message.LOGIN:
 								login();
 								break;
+						case Message.LOGOUT:
+								logout();
+								break;
 						case Message.NEW_GAME:
 								newGame();
 								break;
@@ -93,6 +96,17 @@ public class ThreadCtrl extends Thread {
 				
 				// Try to log the current player
 				response = HAL.login(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void logout() {
+				outputPrint("Current player is trying to logout");
+				Message response;
+				
+				// Try to log the current player
+				response = HAL.logout(new String(request.getBody());
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

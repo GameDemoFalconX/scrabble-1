@@ -42,11 +42,9 @@ public class View {
 		public void initMenu(String error, String name, Integer status) {
 				System.out.println(menuHeader);
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu
-				if (!status.equals("")) System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
+				if (!status.equals(null)) System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
-				if (status == Message.LOGIN_SUCCESS) {
-						System.out.println("2: Load game");
-				}
+				System.out.println("2: Load game"); // Catch error during the process.
 				System.out.println("0: Exit\n");
 				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}

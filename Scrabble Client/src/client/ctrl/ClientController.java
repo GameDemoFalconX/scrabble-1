@@ -72,7 +72,6 @@ public class ClientController {
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}
@@ -107,7 +106,7 @@ public class ClientController {
 								try {
 										gameBoard.createNewPlay(player.getPlayerID());
 										if (debug) {
-												gameBoard.displayGame();
+												view.displayGame(gameBoard.getPlay());
 												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
@@ -126,7 +125,7 @@ public class ClientController {
 												view.display("See you next time !");
 										}
 										if (debug) {
-												gameBoard.displayGame();
+												view.displayGame(gameBoard.getPlay());
 												view.playMenu(player.isAnonym());
 										} else {
 												// TODO GUI 
@@ -136,6 +135,11 @@ public class ClientController {
 								}
 								break;
 						case 0:
+								try {
+										gameBoard.logoutPlayer(player.getPlayerID());
+								} catch (GameException ge) {
+										processException(ge);
+								}
 								view.display("See you next time !");
 								break;
 						default:
@@ -301,11 +305,17 @@ public class ClientController {
 						case LOGIN_ERROR:
 								view.firstMenu("Warning! The password entered is not correct! Please try again.");
 								break;
+						case LOGOUT_ERROR:
+								view.firstMenu("Warning! You are not yet logged!");
+								break;
 						case PLAYER_NOT_LOGGED:
 								view.firstMenu("Warning! You are not yet logged!");
 								break;
 						case NEW_GAME_ANONYM_ERROR:
 								view.firstMenu("An error has been encountered during the server processing! Please try again.");
+								break;
+						case LOAD_GAME_LIST_ERROR:
+								view.initMenu("Warning! You don't have yet any saved games!", "", null);
 								break;
 						case LOAD_GAME_ERROR:
 								view.firstMenu("An error has been encountered during the server processing! Please try again.");

@@ -184,10 +184,10 @@ public class GameRAM {
 		/**
 			* Get the list of plays for the current user and format the content of them for send it to the client
 			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score] == play unit
-			* [play unit 1]##[play unit 2]## ...
+			* [play unit 1]@@[play unit 2]@@ ...
 			* Two underscore between play attributes and two ## between play units.
 			*/
-		public String loadPlayList(String playerUUID) { // catch errors
+		public String loadPlayList(String playerUUID) throws GameException {
 				String result = "";
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
@@ -206,7 +206,7 @@ public class GameRAM {
 														
 														// Format Play informations without the game objects and concat it to the result variable.
 														result += playNode.getChildText("uuid")+"__"+playNode.getChildText("created")+"__"+playNode.getChildText("modified")+"__"+Integer.parseInt(playNode.getChildText("score"));
-														if (j < playList.size()) result += "##";
+														if (j < playList.size()) result += "@@";
 												}
 										}
 										break; // break the loop.
@@ -219,7 +219,7 @@ public class GameRAM {
 						}
 				} else {
 						System.out.println("Game file doesn't exist!");
-						// TODO Improve the way to handle errors.
+						throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
 				}
 				return result;
 		}

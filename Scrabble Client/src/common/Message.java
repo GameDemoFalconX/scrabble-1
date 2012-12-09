@@ -51,6 +51,8 @@ public class Message {
 		
 		// LOGOUT //
 		public static final int  LOGOUT = 50;  // Logout
+		public static final int  LOGOUT_SUCCESS = 51;  // Logout with success
+		public static final int  LOGOUT_ERROR = 52;  // Logout with error
 		
 		// TILE_EXCHANGE //
 		public static final int TILE_EXCHANGE = 60; // Exchange tiles

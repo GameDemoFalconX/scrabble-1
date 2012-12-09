@@ -72,25 +72,6 @@ public class GameBoard {
 		}
 		
 		/**
-			* Hash the password with the SHA-256 algorythm
-			* @param password a password as a String
-			* @return the hashed password as a String
-			* @throws Exception 
-			*/
-		private String hashPassword(String password) throws Exception {
-				MessageDigest md = MessageDigest.getInstance("SHA-256");
-				md.update(password.getBytes());
-				byte byteData[] = md.digest();
-						
-				// Return the hexadecimal Hash password value under String form
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < byteData.length; i++) {
-						sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-				}
-				return sb.toString();
-		}
-		
-		/**
 			* Ask the server to log a Player.
 			* @param name the player name as a String
 			* @param password the player password as a String
@@ -98,25 +79,22 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public Player loginPlayer(String name, String password) throws GameException {
+				Player player = null;
 				// Hash password before to send it
 				try {
-						password = hashPassword(password);
+						password = hashPassword(password); // Improve this way by adding public/private keys system (rom)
 				} catch (Exception e) {
 						// Throw an exception if the hash function return an error.
 						throw new GameException(GameException.typeErr.PWDKO);
 				}
-				String args = name+"_"+password;
-				Message serverResponse = gbProtocol.sendRequest(Message.LOGIN, 0,  args);
+				Message serverResponse = gbProtocol.sendRequest(Message.LOGIN,  name+"_"+password);
 				
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOGIN_SUCCESS:
-										// Return the new instance of the current player
-										return new Player(name, password, new String(serverResponse.getBody()));
+										player =  new Player(name, password, new String(serverResponse.getBody()));
 								case Message.PLAYER_NOT_EXISTS:
 										throw new GameException(GameException.typeErr.PLAYER_NOT_EXISTS);
 								case Message.LOGIN_ERROR:
@@ -125,7 +103,7 @@ public class GameBoard {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-				return null; // To update
+				return player;
 		}
 
 		/**
@@ -134,11 +112,9 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public void createNewPlay(String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME, 0,  playerID);
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME,  playerID);
 				
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -207,7 +183,7 @@ public class GameBoard {
 			*/
 		public void addWord(String formatedWord) throws GameException {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...@@[blank tile 1]##[blank tile 2]
-				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD, 0, cPlay.getOwner()
+				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD,  cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
@@ -286,18 +262,18 @@ public class GameBoard {
 			* @throws GameException 
 			*/
 		public String [] loadPlayList(String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST, 0,  playerID);
-				// Handle response
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST,  playerID);
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOAD_GAME_LIST_SUCCESS:
-										String [] args = new String(serverResponse.getBody()).split("##");
+										String [] args = new String(serverResponse.getBody()).split("@@");
 										return args;
 								case Message.LOAD_GAME_LIST_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+								case Message.PLAYER_NOT_LOGGED:
+										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
@@ -313,7 +289,7 @@ public class GameBoard {
 			*/
 		public void loadGame(String playerID, String playInfos) throws GameException {
 				String [] playArgs = playInfos.split("__");
-				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME, 0,  playerID+"_"+playArgs[0]);
+				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME,  playerID+"_"+playArgs[0]);
 				// Handle response
 				if (serverResponse != null) {
 						// Handle the server response
@@ -337,5 +313,40 @@ public class GameBoard {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
+		}
+		
+		public void logoutPlayer(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.LOGOUT,  playerID);
+				if (serverResponse != null) {
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.LOGOUT_ERROR:
+										throw new GameException(GameException.typeErr.LOGOUT_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
+		// *** Utility methods for GameBoard *** //
+		
+		/**
+			* Hash the password with the SHA-256 algorithm
+			* @param password a password as a String
+			* @return the hashed password as a String
+			* @throws Exception 
+			*/
+		private String hashPassword(String password) throws Exception {
+				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				md.update(password.getBytes());
+				byte byteData[] = md.digest();
+						
+				// Return the hexadecimal Hash password value under String form
+				StringBuffer sb = new StringBuffer();
+				for (int i = 0; i < byteData.length; i++) {
+						sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+				}
+				return sb.toString();
 		}
 }
