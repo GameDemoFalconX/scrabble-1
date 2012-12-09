@@ -29,9 +29,6 @@ import org.jdom2.input.SAXBuilder;
 public class GameRAM {
 		private  Map<String, Play> plays = new HashMap<String, Play>(); // HashMap which contains player ID like Key and Play instance like Value.
 
-		/**
-			* 
-			*/
 		public GameRAM() {}
 		
 		/**

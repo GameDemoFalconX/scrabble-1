@@ -13,12 +13,6 @@ public class Play {
 		private Grid grid;
 		private Rack rack;
 		
-		/**
-			* 
-			* @param playerID
-			* @param playSID
-			* @param formatedRack
-			*/
 		public Play(String playerID, String playSID, String formatedRack) {
 				playID = UUID.fromString(playSID);
 				owner = UUID.fromString(playerID);
@@ -27,67 +21,34 @@ public class Play {
 				rack = new Rack(formatedRack);
 		}
 		
-		/**
-			* 
-			* @return
-			*/
 		public String getPlayID() {
 				return playID.toString();
 		}
 		
-		/**
-			* 
-			* @return
-			*/
 		public String getOwner() {
 				return owner.toString();
 		}
 
-		/**
-			* 
-			* @return
-			*/
 		public Grid getGrid() {
 				return grid;
 		}
 		
-		/**
-			* 
-			* @param score
-			*/
 		public void setScore(Integer score) {
 				this.score = score;
 		}
 		
-		/**
-			* 
-			* @return
-			*/
 		public Integer getScore() {
 				return score;
 		}
 		
-		/**
-			* 
-			* @return
-			*/
 		public String displayGrid() {
 				return grid.toString();
 		}
 		
-		/**
-			* 
-			* @return
-			*/
 		public String displayRack() {
 				return rack.toString();
 		}
 		
-		/**
-			* 
-			* @param args
-			* @param formatedWord
-			*/
 		public void addWord(String args, String formatedWord) {
 				String [] infos = args.split("_");
 				String playerID = infos[0];
@@ -129,54 +90,26 @@ public class Play {
 				return regulatedTiles;
 		}
 		
-		/**
-			* 
-			* @param position
-			*/
 		public void switchTiles(String position) {
 				rack.switchTiles(position);
 		}
 		
-		/**
-			* 
-			* @param position
-			*/
 		public void reorganizeTiles(String position) {
 				rack.reorganizeTiles(position);
 		}
 		
-		/**
-			* 
-			* @param position
-			* @return
-			*/
 		public String getFormatedTileFromRack(Integer position) {
 				return rack.getFormatedTile(position);
 		}
 		
-		/**
-			* 
-			* @param position
-			* @return
-			*/
 		public String getFormatedTilesFromRack(String position) {
 				return rack.getFormatedTiles(position);
 		}
 		
-		/**
-			* 
-			* @param position
-			* @param tiles
-			*/
 		public void setFormatedTilesToRack(String position, String tiles) {
 				rack.setFormatedTiles(position, tiles);
 		}
 		
-		/**
-			* 
-			* @param pos
-			* @return
-			*/
 		public boolean isTileBlank(Integer pos) {
 				return rack.isTileBlank(pos);
 		}

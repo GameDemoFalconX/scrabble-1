@@ -13,14 +13,7 @@ import common.Message;
  */
 
 public abstract class Game implements IGame {
-		 
-		/**
-			* 
-			* @param pl_name
-			* @param pl_pwd
-			* @return
-			* @throws GameException
-			*/
+		
 		@Override
 		public Message newAccount(String pl_name, String pl_pwd) throws GameException {
 				Message response = createAccount(pl_name, pl_pwd);
@@ -33,13 +26,6 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		/**
-			* 
-			* @param pl_name
-			* @param pl_pwd
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message login(String pl_name, String pl_pwd) throws GameException {
 				Message response = loginProcess(pl_name, pl_pwd);
@@ -55,12 +41,6 @@ public abstract class Game implements IGame {
 		}
 		
 		// Game -  plays actions
-		/**
-			* 
-			* @param pl_id
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message createNewPlay(String pl_id) throws GameException {
 				Message response = createNewGame(pl_id);
@@ -73,12 +53,6 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		/**
-			* 
-			* @param pl_id
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message createNewAnonymPlay(String pl_id) throws GameException {
 				Message response = createNewAnonymGame(pl_id);
@@ -108,13 +82,6 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		/**
-			* 
-			* @param pl_id
-			* @param ga_id
-			* @return
-			* @throws GameException
-			*/
 		public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
 				Message response = loadPlay(pl_id, ga_id);
 				switch (response.getHeader()) {
@@ -129,14 +96,6 @@ public abstract class Game implements IGame {
 		}
 		
 		// *** GAME *** //
-		/**
-			* 
-			* @param pl_id
-			* @param ga_id
-			* @param ga_infos
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
 				Message response = scrabbleValidator(pl_id, ga_id, ga_infos);
@@ -152,20 +111,9 @@ public abstract class Game implements IGame {
 		}
 					
 		//Déconnexion - Utile pour les opérations de mise à jour différées
-		/**
-			* 
-			* @param nom
-			* @throws GameException
-			*/
 		public void deconnection(String nom) throws GameException {}
 		
 		// Save, Delete or Destroy plays
-		/**
-			* 
-			* @param pl_id
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message deleteAnonym(String pl_id) throws GameException {
 				Message response = destroyAnonym(pl_id);
@@ -178,13 +126,6 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message exchangeTile(String pl_id, String position) throws GameException {
 				Message response = tileExchange(pl_id, position); 
@@ -197,13 +138,6 @@ public abstract class Game implements IGame {
 				return  null;
 		}
 				
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message switchTile(String pl_id, String position) throws GameException {
 				Message response = tileSwitch(pl_id, position); 
@@ -216,13 +150,6 @@ public abstract class Game implements IGame {
 				return  null;
 		}
 		
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			* @throws GameException
-			*/
 		@Override
 		public Message reorganizeTile(String pl_id, String position) throws GameException {
 				Message response = tileReorganize(pl_id, position); 
@@ -238,81 +165,18 @@ public abstract class Game implements IGame {
 		
 		
 		// Abstract methods
-		/**
-			* 
-			* @param pl_name
-			* @param pl_pwd
-			* @return
-			*/
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
-		/**
-			* 
-			* @param pl_name
-			* @param pl_pwd
-			* @return
-			*/
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
-		/**
-			* 
-			* @param pl_id
-			* @return
-			*/
 		protected abstract Message createNewGame(String pl_id);
-		/**
-			* 
-			* @param pl_id
-			* @return
-			*/
 		protected abstract Message createNewAnonymGame(String pl_id);
-		/**
-			* 
-			* @param pl_id
-			* @return
-			*/
 		protected abstract Message loadPlayLister(String pl_id);
-		/**
-			* 
-			* @param pl_id
-			* @param ga_id
-			* @return
-			*/
 		protected abstract Message loadPlay(String pl_id, String ga_id);
 		
 		// Game
-		/**
-			* 
-			* @param pl_id
-			* @param ga_id
-			* @param ga_infos
-			* @return
-			*/
 		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
 		
-		/**
-			* 
-			* @param pl_id
-			* @return
-			*/
 		protected abstract Message destroyAnonym(String pl_id);
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			*/
 		protected abstract Message tileExchange(String pl_id, String position);
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			*/
 		protected abstract Message tileSwitch(String pl_id, String position);
-		/**
-			* 
-			* @param pl_id
-			* @param position
-			* @return
-			*/
 		protected abstract Message tileReorganize(String pl_id, String position);
 }

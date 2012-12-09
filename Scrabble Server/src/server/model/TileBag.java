@@ -72,12 +72,6 @@ public class TileBag {
 				return tile;																																	// return that tile (to go to the rack)
 		}
 		
-		/**
-			* 
-			* @param letter
-			* @param value
-			* @return
-			*/
 		public Tile popTile(char letter, int value) {
 				tileBag[value].removeFirstOccurrence(letter);
 				return new Tile(letter, value);

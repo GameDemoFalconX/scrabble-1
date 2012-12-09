@@ -24,10 +24,6 @@ public class Dictionary {
 		final static String filename = "french.dic";
 		final static Charset ENCODING = StandardCharsets.UTF_8;
 		
-		/**
-			* 
-			* @throws IOException
-			*/
 		public Dictionary() throws IOException {
 				Path path = Paths.get(filename);
 				try (BufferedReader reader = Files.newBufferedReader(path, ENCODING)){

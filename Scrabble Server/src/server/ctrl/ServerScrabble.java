@@ -18,33 +18,19 @@ public class ServerScrabble {
 		private IGame game;
 		private int port = 8189;
 
-		/**
-			* 
-			* @param args
-			*/
 		public static void main(String[] args) {
 				ServerScrabble serverScrabble = new ServerScrabble();
 				serverScrabble.start();
 		}
 		
-		/**
-			* 
-			*/
 		public ServerScrabble() {
 				game = GameFactory.getGame();	
 		}
 		
-		/**
-			* 
-			* @param port
-			*/
 		public ServerScrabble(int port) {
 				this.port = port;
 		}
 		
-		/**
-			* 
-			*/
 		public void start() {
 				int connectionNumber = 0;
 				try {
@@ -176,11 +162,6 @@ public class ServerScrabble {
 				return response;
 		}
 		
-		/**
-			* 
-			* @param playerID
-			* @return
-			*/
 		public synchronized Message deleteAnonym(String playerID) {
 				Message response = null;
 				try {
@@ -194,13 +175,6 @@ public class ServerScrabble {
 				return response;
 		}
 		
-		/**
-			* 
-			* @param playerID
-			* @param playID
-			* @param gameInfos
-			* @return
-			*/
 		public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
 				Message response = null;
 				try {
@@ -214,12 +188,6 @@ public class ServerScrabble {
 				return response;
 		}
 		
-		/**
-			* 
-			* @param playerID
-			* @param tiles
-			* @return
-			*/
 		public synchronized Message exchangeTile(String playerID, String tiles) {
 				Message response = null;
 				try {
@@ -232,12 +200,6 @@ public class ServerScrabble {
 				return response;
 		}
 		
-		/**
-			* 
-			* @param playerID
-			* @param position
-			* @return
-			*/
 		public synchronized Message switchTile(String playerID, String position) {
 				Message response = null;
 				try {
@@ -250,12 +212,6 @@ public class ServerScrabble {
 				return response;
 		}
 		
-		/**
-			* 
-			* @param playerID
-			* @param position
-			* @return
-			*/
 		public synchronized Message reorganizeTile(String playerID, String position) {
 				Message response = null;
 				try {

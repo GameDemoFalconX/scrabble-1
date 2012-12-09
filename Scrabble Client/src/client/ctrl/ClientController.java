@@ -27,11 +27,7 @@ public class ClientController {
 				ClientController clientCtrl = new ClientController(args);
 				clientCtrl.firstShow();
 		}
-    
-		/**
-			* 
-			* @param args
-			*/
+  
 		public ClientController(String[] args) {
 				switch (args.length) {
 						case 1:
@@ -45,18 +41,11 @@ public class ClientController {
 				view = new View(this);
 				gameBoard = new GameBoard(IPaddress, port);
 		}
-    
-		/**
-			* 
-			*/
+ 
 		public void firstShow() {
 				view.firstMenu("");
 		}
-    
-		/**
-			* 
-			* @param choice
-			*/
+
 		public void firstChoice(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -113,10 +102,6 @@ public class ClientController {
 				}
 		}
 		
-		/**
-			* 
-			* @param choice
-			*/
 		public void initChoice(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -160,10 +145,6 @@ public class ClientController {
 				}
 		}
 		
-		/**
-			* 
-			* @param choice
-			*/
 		public void playChoice(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -195,10 +176,6 @@ public class ClientController {
 				}
 		}
 		
-		/**
-			* 
-			* @param number
-			*/
 		public void tileUsher(Integer number) {
 				System.out.println("number of tiles to add : "+number);
 				String formatedWord = ""; String orientation = ""; String blankTiles = "";
@@ -263,10 +240,6 @@ public class ClientController {
 				view.playMenu(player.isAnonym());
 		}
 		
-		/**
-			* 
-			* @param choice
-			*/
 		public void tileOrganizer(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -294,10 +267,6 @@ public class ClientController {
 				view.playMenu(player.isAnonym());
 		}
 		
-		/**
-			* 
-			* @param choice
-			*/
 		public void tileExchange(Integer choice) {
 				switch (choice) {
 						case 1: 

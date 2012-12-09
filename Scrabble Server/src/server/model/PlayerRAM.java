@@ -70,11 +70,7 @@ public class PlayerRAM {
 						}
 				}
 		} 
-		/**
-			* 
-			* @param name
-			* @return
-			*/
+		
 		public boolean playerExists(String name) {
 				if (!players.isEmpty()) {
 						return players.containsKey(name);
@@ -83,12 +79,6 @@ public class PlayerRAM {
 				}
 		}
 		
-		/**
-			* 
-			* @param pl_name
-			* @param pl_pwd
-			* @return
-			*/
 		public Player checkPassword(String pl_name, String pl_pwd) {
 				Player plCheck = players.get(pl_name);
 				if (plCheck.getPlayerPassword().equals(pl_pwd)) {
@@ -110,10 +100,6 @@ public class PlayerRAM {
 				}
 		}
 		
-		/**
-			* 
-			* @param player
-			*/
 		public void addPlayer(Player player) {
 				// Add new player in the Map
 				players.put(player.getPlayerName(), player);
@@ -148,10 +134,6 @@ public class PlayerRAM {
 				}
 		}
 		
-		/**
-			* 
-			* @param name
-			*/
 		public void deletePlayer(String name) {
 				if (!players.isEmpty()) {
 						String uuidToDelete = players.get(name).getPlayerID();
