@@ -27,7 +27,7 @@ public class ClientController {
 				ClientController clientCtrl = new ClientController(args);
 				clientCtrl.firstShow();
 		}
-    
+  
 		public ClientController(String[] args) {
 				switch (args.length) {
 						case 1:
@@ -41,11 +41,11 @@ public class ClientController {
 				view = new View(this);
 				gameBoard = new GameBoard(IPaddress, port);
 		}
-    
+ 
 		public void firstShow() {
 				view.firstMenu("");
 		}
-    
+
 		public void firstChoice(Integer choice) {
 				switch (choice) {
 						case 1:
@@ -53,12 +53,11 @@ public class ClientController {
 										player = new Player(); // Create an anonymous player.
 										gameBoard.createNewPlayAnonym(player.getPlayerID());
 										if (debug) {
-												gameBoard.displayGame();
-												view.playMenu(player.isAnonym());
+												view.displayGame(gameBoard.getPlay());
+												view.playMenu(player.isAnonym(), -1);
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}
@@ -69,11 +68,10 @@ public class ClientController {
 								try {
 										player = gameBoard.loginPlayer(plname, plpwd);
 										if (debug) {
-												view.initMenu(plname, Message.LOGIN_SUCCESS);
+												view.initMenu("", plname, Message.LOGIN_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}
@@ -84,11 +82,10 @@ public class ClientController {
 								try {
 										player = gameBoard.newPlayer(name, password);
 										if (debug) {
-												view.initMenu(name, Message.NEW_ACCOUNT_SUCCESS);
+												view.initMenu("", name, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}
@@ -97,7 +94,7 @@ public class ClientController {
 								view.display("See you next time !");
 								break;
 						default:
-								view.initMenu(player.getPlayerName(), Message.LOGIN_SUCCESS);
+								view.initMenu("", player.getPlayerName(), Message.LOGIN_SUCCESS);
 								break;
 				}
 		}
@@ -108,8 +105,8 @@ public class ClientController {
 								try {
 										gameBoard.createNewPlay(player.getPlayerID());
 										if (debug) {
-												gameBoard.displayGame();
-												view.playMenu(player.isAnonym());
+												view.displayGame(gameBoard.getPlay());
+												view.playMenu(player.isAnonym(), -1);
 										} else {
 												// TODO GUI 
 										}
@@ -120,15 +117,15 @@ public class ClientController {
 						case 2:
 								try {
 										String [] playList = gameBoard.loadPlayList(player.getPlayerID());
-										int playChoosen = view.displayPlayList(playList);
-										if (playChoosen != 0) {
-												System.out.print("Load in process .");
-												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen-1].split("__")[0]);
+										int playChoosen = view.displayPlayList(playList)-1;
+										if (playChoosen >= 0) {
+												gameBoard.loadGame(player.getPlayerID(), playList[playChoosen]);
 										} else {
 												view.display("See you next time !");
 										}
 										if (debug) {
-												
+												view.displayGame(gameBoard.getPlay());
+												view.playMenu(player.isAnonym(), gameBoard.getPlay().getScore());
 										} else {
 												// TODO GUI 
 										}
@@ -137,6 +134,11 @@ public class ClientController {
 								}
 								break;
 						case 0:
+								try {
+										gameBoard.logoutPlayer(player.getPlayerID());
+								} catch (GameException ge) {
+										processException(ge);
+								}
 								view.display("See you next time !");
 								break;
 						default:
@@ -148,7 +150,17 @@ public class ClientController {
 		public void playChoice(Integer choice) {
 				switch (choice) {
 						case 1:
-								view.tileUsherMainMenu();
+								String request = tileUsher(view.tileUsherMainMenu());
+								int newScore = -1;
+								if (!request.equals("")) {
+										try {
+												newScore = gameBoard.addWord(request);
+										} catch (GameException ge) {
+												processException(ge);
+										}
+								}
+								view.displayGame(gameBoard.getPlay());
+								view.playMenu(player.isAnonym(), newScore);
 								break;
 						case 2:
 								view.tileOrganizerMainMenu();
@@ -157,6 +169,9 @@ public class ClientController {
 								view.changeTileMainMenu();
 								break;
 						case 4:
+								break;
+						case 9:
+								// Check if save or not.
 								break;
 						case 0:
 								if (player.isAnonym()) {
@@ -176,20 +191,19 @@ public class ClientController {
 				}
 		}
 		
-		public void tileUsher(Integer number) {
-				System.out.println("number of tiles to add : "+number);
+		public String tileUsher(Integer number) {
 				String formatedWord = ""; String orientation = "";
 				int  firstX = -1;
-				Integer i = 1;
+				Integer i = 0;
 				boolean cancel = false;
 				if (number > 0) {
-						while ((number+1 > i) && !cancel) {																
-								boolean threeArgs = false; boolean argXisOK = false; boolean argYisOK = false; boolean argPosIsOK = false;
+						while ((number > i) && !cancel) {						
+								boolean threeArgs = false; boolean argXisOK = false; 
+								boolean argYisOK = false; boolean argPosIsOK = false;
 								int x = -1; int y = -1; int pos = -1; // Data given by the player.
 								do {
-										String [] answer = view.tileUsherMenu(i).split(" ");
+										String [] answer = view.tileUsherMenu(i+1).split(" ");
 										cancel = (answer.length == 1 && answer[0].equals("0"));
-										
 										if (!cancel) {
 												// Player data
 												x = Integer.parseInt(answer[0])-1;
@@ -198,31 +212,30 @@ public class ClientController {
 
 												// Check integrity
 												threeArgs = answer.length == 3;
-												argXisOK = (x >= 1) && (x <= 15);
-												argYisOK = (y >= 1) && (y <= 15);
-												argPosIsOK = (pos >= 1) && (pos <= 7);
+												argXisOK = (x >= 0) && (x <= 14);
+												argYisOK = (y >= 0) && (y <= 14);
+												argPosIsOK = (pos >= 0) && (pos <= 6);
 										}
 								} while (!cancel && (!threeArgs || !argXisOK || !argYisOK || !argPosIsOK));
 								if (!cancel) {
-										formatedWord += x+":"+y+":"+pos; // New format, easier to split over the both side.
+										String blank = "";
+										if (gameBoard.isTileBlank(pos)) {
+												do {
+														 blank = view.blankTileManager();
+												} while ((blank.matches("[a-zA-Z]")) && (blank.length() < 1 || blank.length() > 1));
+										}
+										formatedWord += ((i > 0) && (formatedWord.length()>0)) ? "##" : "";
+										formatedWord += (blank.equals("")) ? x+":"+y+":"+pos : x+":"+y+":"+pos+":"+blank; // New format, easier to split over the both side.
 										firstX = (i == 1) ? x : firstX;
 										if (i == 2) {
 												orientation = (firstX == x) ? "V" : "H";
 										}
-										formatedWord += (i < number) ? "##" : "";
 								}
 								i++;
 						}
-						try {
-								if (!cancel) {
-										gameBoard.addWord(orientation+"@@"+formatedWord);
-								}
-						} catch (GameException ge) {
-								processException(ge);
-						}
+						return (!cancel) ? orientation+"@@"+formatedWord : "";
 				}
-				gameBoard.displayGame();
-				view.playMenu(player.isAnonym());
+				return "";
 		}
 		
 		public void tileOrganizer(Integer choice) {
@@ -236,20 +249,20 @@ public class ClientController {
 								break;
 						case 2:
 								try {
-										gameBoard.reorganizeTiles(view.tileReorganizerMenu());
+										gameBoard.switchTiles(view.tileReorganizerMenu());
 								} catch (GameException ge) {
 										processException(ge);
 								}
 								break;
 						case 0:
-								view.playMenu(player.isAnonym());
+								view.playMenu(player.isAnonym(), -1);
 								break;
 						default:
-								view.playMenu(player.isAnonym());
+								view.playMenu(player.isAnonym(), -1);
 								break;
 				}
-				gameBoard.displayGame();
-				view.playMenu(player.isAnonym());
+				view.displayGame(gameBoard.getPlay());
+				view.playMenu(player.isAnonym(), -1);
 		}
 		
 		public void tileExchange(Integer choice) {
@@ -269,15 +282,15 @@ public class ClientController {
 								}
 								break;
 						default:
-								view.playMenu(player.isAnonym());
+								view.playMenu(player.isAnonym(), -1);
 								break;
 				}
-				gameBoard.displayGame();
-				view.playMenu(player.isAnonym());
+				view.displayGame(gameBoard.getPlay());
+				view.playMenu(player.isAnonym(), -1);
 		}
 
 		private void processException(GameException ge) {
-				switch(ge.getErreur()) {
+				switch(ge.getError()) {
 						case CONN_KO:
 								view.firstMenu("The server connection is not possible! Please try again.");
 								break;
@@ -296,10 +309,19 @@ public class ClientController {
 						case LOGIN_ERROR:
 								view.firstMenu("Warning! The password entered is not correct! Please try again.");
 								break;
+						case LOGOUT_ERROR:
+								view.firstMenu("Warning! You are not yet logged!");
+								break;
 						case PLAYER_NOT_LOGGED:
 								view.firstMenu("Warning! You are not yet logged!");
 								break;
 						case NEW_GAME_ANONYM_ERROR:
+								view.firstMenu("An error has been encountered during the server processing! Please try again.");
+								break;
+						case LOAD_GAME_LIST_ERROR:
+								view.initMenu("Warning! You don't have yet any saved games!", "", null);
+								break;
+						case LOAD_GAME_ERROR:
 								view.firstMenu("An error has been encountered during the server processing! Please try again.");
 								break;
 						case DELETE_ANONYM_ERROR:

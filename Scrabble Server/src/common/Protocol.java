@@ -10,7 +10,7 @@ import java.net.Socket;
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public abstract class Protocol {
-    
+
 		protected Socket socket;
 		protected DataInputStream in;
 		protected DataOutputStream out;

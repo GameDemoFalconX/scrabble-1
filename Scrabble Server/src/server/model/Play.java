@@ -1,14 +1,14 @@
 package server.model;
 
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 
- * @author Romain <ro.foncier@gmail.com>
+ * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
 		private UUID playID;
@@ -30,6 +30,10 @@ public class Play {
 		private int testsWithSuccess = 0;
 		private int testsWithError = 0;
 		
+		/**
+			* Constructor for Play instance from simply playerID.
+			* @param playerID 
+			*/
 		public Play(String playerID) {
 				playID = UUID.randomUUID();
 				owner = UUID.fromString(playerID);
@@ -43,11 +47,6 @@ public class Play {
 		/**
 			* Allows to initialize a Play object without grid, rack and bag to save memory. 
 			* Thus it become possible to display some attributes of this without to have load the complete object.
-			* @param playerID
-			* @param playID
-			* @param created
-			* @param modified
-			* @param score 
 			*/
 		public Play(String playerID, String playID, String created, String modified, Integer score) {
 				this.playID = UUID.fromString(playID);
@@ -58,9 +57,10 @@ public class Play {
 				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
 				this.score = score;
 				
-				// Initialize grid and  tilebag
+				// Initialize grid,  tilebag and rack.
 				grid = new Grid();
 				bag = new TileBag();
+				rack = new Rack();
 		}
 		
 		public void loadTile(int x, int y, char letter, int value) {
@@ -68,6 +68,14 @@ public class Play {
 				grid.putInGrid(x, y, newTile);
 		}
 		
+		public void loadRackTile(int index, char letter, int value) {
+				Tile newTile = bag.popTile(letter, value);
+				rack.setTile(index, newTile);
+		}
+		
+		/**
+			* @return string representation of Play ID.
+			*/
 		public String getPlayID() {
 				return playID.toString();
 		}
@@ -78,7 +86,7 @@ public class Play {
 		}
 		
 		/**
-			* Put the player's tiles on the gameboard.
+			* Put the player's tiles on the game board.
 			* @param args
 			* @return a List which contains the tiles coordinates and their index in the rack.
 			*/
@@ -90,13 +98,14 @@ public class Play {
 						String [] tileAttrs = tilesList[i].split(":");
 						int x = Integer.parseInt(tileAttrs[0]);
 						int y = Integer.parseInt(tileAttrs[1]);
+						if (tileAttrs.length > 3) rack.setLetter(Integer.parseInt(tileAttrs[2]), tileAttrs[3]); // Set the letter of this tile before referencing.
 						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));
 						result.add(cTile); 
 						
 						// Tile treatment
 						cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
 						cTile.upStatus(); // Set this tile like a new add in the grid.
-						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard and add it its coordinates.
+						grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
 				}
 				return result;
 		}
@@ -107,14 +116,14 @@ public class Play {
 			*/
 		protected void removeBadTiles(ArrayList<Tile> tilesList) {
 				for (int i = 0; i < tilesList.size(); i++) {
-						grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY());
+						grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY()); // remove pointer
 				}
 		}
 		
 		/**
 			* Check neighbors tiles of the current tile, create a word form their letters and count the score of 
 			* this new word by considering the orientation given in parameter.
-			* @param coords
+			* @param cTile 
 			* @param orientation 
 			*/
 		protected void wordTreatment(Tile cTile, char orientation) {
@@ -224,7 +233,7 @@ public class Play {
 				return this.grid.toString();
 		}
 		
-		public String switchTiles(String position) {
+		public String tileExchange(String position) {
 				String newTiles = "";
 				String [] positions = position.split(" ");
 				for (int i = 0; i < positions.length; i++) {
@@ -239,6 +248,10 @@ public class Play {
 				}
 				rack = new Rack(newTiles);
 				return newTiles;
+		}
+		
+		public void tileSwitch(String position) {
+				rack.tileSwitch(position);
 		}
 		
 		public void setFormatedGrid(String fGrid) {

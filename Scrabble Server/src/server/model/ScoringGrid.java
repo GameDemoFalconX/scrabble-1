@@ -48,9 +48,7 @@ public class ScoringGrid {
 		
 		/**
 			* Return the value of count word. 1 by default, 2 for double count and 3 for triple count.
-			* @param x
-			* @param y
-			* @param val
+			* @param t 
 			* @param cPlay
 			* @return 
 			*/

@@ -1,11 +1,10 @@
 package server.model;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.io.IOException;
-import common.Message;
 import common.GameException;
 import common.Message;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,7 +26,8 @@ public class HAL extends Game {
 		
 		/**
 			* Create a new account for the current player.
-			* @param player
+			* @param pl_name 
+			* @param pl_pwd 
 			* @return Return True if a new account has been created. If the player name already exists, return False and do nothing.
 			*/
 
@@ -38,27 +38,32 @@ public class HAL extends Game {
 				}
 				Player newPlayer = new Player(pl_name, pl_pwd);
 				players.addPlayer(newPlayer);
-				plays.addStarter(newPlayer.getPlayerID());
+				plays.addPlayer(newPlayer.getPlayerID());
 				// Return the new player ID
 				return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
 		}
 		
 		@Override
 		protected Message loginProcess(String pl_name, String pl_pwd) {
-				Message response = null;
 				if (players.playerExists(pl_name)) {
 						Player pl = players.checkPassword(pl_name, pl_pwd); 
 						if (pl != null) {
-								plays.addStarter(pl.getPlayerID());
-								// Return the player ID
-								response = new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
+								plays.addPlayer(pl.getPlayerID());
+								return new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
 						} else {
-								response = new Message(Message.LOGIN_ERROR, "");
+								return new Message(Message.LOGIN_ERROR, "");
 						}
-				} else {
-						response = new Message(Message.PLAYER_NOT_EXISTS, "");
 				}
-				return response;
+				return new Message(Message.PLAYER_NOT_EXISTS, "");
+		}
+		
+		@Override
+		protected Message logoutProcess(String pl_id) {
+				if (plays.playerIsLogged(pl_id)) {
+						plays.removePlayer(pl_id);
+						return new Message(Message.LOGOUT_SUCCESS, "");
+				}
+				return new Message(Message.LOGOUT_ERROR, "");
 		}
 		
 		@Override
@@ -81,7 +86,7 @@ public class HAL extends Game {
 		protected Message createNewAnonymGame(String pl_id) {
 				if (!plays.playerIsLogged(pl_id)) {
 						// Add this anonymous player to the server players list.
-						plays.addStarter(pl_id);
+						plays.addPlayer(pl_id);
 						// Initialization of the Play on the server side and add it to the GameRAM dict.
 						Play newPlay = new Play(pl_id);
 						plays.addNewPlay(pl_id, newPlay);
@@ -94,7 +99,12 @@ public class HAL extends Game {
 		@Override
 		protected Message loadPlayLister(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
-						String list = plays.loadPlayList(pl_id);
+						String list = "";
+						try {
+								list = plays.loadPlayList(pl_id);
+						} catch (GameException ge) {
+								return new Message(Message.XML_FILE_NOT_EXISTS, "");
+						}
 						if (!list.equals("")) {
 								return new Message(Message.LOAD_GAME_LIST_SUCCESS, list);
 						}
@@ -108,8 +118,14 @@ public class HAL extends Game {
 				if (plays.playerIsLogged(pl_id)) {
 						try {
 								Play lPlay = plays.LoadGame(pl_id, ga_id);
-								plays.addNewPlay(pl_id, lPlay);
-								return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@");
+								if (lPlay != null) {
+										plays.addNewPlay(pl_id, lPlay);
+										System.out.println(lPlay.getGrid());
+										System.out.println(lPlay.getFormatRack());
+										return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@"+lPlay.getFormatRack());
+								} else {
+										return new Message(Message.LOAD_GAME_ERROR, "");
+								}
 						} catch (GameException ge) {
 								return new Message(Message.XML_FILE_NOT_EXISTS, "");
 						}
@@ -119,7 +135,6 @@ public class HAL extends Game {
 		
 		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
-				System.out.println(ga_infos);
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
 						cPlay.newTest(); // Increase the number of tests for this player.
@@ -128,10 +143,10 @@ public class HAL extends Game {
 						// Step 1 - Get orientation of the main word
 						char orientation = (char) gameArgs[0].charAt(0);
 						
-						// Step 2 - Place tiles on the grid and get the list of coordinates.
-						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
+						// Step 2.1 - Place tiles on the grid and get the list of coordinates.
+						//// Important! The list of tiles from client must be formated like the following canvas : x:y:[index of tile in the rack]##... x:y:[index of tile in the rack]:[letter for blank tile] ...
 						ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
-												
+										
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
 						int score = 0;
 						int bestWord = 0;
@@ -163,7 +178,7 @@ public class HAL extends Game {
 								cPlay.setScore(score); // Update score
 								String newTiles = cPlay.getNewTiles(tileList); // Get a formated list of tile with their index in the rack
 								cPlay.testWithSuccess(); // Increase the number of tests with success
-								return new Message(Message.PLACE_WORD_SUCCES, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
+								return new Message(Message.PLACE_WORD_SUCCESS, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
 						} else {
 								cPlay.setScore((bestWord/2)*(-1)); // Update score
 								cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
@@ -177,20 +192,32 @@ public class HAL extends Game {
 		@Override
 		protected Message destroyAnonym(String pl_id) {
 				if (plays.playerIsLogged(pl_id)) {
-						plays.removeStarter(pl_id);
+						plays.removePlayer(pl_id);
 						return new Message(Message.DELETE_ANONYM_SUCCESS, "");
 				}
 				return new Message(Message.DELETE_ANONYM_ERROR, "");
 		}
 		
 		@Override
-		protected Message switchTile(String pl_id, String position) {
+		protected Message tileExchange(String pl_id, String position) {
 				Message response = null;
 				if (plays.playerIsLogged(pl_id)) {
 						Play play = plays.getPlay(pl_id);
-						String newTiles = play.switchTiles(position);
+						String newTiles = play.tileExchange(position);
 						return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
 				}
 				return new Message(Message.PLAYER_NOT_LOGGED,"");
 		}
+		
+		@Override
+		protected Message tileSwitch(String pl_id, String position) {
+				Message response = null;
+				if (plays.playerIsLogged(pl_id)) {
+						Play play = plays.getPlay(pl_id);
+						play.tileSwitch(position);
+						return new Message(Message.TILE_SWITCH_SUCCES,"");
+				}
+				return new Message(Message.PLAYER_NOT_LOGGED,"");
+		}
+		
 }

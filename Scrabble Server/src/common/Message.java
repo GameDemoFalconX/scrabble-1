@@ -50,15 +50,29 @@ public class Message {
 		
 		// LOGOUT //
 		public static final int  LOGOUT = 50;  // Logout
+		public static final int  LOGOUT_SUCCESS = 51;  // Logout with success
+		public static final int  LOGOUT_ERROR = 52;  // Logout with error
 		
 		// TILE_EXCHANGE //
 		public static final int TILE_EXCHANGE = 60; // Exchange tiles
 		public static final int TILE_EXCHANGE_SUCCES = 61; // Exchange tiles with succes
 		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
+		// TILE_SWITCH //
+		
+		public static final int TILE_SWITCH = 63; // Exchange tiles
+		public static final int TILE_SWITCH_SUCCES = 64; // Exchange tiles with succes
+		public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
+		
+		// TILE_REORGANIZE //
+		
+		public static final int TILE_REORGANIZE = 66; // Exchange tiles
+		public static final int TILE_REORGANIZE_SUCCES = 67; // Exchange tiles with succes
+		public static final int TILE_REORGANIZE_ERROR = 68; // Exchange tiles with error
+		
 		// PLACE_WORD //
 		public static final int PLACE_WORD = 70; // Place word
-		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes
+		public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
 		public static final int PLACE_WORD_ERROR = 72; // Place word with error
 		
 		// DICTIONNARY //
@@ -73,19 +87,19 @@ public class Message {
 		
 		// XML FILES EXCEPTIONS
 		public static final int XML_FILE_NOT_EXISTS = 550; // 
-		
+
 		public Message(Integer header, String body) {
 				this.header = header;
 				this.body = body.getBytes();
 				this.size = this.body.length;
 		}
-		
+
 		public Message(Integer header, Integer length, byte [] body) {
 				this.header = header;
 				this.size = length;
 				this.body = body;
 		}
-		
+
 		public Message(String args) {
 				String [] argsTab = new String[2];
 				argsTab = args.split("#");
@@ -93,15 +107,15 @@ public class Message {
 				this.body = argsTab[1].getBytes();
 				this.size = this.body.length;
 		}
-    
+
 		public int getHeader() {
 				return header;
 		}
-    
+
 		public int getSize() {
 				return size;
 		}
-    
+
 		public byte [] getBody() {
 				return body;
 		}

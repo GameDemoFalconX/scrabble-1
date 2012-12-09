@@ -33,7 +33,10 @@ public class GameRAM {
 		
 		/**
 			* Load a specific play for the current player from the games.xml file. 
-			* @param playerUUID 
+			* @param playerUUID
+			* @param playID 
+			* @return
+			* @throws GameException  
 			*/
 		public Play LoadGame(String playerUUID, String playID) throws GameException {
 				File gameFile = new File("games.xml");
@@ -66,16 +69,29 @@ public class GameRAM {
 																		fGrid += tile.getValue();
 																		if (k < tileList.size()-1) fGrid += "##";
 																		
-																		String [] tileAttrs = tile.getValue().split("__");
+																		String [] tileAttrs = tile.getValue().split(":");
 																		
 																		// Tile attributes
-																		int x = Integer.parseInt(tileAttrs[0].split(":")[0]);
-																		int y = Integer.parseInt(tileAttrs[0].split(":")[1]);
-																		char letter = tileAttrs[1].split(":")[0].charAt(0);
-																		int value = Integer.parseInt(tileAttrs[1].split(":")[1]);
+																		int x = Integer.parseInt(tileAttrs[0]);
+																		int y = Integer.parseInt(tileAttrs[1]);
+																		char letter = tileAttrs[2].charAt(0);
+																		int value = Integer.parseInt(tileAttrs[3]);
 																		loadPlay.loadTile(x, y, letter, value);
 																}
 																loadPlay.setFormatedGrid(fGrid);
+																
+																// Load rack
+																Element rack = playNode.getChild("rack");
+																List rTileList = rack.getChildren("tile");
+																for (int l = 0; l < rTileList.size(); l++) {
+																		Element tile = (Element) rTileList.get(l);	
+																		String [] tileAttrs = tile.getValue().split(":");
+																		
+																		// Tile attributes
+																		char letter = tileAttrs[0].charAt(0);
+																		int value = Integer.parseInt(tileAttrs[1]);
+																		loadPlay.loadRackTile(l, letter, value);
+																}
 														}
 														break;
 												}
@@ -98,6 +114,7 @@ public class GameRAM {
 		
 		/**
 			* Simply put the new play in the plays HashMap if the playerID exists.
+			* @param playerID 
 			* @param play 
 			* @return true if operation is done.
 			*/
@@ -107,13 +124,11 @@ public class GameRAM {
 				Set set = this.plays.entrySet(); 
 				Iterator i = set.iterator(); 
 				
-				// Display elements 
-				while(i.hasNext()) { 
+				while(!done && i.hasNext()) { 
 						Map.Entry me = (Map.Entry)i.next(); 
 						if (me.getKey().equals(playerID)) {
 								me.setValue(play);
 								done = true;
-								break;
 						}
 				}
 				return done;
@@ -129,18 +144,18 @@ public class GameRAM {
 		}
 		
 		/**
-			* Add the new player to the player list and initialize this Play instance to null.
+			* Add the current player to the player list and initialize this Play instance to null.
 			* @param playerID 
 			*/
-		public void addStarter(String playerID) {
+		public void addPlayer(String playerID) {
 				plays.put(playerID, null);
 		}
 		
 		/**
-			* Remove a player to the player list and destroy this Play instance.
+			* Remove the current player to the player list and destroy this Play instance (Garbage collector).
 			* @param playerID 
 			*/
-		public void removeStarter(String playerID) {
+		public void removePlayer(String playerID) {
 				plays.remove(playerID);
 		}
 		
@@ -172,11 +187,12 @@ public class GameRAM {
 		
 		/**
 			* Get the list of plays for the current user and format the content of them for send it to the client
+			* @param playerUUID 
 			* @return String with this canvas : [play uuid]__[play created date]__[modified]__[score] == play unit
-			* [play unit 1]##[play unit 2]## ...
+			* [play unit 1]@@[play unit 2]@@ ...
 			* Two underscore between play attributes and two ## between play units.
 			*/
-		public String loadPlayList(String playerUUID) { // catch errors
+		public String loadPlayList(String playerUUID) throws GameException {
 				String result = "";
 				File gameFile = new File("games.xml");
 				if (gameFile.exists()) {
@@ -195,7 +211,7 @@ public class GameRAM {
 														
 														// Format Play informations without the game objects and concat it to the result variable.
 														result += playNode.getChildText("uuid")+"__"+playNode.getChildText("created")+"__"+playNode.getChildText("modified")+"__"+Integer.parseInt(playNode.getChildText("score"));
-														if (j < playList.size()) result += "##";
+														if (j < playList.size()) result += "@@";
 												}
 										}
 										break; // break the loop.
@@ -208,7 +224,7 @@ public class GameRAM {
 						}
 				} else {
 						System.out.println("Game file doesn't exist!");
-						// TODO Improve the way to handle errors.
+						throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
 				}
 				return result;
 		}
@@ -223,6 +239,11 @@ public class GameRAM {
 			*/
 		public void removePlay() {}
 		
+		/**
+			* 
+			* @param playerID
+			* @return
+			*/
 		public Play getPlay(String playerID) {
 				if (!plays.isEmpty()) {
 						System.out.println("GameRAM not empty " + playerID);

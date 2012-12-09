@@ -11,6 +11,7 @@ public interface IGame {
 		// Player connection
 		Message newAccount(String pl_name, String pl_pwd) throws GameException;
 		Message login(String pl_name, String pl_pwd) throws GameException;
+		Message logout(String pl_id) throws GameException;
 		
 		// Create or load plays
 		Message createNewPlay(String pl_id) throws GameException;
@@ -29,4 +30,6 @@ public interface IGame {
 		
 		// Exchange tile
 		Message exchangeTile(String pl_id, String position) throws GameException;
+		
+		Message switchTile(String pl_id, String position) throws GameException;
 }

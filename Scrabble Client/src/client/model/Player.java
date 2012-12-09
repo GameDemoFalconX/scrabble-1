@@ -19,10 +19,6 @@ public class Player {
 				playerID = UUID.fromString(uuid);
 		}
 		
-		/**
-			* Constructor for anonymous player.
-			* @param name
-			*/
 		public Player() {
 				isAnonymous = true;
 				playerID = UUID.randomUUID();
@@ -45,10 +41,16 @@ public class Player {
 				this.playerPassword = pwd;
 		}
 		
+		/**
+			* @return player ID. 
+			*/
 		public String getPlayerID() {
 				return playerID.toString();
 		}
 		
+		/**
+			* @return True if current player is anonymous. 
+			*/
 		public boolean isAnonym() {
 				return isAnonymous;
 		}
