@@ -173,16 +173,13 @@ public class ThreadCtrl extends Thread {
 		
 		private void gameTreatment() {
 				// Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
+				System.out.println(new String(request.getBody()));
 				String [] argsTab = new String(request.getBody()).split("_");
-				String playerID = argsTab[0];
-				String playID = argsTab[1];
-				String gameInformations = argsTab[2];
-				System.out.println(gameInformations);
 				outputPrint("Start game treatment for the current player");
 				Message response;
 						
 				// Check if the player's game is correct.
-				response = HAL.gameTreatment(playerID, playID, gameInformations);
+				response = HAL.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

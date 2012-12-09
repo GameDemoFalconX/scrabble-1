@@ -118,7 +118,7 @@ public abstract class Game implements IGame {
 		public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
 				Message response = scrabbleValidator(pl_id, ga_id, ga_infos);
 				switch (response.getHeader()) {
-						case Message.PLACE_WORD_SUCCES:
+						case Message.PLACE_WORD_SUCCESS:
 								return response;
 						case Message.PLACE_WORD_ERROR:
 								return response;

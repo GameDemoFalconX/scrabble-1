@@ -61,7 +61,7 @@ public class Message {
 		
 		// PLACE_WORD //
 		public static final int PLACE_WORD = 70; // Place word
-		public static final int PLACE_WORD_SUCCES = 71; // Place word with succes
+		public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
 		public static final int PLACE_WORD_ERROR = 72; // Place word with error
 		
 		// DELETE_ANONYM

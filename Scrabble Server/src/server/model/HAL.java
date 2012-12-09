@@ -143,10 +143,9 @@ public class HAL extends Game {
 						char orientation = (char) gameArgs[0].charAt(0);
 						
 						// Step 2.1 - Place tiles on the grid and get the list of coordinates.
-						//// Important! The list of tiles from clinet must be formated like the following canva : x:y--[index of tile in the rack]##...
+						//// Important! The list of tiles from client must be formated like the following canvas : x:y:[index of tile in the rack]##... x:y:[index of tile in the rack]:[letter for blank tile] ...
 						ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
-						
-												
+										
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
 						int score = 0;
 						int bestWord = 0;
@@ -178,7 +177,7 @@ public class HAL extends Game {
 								cPlay.setScore(score); // Update score
 								String newTiles = cPlay.getNewTiles(tileList); // Get a formated list of tile with their index in the rack
 								cPlay.testWithSuccess(); // Increase the number of tests with success
-								return new Message(Message.PLACE_WORD_SUCCES, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
+								return new Message(Message.PLACE_WORD_SUCCESS, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
 						} else {
 								cPlay.setScore((bestWord/2)*(-1)); // Update score
 								cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid

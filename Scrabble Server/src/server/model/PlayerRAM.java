@@ -22,7 +22,7 @@ public class PlayerRAM {
 		
 		private  Map<String, Player> players = new HashMap<>();
 
-		protected PlayerRAM() {
+		public PlayerRAM() {
 				File playerFile = new File("players.xml");
 				if (playerFile.exists()) {
 						System.out.println("Player file exists!");
@@ -67,7 +67,7 @@ public class PlayerRAM {
 			* @param name
 			* @return True if the name exists.
 			*/
-		protected boolean playerExists(String name) {
+		public boolean playerExists(String name) {
 				if (!players.isEmpty()) {
 						return players.containsKey(name);
 				} else {
@@ -88,7 +88,7 @@ public class PlayerRAM {
 				return null;
 		}
 		
-		private void displayPlayers() {
+		protected void displayPlayers() {
 				if (players.isEmpty()) System.out.println("Map empty!");
 				Set set = this.players.entrySet(); 
 				Iterator i = set.iterator(); 

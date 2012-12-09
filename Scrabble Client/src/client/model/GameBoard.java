@@ -92,6 +92,7 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.LOGIN_SUCCESS:
 										player =  new Player(name, password, new String(serverResponse.getBody()));
+										break;
 								case Message.PLAYER_NOT_EXISTS:
 										throw new GameException(GameException.typeErr.PLAYER_NOT_EXISTS);
 								case Message.LOGIN_ERROR:
@@ -194,26 +195,28 @@ public class GameBoard {
 
 		/**
 			* Ask the server to add a Word to the grid
-			* @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...@@[blank tile 1]##[blank tile 2]
+			* @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
 			* @throws GameException 
 			*/
-		public void addWord(String formatedWord) throws GameException {
-				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...@@[blank tile 1]##[blank tile 2]
+		public int addWord(String formatedWord) throws GameException {
+				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
 				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD,  cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.PLACE_WORD_SUCCES:
+								case Message.PLACE_WORD_SUCCESS:
 										String args = new String(serverResponse.getBody());
 										cPlay.addWord(args, formatedWord);
 										break;
 								case Message.PLACE_WORD_ERROR:
-										String [] error = new String(serverResponse.getBody()).split("_");
-										System.out.println("Sorry, this word doesn't exist! Your new score is :"+error[2]);
+										cPlay.setScore(Integer.parseInt(new String(serverResponse.getBody()).split("_")[2])); // Update score if the Play is over.
 						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
 				}
+				return cPlay.getScore();
 		}
 		
 		/**
@@ -255,7 +258,7 @@ public class GameBoard {
 				if ("".equals(position)) {
 						position += "1 2 3 4 5 6 7";
 				}
-				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, 0, cPlay.getOwner()
+				Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, cPlay.getOwner()
 												+"##"+position);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {

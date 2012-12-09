@@ -21,7 +21,6 @@ public class View {
 		
 		public void displayGame(Play cPlay) {
 				System.out.println(menuHeader);
-				System.out.println("Score : " + cPlay.getScore());
 				AnsiConsole.systemInstall();
 				AnsiConsole.out.println(cPlay.displayGrid());
 				System.out.print("\n");
@@ -42,14 +41,15 @@ public class View {
 		public void initMenu(String error, String name, Integer status) {
 				System.out.println(menuHeader);
 				if (!error.equals("")) System.out.println(error+"\n"); // Display error messages in the menu
-				if (!status.equals(null)) System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
+				if (status != null) System.out.println((status == Message.NEW_ACCOUNT_SUCCESS) ? name+", you're sucessfully registered!\n" : name+", you're sucessfully logged!\n");
 				System.out.println("1: New game");
 				System.out.println("2: Load game"); // Catch error during the process.
 				System.out.println("0: Exit\n");
 				ctrl.initChoice(CConsole.readInt("Your choice ?  "));
 		}
     
-		public void playMenu(boolean isAnonymous) {
+		public void playMenu(boolean isAnonymous, int score) {
+				if (score > -1) System.out.println("Your score : "+score+"\n"); // Display score in the menu
 				System.out.println("1: Place word");
 				System.out.println("2: Organize your letters");
 				System.out.println("3: Exchange a tile");
@@ -71,11 +71,11 @@ public class View {
 				return CConsole.readInt("Select the game you want to play?  ");
 		}
 		
-		public void tileUsherMainMenu() {
+		public int tileUsherMainMenu() {
 				System.out.println("\n#            TILES USHER             #");
 				System.out.println("_______________________________________\n");
-				System.out.println("Please enter the number of tiles you want to place. Type 0 to cancel.");
-				ctrl.tileUsher(CConsole.readInt("e.g. 3 : "));
+				System.out.println("Please enter the number of tiles you want to place. Type 0 to cancel and back to the menu.");
+				return CConsole.readInt("e.g. 3 : ");
 		}
 		
 		public String tileUsherMenu(Integer letterNumber) {
