@@ -50,12 +50,15 @@ Scrabble is a word game in which two to four players score points by forming wor
 				<score>[play-score]</score>
 				<grid>
 					<tile>
-                    	[x:y__L:V]
-                    	...
-                	</tile>
+						[x:y:L:V]
+						...
+					</tile>
 				</grid>
 				<rack>
-					[rack-informations]
+					<tile>
+						[x:y:L:V]
+						...
+					</tile>
 				</rack>
 			</play>
 		</player>

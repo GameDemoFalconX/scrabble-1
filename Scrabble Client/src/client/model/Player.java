@@ -41,10 +41,16 @@ public class Player {
 				this.playerPassword = pwd;
 		}
 		
+		/**
+			* @return player ID. 
+			*/
 		public String getPlayerID() {
 				return playerID.toString();
 		}
 		
+		/**
+			* @return True if current player is anonymous. 
+			*/
 		public boolean isAnonym() {
 				return isAnonymous;
 		}

@@ -30,4 +30,9 @@
     <name>nom</name>
     <password>5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8</password>
   </player>
+  <player uuid="fff80896-2b1c-41b2-b703-40a9c94e9256">
+    <uuid>fff80896-2b1c-41b2-b703-40a9c94e9256</uuid>
+    <name>albert</name>
+    <password>79ea9358181884637163fbd61c06b22150f429636bdded87bdc70067db2396a4</password>
+  </player>
 </players>

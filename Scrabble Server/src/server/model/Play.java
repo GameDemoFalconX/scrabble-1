@@ -30,6 +30,10 @@ public class Play {
 		private int testsWithSuccess = 0;
 		private int testsWithError = 0;
 		
+		/**
+			* Constructor for Play instance from simply playerID.
+			* @param playerID 
+			*/
 		public Play(String playerID) {
 				playID = UUID.randomUUID();
 				owner = UUID.fromString(playerID);
@@ -53,9 +57,10 @@ public class Play {
 				this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
 				this.score = score;
 				
-				// Initialize grid and  tilebag
+				// Initialize grid,  tilebag and rack.
 				grid = new Grid();
 				bag = new TileBag();
+				rack = new Rack();
 		}
 		
 		public void loadTile(int x, int y, char letter, int value) {
@@ -63,6 +68,14 @@ public class Play {
 				grid.putInGrid(x, y, newTile);
 		}
 		
+		public void loadRackTile(int index, char letter, int value) {
+				Tile newTile = bag.popTile(letter, value);
+				rack.setTile(index, newTile);
+		}
+		
+		/**
+			* @return string representation of Play ID.
+			*/
 		public String getPlayID() {
 				return playID.toString();
 		}
@@ -72,20 +85,8 @@ public class Play {
 				return dateFormat.format(d);
 		}
 		
-		protected String blankTreatment(String blankTiles) {
-				String regulatedTiles = "";
-				String[] blankTilesArray = blankTiles.split("##");
-				for (int i = 0; i < blankTilesArray.length; i++) {
-						String[] singleBlankTile = blankTilesArray[i].split(":");
-						rack.setLetter(Integer.parseInt(singleBlankTile[2]),singleBlankTile[3]);
-						regulatedTiles += singleBlankTile[0]+":"+singleBlankTile[1]+":"+singleBlankTile[2]+"##";
-				}
-				System.out.println("regulatedTiles = " + regulatedTiles);
-				return regulatedTiles;
-		}
-		
 		/**
-			* Put the player's tiles on the gameboard.
+			* Put the player's tiles on the game board.
 			* @param args
 			* @return a List which contains the tiles coordinates and their index in the rack.
 			*/
@@ -95,16 +96,16 @@ public class Play {
 				
 				for (int i = 0; i < tilesList.length; i++) {
 						String [] tileAttrs = tilesList[i].split(":");
-						System.out.println("tilesList["+i+"] : " + tilesList[i]);
 						int x = Integer.parseInt(tileAttrs[0]);
 						int y = Integer.parseInt(tileAttrs[1]);
+						if (tileAttrs.length > 3) rack.setLetter(Integer.parseInt(tileAttrs[2]), tileAttrs[3]); // Set the letter of this tile before referencing.
 						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));
 						result.add(cTile); 
 						
 						// Tile treatment
 						cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
 						cTile.upStatus(); // Set this tile like a new add in the grid.
-						grid.putInGrid(x, y, cTile); // Put this tile on the gameboard and add it its coordinates.
+						grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
 				}
 				return result;
 		}
@@ -115,7 +116,7 @@ public class Play {
 			*/
 		protected void removeBadTiles(ArrayList<Tile> tilesList) {
 				for (int i = 0; i < tilesList.size(); i++) {
-						grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY());
+						grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY()); // remove pointer
 				}
 		}
 		

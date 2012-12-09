@@ -24,10 +24,8 @@ public class Player {
 		}
 		
 		/**
-			* 
-			* @param name
-			* @param pwd
-			* @param uuid
+			* Create a new instance of player.
+			* @param name, pwd, uuid.
 			*/
 		public Player(String name, String pwd, String uuid) {
 				playerName = name;

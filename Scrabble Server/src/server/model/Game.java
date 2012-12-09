@@ -40,6 +40,18 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		@Override
+		public Message logout(String pl_id) throws GameException {
+				Message response = logoutProcess(pl_id);
+				switch (response.getHeader()) {
+						case Message.LOGOUT_SUCCESS:
+								return response;
+						case Message.LOGOUT_ERROR:
+								throw new GameException(GameException.typeErr.LOGOUT_ERROR);
+				}
+				return null;
+		}
+		
 		// Game -  plays actions
 		@Override
 		public Message createNewPlay(String pl_id) throws GameException {
@@ -60,7 +72,7 @@ public abstract class Game implements IGame {
 						case Message.NEW_GAME_ANONYM_SUCCESS:
 								return response;
 						case Message.NEW_GAME_ANONYM_ERROR:
-								throw new GameException(GameException.typeErr.LOGIN_ERROR);
+								throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
 				}
 				return null;
 		}
@@ -77,7 +89,11 @@ public abstract class Game implements IGame {
 						case Message.LOAD_GAME_LIST_SUCCESS:
 								return response;
 						case Message.LOAD_GAME_LIST_ERROR:
+								throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
+						case Message.PLAYER_NOT_LOGGED:
 								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+						case Message.XML_FILE_NOT_EXISTS:
+								throw new GameException(GameException.typeErr.LOAD_GAME_LIST_ERROR);
 				}
 				return null;
 		}
@@ -88,6 +104,8 @@ public abstract class Game implements IGame {
 						case Message.LOAD_GAME_SUCCESS:
 								return response;
 						case Message.LOAD_GAME_ERROR:
+								throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
+						case Message.PLAYER_NOT_LOGGED:
 								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						case Message.XML_FILE_NOT_EXISTS:
 								throw new GameException(GameException.typeErr.XML_FILE_NOT_EXISTS);
@@ -100,7 +118,7 @@ public abstract class Game implements IGame {
 		public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
 				Message response = scrabbleValidator(pl_id, ga_id, ga_infos);
 				switch (response.getHeader()) {
-						case Message.PLACE_WORD_SUCCES:
+						case Message.PLACE_WORD_SUCCESS:
 								return response;
 						case Message.PLACE_WORD_ERROR:
 								return response;
@@ -153,6 +171,7 @@ public abstract class Game implements IGame {
 		// Abstract methods
 		protected abstract Message createAccount(String pl_name, String pl_pwd); 
 		protected abstract Message loginProcess(String pl_name, String pl_pwd);
+		protected abstract Message logoutProcess(String pl_id);
 		protected abstract Message createNewGame(String pl_id);
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);

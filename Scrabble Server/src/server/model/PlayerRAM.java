@@ -36,16 +36,11 @@ public class PlayerRAM {
 								List list = rootNode.getChildren("player");
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
-										// Create new player instance
+										// Create new player instances
 										Player loadPlayer = new Player(node.getChildText("name"), node.getChildText("password"), node.getChildText("uuid"));
-										//System.out.println(node.getChildText("name"));
 										// Add this new instance to the map
 										players.put(node.getChildText("name"), loadPlayer);
 								}
-								
-								// Display the players hashmap
-								//displayPlayers();
-								
 								System.out.println("Player file Loaded!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
@@ -62,7 +57,6 @@ public class PlayerRAM {
  
 								xmlOutput.setFormat(Format.getPrettyFormat());
 								xmlOutput.output(doc, new FileWriter(playerFile));
-								//xmlOutput.output(doc, System.out);
 								
 								System.out.println("Player file Created!");
 						} catch (IOException e) {
@@ -71,6 +65,11 @@ public class PlayerRAM {
 				}
 		} 
 		
+		/**
+			* Check if the player name given in parameter exists within players saved list over server.
+			* @param name
+			* @return True if the name exists.
+			*/
 		public boolean playerExists(String name) {
 				if (!players.isEmpty()) {
 						return players.containsKey(name);
@@ -79,6 +78,11 @@ public class PlayerRAM {
 				}
 		}
 		
+		/**
+			* Check if the password for this player name is correct.
+			* @params pl_name, pl_pwd
+			* @return Player instance if password is correct otherwise null.
+			*/
 		public Player checkPassword(String pl_name, String pl_pwd) {
 				Player plCheck = players.get(pl_name);
 				if (plCheck.getPlayerPassword().equals(pl_pwd)) {
@@ -87,7 +91,7 @@ public class PlayerRAM {
 				return null;
 		}
 		
-		private void displayPlayers() {
+		protected void displayPlayers() {
 				if (players.isEmpty()) System.out.println("Map empty!");
 				Set set = this.players.entrySet(); 
 				Iterator i = set.iterator(); 
