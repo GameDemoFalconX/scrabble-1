@@ -86,7 +86,6 @@ public class ClientController {
 										} else {
 												// TODO GUI 
 										}
-												// TODO player menu  
 								} catch (GameException ge) {
 										processException(ge);
 								}

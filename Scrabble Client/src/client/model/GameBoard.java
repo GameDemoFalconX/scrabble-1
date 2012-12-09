@@ -50,12 +50,9 @@ public class GameBoard {
 						// Throw an exception if the hash function return an error.
 						throw new GameException(GameException.typeErr.PWDKO);
 				}
-				String args = name+"_"+password;
-				Message serverResponse = gbProtocol.sendRequest(Message.NEW_ACCOUNT, 0,  args);
+				Message serverResponse = gbProtocol.sendRequest(Message.NEW_ACCOUNT,  name+"_"+password);
 				
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -68,7 +65,7 @@ public class GameBoard {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-				return null; // To update
+				return null; 
 		}
 		
 		/**
@@ -106,6 +103,25 @@ public class GameBoard {
 				return player;
 		}
 
+		/**
+			* Ask the server to logout the current player.
+			* @param playerID
+			* @throws GameException 
+			*/
+		public void logoutPlayer(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.LOGOUT,  playerID);
+				if (serverResponse != null) {
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.LOGOUT_ERROR:
+										throw new GameException(GameException.typeErr.LOGOUT_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
 		/**
 			* Ask the server to create a new Play based on the player ID
 			* @param playerID the player ID as a String
@@ -309,20 +325,6 @@ public class GameBoard {
 										throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
 								case Message.PLAYER_NOT_LOGGED:
 										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
-						}
-				} else {
-						throw new GameException(GameException.typeErr.CONN_KO);
-				}
-		}
-		
-		public void logoutPlayer(String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.LOGOUT,  playerID);
-				if (serverResponse != null) {
-						switch(serverResponse.getHeader()) {		
-								case Message.SYSKO:
-										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.LOGOUT_ERROR:
-										throw new GameException(GameException.typeErr.LOGOUT_ERROR);
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);

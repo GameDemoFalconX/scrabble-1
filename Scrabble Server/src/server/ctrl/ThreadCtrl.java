@@ -106,7 +106,7 @@ public class ThreadCtrl extends Thread {
 				Message response;
 				
 				// Try to log the current player
-				response = HAL.logout(new String(request.getBody());
+				response = HAL.logout(new String(request.getBody()));
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();
