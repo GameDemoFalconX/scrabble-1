@@ -12,12 +12,12 @@ import javax.swing.JPanel;
  * 
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
-public class TireRack extends JPanel {
+public class Rack extends JPanel {
     
 //    PictureTransferHandler picHandler;
   DTPicture dticone;
 
-  public TireRack(int ratingOfGUI, MyGlassPane glass){
+  public Rack(int ratingOfGUI, MyGlassPane glass){
     ImageIcon icon = createImageIcon("images/Tile.png","Tile");
     icon = new ImageIcon(getScaledImage(icon.getImage(), 36,getProportionnalHeight(icon, 37)));
     dticone = new DTPicture(icon.getImage(), glass);

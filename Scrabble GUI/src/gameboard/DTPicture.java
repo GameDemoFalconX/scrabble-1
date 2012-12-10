@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
@@ -94,7 +95,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseDragged(MouseEvent e) {
-//    System.out.println("mouseDragged:DTPicture");
+    System.out.println("mouseDragged:DTPicture");
       //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
     
     Component com = e.getComponent();
@@ -141,6 +142,13 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseReleased(MouseEvent e) {
+//            //This is a drag, not a click.
+//        JComponent c = (JComponent) e.getSource();
+//        TransferHandler handler = c.getTransferHandler();
+//        //Tell the transfer handler to initiate the drag.
+//        handler.exportAsDrag(c, firstMouseEvent, TransferHandler.MOVE);
+      
+    //System.out.println("mouseReleased:DTPicture");
     firstMouseEvent = null;
     
     //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
@@ -168,7 +176,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //On n'oublie pas de ne plus l'afficher
     glass.setVisible(false);
     
-    dtpic.setVisible(true);
+//    dtpic.setVisible(true);
 //    System.out.println("ici");
     //@@@@@@@@  FIN GlassPane @@@@@@@@@@@@@@
 

@@ -20,14 +20,14 @@ class MainFrame {
     contentPane.setLayout(null);
 
     GameBoard gameboard = new GameBoard(ratingOfGUI);
-    TireRack tireRack = new TireRack(ratingOfGUI, glass);
+    Rack tireRack = new Rack(ratingOfGUI, glass);
     contentPane.add(gameboard, 0);
     contentPane.add(tireRack, 0);
     contentPane.add(new GameGrid(glass), 0);
 
 
     double FrHeight = (double)ratingOfGUI*120;
-    System.out.println("Height of the frame : " + FrHeight);
+//    System.out.println("Height of the frame : " + FrHeight);
 
     frame.setSize(gameboard.getWidth() + gameboard.getInsets().left
                 + gameboard.getInsets().right+15, (int)FrHeight);

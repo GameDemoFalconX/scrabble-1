@@ -44,25 +44,10 @@ class Picture extends JComponent implements MouseListener {
   protected void paintComponent(Graphics graphics) {
     Graphics g = graphics.create();
 
-    //Draw in our entire space, even if isOpaque is false.
-//    g.setColor(Color.WHITE);
-//    g.fillRect(0, 0, image == null ? 125 : image.getWidth(this),
-//        image == null ? 125 : image.getHeight(this));
-
     if (image != null) {
-      //Draw image at its natural size of 125x125.
+      //Draw image at its natural size.
       g.drawImage(image, 0, 0, this);
     }
-
-//    g.setColor(Color.BLACK);
-    //Add a border, red if picture currently has focus
-//    if (isFocusOwner()) {
-//      g.setColor(Color.RED);
-//    } else {
-//      g.setColor(Color.BLACK);
-//    }
-//    g.drawRect(0, 0, image == null ? 125 : image.getWidth(this),
-//        image == null ? 125 : image.getHeight(this));
     g.dispose();
   }
 }
