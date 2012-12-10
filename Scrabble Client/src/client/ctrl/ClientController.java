@@ -174,13 +174,33 @@ public class ClientController {
 								break;
 						case 4:
 								try {
-										gameBoard.saveGame(player.getPlayerID());
+										gameBoard.saveGame(Message.JUST_SAVE, player.getPlayerID());
 								} catch (GameException ge) {
 										processException(ge);
 								}
 								break;
 						case 9:
-								// Check if save or not.
+								if (player.isAnonym()) {
+										try {
+												gameBoard.deleteAnonym(player.getPlayerID());
+												view.firstMenu(""); // Back to the first Menu
+										} catch (GameException ge) {
+												processException(ge);
+										}
+								} else {
+										char getAction;
+										do {
+												getAction = view.saveMenu();
+										} while (getAction != 'Y' || getAction != 'N');
+										if (getAction == 'Y') {
+												try {
+														gameBoard.saveGame(Message.SAVE_AND_STOP, player.getPlayerID());
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										}
+										view.initMenu("", "", null);
+								}
 								break;
 						case 0:
 								if (player.isAnonym()) {
@@ -190,7 +210,23 @@ public class ClientController {
 												processException(ge);
 										}
 								} else {
-										// Auto save.
+										char getAction;
+										do {
+												getAction = view.saveMenu();
+										} while (getAction != 'Y' || getAction != 'N');
+										if (getAction == 'Y') {
+												try {
+														gameBoard.saveGame(Message.SAVE_AND_SIGNOUT, player.getPlayerID());
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										} else { // just logout the current player before leave the application.
+												try {
+														gameBoard.logoutPlayer(player.getPlayerID());
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										}
 								}
 								view.display("See you next time !");
 								break;

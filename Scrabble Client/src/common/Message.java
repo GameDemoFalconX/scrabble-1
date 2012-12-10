@@ -71,8 +71,14 @@ public class Message {
 		
 		// SAVE_GAME //
 		public static final int SAVE_GAME = 80; // Save game
-		public static final int SAVE_GAME_SUCCESS = 81; // Save game with success
-		public static final int SAVE_GAME_ERROR = 82; // Save game wit errors
+		public static final int SAVE_GAME_WITH_END_GAME = 81; // Save and leave the current game
+		public static final int SAVE_GAME_WITH_LOGOUT = 82; // Save game and logout
+		public static final int SAVE_GAME_SUCCESS = 84; // Save game with success
+		public static final int SAVE_GAME_ERROR = 85; // Save game wit errors
+		//// Use for type of save process
+		public static final int JUST_SAVE = 86;
+		public static final int SAVE_AND_STOP = 87;
+		public static final int SAVE_AND_SIGNOUT = 88;
 		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player

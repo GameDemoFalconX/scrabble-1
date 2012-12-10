@@ -75,8 +75,10 @@ public class Message {
 		
 		// SAVE_GAME //
 		public static final int SAVE_GAME = 80; // Save game
-		public static final int SAVE_GAME_SUCCESS = 81; // Save game with success
-		public static final int SAVE_GAME_ERROR = 82; // Save game wit errors
+		public static final int SAVE_GAME_WITH_END_GAME = 81; // Save and leave the current game
+		public static final int SAVE_GAME_WITH_LOGOUT = 82; // Save game and logout
+		public static final int SAVE_GAME_SUCCESS = 84; // Save game with success
+		public static final int SAVE_GAME_ERROR = 85; // Save game wit errors
 		
 		// DICTIONNARY //
 		public static final int DICO_LOADED = 510; // Dictionnary loaded

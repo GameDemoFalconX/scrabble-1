@@ -334,7 +334,7 @@ public class GameBoard {
 				}
 		}
 		
-		public void saveGame(String playerID) throws GameException {
+		public void saveGame(int type, String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.SAVE_GAME,  playerID+"_"+cPlay.getPlayID()+"_"+cPlay.checkBlankTile());
 				if (serverResponse != null) {
 						switch(serverResponse.getHeader()) {		
