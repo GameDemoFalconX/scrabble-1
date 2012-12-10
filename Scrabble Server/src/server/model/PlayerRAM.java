@@ -37,9 +37,9 @@ public class PlayerRAM {
 								for (int i = 0; i < list.size(); i++) {
 										Element node = (Element) list.get(i);
 										// Create new player instances
-										Player loadPlayer = new Player(node.getChildText("name"), node.getChildText("password"), node.getChildText("uuid"));
+										Player loadPlayer = new Player(node.getChildText("email"), node.getChildText("password"), node.getChildText("uuid"));
 										// Add this new instance to the map
-										players.put(node.getChildText("name"), loadPlayer);
+										players.put(node.getChildText("email"), loadPlayer);
 								}
 								System.out.println("Player file Loaded!");
 						} catch (IOException e) {
@@ -67,12 +67,12 @@ public class PlayerRAM {
 		
 		/**
 			* Check if the player name given in parameter exists within players saved list over server.
-			* @param name
+			* @param email
 			* @return True if the name exists.
 			*/
-		public boolean playerExists(String name) {
+		public boolean playerExists(String email) {
 				if (!players.isEmpty()) {
-						return players.containsKey(name);
+						return players.containsKey(email);
 				} else {
 						return false;
 				}
@@ -83,8 +83,8 @@ public class PlayerRAM {
 			* @params pl_name, pl_pwd
 			* @return Player instance if password is correct otherwise null.
 			*/
-		public Player checkPassword(String pl_name, String pl_pwd) {
-				Player plCheck = players.get(pl_name);
+		public Player checkPassword(String pl_email, String pl_pwd) {
+				Player plCheck = players.get(pl_email);
 				if (plCheck.getPlayerPassword().equals(pl_pwd)) {
 						return plCheck;
 				}
@@ -106,7 +106,7 @@ public class PlayerRAM {
 		
 		public void addPlayer(Player player) {
 				// Add new player in the Map
-				players.put(player.getPlayerName(), player);
+				players.put(player.getPlayerEmail(), player);
 				//displayPlayers();
 				
 				// Add this in the XML File
@@ -120,7 +120,7 @@ public class PlayerRAM {
 						Element pl = new Element("player");
 						pl.setAttribute(new Attribute("uuid", player.getPlayerID()));
 						pl.addContent(new Element("uuid").setText(player.getPlayerID()));
-						pl.addContent(new Element("name").setText(player.getPlayerName()));
+						pl.addContent(new Element("email").setText(player.getPlayerEmail()));
 						pl.addContent(new Element("password").setText(player.getPlayerPassword()));
 						doc.getRootElement().addContent(pl);
  
@@ -138,12 +138,12 @@ public class PlayerRAM {
 				}
 		}
 		
-		public void deletePlayer(String name) {
+		public void deletePlayer(String email) {
 				if (!players.isEmpty()) {
-						String uuidToDelete = players.get(name).getPlayerID();
+						String uuidToDelete = players.get(email).getPlayerID();
 
 						// Delete player from Map
-						players.remove(name);
+						players.remove(email);
 						//displayPlayers();
 						
 						// Remove it from the XML File

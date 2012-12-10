@@ -8,13 +8,13 @@ import java.util.UUID;
  */
 public class Player {
 		
-		private String playerName;
+		private String playerEmail;
 		private String playerPassword;
 		private UUID playerID;
 		private boolean isAnonymous = false;
 		
-		public Player(String name, String pwd, String uuid) {
-				playerName = name;
+		public Player(String email, String pwd, String uuid) {
+				playerEmail = email;
 				playerPassword = pwd;
 				playerID = UUID.fromString(uuid);
 		}
@@ -22,15 +22,15 @@ public class Player {
 		public Player() {
 				isAnonymous = true;
 				playerID = UUID.randomUUID();
-				playerName = "PA"+playerID.toString();
+				playerEmail = "PA"+playerID.toString();
 		}
 		
-		public String getPlayerName() {
-				return playerName;
+		public String getPlayerEmail() {
+				return playerEmail;
 		}
 		
-		public void setPlayerName(String name) {
-				this.playerName = name;
+		public void setPlayerEmail(String name) {
+				this.playerEmail = name;
 		}
 		
 		public String getPlayerPassword() {
