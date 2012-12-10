@@ -8,31 +8,29 @@ import java.util.UUID;
  */
 public class Player {
 		
-		private String playerName;
+		private String playerEmail;
 		private String playerPassword;
 		private UUID playerID;
+		private boolean isAnonymous = false;
 		
-		public Player(String name, String pwd, String uuid) {
-				playerName = name;
+		public Player(String email, String pwd, String uuid) {
+				playerEmail = email;
 				playerPassword = pwd;
 				playerID = UUID.fromString(uuid);
 		}
 		
-		/**
-			* Constructor for anonymous player.
-			* @param name
-			*/
 		public Player() {
+				isAnonymous = true;
 				playerID = UUID.randomUUID();
-				playerName = "PA"+playerID.toString();
+				playerEmail = "PA"+playerID.toString();
 		}
 		
-		public String getPlayerName() {
-				return playerName;
+		public String getPlayerEmail() {
+				return playerEmail;
 		}
 		
-		public void setPlayerName(String name) {
-				this.playerName = name;
+		public void setPlayerEmail(String name) {
+				this.playerEmail = name;
 		}
 		
 		public String getPlayerPassword() {
@@ -43,7 +41,17 @@ public class Player {
 				this.playerPassword = pwd;
 		}
 		
+		/**
+			* @return player ID. 
+			*/
 		public String getPlayerID() {
 				return playerID.toString();
+		}
+		
+		/**
+			* @return True if current player is anonymous. 
+			*/
+		public boolean isAnonym() {
+				return isAnonymous;
 		}
 }

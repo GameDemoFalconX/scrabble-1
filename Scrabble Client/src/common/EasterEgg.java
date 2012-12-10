@@ -15,7 +15,7 @@ public class EasterEgg {
 		public static final String HELLO = "Hello.wav";
 
 		public static void playFile(String file) {
-				AePlayWave aw = new AePlayWave(file);
-				aw.start();
+				AePlayWave player = new AePlayWave(file);
+				player.start();
 		}
 }

@@ -1,13 +1,13 @@
 package server.ctrl;
 
-
+import common.GameException;
+import common.Message;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import server.connection.ServerProtocol;
 import server.model.GameFactory;
 import server.model.IGame;
-import common.*;
 
 /**
  *
@@ -90,6 +90,24 @@ public class ServerScrabble {
 		}
 		
 		/**
+			* Allows to logout the current user.
+			* @param pl_id
+			* @return 
+			*/
+		public synchronized Message logout(String pl_id) {
+				Message response = null;
+				try {
+						// Try to log the current player
+						response = game.logout(pl_id);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		/**
 			* Allows to create a new Play instance.
 			* @param playerID
 			* @return the new playID and the formatedRack.
@@ -115,7 +133,7 @@ public class ServerScrabble {
 		public synchronized Message newAnonymGame(String pl_id) {
 				Message response = null;
 				try {
-						// Try to log the current player
+						// Try to create a new game for the current anonymous player
 						response = game.createNewAnonymPlay(pl_id);
 						
 						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
@@ -163,6 +181,61 @@ public class ServerScrabble {
 		}
 		
 		/**
+			* Try to delete all informations which belong to the current anonymous user.
+			* @param playerID
+			* @return status
+			*/
+		public synchronized Message deleteAnonym(String playerID) {
+				Message response = null;
+				try {
+						// Try to delete an existed play for the current anonymous player
+						response = game.deleteAnonym(playerID);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
+				Message response = null;
+				try {
+						// Check if the player's game is correct.
+						response = game.checkGame(playerID, playID, gameInfos);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		public synchronized Message exchangeTile(String playerID, String tiles) {
+				Message response = null;
+				try {
+						response = game.exchangeTile(playerID,tiles);
+
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		public synchronized Message switchTile(String playerID, String position) {
+				Message response = null;
+				try {
+						response = game.switchTile(playerID,position);
+
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
+		/**
 			* Handle errors throws during the Game process.
 			* @param e
 			* @return a message instance with specific header.
@@ -186,6 +259,10 @@ public class ServerScrabble {
 								error = new Message(Message.LOGIN_ERROR, "");
 								outputPrint("Server error : Login error.");
 								break;
+						case LOGOUT_ERROR:
+								error = new Message(Message.LOGOUT_ERROR, "");
+								outputPrint("Server error : Logout error.");
+								break;
 						case PLAYER_NOT_LOGGED:
 								error = new Message(Message.PLAYER_NOT_LOGGED, "");
 								outputPrint("Server error : The current player does not yet logged.");
@@ -194,9 +271,29 @@ public class ServerScrabble {
 								error = new Message(Message.LOAD_GAME_LIST_ERROR, "");
 								outputPrint("Server error : The current player does not yet any plays saved on the server.");
 								break;
+						case LOAD_GAME_ERROR:
+								error = new Message(Message.LOAD_GAME_ERROR, "");
+								outputPrint("Server error : The current player can not load play saved on the server.");
+								break;
+						case XML_FILE_NOT_EXISTS:
+								error = new Message(Message.LOAD_GAME_ERROR, ""); // Send this error because the client side must ignore how data are saved on the server. This error concerned a data loading error. (from file or DB, ...)
+								outputPrint("Server error : The current player can not load play saved on the server.");
+								break;
 						case NEW_GAME_ANONYM_ERROR:
 								error = new Message(Message.NEW_GAME_ANONYM_ERROR, "");
 								outputPrint("Server error : The current anonymous player is already logged on the server. No play may be created.");
+								break;
+						case DELETE_ANONYM_ERROR:
+								error = new Message(Message.DELETE_ANONYM_ERROR, "");
+								outputPrint("Server error : The current anonymous player does not yet logged on the server. No play to remove.");
+								break;
+						case GAME_IDENT_ERROR:
+								error = new Message(Message.GAME_IDENT_ERROR, "");
+								outputPrint("Server error : The current player does not yet logged on the server or can't play at specific game.");
+								break;
+						case TILE_EXCHANGE_ERROR:
+								error = new Message(Message.TILE_EXCHANGE_ERROR,"");
+								outputPrint("Server error : Something went wrong with the tile exchange. Don't ask me, I don't know what.");
 								break;
 				}
 				return error;

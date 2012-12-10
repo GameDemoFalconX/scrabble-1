@@ -1,5 +1,8 @@
 package gameboard;
 
+import common.DTPicture;
+import common.MyGlassPane;
+import common.TileTransferHandler;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -63,7 +66,7 @@ public class Rack extends JPanel {
     setVisible(true);
   }
 
-      /** Returns an ImageIcon, or null if the path was invalid. */
+  /** Returns an ImageIcon, or null if the path was invalid. */
   final protected ImageIcon createImageIcon(String path, String description) {
     java.net.URL imgURL = getClass().getResource(path);
     if (imgURL != null) {

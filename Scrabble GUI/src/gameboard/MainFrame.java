@@ -1,7 +1,8 @@
 package gameboard;
 
-import java.awt.*;
-import javax.swing.*;
+import common.MyGlassPane;
+import java.awt.Container;
+import javax.swing.JFrame;
 
 /**
  *
@@ -10,44 +11,59 @@ import javax.swing.*;
 class MainFrame {
     
   public int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
+		
+		
   private MyGlassPane glass = new MyGlassPane();
+		private MainPopUp mainPopUp;
+		private String playerName = "";
 
   public MainFrame()  {
-    JFrame frame = new JFrame("SCRABBLE");
+    JFrame frame = new JFrame("Scrabble");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     Container contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
 
-    GameBoard gameboard = new GameBoard(ratingOfGUI);
-    Rack tireRack = new Rack(ratingOfGUI, glass);
-    contentPane.add(gameboard, 0);
-    contentPane.add(tireRack, 0);
-    contentPane.add(new GameGrid(glass), 0);
+    GameBoard gameBoard = new GameBoard(ratingOfGUI);
+    Rack rack = new Rack(ratingOfGUI, glass);
+				GameGrid gameGrid = new GameGrid(glass);
+				Menu menu = new Menu();
+    contentPane.add(gameBoard, 0);
+    contentPane.add(rack, 0);
+    contentPane.add(gameGrid, 0);
+				frame.setJMenuBar(menu.getMenu());
 
 
-    double FrHeight = (double)ratingOfGUI*120;
-//    System.out.println("Height of the frame : " + FrHeight);
+    double frameHeight = (double)ratingOfGUI*120;
+    System.out.println("Height of the frame : " + frameHeight);
 
-    frame.setSize(gameboard.getWidth() + gameboard.getInsets().left
-                + gameboard.getInsets().right+15, (int)FrHeight);
+    frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
+                + gameBoard.getInsets().right+15, (int)frameHeight);
     contentPane.setVisible(true);
     frame.setContentPane(contentPane);
     frame.setGlassPane(glass);
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
+				mainPopUp = new MainPopUp();
   }
+		
+		public void setPlayerName(String playerName) {
+				this.playerName = playerName;
+		}
+		
+		public String getPlayerName() {
+				return playerName;
+		}
 
   /**
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    // TODO code application logic here
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
-    @Override
-    public void run() {
-        new MainFrame();
-    }
+						@Override
+						public void run() {
+										MainFrame mainFrame = new MainFrame();
+						}
     });
   }
     

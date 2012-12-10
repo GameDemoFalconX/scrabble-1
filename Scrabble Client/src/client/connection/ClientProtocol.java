@@ -40,16 +40,12 @@ public class ClientProtocol extends Protocol {
 				return CONN_KO;
 		}
 		
-		public Message sendRequest(int header, int token, String args) {
+		public Message sendRequest(int header, String args) {
 				Message serverResponse = null;
 				if (TCPConnection() == CONN_OK) {
 						int connect = connectionScrabbleServer();
 						switch(connect) {
 								case CONN_ACK:
-										if (token != 0) {
-												// Add token to the message body
-												args = String.valueOf(token)+"@"+args;
-										}
 										int treatment = sendServerRequest(new Message(header, args));
 										switch (treatment) {
 												case CONN_ACK:

@@ -2,6 +2,10 @@ package common;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.*;
  
 public class AePlayWave extends Thread { 
@@ -27,6 +31,13 @@ public class AePlayWave extends Thread {
     } 
  
     public void run() { 
+				try {
+						JarFile jar = new JarFile(filename);
+				} catch (IOException ex) {
+						Logger.getLogger(AePlayWave.class.getName()).log(Level.SEVERE, null, ex);
+				}
+								JarEntry jen;
+								jen = new JarEntry("sounds/" + filename);
  
         File soundFile = new File(filename);
         if (!soundFile.exists()) { 

@@ -6,7 +6,7 @@ package client.model;
 */
 public class Tile {
 		
-		private final char letter;
+		private char letter;
 		private final int value;
 
 		public Tile(char letter, int value) {
@@ -21,13 +21,21 @@ public class Tile {
 		public int getValue() {
 				return value;
 		}
+		
+		public void setLetter(char letter) {
+				this.letter = letter;
+		}
 
 		/**
 		* Used only for debugging purpose
 		*/
 		@Override
 		public String toString() {
-				return  "[" + letter + value + "]";
+				if (value < 10) {
+						return "[" + letter + " " + value + "]";
+				} else {
+						return "[" + letter + "" + value+ "]";
+				}
 		}
 
 }

@@ -1,5 +1,6 @@
 package gameboard;
 
+import common.MyGlassPane;
 import javax.swing.JPanel;
 
 /**

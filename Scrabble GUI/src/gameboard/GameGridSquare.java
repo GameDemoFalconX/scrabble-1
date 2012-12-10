@@ -1,5 +1,8 @@
 package gameboard;
 
+import common.DTPicture;
+import common.MyGlassPane;
+import common.TileTransferHandler;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 

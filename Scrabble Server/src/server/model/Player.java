@@ -8,38 +8,67 @@ import java.util.UUID;
  */
 public class Player {
     
-		private String playerName;
+		private String playerEmailString;
 		private String playerPassword;
 		private UUID playerID;
 		
-		public Player(String name, String pwd) {
-				playerName = name;
+		/**
+			* 
+			* @param email
+			* @param pwd
+			*/
+		public Player(String email, String pwd) {
+				playerEmailString = email;
 				playerPassword = pwd; 
 				playerID = UUID.randomUUID();
 		}
 		
-		public Player(String name, String pwd, String uuid) {
-				playerName = name;
+		/**
+			* Create a new instance of player.
+			* @param name, pwd, uuid.
+			*/
+		public Player(String email, String pwd, String uuid) {
+				playerEmailString = email;
 				playerPassword = pwd;
 				playerID = UUID.fromString(uuid);
 		}
 		
-		public String getPlayerName() {
-				return playerName;
+		/**
+			* 
+			* @return
+			*/
+		public String getPlayerEmail() {
+				return playerEmailString;
 		}
 
-		public void setPlayerName(String name) {
-				this.playerName = name;
+		/**
+			* 
+			* @param email
+			*/
+		public void setPlayerEmail(String email) {
+				this.playerEmailString = email;
 		}
 
+		/**
+			* 
+			* @return
+			*/
 		public String getPlayerPassword() {
 				return playerPassword;
 		}
 		
+		/**
+			* 
+			* @param pwd
+			*/
 		public void setPlayerPassword(String pwd) {
 				this.playerPassword = pwd;
 		}
 		
+		/**
+			* 
+			* @return
+			*/
 		public String getPlayerID() {
 				return playerID.toString();
 		}

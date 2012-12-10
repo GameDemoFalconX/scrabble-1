@@ -8,6 +8,12 @@ class Rack {
 		
 		private Tile[] rack = new Tile[7];
 		
+		public Rack() {
+				for (int i = 0; i < rack.length; i++) {
+						rack[i] = null;
+				}
+		}
+		
 		/**
 			* Constructs a new Rack during the new Play process.
 			* @param bag 
@@ -30,6 +36,34 @@ class Rack {
 		}
 		
 		/**
+			* Get Tile at the specific index in the rack.
+			* @param i
+			* @return 
+			*/
+		protected Tile getTile(int i) {
+				return rack[i];
+		}
+		
+		/**
+			* Set a new Tile in the specific index in the rack.
+			* @param i
+			* @param newTile 
+			*/
+		protected void setTile(int i, Tile newTile) {
+				rack[i] = newTile;
+		}
+		
+		protected String displayRack() {
+				String result = "";
+				for (int i = 0; i < 7; i++) {
+						result += rack[i].toString() + " ";
+				}
+				result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+											  	+ "  1     2     3     4     5     6     7\n";
+				return result;
+		}
+		
+		/**
 			* Format the rack in a printable String
 			* @return a String
 			*/
@@ -37,7 +71,8 @@ class Rack {
 		public String toString() {
 				String result = "";
 				for (int i = 0; i < 7; i++) {
-						result += rack[i]+"__";
+						result += rack[i];
+						result += (i < 6) ? "__" : "";
 				}
 				return result;
 		}
@@ -63,4 +98,25 @@ class Rack {
 				rack[5] = new Tile('F',4);
 				rack[6] = new Tile('G',8);
 		}
+
+		
+		public void setLetter(Integer pos, String letter) {
+				rack[pos].setLetter(letter.charAt(0));
+		}
+		
+		public void tileSwitch(String position) {
+				String [] positionSource = position.split(" ");
+				if (positionSource.length > 2) {
+						Tile[] newRack = new Tile[7];
+						for (int i = 0; i < 7; i++) {
+								newRack[i] = rack[Integer.parseInt(positionSource[i])-1];
+						}
+						this.rack = newRack;
+				} else {
+						Tile tmp = rack[Integer.parseInt(positionSource[0])-1];
+						rack[Integer.parseInt(positionSource[0])-1] = rack[Integer.parseInt(positionSource[1])-1];
+						rack[Integer.parseInt(positionSource[1])-1] = tmp;
+				}
+		}
+		
 }

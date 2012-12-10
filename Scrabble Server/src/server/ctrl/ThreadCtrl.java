@@ -1,10 +1,7 @@
 package server.ctrl;
 
-import common.GameException;
 import common.Message;
 import server.connection.ServerProtocol;
-import server.model.GameFactory;
-import server.model.IGame;
 
 /**
  *
@@ -39,6 +36,9 @@ public class ThreadCtrl extends Thread {
 						case Message.LOGIN:
 								login();
 								break;
+						case Message.LOGOUT:
+								logout();
+								break;
 						case Message.NEW_GAME:
 								newGame();
 								break;
@@ -50,6 +50,18 @@ public class ThreadCtrl extends Thread {
 								break;
 						case Message.LOAD_GAME:
 								loadGame();
+								break;
+						case Message.DELETE_ANONYM:
+								deleteAnonym();
+								break;
+						case Message.PLACE_WORD:
+								gameTreatment();
+								break;
+						case Message.TILE_EXCHANGE:
+								exchangeTile();
+								break;
+						case Message.TILE_SWITCH:
+								switchTile();
 								break;
 				}
 		}
@@ -92,6 +104,17 @@ public class ThreadCtrl extends Thread {
 				Thread.currentThread().interrupt();
 		}
 		
+		private void logout() {
+				outputPrint("Current player is trying to logout");
+				Message response;
+				
+				// Try to log the current player
+				response = HAL.logout(new String(request.getBody()));
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
 		private void newGame() {
 				String playerID = new String(request.getBody());
 				outputPrint("Current player is trying to create a new game");
@@ -108,7 +131,7 @@ public class ThreadCtrl extends Thread {
 				outputPrint("Current anonymous player is trying to create a new game");
 				Message response;
 				
-				// Try to log the current player
+				// Try to create a new play for the current anonymous player
 				response = HAL.newAnonymGame(new String(request.getBody()));
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
@@ -129,11 +152,63 @@ public class ThreadCtrl extends Thread {
 		
 		private void loadGame() {
 				String [] argsTab = new String(request.getBody()).split("_");
-				outputPrint("Current player is trying to load  an existed game");
+				outputPrint("Current player is trying to load an existed game - game ID : "+argsTab[1]);
 				Message response;
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void deleteAnonym() {
+				String playerID = new String(request.getBody());
+				outputPrint("Try to delete the play for this anonymous player");
+				Message response;
+						
+				// Try to load an existed play for the current player
+				response = HAL.deleteAnonym(playerID);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void gameTreatment() {
+				// Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
+				System.out.println(new String(request.getBody()));
+				String [] argsTab = new String(request.getBody()).split("_");
+				outputPrint("Start game treatment for the current player");
+				Message response;
+						
+				// Check if the player's game is correct.
+				response = HAL.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void exchangeTile() {
+				String [] argsTab = new String(request.getBody()).split("##");
+				outputPrint("Current player is trying to exchange tiles");
+				Message response;
+				String playerID = argsTab[0];
+				String position = argsTab[1];
+				response = HAL.exchangeTile(playerID,position);
+
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void switchTile() {
+				String [] argsTab = new String(request.getBody()).split("##");
+				outputPrint("Current player is trying to switch tiles");
+				Message response;
+				String playerID = argsTab[0];
+				String position = argsTab[1];
+				response = HAL.switchTile(playerID,position);
+
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

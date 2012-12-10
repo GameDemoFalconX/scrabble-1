@@ -9,11 +9,11 @@ package server.model;
 */
 public class ScoringGrid {
 
-		public static final int REGULAR = 0;
-		public static final int DOUBLE_LETTER = 1;
-		public static final int TRIPLE_LETTER = 2;
-		public static final int DOUBLE_WORD = 3;
-		public static final int TRIPLE_WORD = 4;
+		public static final int REGULAR = 1;
+		public static final int DOUBLE_LETTER = 2;
+		public static final int TRIPLE_LETTER = 3;
+		public static final int DOUBLE_WORD = 4;
+		public static final int TRIPLE_WORD = 5;
 		
 		/**
 			* The matrix that contains the bonuses
@@ -45,5 +45,25 @@ public class ScoringGrid {
 		public int getBonus(int x, int y) {
 				return scoringGrid[x][y];
 		}
- 
+		
+		/**
+			* Return the value of count word. 1 by default, 2 for double count and 3 for triple count.
+			* @param t 
+			* @param cPlay
+			* @return 
+			*/
+		public int checkBonus(Tile t, Play cPlay) {
+				int bonus = getBonus(t.getX(), t.getY());
+				switch(bonus) {
+						case DOUBLE_WORD:
+								cPlay.setLastWordScore(t.getValue());
+								return 2;
+						case TRIPLE_WORD:
+								cPlay.setLastWordScore(t.getValue());
+								return 3;
+						default:
+								cPlay.setLastWordScore(t.getValue()*bonus);
+								return 1;
+				}
+		}
 }
