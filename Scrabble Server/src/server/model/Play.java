@@ -254,6 +254,19 @@ public class Play {
 				rack.tileSwitch(position);
 		}
 		
+		/**
+			* Update blank tiles in the rack before saving.
+			* @param args 
+			*/
+		public void updateBlankTile(String args) {
+				String [] tileList = args.split(":");
+				for (int i = 0; i < tileList.length; i++) {
+						rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
+				}
+		}
+		
+		// *** Formated data *** //
+		
 		public void setFormatedGrid(String fGrid) {
 				this.formatedGrid = fGrid;
 		}

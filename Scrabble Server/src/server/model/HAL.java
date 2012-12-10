@@ -134,6 +134,29 @@ public class HAL extends Game {
 		}
 		
 		@Override
+		protected Message savePlay(String pl_id, String ga_id, String ga_infos) {
+				Play cPlay = plays.playIdentification(pl_id, ga_id);
+				if (cPlay != null) {
+						// This step must be processed after to have saved the grid else it causes errors with the references.
+						if (!ga_infos.equals("")) cPlay.updateBlankTile(ga_infos);
+						try {
+								Play lPlay = plays.LoadGame(pl_id, ga_id);
+								if (lPlay != null) {
+										plays.addNewPlay(pl_id, lPlay);
+										System.out.println(lPlay.getGrid());
+										System.out.println(lPlay.getFormatRack());
+										return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@"+lPlay.getFormatRack());
+								} else {
+										return new Message(Message.LOAD_GAME_ERROR, "");
+								}
+						} catch (GameException ge) {
+								return new Message(Message.XML_FILE_NOT_EXISTS, "");
+						}
+				}
+				return new Message(Message.GAME_IDENT_ERROR, "");
+		}
+		
+		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
