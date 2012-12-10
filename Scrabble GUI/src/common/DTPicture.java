@@ -1,12 +1,16 @@
 package common;
 
+import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
@@ -93,9 +97,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseDragged(MouseEvent e) {
-    System.out.println("mouseDragged:DTPicture");
       //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
-    
     Component com = e.getComponent();
 
     Point p = (Point) e.getPoint().clone();
@@ -103,8 +105,6 @@ public class DTPicture extends Picture implements MouseMotionListener{
     SwingUtilities.convertPointFromScreen(p, glass);
     glass.setLocation(p);
     glass.repaint();
-    
-    
     //@@@@@@@@  FIN GlassPane @@@@@@@@@@@@@@
     
     //Don't bother to drag if the component displays no image.
@@ -140,16 +140,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseReleased(MouseEvent e) {
-//            //This is a drag, not a click.
-//        JComponent c = (JComponent) e.getSource();
-//        TransferHandler handler = c.getTransferHandler();
-//        //Tell the transfer handler to initiate the drag.
-//        handler.exportAsDrag(c, firstMouseEvent, TransferHandler.MOVE);
-      
-    //System.out.println("mouseReleased:DTPicture");
     firstMouseEvent = null;
-    
-    //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
     //---------------------------------------------------------------------
     //On implémente le transfert lorsqu'on relâche le bouton de souris
     //Ceci afin de ne pas supplanter le fonctionnement du déplacement
@@ -166,6 +157,8 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //de convertir un point en coordonnées d'écran
     //et de reconvertir ce point en coordonnées fenêtre
     SwingUtilities.convertPointToScreen(location, composant);
+    int CooX = location.x+1;
+    int CooY = location.y+1;
     SwingUtilities.convertPointFromScreen(location, glass);
       
     //On passe les données qui vont bien à notre GlassPane
@@ -174,12 +167,15 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //On n'oublie pas de ne plus l'afficher
     glass.setVisible(false);
     
-//    dtpic.setVisible(true);
-//    System.out.println("ici");
-    //@@@@@@@@  FIN GlassPane @@@@@@@@@@@@@@
+    //Movement mouse for the refresh's bug.
+    try {
+          
+          Robot robot = new Robot();
+          robot.mouseMove(CooX, CooY);
 
-//    validate();
-//    repaint();
+    } catch (AWTException ex) {
+      Logger.getLogger(DTPicture.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
     @Override
