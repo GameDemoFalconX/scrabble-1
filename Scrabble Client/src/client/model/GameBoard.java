@@ -311,9 +311,7 @@ public class GameBoard {
 		public void loadGame(String playerID, String playInfos) throws GameException {
 				String [] playArgs = playInfos.split("__");
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME,  playerID+"_"+playArgs[0]);
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -328,6 +326,24 @@ public class GameBoard {
 										break;
 								case Message.LOAD_GAME_ERROR:
 										throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
+								case Message.PLAYER_NOT_LOGGED:
+										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
+		public void saveGame(String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(Message.SAVE_GAME,  playerID+"_"+cPlay.getPlayID()+"_"+cPlay.checkBlankTile());
+				if (serverResponse != null) {
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.SAVE_GAME_SUCCESS:
+										break;
+								case Message.SAVE_GAME_ERROR:
+										throw new GameException(GameException.typeErr.SAVE_GAME_ERROR);
 								case Message.PLAYER_NOT_LOGGED:
 										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						}

@@ -59,13 +59,11 @@ public class Message {
 		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// TILE_SWITCH //
-		
 		public static final int TILE_SWITCH = 63; // Exchange tiles
 		public static final int TILE_SWITCH_SUCCES = 64; // Exchange tiles with succes
 		public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
 		
 		// TILE_REORGANIZE //
-		
 		public static final int TILE_REORGANIZE = 66; // Exchange tiles
 		public static final int TILE_REORGANIZE_SUCCES = 67; // Exchange tiles with succes
 		public static final int TILE_REORGANIZE_ERROR = 68; // Exchange tiles with error
@@ -74,6 +72,11 @@ public class Message {
 		public static final int PLACE_WORD = 70; // Place word
 		public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
 		public static final int PLACE_WORD_ERROR = 72; // Place word with error
+		
+		// SAVE_GAME //
+		public static final int SAVE_GAME = 80; // Save game
+		public static final int SAVE_GAME_SUCCESS = 81; // Save game with success
+		public static final int SAVE_GAME_ERROR = 82; // Save game wit errors
 		
 		// DICTIONNARY //
 		public static final int DICO_LOADED = 510; // Dictionnary loaded

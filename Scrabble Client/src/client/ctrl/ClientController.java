@@ -173,6 +173,11 @@ public class ClientController {
 								view.changeTileMainMenu();
 								break;
 						case 4:
+								try {
+										gameBoard.saveGame(player.getPlayerID());
+								} catch (GameException ge) {
+										processException(ge);
+								}
 								break;
 						case 9:
 								// Check if save or not.
@@ -200,7 +205,7 @@ public class ClientController {
 				int  firstX = -1;
 				Integer i = 0;
 				boolean cancel = false;
-				if ((number > 0) && (number < 8)) {
+				if (number > 0) {
 						while ((number > i) && !cancel) {						
 								boolean threeArgs = false; boolean argXisOK = false; 
 								boolean argYisOK = false; boolean argPosIsOK = false;
