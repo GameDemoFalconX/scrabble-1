@@ -36,16 +36,18 @@ class Grid {
 		
 		protected void putInGrid(int x, int y, Tile tile) {
 				tile.setCoordinates(x, y);
-				tile.setLoaded();
 				grid[x][y] = tile;
 		}
 		
 		protected ArrayList getNewAdds() {
 				ArrayList result = new ArrayList();
-				for (int i = 0; i < 15; i++) {
-						for (int j = 0; j < 15; j++) {
-								Tile cTile = getTile(i, j);
+				for (int x = 0; x < 15; x++) {
+						for (int y = 0; y < 15; y++) {
+								Tile cTile = this.getTile(x, y);
+								System.out.println("Tile value : "+cTile);
+								if (cTile != null) { System.out.println("Tile loaded state : "+cTile.getLoadedState()); }
 								if (cTile != null && !cTile.getLoadedState()) { // Check if the case is not empty and if the tile at this position is new added.
+										System.out.println("Tile new added");
 										result.add(cTile.getX()+":"+cTile.getY()+":"+cTile.toString());
 								}
 						}

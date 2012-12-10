@@ -5,16 +5,16 @@
       <uuid>32e6048c-fb40-474e-9465-579e57b39d65</uuid>
       <created>2012/12/10</created>
       <modified>2012/12/10</modified>
-      <score>14</score>
+      <score>112</score>
       <grid />
       <rack>
-        <tile>L:1</tile>
         <tile>?:0</tile>
-        <tile>E:1</tile>
-        <tile>C:3</tile>
-        <tile>L:1</tile>
-        <tile>X:10</tile>
+        <tile>P:3</tile>
         <tile>F:4</tile>
+        <tile>Q:8</tile>
+        <tile>I:1</tile>
+        <tile>H:4</tile>
+        <tile>R:1</tile>
       </rack>
     </play>
   </player>

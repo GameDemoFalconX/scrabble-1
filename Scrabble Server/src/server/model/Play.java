@@ -65,6 +65,7 @@ public class Play {
 		
 		public void loadTile(int x, int y, char letter, int value) {
 				Tile newTile = bag.popTile(letter, value);
+				newTile.setLoaded();
 				grid.putInGrid(x, y, newTile);
 		}
 		
@@ -103,6 +104,9 @@ public class Play {
 		}
 		
 		protected ArrayList getNewAddedTiles() {
+				System.out.println("@@@@@@@@@@");
+				System.out.println(this.grid.toString());
+				
 				return grid.getNewAdds();
 		}
 		
