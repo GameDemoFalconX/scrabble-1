@@ -8,17 +8,17 @@ import java.util.UUID;
  */
 public class Player {
     
-		private String playerName;
+		private String playerEmailString;
 		private String playerPassword;
 		private UUID playerID;
 		
 		/**
 			* 
-			* @param name
+			* @param email
 			* @param pwd
 			*/
-		public Player(String name, String pwd) {
-				playerName = name;
+		public Player(String email, String pwd) {
+				playerEmailString = email;
 				playerPassword = pwd; 
 				playerID = UUID.randomUUID();
 		}
@@ -27,8 +27,8 @@ public class Player {
 			* Create a new instance of player.
 			* @param name, pwd, uuid.
 			*/
-		public Player(String name, String pwd, String uuid) {
-				playerName = name;
+		public Player(String email, String pwd, String uuid) {
+				playerEmailString = email;
 				playerPassword = pwd;
 				playerID = UUID.fromString(uuid);
 		}
@@ -37,16 +37,16 @@ public class Player {
 			* 
 			* @return
 			*/
-		public String getPlayerName() {
-				return playerName;
+		public String getPlayerEmail() {
+				return playerEmailString;
 		}
 
 		/**
 			* 
-			* @param name
+			* @param email
 			*/
-		public void setPlayerName(String name) {
-				this.playerName = name;
+		public void setPlayerEmail(String email) {
+				this.playerEmailString = email;
 		}
 
 		/**

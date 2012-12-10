@@ -3,6 +3,7 @@ package client.ctrl;
 import client.model.GameBoard;
 import client.model.Player;
 import client.view.View;
+import common.EmailValidator;
 import common.GameException;
 import common.Message;
 
@@ -47,6 +48,7 @@ public class ClientController {
 		}
 
 		public void firstChoice(Integer choice) {
+				EmailValidator emailVal = new EmailValidator();
 				switch (choice) {
 						case 1:
 								try {
@@ -63,12 +65,15 @@ public class ClientController {
 								}
 								break;
 						case 2:
-								String plname = view.askName();
+								String plEmail;
+								do {
+										plEmail = view.askEmail();
+								} while (!emailVal.validate(plEmail));
 								String plpwd = view.askPassword();
 								try {
-										player = gameBoard.loginPlayer(plname, plpwd);
+										player = gameBoard.loginPlayer(plEmail, plpwd);
 										if (debug) {
-												view.initMenu("", plname, Message.LOGIN_SUCCESS);
+												view.initMenu("", plEmail, Message.LOGIN_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -77,12 +82,15 @@ public class ClientController {
 								}
 								break;
 						case 3:
-								String name = view.askName();
+								String email;
+								do {
+										email = view.askEmail();
+								} while (!emailVal.validate(email));
 								String password = view.askPassword();
 								try {
-										player = gameBoard.newPlayer(name, password);
+										player = gameBoard.newPlayer(email, password);
 										if (debug) {
-												view.initMenu("", name, Message.NEW_ACCOUNT_SUCCESS);
+												view.initMenu("", email, Message.NEW_ACCOUNT_SUCCESS);
 										} else {
 												// TODO GUI 
 										}
@@ -94,7 +102,7 @@ public class ClientController {
 								view.display("See you next time !");
 								break;
 						default:
-								view.initMenu("", player.getPlayerName(), Message.LOGIN_SUCCESS);
+								view.initMenu("", player.getPlayerEmail(), Message.LOGIN_SUCCESS);
 								break;
 				}
 		}

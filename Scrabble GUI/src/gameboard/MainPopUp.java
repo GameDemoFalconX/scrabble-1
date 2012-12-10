@@ -18,8 +18,8 @@ public class MainPopUp {
 		private static final int HEIGHT_DIM = 300;
 		
 		private static JDialog popUp;
-		private JLabel iconLabel, nameLabel, passwordLabel;
-		private JTextField nameField;
+		private JLabel iconLabel, emailLabel, passwordLabel;
+		private JTextField emailField;
 		private JPasswordField passwordField;
 		private JButton playButton, logInButton, signUpButton, exitButton;
 		private String name;
@@ -63,6 +63,9 @@ public class MainPopUp {
 						@Override
       public void actionPerformed(ActionEvent arg0) {        
 //        TODO call the anonymous new game function
+								if (!Menu.getSaveCloseEnabled()) {
+										Menu.setSaveCloseEnabled(true);
+								}
 								setVisible(false);
       }
 				});
@@ -72,12 +75,12 @@ public class MainPopUp {
 				
 //				FIELDS PANEL
 				fieldsPanel = new JPanel();
-				nameLabel = new JLabel("Name : ");
-				nameField = new JTextField();
-				nameField.setPreferredSize(new Dimension(90,25));
+				emailLabel = new JLabel("Name : ");
+				emailField = new JTextField();
+				emailField.setPreferredSize(new Dimension(90,25));
 				
-				fieldsPanel.add(nameLabel);
-				fieldsPanel.add(nameField);
+				fieldsPanel.add(emailLabel);
+				fieldsPanel.add(emailField);
 				
 				passwordLabel = new JLabel("Password : ");
 				passwordField = new JPasswordField();
@@ -92,7 +95,7 @@ public class MainPopUp {
 				logInButton.addActionListener(new ActionListener(){
 						@Override
       public void actionPerformed(ActionEvent arg0) {   
-								name = nameField.getText();
+								name = emailField.getText();
 								password = passwordField.getPassword();
 //								TODO logIn(name,password);
 								JOptionPane.showMessageDialog(null, "Name : "+name+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
@@ -104,7 +107,7 @@ public class MainPopUp {
 				signUpButton.addActionListener(new ActionListener(){
 						@Override
       public void actionPerformed(ActionEvent arg0) {        
-								name = nameField.getText();
+								name = emailField.getText();
 								password = passwordField.getPassword();
 //								TODO signUp(name,password);
 								JOptionPane.showMessageDialog(null, "Name : "+name+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
