@@ -20,9 +20,9 @@ public class DTPicture extends Picture implements MouseMotionListener{
   private MyGlassPane glass;
   private BufferedImage imageGlass;
 
-  public DTPicture(Image image, MyGlassPane glasss) {
+  public DTPicture(Image image, MyGlassPane glass) {
     super(image);
-    glass = glasss;
+    this.glass = glass;
     addMouseMotionListener(this);
     
 //    DragSource.getDefaultDragSource().addDragSourceMotionListener(
@@ -48,8 +48,8 @@ public class DTPicture extends Picture implements MouseMotionListener{
     
   }
 
-  public void setImage(Image imagee) {
-    this.image = imagee;
+  public void setImage(Image image) {
+    this.image = image;
     this.repaint();
   }
 
