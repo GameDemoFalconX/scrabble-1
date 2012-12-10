@@ -136,15 +136,6 @@ public class GameRAM {
 		} 
 		
 		/**
-			* Return true if the playerID is contained in the plays Dict (Initialized during the login or create new player)
-			* @param playerID
-			* @return 
-			*/
-		public boolean playerIsLogged(String playerID) {
-				return plays.containsKey(playerID);
-		}
-		
-		/**
 			* Add the current player to the player list and initialize this Play instance to null.
 			* @param playerID 
 			*/
@@ -161,6 +152,23 @@ public class GameRAM {
 		}
 		
 		/**
+			* Set to null the play instance of the current logged player.
+			* @param playerID 
+			*/
+		public void initPlayer(String playerID) {
+				addNewPlay(playerID, null);
+		}
+		
+		/**
+			* Return true if the playerID is contained in the plays Dict (Initialized during the login or create new player)
+			* @param playerID
+			* @return 
+			*/
+		public boolean playerIsLogged(String playerID) {
+				return plays.containsKey(playerID);
+		}
+		
+		/**
 			* Check if the current player is logged to play this specific game.
 			* @param pl_id
 			* @param ga_id
@@ -171,19 +179,6 @@ public class GameRAM {
 						return plays.get(pl_id);
 				}
 				return null;
-		}
-		
-		private void displayPlays() {
-				if (plays.isEmpty()) System.out.println("Map empty!");
-				Set set = this.plays.entrySet(); 
-				Iterator i = set.iterator(); 
-				
-				// Display elements 
-				while(i.hasNext()) { 
-						Map.Entry me = (Map.Entry)i.next(); 
-						System.out.print(me.getKey() + ": "); 
-						System.out.println(me.getValue()); // Return the code of this instance. Use it only for debug.
-				}
 		}
 		
 		/**
@@ -275,6 +270,10 @@ public class GameRAM {
 										newPlayer.addContent(newPlay);
 										rootNode.addContent(newPlayer);
 								}
+								XMLOutputter xmlOutput = new XMLOutputter();
+ 
+								xmlOutput.setFormat(Format.getPrettyFormat());
+								xmlOutput.output(document, new FileWriter(gameFile));
 								System.out.println("Games file updated!");
 						} catch (IOException e) {
 								System.out.println(e.getMessage());
@@ -287,7 +286,6 @@ public class GameRAM {
 						try {
 								Element plays = new Element("plays");
 								Document doc = new Document(plays);
-								doc.setRootElement(plays);
  
 								Element newPlayer = new Element("player");
 								newPlayer.setAttribute(new Attribute("id", cPlay.getOwner()));
@@ -314,29 +312,33 @@ public class GameRAM {
 				play.getChild("score").setText(""+cPlay.getScore());
 																
 				// Save grid
-				Element grid = play.getChild("grid");
+				Element grid = (play.getChild("grid") != null) ? play.getChild("grid") : new Element("grid");
 				// Get the list of new added tiles and add it on the XML file.
 				ArrayList newTiles = cPlay.getNewAddedTiles();
+				System.out.println("Tiles size : "+newTiles.size());
 				if (newTiles.size() > 0) {
 						for (int k = 0; k < newTiles.size(); k++) {
 								grid.addContent(new Element("tile").setText(newTiles.get(k).toString()));
 						}
 				}
+				if (play.getChild("grid") == null) play.addContent(grid);
 																
 				// Load rack
-				Element rack = play.getChild("rack");
-				if (rack.removeChildren("tile")) {
-						if (!args.equals("")) cPlay.updateBlankTile(args);
-						for (int l = 0; l < 7; l++) {
-								rack.addContent(new Element("tile").setText(cPlay.getRack().getTile(l).toString()));
-						}
+				Element rack = (play.getChild("rack") != null) ? play.getChild("rack") : new Element("rack");
+				rack.removeChildren("tile");
+				if (!args.equals("")) cPlay.updateBlankTile(args);
+				for (int l = 0; l < 7; l++) {
+						rack.addContent(new Element("tile").setText(cPlay.getRack().getTile(l).toString()));
 				}
+				if (play.getChild("rack") == null) play.addContent(rack);
 		}
 		
 		private void saveNewPlay(Element play, Play cPlay, String args) {
 				play.setAttribute(new Attribute("id", cPlay.getPlayID()));
 				play.addContent(new Element("uuid").setText(cPlay.getPlayID()));
 				play.addContent(new Element("created").setText(cPlay.getCreated()));
+				play.addContent(new Element("modified").setText(""));
+				play.addContent(new Element("score").setText(""));
 				savePlay(play, cPlay, args);
 		}
 		
@@ -356,6 +358,19 @@ public class GameRAM {
 						return plays.get(playerID);
 				}
 				return null;
+		}
+		
+		private void displayPlays() {
+				if (plays.isEmpty()) System.out.println("Map empty!");
+				Set set = this.plays.entrySet(); 
+				Iterator i = set.iterator(); 
+				
+				// Display elements 
+				while(i.hasNext()) { 
+						Map.Entry me = (Map.Entry)i.next(); 
+						System.out.print(me.getKey() + ": "); 
+						System.out.println(me.getValue()); // Return the code of this instance. Use it only for debug.
+				}
 		}
 		
 }

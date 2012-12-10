@@ -178,6 +178,8 @@ public class ClientController {
 								} catch (GameException ge) {
 										processException(ge);
 								}
+								System.out.println("Your current play has been correctly saved!");
+								view.playMenu(player.isAnonym(), gameBoard.getPlay().getScore());
 								break;
 						case 9:
 								if (player.isAnonym()) {
@@ -188,18 +190,19 @@ public class ClientController {
 												processException(ge);
 										}
 								} else {
-										char getAction;
+										String getAction;
 										do {
 												getAction = view.saveMenu();
-										} while (getAction != 'Y' || getAction != 'N');
-										if (getAction == 'Y') {
+												System.out.println(getAction);
+										} while (getAction.length() != 1 && !(getAction.equals("Y") || getAction.equals("N")));
+										if (getAction.equals("Y")) {
 												try {
 														gameBoard.saveGame(Message.SAVE_AND_STOP, player.getPlayerID());
 												} catch (GameException ge) {
 														processException(ge);
 												}
 										}
-										view.initMenu("", "", null);
+										view.initMenu("Your current play has been correctly saved!", "", null);
 								}
 								break;
 						case 0:
@@ -210,13 +213,15 @@ public class ClientController {
 												processException(ge);
 										}
 								} else {
-										char getAction;
+										String getAction;
 										do {
 												getAction = view.saveMenu();
-										} while (getAction != 'Y' || getAction != 'N');
-										if (getAction == 'Y') {
+												System.out.println(getAction);
+										} while (getAction.length() != 1 && !(getAction.equals("Y") || getAction.equals("N")));
+										if (getAction.equals("Y")) {
 												try {
 														gameBoard.saveGame(Message.SAVE_AND_SIGNOUT, player.getPlayerID());
+														System.out.println("Your current play has been correctly saved!");
 												} catch (GameException ge) {
 														processException(ge);
 												}

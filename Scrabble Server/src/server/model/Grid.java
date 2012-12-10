@@ -45,7 +45,7 @@ class Grid {
 				for (int i = 0; i < 15; i++) {
 						for (int j = 0; j < 15; j++) {
 								Tile cTile = getTile(i, j);
-								if (!cTile.equals(null) && !cTile.getLoadedState()) { // Check if the case is not empty and if the tile at this position is new added.
+								if (cTile != null && !cTile.getLoadedState()) { // Check if the case is not empty and if the tile at this position is new added.
 										result.add(cTile.getX()+":"+cTile.getY()+":"+cTile.toString());
 								}
 						}

@@ -52,7 +52,13 @@ public class ThreadCtrl extends Thread {
 								loadGame();
 								break;
 						case Message.SAVE_GAME:
-								saveGame();
+								saveGame(Message.JUST_SAVE);
+								break;
+						case Message.SAVE_GAME_WITH_END_GAME:
+								saveGame(Message.SAVE_AND_STOP);
+								break;
+						case Message.SAVE_GAME_WITH_LOGOUT:
+								saveGame(Message.SAVE_AND_SIGNOUT);
 								break;
 						case Message.DELETE_ANONYM:
 								deleteAnonym();
@@ -165,13 +171,14 @@ public class ThreadCtrl extends Thread {
 				Thread.currentThread().interrupt();
 		}
 		
-		private void saveGame() {
+		private void saveGame(int type) {
 				String [] argsTab = new String(request.getBody()).split("_");
-				outputPrint("Current player is trying to load an existed game - game ID : "+argsTab[1]);
+				outputPrint("Current player is trying to save an existed game - game ID : "+argsTab[1]);
 				Message response;
 						
 				// Try to load an existed play for the current player
-				response = HAL.saveGame(argsTab[0], argsTab[1], argsTab[2]);
+				String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
+				response = HAL.saveGame(type, argsTab[0], argsTab[1], blankTiles);
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

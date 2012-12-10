@@ -335,21 +335,39 @@ public class GameBoard {
 		}
 		
 		public void saveGame(int type, String playerID) throws GameException {
-				Message serverResponse = gbProtocol.sendRequest(Message.SAVE_GAME,  playerID+"_"+cPlay.getPlayID()+"_"+cPlay.checkBlankTile());
+				Message serverResponse = gbProtocol.sendRequest(typeSave(type),  playerID+"_"+cPlay.getPlayID()+"_"+cPlay.checkBlankTile());
 				if (serverResponse != null) {
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
 								case Message.SAVE_GAME_SUCCESS:
+										// Do nothing
 										break;
 								case Message.SAVE_GAME_ERROR:
 										throw new GameException(GameException.typeErr.SAVE_GAME_ERROR);
-								case Message.PLAYER_NOT_LOGGED:
-										throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
+								case Message.GAME_IDENT_ERROR:
+										throw new GameException(GameException.typeErr.GAME_IDENT_ERROR);
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
+		}
+		
+		/**
+			* Define the type of save process to request to the server.
+			* @param type
+			* @return type
+			*/
+		private int typeSave(int type) {
+				switch(type) {
+						case Message.JUST_SAVE:
+								return Message.SAVE_GAME;
+						case Message.SAVE_AND_STOP:
+								return Message.SAVE_GAME_WITH_END_GAME;
+						case Message.SAVE_AND_SIGNOUT:
+								return Message.SAVE_GAME_WITH_LOGOUT;
+				}
+				return -1; // default
 		}
 		
 		// *** Utility methods for GameBoard *** //

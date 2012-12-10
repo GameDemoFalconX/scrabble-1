@@ -131,9 +131,9 @@ public class View {
 				return CConsole.readLine("e.g. 2 3 6 : ");
 		}
 		
-		public char saveMenu() {
+		public String saveMenu() {
 				System.out.println("\nDo you want to save the current play?");
-				return CConsole.readLine(" Press Y (Yes) or N (No) : ").charAt(0);
+				return CConsole.readLine(" Press Y (Yes) or N (No) : ");
 		}
 
 		public void display(String msg) {

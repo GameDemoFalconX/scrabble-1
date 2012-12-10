@@ -20,6 +20,7 @@ public class Grid {
 		}
 		
 		protected void loadGrid(String formatedGrid) {
+				System.out.println("Data client side : "+formatedGrid);
 				String [] tileList = formatedGrid.split("##");
 				for (int i = 0; i < tileList.length; i++) {
 						String [] tileAttrs = tileList[i].split(":");

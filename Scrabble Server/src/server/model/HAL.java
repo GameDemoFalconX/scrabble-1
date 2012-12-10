@@ -134,12 +134,18 @@ public class HAL extends Game {
 		}
 		
 		@Override
-		protected Message savePlay(String pl_id, String ga_id, String ga_infos) {
+		protected Message savePlay(int type, String pl_id, String ga_id, String ga_infos) {
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
-						plays.saveGameOnFile(pl_id, cPlay, ga_infos);
-						plays.removePlayer(pl_id); // Remove this player and play from GaemRAM dict.
-						if (state) plays.addPlayer(pl_id); // If player doesn't leave the game, add it to the player list with no play.
+						plays.saveGameOnFile(pl_id, cPlay, ga_infos);  // TODO : Handle error (rom)
+						switch(type) {
+								case Message.SAVE_AND_STOP:
+										plays.initPlayer(pl_id);
+										break;
+								case Message.SAVE_AND_SIGNOUT:
+										plays.removePlayer(pl_id);
+										break;
+						}
 						return new Message(Message.SAVE_GAME_SUCCESS, "");
 				}
 				return new Message(Message.GAME_IDENT_ERROR, "");
