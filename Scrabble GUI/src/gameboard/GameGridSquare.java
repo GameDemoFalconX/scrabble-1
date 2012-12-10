@@ -1,24 +1,29 @@
 package gameboard;
 
-import dragndrop.MouseGlassListener;
-import dragndrop.MouseGlassMotionListener;
-import dragndrop.MyGlassPane;
-import javax.swing.JLabel;
-import javax.swing.TransferHandler;
+import common.TileTransferHandler;
+import common.MyGlassPane;
+import common.DTPicture;
+import java.awt.GridLayout;
+import javax.swing.JPanel;
 
 /**
  * 
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
-public class GameGridSquare extends JLabel {
-  private MyGlassPane glass;
+public class GameGridSquare extends JPanel {
+  DTPicture dticone;
 
-  public GameGridSquare(MyGlassPane glasss){
-    glass = glasss;
+  public GameGridSquare(MyGlassPane glass){
+    setOpaque(false);
 //				setBorder(BorderFactory.createLineBorder(Color.black));
-    addMouseListener(new MouseGlassListener(glass, this));
-                addMouseMotionListener(new MouseGlassMotionListener(glass));
-    setTransferHandler(new TransferHandler("icon"));
+    setLayout(new GridLayout(1, 1));
+//    setVisible(true);
+    dticone = new DTPicture(null, glass);
+    dticone.setTransferHandler(new TileTransferHandler());
+    add(dticone);
+//    addMouseListener(new MouseGlassListener(glass, this));
+//    addMouseMotionListener(new MouseGlassMotionListener(glass));
+//    setTransferHandler(new TransferHandler("icon"));
   }
 
 }

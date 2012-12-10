@@ -1,4 +1,4 @@
-package dragndrop;
+package common;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,7 +23,8 @@ public class MyGlassPane extends JPanel{
    
     @Override
   public void setLocation(Point location){
-    this.location = location;        
+    this.location = location;
+//    System.out.println(location);
   }
    
   public void setImage(BufferedImage image){
@@ -39,6 +40,6 @@ public class MyGlassPane extends JPanel{
       
     //Dans le cas contraire, on dessine l'image souhaitée
     Graphics2D g2d = (Graphics2D)g;
-    g2d.drawImage(img, (int) (location.getX() - (img.getWidth(this)  / 2)), (int) (location.getY() - (img.getHeight(this) / 2)), null);
+    g2d.drawImage(img, (int) (location.getX()-18), (int) (location.getY()-20), null);
   }   
 }

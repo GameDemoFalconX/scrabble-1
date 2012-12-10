@@ -1,8 +1,8 @@
 package gameboard;
 
-import dragndrop.MyGlassPane;
-import java.awt.Container;
-import javax.swing.JFrame;
+import common.MyGlassPane;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  *
