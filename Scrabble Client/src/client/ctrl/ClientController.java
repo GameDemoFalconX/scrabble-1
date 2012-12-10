@@ -65,10 +65,7 @@ public class ClientController {
 								}
 								break;
 						case 2:
-								String plEmail;
-								do {
-										plEmail = view.askEmail();
-								} while (!emailVal.validate(plEmail));
+								String plEmail = view.askEmail();
 								String plpwd = view.askPassword();
 								try {
 										player = gameBoard.loginPlayer(plEmail, plpwd);

@@ -1,9 +1,16 @@
 package gameboard;
 
+import common.MD5Util;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -18,11 +25,11 @@ public class MainPopUp {
 		private static final int HEIGHT_DIM = 300;
 		
 		private static JDialog popUp;
-		private JLabel iconLabel, emailLabel, passwordLabel;
+		private JLabel iconLabel, playerLabel, emailLabel, passwordLabel;
 		private JTextField emailField;
 		private JPasswordField passwordField;
 		private JButton playButton, logInButton, signUpButton, exitButton;
-		private String name;
+		private String email;
 		private char[] password;
 		private JPanel playPanel, fieldsPanel, buttonsPanel;
 
@@ -48,15 +55,11 @@ public class MainPopUp {
 		
 		private void initComponent() {
 				
-//				ImageIcon icon = createImageIcon("images/Grid_72ppp.jpg","GameBoard");
-//    icon = new ImageIcon(getScaledImage(icon.getImage(), ratingOfGUI*100,
-//                 getProportionnalHeight(icon, ratingOfGUI*100)));
-//    JLabel JLabelGameBoard = new JLabel(icon);
-				
-				
 //				PLAY AS GUEST PANEL
 				ImageIcon icon = createImageIcon("images/Scrabble.png","Scrabble");
 				iconLabel = new JLabel(icon);
+				ImageIcon noPic = createImageIcon("images/no_user.gif","No_user");
+				playerLabel = new JLabel(noPic);
 				playPanel = new JPanel();
 				playButton = new JButton("Play as guest");
 				playButton.addActionListener(new ActionListener(){
@@ -72,10 +75,11 @@ public class MainPopUp {
 				
 				playPanel.add(iconLabel);
 				playPanel.add(playButton);
+				playPanel.add(playerLabel);
 				
 //				FIELDS PANEL
 				fieldsPanel = new JPanel();
-				emailLabel = new JLabel("Name : ");
+				emailLabel = new JLabel("Email : ");
 				emailField = new JTextField();
 				emailField.setPreferredSize(new Dimension(90,25));
 				
@@ -95,22 +99,36 @@ public class MainPopUp {
 				logInButton.addActionListener(new ActionListener(){
 						@Override
       public void actionPerformed(ActionEvent arg0) {   
-								name = emailField.getText();
+								email = emailField.getText();
 								password = passwordField.getPassword();
 //								TODO logIn(name,password);
-								JOptionPane.showMessageDialog(null, "Name : "+name+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								Menu.setPlayerName(name);
-								popUp.setVisible(false);
+								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
+								Menu.setPlayerName(email);
+								String hash = MD5Util.md5Hex(email);
+								URL url = null;
+								try {
+										url = new URL("http://www.gravatar.com/avatar/"+hash);
+								} catch (MalformedURLException ex) {
+										Logger.getLogger(MainPopUp.class.getName()).log(Level.SEVERE, null, ex);
+								}
+								try {
+																		playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
+										//								popUp.setVisible(false);
+								} catch (IOException ex) {
+										Logger.getLogger(MainPopUp.class.getName()).log(Level.SEVERE, null, ex);
+								}
       }
 				});
 				signUpButton = new JButton("Sign up");
 				signUpButton.addActionListener(new ActionListener(){
 						@Override
       public void actionPerformed(ActionEvent arg0) {        
-								name = emailField.getText();
+								email = emailField.getText();
 								password = passwordField.getPassword();
 //								TODO signUp(name,password);
-								JOptionPane.showMessageDialog(null, "Name : "+name+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
+								Menu.setPlayerName(email);
+//								popUp.setVisible(false);
       }
 				});
 				
