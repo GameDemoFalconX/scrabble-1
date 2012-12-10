@@ -80,9 +80,34 @@ public class Play {
 				return playID.toString();
 		}
 		
+		public String getOwner() {
+				return owner.toString();
+		}
+		
 		private String formatDate(Date d) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 				return dateFormat.format(d);
+		}
+		
+		protected String getCreated() {
+				return formatDate(created);
+		}
+		
+		protected String getModified() {
+				setModified();
+				return formatDate(modified);
+		}
+		
+		private void setModified() {
+				modified = new Date();
+		}
+		
+		protected ArrayList getNewAddedTiles() {
+				return grid.getNewAdds();
+		}
+		
+		protected Rack getRack() {
+				return rack;
 		}
 		
 		/**

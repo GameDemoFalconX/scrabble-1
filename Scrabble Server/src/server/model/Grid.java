@@ -1,5 +1,7 @@
 package server.model;
 
+import java.util.ArrayList;
+
 /**
  * Model that contains the Tile used to make words.
 	* It's basically a matrix of Tile
@@ -34,7 +36,21 @@ class Grid {
 		
 		protected void putInGrid(int x, int y, Tile tile) {
 				tile.setCoordinates(x, y);
+				tile.setLoaded();
 				grid[x][y] = tile;
+		}
+		
+		protected ArrayList getNewAdds() {
+				ArrayList result = new ArrayList();
+				for (int i = 0; i < 15; i++) {
+						for (int j = 0; j < 15; j++) {
+								Tile cTile = getTile(i, j);
+								if (!cTile.equals(null) && !cTile.getLoadedState()) { // Check if the case is not empty and if the tile at this position is new added.
+										result.add(cTile.getX()+":"+cTile.getY()+":"+cTile.toString());
+								}
+						}
+				}
+				return result;
 		}
 		
 		/**

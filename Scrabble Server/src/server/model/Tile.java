@@ -12,6 +12,7 @@ public class Tile {
 		private int y;
 		private int rackPosition = -1; // By default, this value equals -1 (i.e not in the rack)
 		private boolean status;
+		private boolean loaded = false;
 		
 		/**
 			* Creates a Tile base on a char letter and a integer value
@@ -47,6 +48,17 @@ public class Tile {
 			*/
 		public int getValue() {
 				return value;
+		}
+		
+		/**
+			* Specify that the tile is loaded from Memory (XML files, DB, ...)
+			*/
+		protected void setLoaded() {
+				loaded = true;
+		}
+		
+		protected boolean getLoadedState() {
+				return loaded;
 		}
 		
 		protected void setCoordinates(int x, int y) {

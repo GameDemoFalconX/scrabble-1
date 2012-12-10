@@ -137,21 +137,10 @@ public class HAL extends Game {
 		protected Message savePlay(String pl_id, String ga_id, String ga_infos) {
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
-						// This step must be processed after to have saved the grid else it causes errors with the references.
-						if (!ga_infos.equals("")) cPlay.updateBlankTile(ga_infos);
-						try {
-								Play lPlay = plays.LoadGame(pl_id, ga_id);
-								if (lPlay != null) {
-										plays.addNewPlay(pl_id, lPlay);
-										System.out.println(lPlay.getGrid());
-										System.out.println(lPlay.getFormatRack());
-										return new Message(Message.LOAD_GAME_SUCCESS, lPlay.getFormatedGrid()+"@@"+lPlay.getFormatRack());
-								} else {
-										return new Message(Message.LOAD_GAME_ERROR, "");
-								}
-						} catch (GameException ge) {
-								return new Message(Message.XML_FILE_NOT_EXISTS, "");
-						}
+						plays.saveGameOnFile(pl_id, cPlay, ga_infos);
+						plays.removePlayer(pl_id); // Remove this player and play from GaemRAM dict.
+						if (state) plays.addPlayer(pl_id); // If player doesn't leave the game, add it to the player list with no play.
+						return new Message(Message.SAVE_GAME_SUCCESS, "");
 				}
 				return new Message(Message.GAME_IDENT_ERROR, "");
 		}

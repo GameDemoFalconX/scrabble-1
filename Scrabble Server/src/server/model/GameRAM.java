@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -232,7 +233,112 @@ public class GameRAM {
 		/**
 			* Save the current play in the games.xml file for the current player.
 			*/
-		public void savePlay() {}
+		public void saveGameOnFile(String pl_id, Play cPlay, String args) {
+				File gameFile = new File("games.xml");
+				if (gameFile.exists()) {
+						System.out.println("Games file exists!");
+						SAXBuilder builder = new SAXBuilder(); 
+						try {
+								Document document = (Document) builder.build(gameFile);
+								Element rootNode = document.getRootElement();
+								List list = rootNode.getChildren("player");
+								boolean foundPlayer = false; int i = 0;
+								while(i < list.size() && !foundPlayer) {
+										Element node = (Element) list.get(i);
+										if (node.getAttributeValue("id").equals(pl_id)) {
+												foundPlayer = true;
+												List playList = node.getChildren("play");
+												boolean foundPlay = false; int j = 0;
+												while(j < playList.size() && !foundPlay) {
+														Element playNode = (Element) playList.get(j);
+														// Check if the current game has already been saved on the XML file. 
+														if (playNode.getAttributeValue("id").equals(cPlay.getPlayID())) {
+																foundPlay = true;
+																// Save the game.
+																savePlay(playNode, cPlay, args);
+														}
+														j++;
+												}
+												if (!foundPlay) {
+														Element newPlay = new Element("play");
+														saveNewPlay(newPlay, cPlay, args);
+														node.addContent(newPlay);
+												}
+										}
+										i++;
+								}
+								if (!foundPlayer) {
+										Element newPlayer = new Element("player");
+										newPlayer.setAttribute(new Attribute("id", cPlay.getOwner()));
+										Element newPlay = new Element("play");
+										saveNewPlay(newPlay, cPlay, args);
+										newPlayer.addContent(newPlay);
+										rootNode.addContent(newPlayer);
+								}
+								System.out.println("Games file updated!");
+						} catch (IOException e) {
+								System.out.println(e.getMessage());
+						} catch (JDOMException jdome) {
+								System.out.println(jdome.getMessage());
+						}
+				} else {
+						System.out.println("Games file doesn't exist!");
+						System.out.println("Create new games file");
+						try {
+								Element plays = new Element("plays");
+								Document doc = new Document(plays);
+								doc.setRootElement(plays);
+ 
+								Element newPlayer = new Element("player");
+								newPlayer.setAttribute(new Attribute("id", cPlay.getOwner()));
+								Element newPlay = new Element("play");
+								saveNewPlay(newPlay, cPlay, args);
+								newPlayer.addContent(newPlay);
+								doc.getRootElement().addContent(newPlayer);
+								
+								XMLOutputter xmlOutput = new XMLOutputter();
+ 
+								xmlOutput.setFormat(Format.getPrettyFormat());
+								xmlOutput.output(doc, new FileWriter(gameFile));
+								
+								System.out.println("Game file Created & updated!");
+						} catch (IOException e) {
+								System.out.println(e.getMessage());
+						}	
+				}
+		}
+		
+		private void savePlay(Element play, Play cPlay, String args) {
+				// Set game informations values
+				play.getChild("modified").setText(cPlay.getModified());
+				play.getChild("score").setText(""+cPlay.getScore());
+																
+				// Save grid
+				Element grid = play.getChild("grid");
+				// Get the list of new added tiles and add it on the XML file.
+				ArrayList newTiles = cPlay.getNewAddedTiles();
+				if (newTiles.size() > 0) {
+						for (int k = 0; k < newTiles.size(); k++) {
+								grid.addContent(new Element("tile").setText(newTiles.get(k).toString()));
+						}
+				}
+																
+				// Load rack
+				Element rack = play.getChild("rack");
+				if (rack.removeChildren("tile")) {
+						if (!args.equals("")) cPlay.updateBlankTile(args);
+						for (int l = 0; l < 7; l++) {
+								rack.addContent(new Element("tile").setText(cPlay.getRack().getTile(l).toString()));
+						}
+				}
+		}
+		
+		private void saveNewPlay(Element play, Play cPlay, String args) {
+				play.setAttribute(new Attribute("id", cPlay.getPlayID()));
+				play.addContent(new Element("uuid").setText(cPlay.getPlayID()));
+				play.addContent(new Element("created").setText(cPlay.getCreated()));
+				savePlay(play, cPlay, args);
+		}
 		
 		/**
 			* Remove selected play in the games.xml file for the current player.
