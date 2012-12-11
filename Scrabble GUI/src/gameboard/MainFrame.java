@@ -1,6 +1,6 @@
 package gameboard;
 
-import dragndrop.MyGlassPane;
+import common.MyGlassPane;
 import java.awt.Container;
 import javax.swing.JFrame;
 
@@ -59,7 +59,6 @@ class MainFrame {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    // TODO code application logic here
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
