@@ -141,6 +141,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     @Override
   public void mouseReleased(MouseEvent e) {
     firstMouseEvent = null;
+    setVisible(true);
     //---------------------------------------------------------------------
     //On implémente le transfert lorsqu'on relâche le bouton de souris
     //Ceci afin de ne pas supplanter le fonctionnement du déplacement
