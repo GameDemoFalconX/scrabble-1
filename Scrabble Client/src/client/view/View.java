@@ -1,7 +1,7 @@
 package client.view;
 
-import client.model.Play;
 import client.ctrl.ClientController;
+import client.model.Play;
 import common.Colors;
 import common.Message;
 import org.fusesource.jansi.AnsiConsole;
@@ -135,11 +135,11 @@ public class View {
 				System.out.println(msg);
 		}
 
-		public String askName() {
-				return (CConsole.readLine("Enter your name ? "));
+		public String askEmail() {
+				return (CConsole.readLine("Enter your email address : "));
 		}
 
 		public String askPassword() {
-				return CConsole.readPass("Enter your password ? ");
+				return CConsole.readPass("Enter your password : ");
 		}
 }
