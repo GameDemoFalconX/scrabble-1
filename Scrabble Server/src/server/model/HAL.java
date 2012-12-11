@@ -155,6 +155,7 @@ public class HAL extends Game {
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
+						System.out.println("Server : start scrabbleValidator with data = "+ga_infos);
 						cPlay.newTest(); // Increase the number of tests for this player.
 						String [] gameArgs = ga_infos.split("@@");
 						
