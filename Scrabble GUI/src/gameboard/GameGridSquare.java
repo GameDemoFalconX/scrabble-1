@@ -1,7 +1,6 @@
 package gameboard;
 
 import common.DTPicture;
-import common.MyGlassPane;
 import common.TileTransferHandler;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
@@ -13,17 +12,14 @@ import javax.swing.JPanel;
 public class GameGridSquare extends JPanel {
   DTPicture dticone;
 
-  public GameGridSquare(MyGlassPane glass){
+  public GameGridSquare(){
     setOpaque(false);
 //				setBorder(BorderFactory.createLineBorder(Color.black));
     setLayout(new GridLayout(1, 1));
 //    setVisible(true);
-    dticone = new DTPicture(null, glass);
+    dticone = new DTPicture(null);
     dticone.setTransferHandler(new TileTransferHandler());
     add(dticone);
-//    addMouseListener(new MouseGlassListener(glass, this));
-//    addMouseMotionListener(new MouseGlassMotionListener(glass));
-//    setTransferHandler(new TransferHandler("icon"));
   }
 
 }

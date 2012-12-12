@@ -13,14 +13,24 @@ import javax.swing.JPanel;
 
 public class MyGlassPane extends JPanel{
 
+  //image in glasspane
   private BufferedImage img;
-  //Les coordonnées de l'image
+  //Coordinate of image
   private Point location;
+  //Instance of class (Singleton)
+  private static MyGlassPane instance;
    
-  public MyGlassPane(){
+  private MyGlassPane(){
     setOpaque(false);
   }   
-   
+  
+  public static synchronized MyGlassPane getInstance() {
+    if (instance == null) {
+      instance = new MyGlassPane() ;
+    }
+    return instance ;
+  }
+  
     @Override
   public void setLocation(Point location){
     this.location = location;

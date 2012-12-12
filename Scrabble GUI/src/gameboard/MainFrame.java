@@ -12,8 +12,6 @@ class MainFrame {
     
   public int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
 		
-		
-  private MyGlassPane glass = new MyGlassPane();
 		private MainPopUp mainPopUp;
 		private String playerName = "";
 
@@ -25,8 +23,8 @@ class MainFrame {
     contentPane.setLayout(null);
 
     GameBoard gameBoard = new GameBoard(ratingOfGUI);
-    Rack rack = new Rack(ratingOfGUI, glass);
-				GameGrid gameGrid = new GameGrid(glass);
+    Rack rack = new Rack(ratingOfGUI);
+				GameGrid gameGrid = new GameGrid();
 				Menu menu = new Menu();
     contentPane.add(gameBoard, 0);
     contentPane.add(rack, 0);
@@ -41,7 +39,7 @@ class MainFrame {
                 + gameBoard.getInsets().right+15, (int)frameHeight);
     contentPane.setVisible(true);
     frame.setContentPane(contentPane);
-    frame.setGlassPane(glass);
+    frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
 				mainPopUp = new MainPopUp();

@@ -1,8 +1,8 @@
 package gameboard;
 
 import common.DTPicture;
-import common.MyGlassPane;
 import common.TileTransferHandler;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -16,53 +16,35 @@ import javax.swing.JPanel;
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
 public class Rack extends JPanel {
-    
-//    PictureTransferHandler picHandler;
+
+//  private Tile[] rack = new Tile[7];
   DTPicture dticone;
 
-  public Rack(int ratingOfGUI, MyGlassPane glass){
+  public Rack(int ratingOfGUI){
+    
+//    char TileRackLetterTest[] = {'S','C','R','A','B','B','L','E'};
+//    int TileRackValueTest[] = {1,4,1,8,8,2,1};
+//    for (int i = 0; i < rack.length; i++) {
+//      JPanel JPaneTileRack = new JPanel(new GridLayout(1, 1));
+//      Tile tile = new Tile(TileRackLetterTest[i], TileRackValueTest[i]);
+//      JPaneTileRack.add(tile);
+//      JPaneTileRack.setVisible(true);
+//      add(JPaneTileRack,i);
+//						rack[i] = tile;
+//				}
+    
     ImageIcon icon = createImageIcon("images/Tile.png","Tile");
     icon = new ImageIcon(getScaledImage(icon.getImage(), 36,getProportionnalHeight(icon, 37)));
-    dticone = new DTPicture(icon.getImage(), glass);
+    dticone = new DTPicture(icon.getImage());
     dticone.setTransferHandler(new TileTransferHandler());
     JPanel JPaneTile1 = new JPanel(new GridLayout(1, 1));
     JPaneTile1.add(dticone);
     JPaneTile1.setVisible(true);
     add(JPaneTile1,0);
-//    JPaneTile1.addMouseListener(new MouseGlassListener(glass, this));
-//    JPaneTile1.addMouseMotionListener(new MouseGlassMotionListener(glass));
-    //    picHandler = new PictureTransferHandler();
-
-//    ImageIcon icon = createImageIcon("images/Tile.png","TileOfRack");
-//    icon = new ImageIcon(getScaledImage(icon.getImage(), 35,
-//                 getProportionnalHeight(icon, 35)));
-//
-//    JLabel JLabTile1 = new JLabel(icon);
-//    JLabel JLabTile2 = new JLabel(icon);
-//    JLabel JLabTile3 = new JLabel(icon);
-//    JLabel JLabTile4 = new JLabel(icon);
-//    JLabel JLabTile5 = new JLabel(icon);
-//    JLabel JLabTile6 = new JLabel(icon);
-//    JLabel JLabTile7 = new JLabel(icon);
-
-    //JLabTile1.setOpaque(false);
-//    JLabTile1.addMouseListener(new MouseGlassListener(glass, JLabTile1));
-//    JLabTile1.addMouseMotionListener(new MouseGlassMotionListener(glass));
-//    JLabTile1.setTransferHandler(new TransferHandler("icon"));
-    //JLabTile1.setTransferHandler(null);
 
     setLayout(new java.awt.GridLayout(1, 7, 0, 0));
+    setBackground(Color.red);
     setBounds( 200, ratingOfGUI*100 + 40, icon.getIconWidth()*8, icon.getIconHeight()+10);
-//    add(JLabTile1,0);
-//    add(JLabTile2,1);
-//    add(JLabTile3,2);
-//    add(JLabTile4,3);
-//    add(JLabTile5,4);
-//    add(JLabTile6,5);
-//    add(JLabTile7,6);
-    
-//    add(new TileOfRack(glass));
-
     setVisible(true);
   }
 

@@ -1,6 +1,5 @@
 package common;
 
-import common.DTPicture;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

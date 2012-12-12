@@ -1,6 +1,5 @@
 package gameboard;
 
-import common.MyGlassPane;
 import javax.swing.JPanel;
 
 /**
@@ -9,10 +8,10 @@ import javax.swing.JPanel;
  */
 public class GameGrid extends JPanel{
   
-		public GameGrid(MyGlassPane glass){
+		public GameGrid(){
 				setOpaque(false);
 				for(int i=0;i<225;i++){
-						add(new GameGridSquare(glass),i);
+						add(new GameGridSquare(),i);
 				}
 								
 				setLayout(new java.awt.GridLayout(15,15));
