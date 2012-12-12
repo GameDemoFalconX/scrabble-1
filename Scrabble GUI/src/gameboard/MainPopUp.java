@@ -1,5 +1,6 @@
 package gameboard;
 
+import common.ImageTools;
 import common.MD5Util;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -43,22 +44,13 @@ public class MainPopUp {
 				this.initComponent();
 		}
 
-		final protected ImageIcon createImageIcon(String path, String description) {
-    java.net.URL imgURL = getClass().getResource(path);
-    if (imgURL != null) {
-        return new ImageIcon(imgURL, description);
-    } else {
-        System.err.println("Couldn't find file : " + path);
-        return null;
-    }
-  }
-		
+	
 		private void initComponent() {
 				
 //				PLAY AS GUEST PANEL
-				ImageIcon icon = createImageIcon("images/Scrabble.png","Scrabble");
+				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
 				iconLabel = new JLabel(icon);
-				ImageIcon noPic = createImageIcon("images/no_user.gif","No_user");
+				ImageIcon noPic = ImageTools.createImageIcon("images/no_user.gif","No_user");
 				playerLabel = new JLabel(noPic);
 				playPanel = new JPanel();
 				playButton = new JButton("Play as guest");
