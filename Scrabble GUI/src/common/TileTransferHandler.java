@@ -22,7 +22,7 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   public boolean importData(JComponent c, Transferable t) {
-    System.out.println("importData");
+//    System.out.println("importData");
     Image image;
     if (canImport(c, t.getTransferDataFlavors())) {
       DTPicture pic = (DTPicture) c;
@@ -48,7 +48,7 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   protected Transferable createTransferable(JComponent c) {
-    System.out.println("createTransferable");
+//    System.out.println("createTransferable");
     sourcePic = (DTPicture) c;
     shouldRemove = true;
     return new PictureTransferable(sourcePic);
@@ -61,7 +61,7 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   protected void exportDone(JComponent c, Transferable data, int action) {
-    System.out.println("exportDone");
+//    System.out.println("exportDone");
     if (shouldRemove && (action == MOVE)) {
       sourcePic.setImage(null);
     }

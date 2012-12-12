@@ -14,7 +14,7 @@ public class Rack extends JPanel {
   private Tile[] rack = new Tile[7];
   private int[] sizeTile = new int[2]; //Size image of the tile [width, height]
 
-  public Rack(int ratingOfGUI){
+  public Rack(){
     
     char TileRackLetterTest[] = {'S','C','R','A','B','B','L','E'};
     int TileRackValueTest[] = {1,4,1,8,8,2,1};
@@ -33,7 +33,7 @@ public class Rack extends JPanel {
 				}
     
     setLayout(new java.awt.GridLayout(1, 7, 0, 0));
-    setBounds( 200, ratingOfGUI*100 + 40, sizeTile[0]*8, sizeTile[1] +10);
+    setBounds( 200, MainFrame.ratingOfGUI*100 + 20, sizeTile[0]*8, sizeTile[1] +10);
     setVisible(true);
   }
 }

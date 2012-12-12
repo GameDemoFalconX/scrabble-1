@@ -1,5 +1,6 @@
 package gameboard;
 
+import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 /**
@@ -11,10 +12,10 @@ public class GameGrid extends JPanel{
 		public GameGrid(){
 				setOpaque(false);
 				for(int i=0;i<225;i++){
-						add(new GameGridSquare(),i);
+						add(new GridSquare(),i);
 				}
 								
-				setLayout(new java.awt.GridLayout(15,15));
+				setLayout(new GridLayout(15,15));
 				setBounds(75,25,598,658);
     setVisible(true);
 		}

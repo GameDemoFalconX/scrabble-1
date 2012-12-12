@@ -47,6 +47,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //et de reconvertir ce point en coordonnées fenêtres
     SwingUtilities.convertPointToScreen(location, composant);
     SwingUtilities.convertPointFromScreen(location, glass);
+//    System.out.println(location);
         
     //Les instructions ci-dessous permettent de redessiner le composant
     imageGlass = new BufferedImage(composant.getWidth(), composant.getHeight(), BufferedImage.TYPE_INT_ARGB);
