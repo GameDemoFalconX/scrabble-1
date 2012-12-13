@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 public class GameBoard extends JPanel{
     
   public GameBoard(){
-    ImageIcon icon = ImageTools.createImageIcon("images/Grid_72ppp.jpg","Game Grid");
+//				Bug starts from here
+    ImageIcon icon = ImageTools.createImageIcon("Grid_72ppp.jpg","Game Grid");
     icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), MainFrame.ratingOfGUI*100,
                  ImageTools.getProportionnalHeight(icon, MainFrame.ratingOfGUI*100)));
     JLabel JLabGameBoard = new JLabel(icon);
