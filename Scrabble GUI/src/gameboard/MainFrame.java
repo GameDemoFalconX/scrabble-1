@@ -1,6 +1,7 @@
 package gameboard;
 
 import common.MyGlassPane;
+import java.awt.BorderLayout;
 import java.awt.Container;
 import javax.swing.JFrame;
 
@@ -12,7 +13,7 @@ class MainFrame {
     
   public static int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
 		
-		private MainPopUp mainPopUp;
+		private SideMenu sideMenu;
 		private JFrame frame;
 		private Container contentPane;
 		private GameBoard gameBoard;
@@ -26,16 +27,18 @@ class MainFrame {
 				gameBoard = new GameBoard();
 				rack = new Rack();
 				gameGrid = new GameGrid();
+				sideMenu = new SideMenu();
 				initContainer();
 				initFrame();
   }
 		
 		private void initContainer() {
 				contentPane = frame.getContentPane();
-				contentPane.setLayout(null);
-				contentPane.add(gameBoard, 0);
-    contentPane.add(rack, 0);
-    contentPane.add(gameGrid, 0);
+				contentPane.setLayout(new BorderLayout());
+				contentPane.add(gameBoard, BorderLayout.CENTER);
+    contentPane.add(rack, BorderLayout.CENTER);
+    contentPane.add(gameGrid, BorderLayout.CENTER);
+				contentPane.add(SideMenu.getPanel(),BorderLayout.EAST);
 				contentPane.setVisible(true);
 		}
 		
@@ -44,12 +47,13 @@ class MainFrame {
 				frame.setJMenuBar(menu.getMenu());
 				double frameHeight = (double)ratingOfGUI*118;
     System.out.println("Height of the frame : " + frameHeight);
-    frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15, (int)frameHeight);
+    frame.setSize((gameBoard.getWidth() + gameBoard.getInsets().left
+                + gameBoard.getInsets().right+15) + 400, (int)frameHeight);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
+				SideMenu.setVisible(true);
 		}
 	
 

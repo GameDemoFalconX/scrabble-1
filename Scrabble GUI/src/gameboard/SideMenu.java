@@ -18,29 +18,21 @@ import javax.swing.*;
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
-public class MainPopUp {
+public class SideMenu {
 		
-		private static final String TITLE = "Welcome to Scrabble";
 		
-		private static final int WIDTH_DIM = 500;
-		private static final int HEIGHT_DIM = 300;
-		
-		private static JDialog popUp;
+		private static JPanel panel;
 		private JLabel iconLabel, playerLabel, emailLabel, passwordLabel;
 		private JTextField emailField;
 		private JPasswordField passwordField;
-		private JButton playButton, logInButton, signUpButton, exitButton;
+		private JButton playButton, logInButton, signUpButton;
 		private String email;
 		private char[] password;
 		private JPanel playPanel, fieldsPanel, buttonsPanel;
 
-		public MainPopUp()	{
-				popUp = new JDialog(null,TITLE,null);
-				popUp.setSize(WIDTH_DIM,HEIGHT_DIM);
-				popUp.setLocationRelativeTo(null);
-				popUp.setResizable(false);
-				popUp.setVisible(true);
-				popUp.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		public SideMenu()	{
+				panel = new JPanel();
+				panel.setSize(400, 300);
 				this.initComponent();
 		}
 
@@ -50,8 +42,18 @@ public class MainPopUp {
 //				PLAY AS GUEST PANEL
 				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
 				iconLabel = new JLabel(icon);
-				ImageIcon noPic = ImageTools.createImageIcon("images/no_user.gif","No_user");
-				playerLabel = new JLabel(noPic);
+				playerLabel = new JLabel();
+				URL url = null;
+				try {
+						url = new URL("http://www.gravatar.com/avatar/"+"a");
+				} catch (MalformedURLException ex) {
+						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				try {
+						playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
+				} catch (IOException ex) {
+						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+				}
 				playPanel = new JPanel();
 				playButton = new JButton("Play as guest");
 				playButton.addActionListener(new ActionListener(){
@@ -61,7 +63,6 @@ public class MainPopUp {
 								if (!Menu.getSaveCloseEnabled()) {
 										Menu.setSaveCloseEnabled(true);
 								}
-								setVisible(false);
       }
 				});
 				
@@ -101,13 +102,12 @@ public class MainPopUp {
 								try {
 										url = new URL("http://www.gravatar.com/avatar/"+hash);
 								} catch (MalformedURLException ex) {
-										Logger.getLogger(MainPopUp.class.getName()).log(Level.SEVERE, null, ex);
+										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 								}
 								try {
-																		playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
-										//								popUp.setVisible(false);
+										playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
 								} catch (IOException ex) {
-										Logger.getLogger(MainPopUp.class.getName()).log(Level.SEVERE, null, ex);
+										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 								}
       }
 				});
@@ -123,26 +123,22 @@ public class MainPopUp {
 //								popUp.setVisible(false);
       }
 				});
-				
-				exitButton = new JButton("Exit");
-				exitButton.addActionListener(new ActionListener(){
-						@Override
-      public void actionPerformed(ActionEvent arg0) {
-        System.exit(0);
-      }        
-    });
-				
+								
 				buttonsPanel.add(logInButton);
 				buttonsPanel.add(signUpButton);
-				buttonsPanel.add(exitButton);
 				
-				popUp.getContentPane().add(playPanel, BorderLayout.NORTH);
-				popUp.getContentPane().add(fieldsPanel, BorderLayout.CENTER); 
-				popUp.getContentPane().add(buttonsPanel, BorderLayout.SOUTH);	
+				panel.setLayout(new BorderLayout());
+				panel.add(playPanel, BorderLayout.NORTH	);
+				panel.add(fieldsPanel, BorderLayout.CENTER); 
+				panel.add(buttonsPanel, BorderLayout.SOUTH);	
 		}
 		
 		public static void setVisible(boolean visible) {
-				popUp.setVisible(visible);
+				panel.setVisible(visible);
+		}
+		
+		public static JPanel getPanel() {
+				return panel;
 		}
 		
 }
