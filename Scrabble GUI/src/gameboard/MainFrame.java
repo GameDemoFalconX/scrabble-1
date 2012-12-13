@@ -13,45 +13,45 @@ class MainFrame {
   public static int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
 		
 		private MainPopUp mainPopUp;
-		private String playerName = "";
+		private JFrame frame;
+		private Container contentPane;
+		private GameBoard gameBoard;
+		private Rack rack;
+		private GameGrid gameGrid;
+		private Menu menu;
 
   public MainFrame()  {
-    JFrame frame = new JFrame("Scrabble");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    Container contentPane =  frame.getContentPane() ;
-    contentPane.setLayout(null);
-
-    GameBoard gameBoard = new GameBoard();
-    Rack rack = new Rack();
-				GameGrid gameGrid = new GameGrid();
-				Menu menu = new Menu();
-    contentPane.add(gameBoard, 0);
+				frame = new JFrame("Scrabble");
+				menu = new Menu();
+				gameBoard = new GameBoard();
+				rack = new Rack();
+				gameGrid = new GameGrid();
+				initContainer();
+				initFrame();
+  }
+		
+		private void initContainer() {
+				contentPane = frame.getContentPane();
+				contentPane.setLayout(null);
+				contentPane.add(gameBoard, 0);
     contentPane.add(rack, 0);
     contentPane.add(gameGrid, 0);
+				contentPane.setVisible(true);
+		}
+		
+		private void initFrame() {
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setJMenuBar(menu.getMenu());
-
-
-    double frameHeight = (double)ratingOfGUI*118;
+				double frameHeight = (double)ratingOfGUI*118;
     System.out.println("Height of the frame : " + frameHeight);
-
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
                 + gameBoard.getInsets().right+15, (int)frameHeight);
-    contentPane.setVisible(true);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
-				mainPopUp = new MainPopUp();
-  }
-		
-		public void setPlayerName(String playerName) {
-				this.playerName = playerName;
 		}
-		
-		public String getPlayerName() {
-				return playerName;
-		}
+	
 
   /**
    * @param args the command line arguments

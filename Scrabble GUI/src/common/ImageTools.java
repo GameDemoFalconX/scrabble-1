@@ -16,7 +16,6 @@ public class ImageTools {
 
 /** Returns an ImageIcon, or null if the path was invalid. */
   static public ImageIcon createImageIcon(String path, String description) {
-//		Bug is because of this line
     URL imgURL = Tile.class.getResource(path);
     if (imgURL != null) {
       return new ImageIcon(imgURL, description);
