@@ -10,10 +10,8 @@ import javax.swing.JFrame;
  */
 class MainFrame {
     
-  public int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
+  public static int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
 		
-		
-  private MyGlassPane glass = new MyGlassPane();
 		private MainPopUp mainPopUp;
 		private String playerName = "";
 
@@ -24,9 +22,9 @@ class MainFrame {
     Container contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
 
-    GameBoard gameBoard = new GameBoard(ratingOfGUI);
-    Rack rack = new Rack(ratingOfGUI, glass);
-				GameGrid gameGrid = new GameGrid(glass);
+    GameBoard gameBoard = new GameBoard();
+    Rack rack = new Rack();
+				GameGrid gameGrid = new GameGrid();
 				Menu menu = new Menu();
     contentPane.add(gameBoard, 0);
     contentPane.add(rack, 0);
@@ -34,14 +32,14 @@ class MainFrame {
 				frame.setJMenuBar(menu.getMenu());
 
 
-    double frameHeight = (double)ratingOfGUI*120;
+    double frameHeight = (double)ratingOfGUI*118;
     System.out.println("Height of the frame : " + frameHeight);
 
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
                 + gameBoard.getInsets().right+15, (int)frameHeight);
     contentPane.setVisible(true);
     frame.setContentPane(contentPane);
-    frame.setGlassPane(glass);
+    frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
 				mainPopUp = new MainPopUp();
