@@ -16,6 +16,7 @@ public class Rack extends JPanel {
 
   public Rack(){
     
+    setName("Rack");
     char TileRackLetterTest[] = {'S','C','R','A','B','B','L','E'};
     int TileRackValueTest[] = {1,4,1,8,8,2,1};
     
@@ -32,8 +33,9 @@ public class Rack extends JPanel {
 						rack[i] = tile;
 				}
     
+//    setBorder(BorderFactory.createLineBorder(Color.black));
     setLayout(new java.awt.GridLayout(1, 7, 0, 0));
-    setBounds( 200, MainFrame.ratingOfGUI*100 + 20, sizeTile[0]*8, sizeTile[1] +10);
+    setBounds( 200, MainFrame.ratingOfGUI*100 + 20, sizeTile[0]*8, sizeTile[1]);
     setVisible(true);
   }
 }

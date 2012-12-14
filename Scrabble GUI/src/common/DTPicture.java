@@ -28,6 +28,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     super(image);
     this.glass = MyGlassPane.getInstance();
     addMouseMotionListener(this);
+    setName("DTPicture");
   }
 
   public void setImage(Image image) {
@@ -37,9 +38,12 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mousePressed(MouseEvent e) {
-      //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
+    LocateOfTile.locateTile("From");
+    //@@@@@@@@  BEGIN GlassPane @@@@@@@@@@@@@@
     //On récupère le composant pour en déduire sa position
     Component composant = e.getComponent();
+    
+    //Coordinate of the mouse in Components
     Point location = (Point)e.getPoint().clone();
     
     //Les méthodes ci-dessous permettent, dans l'ordre, 
@@ -47,7 +51,6 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //et de reconvertir ce point en coordonnées fenêtres
     SwingUtilities.convertPointToScreen(location, composant);
     SwingUtilities.convertPointFromScreen(location, glass);
-//    System.out.println(location);
         
     //Les instructions ci-dessous permettent de redessiner le composant
     imageGlass = new BufferedImage(composant.getWidth(), composant.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -58,9 +61,8 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //On passe les données qui vont bien à notre GlassPane
     glass.setLocation(location);
     glass.setImage(imageGlass);
-      
     glass.setVisible(true);
-     //@@@@@@@@  FIN GlassPane @@@@@@@@@@@@@@
+     //@@@@@@@@  END GlassPane @@@@@@@@@@@@@@
     
     //Don't bother to drag if there is no image.
     if (image == null) {
@@ -74,15 +76,14 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseDragged(MouseEvent e) {
-      //@@@@@@@@  DEBUT GlassPane @@@@@@@@@@@@@@
+      //@@@@@@@@  BEGIN GlassPane @@@@@@@@@@@@@@
     Component com = e.getComponent();
-
     Point p = (Point) e.getPoint().clone();
     SwingUtilities.convertPointToScreen(p, com);
     SwingUtilities.convertPointFromScreen(p, glass);
     glass.setLocation(p);
     glass.repaint();
-    //@@@@@@@@  FIN GlassPane @@@@@@@@@@@@@@
+    //@@@@@@@@  END GlassPane @@@@@@@@@@@@@@
     
     //Don't bother to drag if the component displays no image.
     if (image == null) {
@@ -97,6 +98,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseReleased(MouseEvent e) {
+    LocateOfTile.locateTile("To");
     firstMouseEvent = null;
     setVisible(true);
     //---------------------------------------------------------------------
@@ -139,7 +141,6 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseMoved(MouseEvent e) {
-      //System.out.println("MouseMoved");
   }
 
 }

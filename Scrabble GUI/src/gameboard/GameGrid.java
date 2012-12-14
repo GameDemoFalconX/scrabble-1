@@ -17,6 +17,7 @@ public class GameGrid extends JPanel{
 								
 				setLayout(new GridLayout(15,15));
 				setBounds(75,25,598,658);
+    setName("Grid");
     setVisible(true);
 		}
 }

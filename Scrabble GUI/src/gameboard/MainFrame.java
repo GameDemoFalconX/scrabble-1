@@ -1,5 +1,6 @@
 package gameboard;
 
+import common.LocateOfTile;
 import common.MyGlassPane;
 import java.awt.Container;
 import javax.swing.JFrame;
@@ -16,6 +17,7 @@ class MainFrame {
 		private String playerName = "";
 
   public MainFrame()  {
+    new LocateOfTile();
     JFrame frame = new JFrame("Scrabble");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -33,7 +35,6 @@ class MainFrame {
 
 
     double frameHeight = (double)ratingOfGUI*118;
-    System.out.println("Height of the frame : " + frameHeight);
 
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
                 + gameBoard.getInsets().right+15, (int)frameHeight);
