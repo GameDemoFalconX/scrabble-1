@@ -13,24 +13,22 @@ import javax.swing.ImageIcon;
 		
 		private char letter;
 		private final int value;
-  private Image img;
+		private Image img;
 
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
-
-    ImageIcon icon;
-    icon = ImageTools.createImageIcon("images/Tile.png","Tile");
-    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 36,ImageTools.getProportionnalHeight(icon, 37)));
-    setImg(icon.getImage());
-    
+				ImageIcon icon;
+				icon = ImageTools.createImageIcon("images/Tile.png","Tile");
+				icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 36,ImageTools.getProportionnalHeight(icon, 37)));
+				setImage(icon.getImage());
 		}
 
-		public void setImg(Image im) {
-    img = im;
+		public void setImage(Image im) {
+				img = im;
 		}
   
-		public Image getImg() {
+		public Image getImage() {
 			return img;
 		}
   
@@ -56,6 +54,5 @@ import javax.swing.ImageIcon;
 				} else {
 						return "[" + letter + "" + value+ "]";
 				}
-		}   
-  
+		}    
 }

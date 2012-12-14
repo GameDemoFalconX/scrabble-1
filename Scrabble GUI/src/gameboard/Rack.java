@@ -23,9 +23,9 @@ public class Rack extends JPanel {
     for (int i = 0; i < rack.length; i++) {
       JPanel JPaneTileRack = new JPanel(new GridLayout(1, 1));
       Tile tile = new Tile(TileRackLetterTest[i], TileRackValueTest[i]);
-      DTPicture dticone = new DTPicture(tile.getImg());
-      sizeTile[0] = tile.getImg().getWidth(null);
-      sizeTile[1] = tile.getImg().getHeight(null);
+      DTPicture dticone = new DTPicture(tile.getImage());
+      sizeTile[0] = tile.getImage().getWidth(null);
+      sizeTile[1] = tile.getImage().getHeight(null);
       dticone.setTransferHandler(new TileTransferHandler());
       JPaneTileRack.add(dticone);
       JPaneTileRack.setVisible(true);

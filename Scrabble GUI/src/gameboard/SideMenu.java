@@ -1,7 +1,6 @@
 package gameboard;
 
 import common.ImageTools;
-import vendor.MD5Util;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,14 +11,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import vendor.MD5Util;
 
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
 public class SideMenu {
-		
-		
+				
 		private static JPanel panel;
 		private JLabel iconLabel, playerLabel, emailLabel, passwordLabel;
 		private JTextField emailField;
@@ -35,9 +34,7 @@ public class SideMenu {
 				this.initComponent();
 		}
 
-	
-		private void initComponent() {
-				
+		private void initComponent() {				
 //				PLAY AS GUEST PANEL
 				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
 				iconLabel = new JLabel(icon);
