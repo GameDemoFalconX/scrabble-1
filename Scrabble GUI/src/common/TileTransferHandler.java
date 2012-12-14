@@ -23,24 +23,26 @@ public class TileTransferHandler extends TransferHandler {
     @Override
   public boolean importData(JComponent c, Transferable t) {
 //    System.out.println("importData");
-    Image image;
-    if (canImport(c, t.getTransferDataFlavors())) {
-      DTPicture pic = (DTPicture) c;
-      //Don't drop on myself.
-      if (sourcePic == pic) {
-        shouldRemove = false;
-        return true;
-      }
-      try {
-        image = (Image) t.getTransferData(pictureFlavor);
-        //Set the component to the new picture.
-        pic.image = image;
-        pic.repaint();
-        return true;
-      } catch (UnsupportedFlavorException ufe) {
-        System.out.println("importData: unsupported data flavor");
-      } catch (IOException ioe) {
-        System.out.println("importData: I/O exception");
+    if (LocateOfTile.getDndEnable()){
+      Image image;
+      if (canImport(c, t.getTransferDataFlavors())) {
+        DTPicture pic = (DTPicture) c;
+        //Don't drop on myself.
+        if (sourcePic == pic) {
+          shouldRemove = false;
+          return true;
+        }
+        try {
+          image = (Image) t.getTransferData(pictureFlavor);
+          //Set the component to the new picture.
+          pic.image = image;
+          pic.repaint();
+          return true;
+        } catch (UnsupportedFlavorException ufe) {
+          System.out.println("importData: unsupported data flavor");
+        } catch (IOException ioe) {
+          System.out.println("importData: I/O exception");
+        }
       }
     }
     return false;

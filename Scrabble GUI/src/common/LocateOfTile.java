@@ -18,8 +18,9 @@ import javax.swing.SwingUtilities;
    * @author Arnaud Morel <a.morel@hotmail.com>
    */
 public class LocateOfTile {
-  private static Component ctainer = null;
-  private static Point pt = null;
+  private static Component ctainer;
+  private static Point pt;
+  private static boolean dndEnable = true;
   
   public LocateOfTile(){
     //The listener catch the component under the mouse:
@@ -76,9 +77,7 @@ public class LocateOfTile {
           if (pt.y+(SquareHeight/2)<SquareHeight*i) {
             if (posY==0) {posY = i;}
           }
-
         }
-          
         System.out.println(fromTo+" Grid pos("+posX+","+posY+")");
         break;
       
@@ -97,6 +96,14 @@ public class LocateOfTile {
         break;
     }    
       
+  }
+  
+  /**
+   * Allows or not the drag'n Drop transfer to avoid replace the other tile.
+   * @return dndEnable
+   */
+  public static boolean getDndEnable(){
+    return dndEnable;
   }
 
 }

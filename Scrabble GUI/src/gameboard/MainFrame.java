@@ -11,9 +11,6 @@ import javax.swing.JFrame;
  */
 class MainFrame {
     
-  public static int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
-		
-		private MainPopUp mainPopUp;
 		private String playerName = "";
 
   public MainFrame()  {
@@ -33,17 +30,14 @@ class MainFrame {
     contentPane.add(gameGrid, 0);
 				frame.setJMenuBar(menu.getMenu());
 
-
-    double frameHeight = (double)ratingOfGUI*118;
-
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15, (int)frameHeight);
+                + gameBoard.getInsets().right+15, 826);
     contentPane.setVisible(true);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
-				mainPopUp = new MainPopUp();
+//				mainPopUp = new MainPopUp();
   }
 		
 		public void setPlayerName(String playerName) {

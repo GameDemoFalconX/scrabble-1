@@ -35,7 +35,7 @@ public class Rack extends JPanel {
     
 //    setBorder(BorderFactory.createLineBorder(Color.black));
     setLayout(new java.awt.GridLayout(1, 7, 0, 0));
-    setBounds( 200, MainFrame.ratingOfGUI*100 + 20, sizeTile[0]*8, sizeTile[1]);
+    setBounds( 200, 700 + 20, sizeTile[0]*8, sizeTile[1]);
     setVisible(true);
   }
 }

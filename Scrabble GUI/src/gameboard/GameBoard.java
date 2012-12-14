@@ -13,8 +13,8 @@ public class GameBoard extends JPanel{
     
   public GameBoard(){
     ImageIcon icon = ImageTools.createImageIcon("images/Grid_72ppp.jpg","Game Grid");
-    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), MainFrame.ratingOfGUI*100,
-                 ImageTools.getProportionnalHeight(icon, MainFrame.ratingOfGUI*100)));
+    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 700,
+                 ImageTools.getProportionnalHeight(icon, 700)));
     JLabel JLabGameBoard = new JLabel(icon);
     setLayout(new java.awt.GridLayout(1, 1, 1, 1)); //Allow to get rid of the gap between JPanel and JLabel
     setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
