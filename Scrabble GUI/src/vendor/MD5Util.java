@@ -1,4 +1,4 @@
-package common;
+package vendor;
 
 import java.io.*;
 import java.security.*;
@@ -28,4 +28,3 @@ public class MD5Util {
       return null;
   }
 }
-
