@@ -1,5 +1,6 @@
 package gameboard;
 
+import common.LocateOfTile;
 import common.MyGlassPane;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -22,6 +23,7 @@ class MainFrame {
 		private Menu menu;
 
   public MainFrame()  {
+				new LocateOfTile();
 				frame = new JFrame("Scrabble");
 				menu = new Menu();
 				gameBoard = new GameBoard();
@@ -36,8 +38,8 @@ class MainFrame {
 				contentPane = frame.getContentPane();
 				contentPane.setLayout(new BorderLayout());
 				contentPane.add(gameBoard, BorderLayout.CENTER);
-    contentPane.add(rack, BorderLayout.CENTER);
-    contentPane.add(gameGrid, BorderLayout.CENTER);
+				contentPane.add(rack, BorderLayout.CENTER);
+				contentPane.add(gameGrid, BorderLayout.CENTER);
 				contentPane.add(SideMenu.getPanel(),BorderLayout.EAST);
 				contentPane.setVisible(true);
 		}
@@ -46,13 +48,13 @@ class MainFrame {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setJMenuBar(menu.getMenu());
 				double frameHeight = (double)ratingOfGUI*118;
-    System.out.println("Height of the frame : " + frameHeight);
-    frame.setSize((gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15) + 420, (int)frameHeight);
-    frame.setContentPane(contentPane);
-    frame.setGlassPane(MyGlassPane.getInstance());
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
+				System.out.println("Height of the frame : " + frameHeight);
+				frame.setSize((gameBoard.getWidth() + gameBoard.getInsets().left
+																		+ gameBoard.getInsets().right+15) + 420, (int)frameHeight);
+				frame.setContentPane(contentPane);
+				frame.setGlassPane(MyGlassPane.getInstance());
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
 				SideMenu.setVisible(true);
 		}
 	
