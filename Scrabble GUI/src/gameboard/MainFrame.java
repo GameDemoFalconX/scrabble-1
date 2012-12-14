@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author Arnaud Morel <a.morel@hotmail.com>
+ * @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 class MainFrame {
     
@@ -48,7 +48,7 @@ class MainFrame {
 				double frameHeight = (double)ratingOfGUI*118;
     System.out.println("Height of the frame : " + frameHeight);
     frame.setSize((gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15) + 400, (int)frameHeight);
+                + gameBoard.getInsets().right+15) + 420, (int)frameHeight);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);

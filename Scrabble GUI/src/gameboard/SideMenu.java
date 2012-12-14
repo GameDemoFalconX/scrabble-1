@@ -2,7 +2,6 @@ package gameboard;
 
 import common.ImageTools;
 import common.MD5Util;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,11 +27,11 @@ public class SideMenu {
 		private JButton playButton, logInButton, signUpButton;
 		private String email;
 		private char[] password;
-		private JPanel playPanel, fieldsPanel, buttonsPanel;
+		private Box playBox, fieldsBox, buttonsBox;
 
 		public SideMenu()	{
 				panel = new JPanel();
-				panel.setSize(400, 300);
+				panel.setPreferredSize(new Dimension(400,300));
 				this.initComponent();
 		}
 
@@ -54,7 +53,7 @@ public class SideMenu {
 				} catch (IOException ex) {
 						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 				}
-				playPanel = new JPanel();
+				playBox = Box.createHorizontalBox();
 				playButton = new JButton("Play as guest");
 				playButton.addActionListener(new ActionListener(){
 						@Override
@@ -66,28 +65,29 @@ public class SideMenu {
       }
 				});
 				
-				playPanel.add(iconLabel);
-				playPanel.add(playButton);
-				playPanel.add(playerLabel);
+				playBox.add(iconLabel);
+				playBox.add(playButton);
+				playBox.add(playerLabel);
 				
 //				FIELDS PANEL
-				fieldsPanel = new JPanel();
+				fieldsBox = Box.createHorizontalBox();
+				fieldsBox.setPreferredSize(new Dimension(400, 100));
 				emailLabel = new JLabel("Email : ");
 				emailField = new JTextField();
-				emailField.setPreferredSize(new Dimension(90,25));
+				emailField.setSize(new Dimension(90,25));
 				
-				fieldsPanel.add(emailLabel);
-				fieldsPanel.add(emailField);
+				fieldsBox.add(emailLabel);
+				fieldsBox.add(emailField);
 				
 				passwordLabel = new JLabel("Password : ");
 				passwordField = new JPasswordField();
-				passwordField.setPreferredSize(new Dimension(90,25));
+				passwordField.setSize(new Dimension(90,25));
 				
-				fieldsPanel.add(passwordLabel);
-				fieldsPanel.add(passwordField);
+				fieldsBox.add(passwordLabel);
+				fieldsBox.add(passwordField);
 				
 //				BUTTON PANEL
-				buttonsPanel = new JPanel();
+				buttonsBox = Box.createHorizontalBox();
 				logInButton = new JButton("Log in");
 				logInButton.addActionListener(new ActionListener(){
 						@Override
@@ -124,13 +124,12 @@ public class SideMenu {
       }
 				});
 								
-				buttonsPanel.add(logInButton);
-				buttonsPanel.add(signUpButton);
+				buttonsBox.add(logInButton);
+				buttonsBox.add(signUpButton);
 				
-				panel.setLayout(new BorderLayout());
-				panel.add(playPanel, BorderLayout.NORTH	);
-				panel.add(fieldsPanel, BorderLayout.CENTER); 
-				panel.add(buttonsPanel, BorderLayout.SOUTH);	
+				panel.add(playBox);
+				panel.add(fieldsBox); 
+				panel.add(buttonsBox);
 		}
 		
 		public static void setVisible(boolean visible) {
