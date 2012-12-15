@@ -4,6 +4,7 @@ import common.LocateOfTile;
 import common.MyGlassPane;
 import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -17,6 +18,8 @@ class MainFrame {
   private Rack rack;
   private GameGrid gameGrid;
   private Menu menu;
+  private JPanel rackBackground;
+  private JPanel ShadeTile;
 
   public MainFrame()  {
     new LocateOfTile();
@@ -25,6 +28,8 @@ class MainFrame {
     rack = new Rack();
 				gameGrid = new GameGrid();
 				menu = new Menu();
+    ShadeTile = new Shade();
+    rackBackground = new RackBackground();
     initContainer();
     initFrame();
   }
@@ -33,6 +38,8 @@ class MainFrame {
     contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
     contentPane.add(gameBoard, 0);
+    contentPane.add(rackBackground, 0);
+    contentPane.add(ShadeTile, 0);
     contentPane.add(rack, 0);
     contentPane.add(gameGrid, 0);
     contentPane.setVisible(true);
@@ -42,7 +49,7 @@ class MainFrame {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setJMenuBar(menu.getMenu());
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15, 826);
+                + gameBoard.getInsets().right+15, 850);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
