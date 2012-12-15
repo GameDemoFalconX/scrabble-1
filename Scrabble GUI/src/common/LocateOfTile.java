@@ -48,7 +48,7 @@ public class LocateOfTile {
           }else
           if (event.getID()==MouseEvent.MOUSE_EXITED )
           {
-//           ctainer = null;
+           ctainer = null;
           }
 
         };
@@ -63,38 +63,40 @@ public class LocateOfTile {
    * @param fromTo If 'From' or 'To' request
    */
   public static void locateTile(String fromTo){
-    Rectangle RecContain = ctainer.getBounds();
-    switch (ctainer.getName()){
-      case "Grid":
-        double SquareWigth = RecContain.getWidth()/15;
-        double SquareHeight = RecContain.getHeight()/15;
-        int posX = 0;
-        int posY = 0;
-        for(int i=1; i<16 ; i++){
-          if (pt.x+(SquareWigth/2)<SquareWigth*i) {
-            if (posX==0) {posX = i;}
+    if (ctainer!=null){
+      Rectangle RecContain = ctainer.getBounds();
+      switch (ctainer.getName()){
+        case "Grid":
+          double SquareWigth = RecContain.getWidth()/15;
+          double SquareHeight = RecContain.getHeight()/15;
+          int posX = 0;
+          int posY = 0;
+          for(int i=1; i<16 ; i++){
+            if (pt.x+(SquareWigth/2)<SquareWigth*i) {
+              if (posX==0) {posX = i;}
+            }
+            if (pt.y+(SquareHeight/2)<SquareHeight*i) {
+              if (posY==0) {posY = i;}
+            }
           }
-          if (pt.y+(SquareHeight/2)<SquareHeight*i) {
-            if (posY==0) {posY = i;}
+          System.out.println(fromTo+" Grid pos("+posX+","+posY+")");
+          break;
+
+        case "Rack":
+          double RackWigth = RecContain.getWidth()/7;
+          int TileNbr = 0;
+          for(int i=1; i<8 ; i++){
+            if (pt.x+(RackWigth/2)<RackWigth*i) {
+              if (TileNbr==0) {TileNbr = i;}
+            }
           }
-        }
-        System.out.println(fromTo+" Grid pos("+posX+","+posY+")");
-        break;
-      
-      case "Rack":
-        double RackWigth = RecContain.getWidth()/7;
-        int TileNbr = 0;
-        for(int i=1; i<8 ; i++){
-          if (pt.x+(RackWigth/2)<RackWigth*i) {
-            if (TileNbr==0) {TileNbr = i;}
-          }
-        }
-        System.out.println(fromTo+" Rack pos("+TileNbr+")");
-        break;
-      
-      default:
-        break;
-    }    
+          System.out.println(fromTo+" Rack pos("+TileNbr+")");
+          break;
+
+        default:
+          break;
+      }    
+    }
       
   }
   
@@ -105,5 +107,5 @@ public class LocateOfTile {
   public static boolean getDndEnable(){
     return dndEnable;
   }
-
+  
 }

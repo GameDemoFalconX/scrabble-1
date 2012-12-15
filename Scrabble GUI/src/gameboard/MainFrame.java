@@ -11,43 +11,44 @@ import javax.swing.JFrame;
  */
 class MainFrame {
     
-		private String playerName = "";
+  private JFrame frame;
+  private Container contentPane;
+  private GameBoard gameBoard;
+  private Rack rack;
+  private GameGrid gameGrid;
+  private Menu menu;
 
   public MainFrame()  {
     new LocateOfTile();
-    JFrame frame = new JFrame("Scrabble");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame = new JFrame("Scrabble");
+    gameBoard = new GameBoard();
+    rack = new Rack();
+				gameGrid = new GameGrid();
+				menu = new Menu();
+    initContainer();
+    initFrame();
+  }
 
-    Container contentPane =  frame.getContentPane() ;
+  private void initContainer() {
+    contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
-
-    GameBoard gameBoard = new GameBoard();
-    Rack rack = new Rack();
-				GameGrid gameGrid = new GameGrid();
-				Menu menu = new Menu();
     contentPane.add(gameBoard, 0);
     contentPane.add(rack, 0);
     contentPane.add(gameGrid, 0);
+    contentPane.setVisible(true);
+  }
+  
+  private void initFrame() {
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setJMenuBar(menu.getMenu());
-
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
                 + gameBoard.getInsets().right+15, 826);
-    contentPane.setVisible(true);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
-//				mainPopUp = new MainPopUp();
   }
 		
-		public void setPlayerName(String playerName) {
-				this.playerName = playerName;
-		}
-		
-		public String getPlayerName() {
-				return playerName;
-		}
-
   /**
    * @param args the command line arguments
    */

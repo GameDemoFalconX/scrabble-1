@@ -29,6 +29,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     this.glass = MyGlassPane.getInstance();
     addMouseMotionListener(this);
     setName("DTPicture");
+    setOpaque(false);
   }
 
   public void setImage(Image image) {
