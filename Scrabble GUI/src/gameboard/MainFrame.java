@@ -19,16 +19,17 @@ class MainFrame {
   private GameGrid gameGrid;
   private Menu menu;
   private JPanel rackBackground;
-  private JPanel ShadeTile;
+  private Shade shadeTile;
 
   public MainFrame()  {
-    new LocateOfTile();
     frame = new JFrame("Scrabble");
     gameBoard = new GameBoard();
     rack = new Rack();
 				gameGrid = new GameGrid();
 				menu = new Menu();
-    ShadeTile = new Shade();
+    shadeTile = new Shade();
+    new LocateOfTile(shadeTile);
+//    ShadeTile.setVisibleShade(1, false);
     rackBackground = new RackBackground();
     initContainer();
     initFrame();
@@ -39,7 +40,7 @@ class MainFrame {
     contentPane.setLayout(null);
     contentPane.add(gameBoard, 0);
     contentPane.add(rackBackground, 0);
-    contentPane.add(ShadeTile, 0);
+    contentPane.add(shadeTile, 0);
     contentPane.add(rack, 0);
     contentPane.add(gameGrid, 0);
     contentPane.setVisible(true);

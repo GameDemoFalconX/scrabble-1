@@ -13,17 +13,17 @@ import javax.swing.JPanel;
  */
 public class Shade extends JPanel {
 
-  private JPanel JPaneShadeTile;
   private DTPicture dticone;
   private ImageIcon icon;
+  private JPanel[] shadeList = new JPanel[7];
 
   public Shade(){
     
     for (int i = 0; i < 7; i++) {
       initTileImage();
-      initSquareRack();
+      shadeList[i] = initSquareRack();
       setOpaque(false);
-      add(JPaneShadeTile,i);
+      add(shadeList[i],i);
 				}
 //    setBorder(BorderFactory.createLineBorder(Color.black));
     setName("Shade");
@@ -37,17 +37,22 @@ public class Shade extends JPanel {
       dticone.setTransferHandler(new TileTransferHandler());
   }
   
-  private void initSquareRack() {
-      JPaneShadeTile = new JPanel(new GridLayout(1, 1));
+  private JPanel initSquareRack() {
+      JPanel JPaneShadeTile = new JPanel(new GridLayout(1, 1));
       JPaneShadeTile.add(dticone);
       JPaneShadeTile.setOpaque(false);
       JPaneShadeTile.setVisible(true);
+      return JPaneShadeTile;
   }
   
-  public ImageIcon getImageShade(){
+  private ImageIcon getImageShade(){
     icon = ImageTools.createImageIcon("images/Shade.png","Shade");
     icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 36,
                          ImageTools.getProportionnalHeight(icon, 37)));
     return icon;
+  }
+  
+  public void setVisibleShade(int position, boolean bol){
+    shadeList[position-1].setVisible(bol);
   }
 }

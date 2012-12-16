@@ -1,5 +1,6 @@
 package common;
 
+import gameboard.Shade;
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Point;
@@ -21,8 +22,10 @@ public class LocateOfTile {
   private static Component ctainer;
   private static Point pt;
   private static boolean dndEnable = true;
+  private static Shade shadeTile;
   
-  public LocateOfTile(){
+  public LocateOfTile(Shade shadeTile){
+    this.shadeTile = shadeTile;
     //The listener catch the component under the mouse:
     Toolkit.getDefaultToolkit().addAWTEventListener(
       new AWTEventListener()
@@ -90,12 +93,23 @@ public class LocateOfTile {
               if (TileNbr==0) {TileNbr = i;}
             }
           }
+          if("From".equals(fromTo)){
+            shadeTile.setVisibleShade(TileNbr, false);
+          }
+          else{
+            shadeTile.setVisibleShade(TileNbr, true);
+            
+          }
           System.out.println(fromTo+" Rack pos("+TileNbr+")");
           break;
 
         default:
           break;
-      }    
+      }
+    }
+    else{
+      shadeTile.setVisibleShade(1, true);
+      System.out.println("There was no movement.");
     }
       
   }
