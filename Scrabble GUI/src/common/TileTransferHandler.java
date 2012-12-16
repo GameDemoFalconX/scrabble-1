@@ -22,7 +22,7 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   public boolean importData(JComponent c, Transferable t) {
-    if (LocateOfTile.getDndEnable()){
+    if (LocateOfTile.getDndEnable() && !LocateOfTile.getLockDropOnTile()){
 //      System.out.println("importData");
       LocateOfTile.setBackTransfer(false);
       Image image;

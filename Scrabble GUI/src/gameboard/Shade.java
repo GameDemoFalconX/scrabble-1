@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * 
+ * Shade of the tile in rack.
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
 public class Shade extends JPanel {

@@ -11,10 +11,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
   /**
-   * This class allows to know which container parent (GameGrid or Rack)
-   * is under the cursor when Drag & Drop occurs. And calculates 
-   * the position of the tile in the rack or grid.
-   * I get the name of parent which had been defined by setName();
+   * - This class allows to know which container parent (GameGrid or Rack)
+   * is under the cursor when Drag & Drop occurs. 
+   * - Calculates the position of the tile in the rack or grid.
+   * - Manage design enhance with drag'n drop.
 
    * @author Arnaud Morel <a.morel@hotmail.com>
    */
@@ -25,6 +25,7 @@ public class LocateOfTile {
   private static Shade shadeTile;
   private static boolean checkBackTransfer;
   private static int nroTileDrag;
+  private static boolean lockDropOnTile = false;
   
   public LocateOfTile(Shade shadeTile){
     this.shadeTile = shadeTile;
@@ -44,15 +45,19 @@ public class LocateOfTile {
               Component c = (Component) o;
               if ("DTPicture".equals(c.getName())){
                 Component traced_mouse_item = (Component)o;
+                if(((DTPicture) o).getImage()!=null) {
+                  setLockDropOnTile(true);
+                }
                 ctainer = traced_mouse_item.getParent().getParent();
                 pt = traced_mouse_item.getLocationOnScreen();
-                SwingUtilities.convertPointFromScreen(pt, ctainer);//Update of pt
+                SwingUtilities.convertPointFromScreen(pt, ctainer);
               }
             }
           }else
           if (event.getID()==MouseEvent.MOUSE_EXITED )
           {
-           ctainer = null;
+            setLockDropOnTile(false);
+            ctainer = null;
           }
 
         };
@@ -67,7 +72,8 @@ public class LocateOfTile {
    * @param fromTo If 'From' or 'To' request
    */
   public static void locateTile(String fromTo){
-    if (ctainer!=null && dndEnable){
+//    System.out.println("locateTile");
+    if (ctainer!=null && getDndEnable()){
       Rectangle RecContain = ctainer.getBounds();
       switch (ctainer.getName()){
         case "Grid":
@@ -75,7 +81,7 @@ public class LocateOfTile {
           double SquareHeight = RecContain.getHeight()/15;
           int posX = 0;
           int posY = 0;
-          for(int i=1; i<16 ; i++){
+          for(int i=1; i<16 ; i++){//position Grid
             if (pt.x+(SquareWigth/2)<SquareWigth*i) {
               if (posX==0) {posX = i;}
             }
@@ -83,13 +89,16 @@ public class LocateOfTile {
               if (posY==0) {posY = i;}
             }
           }
-          System.out.println(fromTo+" Grid pos("+posX+","+posY+")");
+          
+          if(!getLockDropOnTile()){
+            System.out.println(fromTo+" Grid pos("+posX+","+posY+")");
+          }
           break;
 
         case "Rack":
           double RackWigth = RecContain.getWidth()/7;
           int TileNbr = 0;
-          for(int i=1; i<8 ; i++){
+          for(int i=1; i<8 ; i++){ //position rack
             if (pt.x+(RackWigth/2)<RackWigth*i) {
               if (TileNbr==0) {TileNbr = i;}
             }
@@ -98,14 +107,17 @@ public class LocateOfTile {
             shadeTile.setVisibleShade(TileNbr, false);
             nroTileDrag = TileNbr;
             setBackTransfer(true);
+            setLockDropOnTile(false);
           }
           else{
-            if(dndEnable) {
+            if(getDndEnable()) {
               shadeTile.setVisibleShade(TileNbr, true);
             }
             
           }
-          System.out.println(fromTo+" Rack pos("+TileNbr+")");
+          if(!getLockDropOnTile()){
+            System.out.println(fromTo+" Rack pos("+TileNbr+")");
+          }
           break;
 
         default:
@@ -113,11 +125,11 @@ public class LocateOfTile {
       }
     }
     else{
-      if (getBackTransfer() && dndEnable){
+      if (getDndEnable()){System.out.println("To Nowhere");}
+      if (getBackTransfer() && getDndEnable()){
         setBackTransfer(false);
         shadeTile.setVisibleShade(nroTileDrag, true);
       }
-      System.out.println("There was no movement.");
     }
       
   }
@@ -138,12 +150,50 @@ public class LocateOfTile {
     return dndEnable;
   }
   
+  /**
+   * Set signal witch allows to restaure shade in the rack
+   * when drop are not occured.
+   * @param bol
+   */
   public static void setBackTransfer(Boolean bol){
     checkBackTransfer = bol;
   }
   
+  /**
+   * Get signal witch allows to restaure shade in the rack
+   * when drop are not occured.
+   * @return
+   */
   public static Boolean getBackTransfer(){
     return checkBackTransfer;
+  }
+  
+  /**
+   * Controller of switch evenement.
+   */
+  public static void switchTiles(){
+    if(getBackTransfer()){
+      shadeTile.setVisibleShade(nroTileDrag, true);
+    }
+    //....
+    //....
+    System.out.println("Start switch of tiles.");
+  }
+  
+  /**
+   * Set lock Drop. Engage switch operation if is locked.
+   * @param bol
+   */
+  public static void setLockDropOnTile(boolean bol){
+    lockDropOnTile = bol;
+  }
+  
+  /**
+   * Get lock Drop. Engage switch operation if is locked.
+   * @return
+   */
+  public static boolean getLockDropOnTile(){
+    return lockDropOnTile;
   }
   
 }

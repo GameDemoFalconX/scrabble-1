@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * 
+ * Rack background
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
 public class RackBackground extends JPanel{

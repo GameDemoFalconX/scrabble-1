@@ -43,6 +43,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mousePressed(MouseEvent e) {
+//      System.out.println("mousePressed");
     //@@@@@@@@  BEGIN GlassPane @@@@@@@@@@@@@@
     //On récupère le composant pour en déduire sa position
     Component composant = e.getComponent();
@@ -51,7 +52,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     Point location = (Point)e.getPoint().clone();
     
     if(getImage() == null ){
-      System.out.println("Pas d'image");
+      System.out.println("No Tile!");
       LocateOfTile.setDndEnable(false);
     }
     LocateOfTile.locateTile("From");
@@ -108,13 +109,16 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseReleased(MouseEvent e) {
+//    System.out.println("mouseReleased");
     firstMouseEvent = null;
     setVisible(true);
+    if(LocateOfTile.getLockDropOnTile()){
+      LocateOfTile.switchTiles();
+    }
     //---------------------------------------------------------------------
     //On implémente le transfert lorsqu'on relâche le bouton de souris
     //Ceci afin de ne pas supplanter le fonctionnement du déplacement
     JComponent dtpic = (JComponent)e.getSource();
-    
     TransferHandler handle = dtpic.getTransferHandler();
     handle.exportAsDrag(dtpic, e, TransferHandler.COPY);
     //---------------------------------------------------------------------
@@ -136,7 +140,7 @@ public class DTPicture extends Picture implements MouseMotionListener{
     //On n'oublie pas de ne plus l'afficher
     glass.setVisible(false);
     
-    //Movement mouse for the refresh's bug.
+    //Movement mouse for the refresh's display.
     try {
           
           Robot robot = new Robot();
