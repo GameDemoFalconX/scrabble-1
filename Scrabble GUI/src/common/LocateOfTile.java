@@ -21,8 +21,10 @@ import javax.swing.SwingUtilities;
 public class LocateOfTile {
   private static Component ctainer;
   private static Point pt;
-  private static boolean dndEnable = true;
+  private static boolean dndEnable = true;//Allows Dnd or not.
   private static Shade shadeTile;
+  private static boolean checkBackTransfer;
+  private static int nroTileDrag;
   
   public LocateOfTile(Shade shadeTile){
     this.shadeTile = shadeTile;
@@ -41,7 +43,6 @@ public class LocateOfTile {
             {
               Component c = (Component) o;
               if ("DTPicture".equals(c.getName())){
-
                 Component traced_mouse_item = (Component)o;
                 ctainer = traced_mouse_item.getParent().getParent();
                 pt = traced_mouse_item.getLocationOnScreen();
@@ -66,7 +67,7 @@ public class LocateOfTile {
    * @param fromTo If 'From' or 'To' request
    */
   public static void locateTile(String fromTo){
-    if (ctainer!=null){
+    if (ctainer!=null && dndEnable){
       Rectangle RecContain = ctainer.getBounds();
       switch (ctainer.getName()){
         case "Grid":
@@ -95,9 +96,13 @@ public class LocateOfTile {
           }
           if("From".equals(fromTo)){
             shadeTile.setVisibleShade(TileNbr, false);
+            nroTileDrag = TileNbr;
+            setBackTransfer(true);
           }
           else{
-            shadeTile.setVisibleShade(TileNbr, true);
+            if(dndEnable) {
+              shadeTile.setVisibleShade(TileNbr, true);
+            }
             
           }
           System.out.println(fromTo+" Rack pos("+TileNbr+")");
@@ -108,10 +113,21 @@ public class LocateOfTile {
       }
     }
     else{
-      shadeTile.setVisibleShade(1, true);
+      if (getBackTransfer() && dndEnable){
+        setBackTransfer(false);
+        shadeTile.setVisibleShade(nroTileDrag, true);
+      }
       System.out.println("There was no movement.");
     }
       
+  }
+  
+  /**
+   * 
+   * Allows or not the drag'n Drop transfer to avoid replace the other tile.
+   */
+  public static void setDndEnable(boolean bol){
+    dndEnable = bol;
   }
   
   /**
@@ -120,6 +136,14 @@ public class LocateOfTile {
    */
   public static boolean getDndEnable(){
     return dndEnable;
+  }
+  
+  public static void setBackTransfer(Boolean bol){
+    checkBackTransfer = bol;
+  }
+  
+  public static Boolean getBackTransfer(){
+    return checkBackTransfer;
   }
   
 }

@@ -36,16 +36,25 @@ public class DTPicture extends Picture implements MouseMotionListener{
     this.image = image;
     this.repaint();
   }
+  
+  public Image getImage() {
+    return this.image;
+  }
 
     @Override
   public void mousePressed(MouseEvent e) {
-    LocateOfTile.locateTile("From");
     //@@@@@@@@  BEGIN GlassPane @@@@@@@@@@@@@@
     //On récupère le composant pour en déduire sa position
     Component composant = e.getComponent();
     
     //Coordinate of the mouse in Components
     Point location = (Point)e.getPoint().clone();
+    
+    if(getImage() == null ){
+      System.out.println("Pas d'image");
+      LocateOfTile.setDndEnable(false);
+    }
+    LocateOfTile.locateTile("From");
     
     //Les méthodes ci-dessous permettent, dans l'ordre, 
     //de convertir un point en coordonnées d'écran
@@ -99,7 +108,6 @@ public class DTPicture extends Picture implements MouseMotionListener{
 
     @Override
   public void mouseReleased(MouseEvent e) {
-    LocateOfTile.locateTile("To");
     firstMouseEvent = null;
     setVisible(true);
     //---------------------------------------------------------------------
