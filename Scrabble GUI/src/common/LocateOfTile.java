@@ -32,13 +32,13 @@ public class LocateOfTile {
 				Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 						@Override
 						public void eventDispatched(AWTEvent event) {
-								if (event.getID()==MouseEvent.MOUSE_ENTERED) {
+								if (event.getID() == MouseEvent.MOUSE_ENTERED) {
 										Object o = event.getSource();
 										if (o instanceof Component) {
 												Component c = (Component) o;
 												if ("DTPicture".equals(c.getName())) {
 														Component traced_mouse_item = (Component)o;
-														if(((DTPicture) o).getImage()!=null) {
+														if(((DTPicture) o).getImage() != null) {
 																setLockDropOnTile(true);
 														}
 														ctainer = traced_mouse_item.getParent().getParent();
@@ -47,7 +47,7 @@ public class LocateOfTile {
 												}
 										}
 								} else {
-										if (event.getID()==MouseEvent.MOUSE_EXITED ) {
+										if (event.getID() == MouseEvent.MOUSE_EXITED ) {
 												setLockDropOnTile(false);
 												ctainer = null;
 										}

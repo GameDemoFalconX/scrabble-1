@@ -1,7 +1,7 @@
 package gameboard;
 
 import common.LocateOfTile;
-import common.MyGlassPane;
+import common.GlassPane;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import javax.swing.JFrame;
@@ -53,7 +53,7 @@ class MainFrame {
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
                 + gameBoard.getInsets().right+15, 850);
     frame.setContentPane(contentPane);
-    frame.setGlassPane(MyGlassPane.getInstance());
+    frame.setGlassPane(GlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
 				SideMenu.setVisible(true);

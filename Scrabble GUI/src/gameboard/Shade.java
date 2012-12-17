@@ -1,12 +1,12 @@
 package gameboard;
 
 import common.ImageTools;
+import java.awt.Color;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import java.awt.Color;
 
 /**
  * Shade of the tile in rack.
@@ -46,9 +46,9 @@ public class Shade extends JPanel {
 		/**
 		  * Define either shade must be visible.
 			* @param position
-			* @param bol
+			* @param visible
 		   */
-		public void setVisibleShade(int position, boolean bol){
-				shadeList[position-1].setVisible(bol);
+		public void setVisibleShade(int position, boolean visible){
+				shadeList[position-1].setVisible(visible);
 		}
 }
