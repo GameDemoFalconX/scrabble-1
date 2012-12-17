@@ -18,40 +18,46 @@ class MainFrame {
   private GameBoard gameBoard;
   private Rack rack;
   private GameGrid gameGrid;
-  private Menu menu;
-  private JPanel rackBackground;
+  private JPanel rackBackground, mainPanel, sidePanel;
   private Shade shadeTile;
+		private SideMenu sideMenu;
 
   public MainFrame()  {
     frame = new JFrame("Scrabble");
     gameBoard = new GameBoard();
     rack = new Rack();
 				gameGrid = new GameGrid();
-				menu = new Menu();
     shadeTile = new Shade();
-    new LocateOfTile(shadeTile);
+				sideMenu = new SideMenu();
+				
+				LocateOfTile locateOfTile = new LocateOfTile(shadeTile);
 //    ShadeTile.setVisibleShade(1, false);
     rackBackground = new RackBackground();
     initContainer();
     initFrame();
+				
   }
 
   private void initContainer() {
     contentPane =  frame.getContentPane() ;
-    contentPane.setLayout(null);
-    contentPane.add(gameBoard, 0);
-    contentPane.add(rackBackground, 0);
-    contentPane.add(shadeTile, 0);
-    contentPane.add(rack, 0);
-    contentPane.add(gameGrid, 0);
+    contentPane.setLayout(new BorderLayout());
+				mainPanel = new JPanel();
+				mainPanel.setLayout(null);
+    mainPanel.add(gameBoard, 0);
+    mainPanel.add(rackBackground, 0);
+    mainPanel.add(rack, 0);
+				mainPanel.add(shadeTile, 0);
+    mainPanel.add(gameGrid, 0);
+				contentPane.add(mainPanel, 0);
     contentPane.setVisible(true);
+				sidePanel = SideMenu.getPanel();
+				contentPane.add(sidePanel, BorderLayout.EAST);
   }
   
   private void initFrame() {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setJMenuBar(menu.getMenu());
     frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15, 850);
+                + gameBoard.getInsets().right+15 + 420, 850);
     frame.setContentPane(contentPane);
     frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
