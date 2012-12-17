@@ -113,6 +113,19 @@ public abstract class Game implements IGame {
 				return null;
 		}
 		
+		public Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException {
+				Message response = savePlay(type, pl_id, ga_id, ga_infos);
+				switch (response.getHeader()) {
+						case Message.SAVE_GAME_SUCCESS:
+								return response;
+						case Message.SAVE_GAME_ERROR:
+								throw new GameException(GameException.typeErr.LOAD_GAME_ERROR);
+						case Message.GAME_IDENT_ERROR:
+								throw new GameException(GameException.typeErr.GAME_IDENT_ERROR);
+				}
+				return null;
+		}
+		
 		// *** GAME *** //
 		@Override
 		public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
@@ -176,6 +189,7 @@ public abstract class Game implements IGame {
 		protected abstract Message createNewAnonymGame(String pl_id);
 		protected abstract Message loadPlayLister(String pl_id);
 		protected abstract Message loadPlay(String pl_id, String ga_id);
+		protected abstract Message savePlay(int type, String pl_id, String ga_id, String ga_infos);
 		
 		// Game
 		protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);

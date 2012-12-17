@@ -134,9 +134,28 @@ public class HAL extends Game {
 		}
 		
 		@Override
+		protected Message savePlay(int type, String pl_id, String ga_id, String ga_infos) {
+				Play cPlay = plays.playIdentification(pl_id, ga_id);
+				if (cPlay != null) {
+						plays.saveGameOnFile(pl_id, cPlay, ga_infos);  // TODO : Handle error (rom)
+						switch(type) {
+								case Message.SAVE_AND_STOP:
+										plays.initPlayer(pl_id);
+										break;
+								case Message.SAVE_AND_SIGNOUT:
+										plays.removePlayer(pl_id);
+										break;
+						}
+						return new Message(Message.SAVE_GAME_SUCCESS, "");
+				}
+				return new Message(Message.GAME_IDENT_ERROR, "");
+		}
+		
+		@Override
 		protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
 				Play cPlay = plays.playIdentification(pl_id, ga_id);
 				if (cPlay != null) {
+						System.out.println("Server : start scrabbleValidator with data = "+ga_infos);
 						cPlay.newTest(); // Increase the number of tests for this player.
 						String [] gameArgs = ga_infos.split("@@");
 						

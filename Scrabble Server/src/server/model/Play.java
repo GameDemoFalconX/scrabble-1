@@ -65,6 +65,7 @@ public class Play {
 		
 		public void loadTile(int x, int y, char letter, int value) {
 				Tile newTile = bag.popTile(letter, value);
+				newTile.setLoaded();
 				grid.putInGrid(x, y, newTile);
 		}
 		
@@ -80,9 +81,37 @@ public class Play {
 				return playID.toString();
 		}
 		
+		public String getOwner() {
+				return owner.toString();
+		}
+		
 		private String formatDate(Date d) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 				return dateFormat.format(d);
+		}
+		
+		protected String getCreated() {
+				return formatDate(created);
+		}
+		
+		protected String getModified() {
+				setModified();
+				return formatDate(modified);
+		}
+		
+		private void setModified() {
+				modified = new Date();
+		}
+		
+		protected ArrayList getNewAddedTiles() {
+				System.out.println("@@@@@@@@@@");
+				System.out.println(this.grid.toString());
+				
+				return grid.getNewAdds();
+		}
+		
+		protected Rack getRack() {
+				return rack;
 		}
 		
 		/**
@@ -253,6 +282,19 @@ public class Play {
 		public void tileSwitch(String position) {
 				rack.tileSwitch(position);
 		}
+		
+		/**
+			* Update blank tiles in the rack before saving.
+			* @param args 
+			*/
+		public void updateBlankTile(String args) {
+				String [] tileList = args.split(":");
+				for (int i = 0; i < tileList.length; i++) {
+						rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
+				}
+		}
+		
+		// *** Formated data *** //
 		
 		public void setFormatedGrid(String fGrid) {
 				this.formatedGrid = fGrid;

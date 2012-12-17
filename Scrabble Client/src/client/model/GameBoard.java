@@ -311,9 +311,7 @@ public class GameBoard {
 		public void loadGame(String playerID, String playInfos) throws GameException {
 				String [] playArgs = playInfos.split("__");
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME,  playerID+"_"+playArgs[0]);
-				// Handle response
 				if (serverResponse != null) {
-						// Handle the server response
 						switch(serverResponse.getHeader()) {		
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
@@ -322,7 +320,9 @@ public class GameBoard {
 										cPlay = new Play(playerID, playArgs[0]);
 										String [] args = new String(serverResponse.getBody()).split("@@");
 										// Load tiles on grid and rack
-										cPlay.loadGrid(args[0]);
+										if (!args[0].equals("")) { // Load grid only when it doesn't empty.
+												cPlay.loadGrid(args[0]);
+										}
 										cPlay.loadRack(args[1]);
 										cPlay.setScore(Integer.parseInt(playArgs[3]));
 										break;
@@ -334,6 +334,42 @@ public class GameBoard {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
+		}
+		
+		public void saveGame(int type, String playerID) throws GameException {
+				Message serverResponse = gbProtocol.sendRequest(typeSave(type),  playerID+"_"+cPlay.getPlayID()+"_"+cPlay.checkBlankTile());
+				if (serverResponse != null) {
+						switch(serverResponse.getHeader()) {		
+								case Message.SYSKO:
+										throw new GameException(GameException.typeErr.SYSKO);
+								case Message.SAVE_GAME_SUCCESS:
+										// Do nothing
+										break;
+								case Message.SAVE_GAME_ERROR:
+										throw new GameException(GameException.typeErr.SAVE_GAME_ERROR);
+								case Message.GAME_IDENT_ERROR:
+										throw new GameException(GameException.typeErr.GAME_IDENT_ERROR);
+						}
+				} else {
+						throw new GameException(GameException.typeErr.CONN_KO);
+				}
+		}
+		
+		/**
+			* Define the type of save process to request to the server.
+			* @param type
+			* @return type
+			*/
+		private int typeSave(int type) {
+				switch(type) {
+						case Message.JUST_SAVE:
+								return Message.SAVE_GAME;
+						case Message.SAVE_AND_STOP:
+								return Message.SAVE_GAME_WITH_END_GAME;
+						case Message.SAVE_AND_SIGNOUT:
+								return Message.SAVE_GAME_WITH_LOGOUT;
+				}
+				return -1; // default
 		}
 		
 		// *** Utility methods for GameBoard *** //

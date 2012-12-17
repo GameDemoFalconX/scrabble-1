@@ -1,31 +1,61 @@
-//package gameboard;
-//
-//import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.* ;
-//
-///**
-// * 
-// * @author Arnaud Morel <a.morel@hotmail.com>
-// */
-//public class Tile extends JLabel implements ActionListener {
-//    
-//  //Create tiles of game grid.
-//  public Tile(int nro) {
-//    super(String.valueOf(nro));
-//    //JLabel label = new JLabel(String.valueOf(nro));
-//    setVerticalAlignment(JLabel.CENTER);
-//    setHorizontalAlignment(JLabel.CENTER);
-//    setOpaque(true);
-//    //label.setBackground(color);
-//    setForeground(Color.black);
-//    setBorder(BorderFactory.createLineBorder(Color.black));
-//
-//  }
-//
-//  @Override
-//  public void actionPerformed(ActionEvent e) {
-//      throw new UnsupportedOperationException("Not supported yet.");
-//  }
-//
-//}
+package gameboard;
+
+import common.ImageTools;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+/**
+ * 
+ * @author Arnaud Morel <a.morel@hotmail.com>
+ */
+
+ public final class Tile {
+		
+		private char letter;
+		private final int value;
+  private Image img;
+
+		public Tile(char letter, int value) {
+				this.letter = letter;
+				this.value = value;
+
+    ImageIcon icon;
+    icon = ImageTools.createImageIcon("images/Tile.png","Tile");
+    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 36,ImageTools.getProportionnalHeight(icon, 37)));
+    setImg(icon.getImage());
+    
+		}
+
+		public void setImg(Image im) {
+    img = im;
+		}
+  
+		public Image getImg() {
+			return img;
+		}
+  
+		public char getLetter() {
+			return letter;
+		}
+
+		public int getValue() {
+				return value;
+		}
+		
+		public void setLetter(char letter) {
+				this.letter = letter;
+		}
+
+		/**
+		* Used only for debugging purpose
+		*/
+		@Override
+		public String toString() {
+				if (value < 10) {
+						return "[" + letter + " " + value + "]";
+				} else {
+						return "[" + letter + "" + value+ "]";
+				}
+		}   
+  
+}

@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plays>
-		<player id="d035ed64-7bed-4029-ae5b-0d35c94238d5">
-				<play id="d035ed64-7bed-4029-ae5b-0d35c94238d6">
-						<uuid>d035ed64-7bed-4029-ae5b-0d35c94238d6</uuid>
-						<created>2012/11/26</created>
-						<modified>2012/11/26</modified>
-						<score>16</score>
-						<grid>
-								<tile>5:7:H:4</tile>
-								<tile>6:7:E:1</tile>
-								<tile>7:7:L:1</tile>
-								<tile>8:7:L:1</tile>
-								<tile>9:7:O:1</tile>
-						</grid>
-						<rack>
-								<tile>H:4</tile>
-								<tile>P:3</tile>
-								<tile>M:2</tile>
-								<tile>E:1</tile>
-								<tile>S:1</tile>
-								<tile>T:1</tile>
-								<tile>J:8</tile>
-						</rack>
-				</play>
-				<play id="d035ed64-7bed-4029-ae5b-0d35c94238d7">
-						<uuid>d035ed64-7bed-4029-ae5b-0d35c94238d7</uuid>
-						<created>2012/11/25</created>
-						<modified>2012/11/25</modified>
-						<score>100</score>
-						<grid>
-								[grid-informations]
-						</grid>
-						<rack>
-								[rack-informations]
-						</rack>
-				</play>
-		</player>
+  <player id="d035ed64-7bed-4029-ae5b-0d35c94238d5">
+    <play id="d5dbfadc-d37b-4478-ab70-e6513bc78e87">
+      <uuid>d5dbfadc-d37b-4478-ab70-e6513bc78e87</uuid>
+      <created>2012/12/11</created>
+      <modified>2012/12/11</modified>
+      <score>-11</score>
+      <grid />
+      <rack>
+        <tile>Z:10</tile>
+        <tile>I:1</tile>
+        <tile>U:1</tile>
+        <tile>V:4</tile>
+        <tile>J:8</tile>
+        <tile>I:1</tile>
+        <tile>T:1</tile>
+      </rack>
+    </play>
+    <play id="228790d8-5e5a-44f6-9dbb-5e758f959c1b">
+      <uuid>228790d8-5e5a-44f6-9dbb-5e758f959c1b</uuid>
+      <created>2012/12/11</created>
+      <modified>2012/12/11</modified>
+      <score>10</score>
+      <grid>
+        <tile>6:7:P:3</tile>
+        <tile>7:7:O:1</tile>
+        <tile>8:7:T:1</tile>
+      </grid>
+      <rack>
+        <tile>N:1</tile>
+        <tile>J:8</tile>
+        <tile>?:0</tile>
+        <tile>E:1</tile>
+        <tile>Q:8</tile>
+        <tile>F:4</tile>
+        <tile>O:1</tile>
+      </rack>
+    </play>
+  </player>
 </plays>

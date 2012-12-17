@@ -178,9 +178,37 @@ public class ClientController {
 								view.changeTileMainMenu();
 								break;
 						case 4:
+								try {
+										gameBoard.saveGame(Message.JUST_SAVE, player.getPlayerID());
+								} catch (GameException ge) {
+										processException(ge);
+								}
+								System.out.println("Your current play has been correctly saved!");
+								view.playMenu(player.isAnonym(), gameBoard.getPlay().getScore());
 								break;
 						case 9:
-								// Check if save or not.
+								if (player.isAnonym()) {
+										try {
+												gameBoard.deleteAnonym(player.getPlayerID());
+												view.firstMenu(""); // Back to the first Menu
+										} catch (GameException ge) {
+												processException(ge);
+										}
+								} else {
+										String getAction;
+										do {
+												getAction = view.saveMenu();
+												System.out.println(getAction);
+										} while (getAction.length() != 1 && !(getAction.equals("Y") || getAction.equals("N")));
+										if (getAction.equals("Y")) {
+												try {
+														gameBoard.saveGame(Message.SAVE_AND_STOP, player.getPlayerID());
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										}
+										view.initMenu("Your current play has been correctly saved!", "", null);
+								}
 								break;
 						case 0:
 								if (player.isAnonym()) {
@@ -190,7 +218,25 @@ public class ClientController {
 												processException(ge);
 										}
 								} else {
-										// Auto save.
+										String getAction;
+										do {
+												getAction = view.saveMenu();
+												System.out.println(getAction);
+										} while (getAction.length() != 1 && !(getAction.equals("Y") || getAction.equals("N")));
+										if (getAction.equals("Y")) {
+												try {
+														gameBoard.saveGame(Message.SAVE_AND_SIGNOUT, player.getPlayerID());
+														System.out.println("Your current play has been correctly saved!");
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										} else { // just logout the current player before leave the application.
+												try {
+														gameBoard.logoutPlayer(player.getPlayerID());
+												} catch (GameException ge) {
+														processException(ge);
+												}
+										}
 								}
 								view.display("See you next time !");
 								break;
@@ -205,7 +251,7 @@ public class ClientController {
 				int  firstX = -1;
 				Integer i = 0;
 				boolean cancel = false;
-				if ((number > 0) && (number < 8)) {
+				if (number > 0) {
 						while ((number > i) && !cancel) {						
 								boolean threeArgs = false; boolean argXisOK = false; 
 								boolean argYisOK = false; boolean argPosIsOK = false;
