@@ -202,7 +202,7 @@ public class HAL extends Game {
 								cPlay.setScore((bestWord/2)*(-1)); // Update score
 								cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
 								cPlay.testWithError(); // Increase the number of tests with error
-								return new Message(Message.PLACE_WORD_ERROR, pl_id+"_"+ga_id+"_"+cPlay.getScore());
+								return new Message(Message.PLACE_WORD_ERROR, pl_id+"_"+ga_id+"_"+cPlay.getScore()); //TODO update don't send  and ga IDs
 						}
 				}
 				return new Message(Message.GAME_IDENT_ERROR, "");

@@ -65,9 +65,9 @@ public class Message {
 		public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
 		
 		// PLACE_WORD //
-		public static final int PLACE_WORD = 70; // Place word
-		public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
-		public static final int PLACE_WORD_ERROR = 72; // Place word with error
+		public static final int PASS_WORD = 70; // Place word
+		public static final int PASS_WORD_SUCCESS = 71; // Place word with succes
+		public static final int PASS_WORD_ERROR = 72; // Place word with error
 		
 		// SAVE_GAME //
 		public static final int SAVE_GAME = 80; // Save game

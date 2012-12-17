@@ -201,17 +201,17 @@ public class GameBoard {
 			*/
 		public int addWord(String formatedWord) throws GameException {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
-				Message serverResponse = gbProtocol.sendRequest(Message.PLACE_WORD,  cPlay.getOwner()
+				Message serverResponse = gbProtocol.sendRequest(Message.PASS_WORD,  cPlay.getOwner()
 												+"_"+cPlay.getPlayID()+"_"+formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.SYSKO:
 										throw new GameException(GameException.typeErr.SYSKO);
-								case Message.PLACE_WORD_SUCCESS:
+								case Message.PASS_WORD_SUCCESS:
 										String args = new String(serverResponse.getBody());
 										cPlay.addWord(args, formatedWord);
 										break;
-								case Message.PLACE_WORD_ERROR:
+								case Message.PASS_WORD_ERROR:
 										cPlay.setScore(Integer.parseInt(new String(serverResponse.getBody()).split("_")[2])); // Update score if the Play is over.
 						}
 				} else {

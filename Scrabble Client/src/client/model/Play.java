@@ -65,7 +65,7 @@ public class Play {
 			* Load the rack of Play from formated data.
 			* @param formatedRack 
 			*/
-		protected void loadRack( String formatedRack) {
+		public void loadRack( String formatedRack) {
 				rack.loadRack(formatedRack);
 		}
 		
