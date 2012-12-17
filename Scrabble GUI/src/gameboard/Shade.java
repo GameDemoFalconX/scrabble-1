@@ -30,11 +30,11 @@ public class Shade extends JPanel {
 		}
 		
 		private JPanel initSquareRack() {
-				JPanel JPaneShadeTile = new JPanel(new GridLayout(1, 1));
-				JPaneShadeTile.add(new JLabel(getImageShade()));
-				JPaneShadeTile.setOpaque(false);
-				JPaneShadeTile.setVisible(true);
-				return JPaneShadeTile;
+				JPanel JPanelShadeTile = new JPanel(new GridLayout(1, 1));
+				JPanelShadeTile.add(new JLabel(getImageShade()));
+				JPanelShadeTile.setOpaque(false);
+				JPanelShadeTile.setVisible(true);
+				return JPanelShadeTile;
 		}
   
 		private ImageIcon getImageShade(){
