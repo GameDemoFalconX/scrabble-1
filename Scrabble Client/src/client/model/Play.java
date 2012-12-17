@@ -114,4 +114,8 @@ public class Play {
 		public boolean isTileBlank(Integer pos) {
 				return rack.isTileBlank(pos);
 		}
+		
+		public String checkBlankTile() {
+				return rack.getBlankTile();
+		}
 }

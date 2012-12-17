@@ -51,6 +51,15 @@ public class ThreadCtrl extends Thread {
 						case Message.LOAD_GAME:
 								loadGame();
 								break;
+						case Message.SAVE_GAME:
+								saveGame(Message.JUST_SAVE);
+								break;
+						case Message.SAVE_GAME_WITH_END_GAME:
+								saveGame(Message.SAVE_AND_STOP);
+								break;
+						case Message.SAVE_GAME_WITH_LOGOUT:
+								saveGame(Message.SAVE_AND_SIGNOUT);
+								break;
 						case Message.DELETE_ANONYM:
 								deleteAnonym();
 								break;
@@ -157,6 +166,19 @@ public class ThreadCtrl extends Thread {
 						
 				// Try to load an existed play for the current player
 				response = HAL.loadGame(argsTab[0], argsTab[1]);
+				outputPrint("Send Response");
+				sProto.sendResponse(response);
+				Thread.currentThread().interrupt();
+		}
+		
+		private void saveGame(int type) {
+				String [] argsTab = new String(request.getBody()).split("_");
+				outputPrint("Current player is trying to save an existed game - game ID : "+argsTab[1]);
+				Message response;
+						
+				// Try to load an existed play for the current player
+				String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
+				response = HAL.saveGame(type, argsTab[0], argsTab[1], blankTiles);
 				outputPrint("Send Response");
 				sProto.sendResponse(response);
 				Thread.currentThread().interrupt();

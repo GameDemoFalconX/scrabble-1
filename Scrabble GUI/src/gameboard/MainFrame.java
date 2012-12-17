@@ -1,59 +1,64 @@
 package gameboard;
 
+import common.LocateOfTile;
 import common.MyGlassPane;
+import java.awt.BorderLayout;
 import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
- * @author Arnaud Morel <a.morel@hotmail.com>
+ * @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 class MainFrame {
     
-  public int ratingOfGUI = 7; //rating to the size of the GUI (4-10)
-		
-		
-  private MyGlassPane glass = new MyGlassPane();
-		private MainPopUp mainPopUp;
-		private String playerName = "";
+  private JFrame frame;
+  private Container contentPane;
+  private GameBoard gameBoard;
+  private Rack rack;
+  private GameGrid gameGrid;
+  private Menu menu;
+  private JPanel rackBackground;
+  private Shade shadeTile;
 
   public MainFrame()  {
-    JFrame frame = new JFrame("Scrabble");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame = new JFrame("Scrabble");
+    gameBoard = new GameBoard();
+    rack = new Rack();
+				gameGrid = new GameGrid();
+				menu = new Menu();
+    shadeTile = new Shade();
+    new LocateOfTile(shadeTile);
+//    ShadeTile.setVisibleShade(1, false);
+    rackBackground = new RackBackground();
+    initContainer();
+    initFrame();
+  }
 
-    Container contentPane =  frame.getContentPane() ;
+  private void initContainer() {
+    contentPane =  frame.getContentPane() ;
     contentPane.setLayout(null);
-
-    GameBoard gameBoard = new GameBoard(ratingOfGUI);
-    Rack rack = new Rack(ratingOfGUI, glass);
-				GameGrid gameGrid = new GameGrid(glass);
-				Menu menu = new Menu();
     contentPane.add(gameBoard, 0);
+    contentPane.add(rackBackground, 0);
+    contentPane.add(shadeTile, 0);
     contentPane.add(rack, 0);
     contentPane.add(gameGrid, 0);
-				frame.setJMenuBar(menu.getMenu());
-
-
-    double frameHeight = (double)ratingOfGUI*120;
-    System.out.println("Height of the frame : " + frameHeight);
-
-    frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
-                + gameBoard.getInsets().right+15, (int)frameHeight);
     contentPane.setVisible(true);
+  }
+  
+  private void initFrame() {
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setJMenuBar(menu.getMenu());
+    frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left
+                + gameBoard.getInsets().right+15, 850);
     frame.setContentPane(contentPane);
-    frame.setGlassPane(glass);
+    frame.setGlassPane(MyGlassPane.getInstance());
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
-				mainPopUp = new MainPopUp();
-  }
-		
-		public void setPlayerName(String playerName) {
-				this.playerName = playerName;
+				SideMenu.setVisible(true);
 		}
-		
-		public String getPlayerName() {
-				return playerName;
-		}
+	
 
   /**
    * @param args the command line arguments

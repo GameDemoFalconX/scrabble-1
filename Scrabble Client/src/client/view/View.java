@@ -130,6 +130,11 @@ public class View {
 				System.out.println("Please enter the position of the tile(s) you want to exchange.");
 				return CConsole.readLine("e.g. 2 3 6 : ");
 		}
+		
+		public String saveMenu() {
+				System.out.println("\nDo you want to save the current play?");
+				return CConsole.readLine(" Press Y (Yes) or N (No) : ");
+		}
 
 		public void display(String msg) {
 				System.out.println(msg);

@@ -59,13 +59,11 @@ public class Message {
 		public static final int TILE_EXCHANGE_ERROR = 62; // Exchange tiles with error
 		
 		// TILE_SWITCH //
-		
 		public static final int TILE_SWITCH = 63; // Exchange tiles
 		public static final int TILE_SWITCH_SUCCES = 64; // Exchange tiles with succes
 		public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
 		
 		// TILE_REORGANIZE //
-		
 		public static final int TILE_REORGANIZE = 66; // Exchange tiles
 		public static final int TILE_REORGANIZE_SUCCES = 67; // Exchange tiles with succes
 		public static final int TILE_REORGANIZE_ERROR = 68; // Exchange tiles with error
@@ -75,15 +73,26 @@ public class Message {
 		public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
 		public static final int PLACE_WORD_ERROR = 72; // Place word with error
 		
-		// DICTIONNARY //
-		public static final int DICO_LOADED = 510; // Dictionnary loaded
-		public static final int WORD_OK = 511; // Word exist
-		public static final int WORK_KO = 512; // Word doesn't exist
+		// SAVE_GAME //
+		public static final int SAVE_GAME = 80; // Save game
+		public static final int SAVE_GAME_WITH_END_GAME = 81; // Save and leave the current game
+		public static final int SAVE_GAME_WITH_LOGOUT = 82; // Save game and logout
+		public static final int SAVE_GAME_SUCCESS = 84; // Save game with success
+		public static final int SAVE_GAME_ERROR = 85; // Save game wit errors
+		//// Use for type of save process
+		public static final int JUST_SAVE = 86;
+		public static final int SAVE_AND_STOP = 87;
+		public static final int SAVE_AND_SIGNOUT = 88;
 		
 		// DELETE_ANONYM
 		public static final int DELETE_ANONYM = 95; // Send instruction to delete the play of the current anonymous player
 		public static final int DELETE_ANONYM_SUCCESS = 96; // Send instruction to delete the play of the current anonymous player
 		public static final int DELETE_ANONYM_ERROR = 97; // Send instruction to delete the play of the current anonymous player
+		
+		// DICTIONNARY //
+		public static final int DICO_LOADED = 510; // Dictionnary loaded
+		public static final int WORD_OK = 511; // Word exist
+		public static final int WORK_KO = 512; // Word doesn't exist
 		
 		// XML FILES EXCEPTIONS
 		public static final int XML_FILE_NOT_EXISTS = 550; // 

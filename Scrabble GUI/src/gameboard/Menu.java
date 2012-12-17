@@ -46,7 +46,7 @@ public class Menu {
 				closeItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								MainPopUp.setVisible(true);
+								SideMenu.setVisible(true);
 						}
 				});
 				
@@ -83,7 +83,7 @@ public class Menu {
 				logOutItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								MainPopUp.setVisible(true);
+								SideMenu.setVisible(true);
 						}
 				});
 //				Add the Player items to the menu

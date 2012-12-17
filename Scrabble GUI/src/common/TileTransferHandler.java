@@ -1,6 +1,5 @@
 package common;
 
-import common.DTPicture;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -23,25 +22,28 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   public boolean importData(JComponent c, Transferable t) {
-    System.out.println("importData");
-    Image image;
-    if (canImport(c, t.getTransferDataFlavors())) {
-      DTPicture pic = (DTPicture) c;
-      //Don't drop on myself.
-      if (sourcePic == pic) {
-        shouldRemove = false;
-        return true;
-      }
-      try {
-        image = (Image) t.getTransferData(pictureFlavor);
-        //Set the component to the new picture.
-        pic.image = image;
-        pic.repaint();
-        return true;
-      } catch (UnsupportedFlavorException ufe) {
-        System.out.println("importData: unsupported data flavor");
-      } catch (IOException ioe) {
-        System.out.println("importData: I/O exception");
+    if (LocateOfTile.getDndEnable() && !LocateOfTile.getLockDropOnTile()){
+//      System.out.println("importData");
+      LocateOfTile.setBackTransfer(false);
+      Image image;
+      if (canImport(c, t.getTransferDataFlavors())) {
+        DTPicture pic = (DTPicture) c;
+        //Don't drop on myself.
+        if (sourcePic == pic) {
+          shouldRemove = false;
+          return true;
+        }
+        try {
+          image = (Image) t.getTransferData(pictureFlavor);
+          //Set the component to the new picture.
+          pic.image = image;
+          pic.repaint();
+          return true;
+        } catch (UnsupportedFlavorException ufe) {
+          System.out.println("importData: unsupported data flavor");
+        } catch (IOException ioe) {
+          System.out.println("importData: I/O exception");
+        }
       }
     }
     return false;
@@ -49,7 +51,7 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   protected Transferable createTransferable(JComponent c) {
-    System.out.println("createTransferable");
+//    System.out.println("createTransferable");
     sourcePic = (DTPicture) c;
     shouldRemove = true;
     return new PictureTransferable(sourcePic);
@@ -62,7 +64,10 @@ public class TileTransferHandler extends TransferHandler {
 
     @Override
   protected void exportDone(JComponent c, Transferable data, int action) {
-    System.out.println("exportDone");
+//    System.out.println("exportDone");
+    LocateOfTile.locateTile("To");
+    LocateOfTile.setBackTransfer(false);
+    LocateOfTile.setDndEnable(true);
     if (shouldRemove && (action == MOVE)) {
       sourcePic.setImage(null);
     }

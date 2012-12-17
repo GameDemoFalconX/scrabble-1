@@ -114,4 +114,17 @@ class Rack {
 				return rack[pos].getValue() == 0;
 		}
 		
+		/**
+			* Check if the rack contains blank tiles.
+			* @return formated list of blank tiles index with the canvas : [index]:[index]: ... 
+			*/
+		public String getBlankTile() {
+				String result = "";
+				for (int i = 0; i < rack.length; i++) {
+						if (isTileBlank(i)) {
+								result += (i < rack.length-1) ? ""+i+":" : ""+i;
+						}
+				}
+				return result;
+		}
 }

@@ -180,6 +180,19 @@ public class ServerScrabble {
 				return response;
 		}
 		
+		public synchronized Message saveGame(int type, String playerID, String playID, String ga_infos) {
+				Message response = null;
+				try {
+						// Try to save current play for the current player
+						response = game.SavePlay(type, playerID, playID, ga_infos);
+						
+						if (response == null) throw new GameException(GameException.typeErr.SYSKO);
+				} catch (GameException e) {
+						response = processError(e);
+				}
+				return response;
+		}
+		
 		/**
 			* Try to delete all informations which belong to the current anonymous user.
 			* @param playerID
