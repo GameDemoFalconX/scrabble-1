@@ -1,7 +1,7 @@
 package gameboard;
 
 import common.ImageTools;
-import common.MD5Util;
+import vendor.MD5Util;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
