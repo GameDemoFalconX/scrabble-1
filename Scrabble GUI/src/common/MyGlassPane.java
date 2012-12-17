@@ -7,17 +7,16 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
- *
+ * Glass pane: Layout to effect of the tile movement. 
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
 
 public class MyGlassPane extends JPanel{
 
-  //image in glasspane
   private BufferedImage img;
-  //Coordinate of image
+  //Coordinate of the image
   private Point location;
-  //Instance of class (Singleton)
+  //Instance of the class (Singleton)
   private static MyGlassPane instance;
    
   private MyGlassPane(){
@@ -34,7 +33,6 @@ public class MyGlassPane extends JPanel{
     @Override
   public void setLocation(Point location){
     this.location = location;
-//    System.out.println(location);
   }
    
   public void setImage(BufferedImage image){
@@ -43,12 +41,11 @@ public class MyGlassPane extends JPanel{
    
     @Override
   public void paintComponent(Graphics g){
-    //Si on n'a pas d'image à dessiner, on ne fait rien…
     if(img == null) {
           return;
       }
       
-    //Dans le cas contraire, on dessine l'image souhaitée
+    //Drawing of the image.
     Graphics2D g2d = (Graphics2D)g;
     g2d.drawImage(img, (int) (location.getX()-18), (int) (location.getY()-20), null);
   }   

@@ -10,16 +10,20 @@ import javax.swing.JPanel;
  * @author Arnaud Morel <a.morel@hotmail.com>
  */
 public class GameBoard extends JPanel{
-    
+  
+  private ImageIcon icon;
+  
   public GameBoard(){
-    ImageIcon icon = ImageTools.createImageIcon("images/Grid_72ppp.jpg","Game Grid");
-    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), MainFrame.ratingOfGUI*100,
-                 ImageTools.getProportionnalHeight(icon, MainFrame.ratingOfGUI*100)));
-    JLabel JLabGameBoard = new JLabel(icon);
+    add(new JLabel(getImageGameBoard()));
+    setVisible(true);
     setLayout(new java.awt.GridLayout(1, 1, 1, 1)); //Allow to get rid of the gap between JPanel and JLabel
     setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
-    add(JLabGameBoard);
-    setVisible(true);
   }
-    
+  
+  public ImageIcon getImageGameBoard(){
+    icon = ImageTools.createImageIcon("images/Grid_72ppp.jpg","Game Board");
+    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 700,
+                         ImageTools.getProportionnalHeight(icon, 700)));
+    return icon;
+  }
 }
