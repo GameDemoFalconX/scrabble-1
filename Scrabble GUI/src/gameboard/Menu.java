@@ -43,6 +43,13 @@ public class Menu {
 				saveItem.setEnabled(false);
 				closeItem.setEnabled(false);
 				
+				closeItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								SideMenu.setVisible(true);
+						}
+				});
+				
 				exitItem.addActionListener(new ActionListener(){
 						@Override
       public void actionPerformed(ActionEvent arg0) {
@@ -76,7 +83,7 @@ public class Menu {
 				logOutItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								MainPopUp.setVisible(true);
+								SideMenu.setVisible(true);
 						}
 				});
 //				Add the Player items to the menu
@@ -95,4 +102,14 @@ public class Menu {
 		public static void setPlayerName(String playerName){
 				playerMenu.setText(playerName);
 		}		
+		
+		public static void setSaveCloseEnabled(boolean arg) {
+				saveItem.setEnabled(arg);
+				closeItem.setEnabled(arg);
+		}
+		
+		public static boolean getSaveCloseEnabled() {
+				return (saveItem.isEnabled() && closeItem.isEnabled());
+		}
+		
 }
