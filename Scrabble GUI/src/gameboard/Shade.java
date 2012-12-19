@@ -23,7 +23,7 @@ public class Shade extends JPanel {
 						setOpaque(false);
 						add(shadeList[i],i);
 				}
-				setBorder(BorderFactory.createLineBorder(Color.black));
+				//setBorder(BorderFactory.createLineBorder(Color.black));
 				setLayout(new java.awt.GridLayout(1, 7, 0, 0));
 				setBounds( 192, 723, 314, 37);
 				setVisible(true);

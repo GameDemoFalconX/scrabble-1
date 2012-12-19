@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
+import javax.swing.BorderFactory;
+import java.awt.Color;
 
 /**
   *
@@ -30,6 +32,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				addMouseMotionListener(this);
 				setName("DTPicture");
 				setOpaque(false);
+				//setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		}
 
 		public void setImage(Image image) {
