@@ -1,7 +1,6 @@
 package gameboard;
 
 import common.ImageTools;
-import vendor.MD5Util;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import vendor.MD5Util;
 
 /**
  *
@@ -19,12 +19,12 @@ import javax.swing.*;
  */
 public class SideMenu {
 		
-		
+		private static final String gravatarUrl = "http://www.gravatar.com/avatar/";
 		private static JPanel panel;
-		private JLabel iconLabel, playerLabel, emailLabel, passwordLabel;
+		private JLabel iconLabel, emailLabel, passwordLabel;
 		private JTextField emailField;
 		private JPasswordField passwordField;
-		private JButton playButton, logInButton, signUpButton;
+		private JButton playButton, logInButton, signUpButton, playerButton;
 		private String email;
 		private char[] password;
 		private Box playBox, fieldsBox, buttonsBox;
@@ -41,15 +41,15 @@ public class SideMenu {
 //				PLAY AS GUEST PANEL
 				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
 				iconLabel = new JLabel(icon);
-				playerLabel = new JLabel();
+				playerButton = new JButton();
 				URL url = null;
 				try {
-						url = new URL("http://www.gravatar.com/avatar/"+"a");
+						url = new URL(gravatarUrl + "fakeStringToGetDefaultGravatarLogo");
 				} catch (MalformedURLException ex) {
 						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				try {
-						playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
+						playerButton.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
 				} catch (IOException ex) {
 						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -67,7 +67,7 @@ public class SideMenu {
 				
 				playBox.add(iconLabel);
 				playBox.add(playButton);
-				playBox.add(playerLabel);
+				playBox.add(playerButton);
 				
 //				FIELDS PANEL
 				fieldsBox = Box.createHorizontalBox();
@@ -96,16 +96,15 @@ public class SideMenu {
 								password = passwordField.getPassword();
 //								TODO logIn(name,password);
 								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								Menu.setPlayerName(email);
 								String hash = MD5Util.md5Hex(email);
 								URL url = null;
 								try {
-										url = new URL("http://www.gravatar.com/avatar/"+hash);
+										url = new URL(gravatarUrl + hash);
 								} catch (MalformedURLException ex) {
 										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 								}
 								try {
-										playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
+										playerButton.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
 								} catch (IOException ex) {
 										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 								}

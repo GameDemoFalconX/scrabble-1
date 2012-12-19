@@ -30,7 +30,7 @@ public class GameBoard extends JPanel {
 			* @see Image
 			*/
 		private void setImageGameBoard(){
-				ImageIcon newIcon = createImageIcon("images/Grid_72ppp.jpg","Scrabble game board");
+				ImageIcon newIcon = createImageIcon("images/vintage_grid.jpg","Scrabble game board");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
