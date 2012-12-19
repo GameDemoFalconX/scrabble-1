@@ -1,7 +1,6 @@
 package gameboard;
 
 import common.ImageTools;
-import common.MD5Util;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import vendor.MD5Util;
 
 /**
  *
