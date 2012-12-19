@@ -21,7 +21,7 @@ public class GameBoard extends JPanel{
   }
   
   public ImageIcon getImageGameBoard(){
-    icon = ImageTools.createImageIcon("images/Grid_72ppp.jpg","Game Board");
+    icon = ImageTools.createImageIcon("images/Focused_grid.jpg","Game Board");
     icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 700,
                          ImageTools.getProportionnalHeight(icon, 700)));
     return icon;
