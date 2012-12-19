@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class GameBoard extends JPanel {
 		
 		private ImageIcon icon;
-		private static final int GB_HEIGHT = 700;
+		private static final int GB_HEIGHT = 710;
 		private static final int GB_WIDTH = 700;
 		
 		public GameBoard(){
@@ -30,7 +30,7 @@ public class GameBoard extends JPanel {
 			* @see Image
 			*/
 		private void setImageGameBoard(){
-				ImageIcon newIcon = createImageIcon("media/Scrabble_gameboard.png","Scrabble game board");
+				ImageIcon newIcon = createImageIcon("images/Grid_72ppp.jpg","Scrabble game board");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
