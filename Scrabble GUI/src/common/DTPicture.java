@@ -25,6 +25,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private MouseEvent firstMouseEvent = null;
 		private GlassPane glass;
 		private BufferedImage imageGlass;
+		private boolean isLocked = false;
 
 		public DTPicture(Image image) {
 				super(image);
@@ -32,7 +33,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				addMouseMotionListener(this);
 				setName("DTPicture");
 				setOpaque(false);
-				//setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		}
 
 		public void setImage(Image image) {
@@ -42,6 +43,14 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		
 		public Image getImage() {
 				return this.image;
+		}
+		
+		/**
+			* Allows to lock this DTPicture in this parent container.
+			* @param state 
+			*/
+		public void setLocked(boolean state) {
+				this.isLocked = state;
 		}
 		
 		/*** Methods from interface MouseListener ***/

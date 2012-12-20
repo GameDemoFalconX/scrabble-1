@@ -1,10 +1,8 @@
 package gameboard;
 
 import common.GlassPane;
-import common.LocateOfTile;
 import java.awt.Container;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
 	* Main class for Scrabble game
@@ -17,20 +15,16 @@ public class Scrabble {
 		private GameBoard gameBoard;
 		private Rack rack;
 		private GameGrid gameGrid;
-		private Menu menu;
-		private JPanel rackBackground;
-		private Shade shadeTile;
+		//private Shade shadeTile;
 
 		public Scrabble()  {
 				frame = new JFrame("Scrabble");
 				gameBoard = new GameBoard();
 				rack = new Rack();
 				gameGrid = new GameGrid();
-				menu = new Menu();
-				shadeTile = new Shade();
-				new LocateOfTile(shadeTile);
+				//shadeTile = new Shade();
+				//new LocateOfTile(shadeTile);
 				// ShadeTile.setVisibleShade(1, false);
-				rackBackground = new RackBackground();
 				initContainer();
 				initFrame();
 		}
@@ -39,22 +33,19 @@ public class Scrabble {
 				contentPane =  frame.getContentPane() ;
 				contentPane.setLayout(null);
 				contentPane.add(gameBoard, 0);
-				contentPane.add(rackBackground, 0);
-				contentPane.add(shadeTile, 0);
 				contentPane.add(rack, 0);
+				contentPane.add(rack.getInnerRack(), 0);
 				contentPane.add(gameGrid, 0);
 				contentPane.setVisible(true);
 		}
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setJMenuBar(menu.getMenu());
-				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15, 850);
+				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
 				frame.setVisible(true);
-				SideMenu.setVisible(true);
 		}
 
 		/**

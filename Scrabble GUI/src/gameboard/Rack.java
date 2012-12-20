@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -16,41 +17,70 @@ import javax.swing.JPanel;
 	*/
 public class Rack extends JPanel {
 
-		private Tile[] rack = new Tile[7];
+		private static final int RACK_LENGTH = 7;
+		private static final int RACK_HEIGHT = 60;
+		private static final int RACK_WIDTH = 365;
 		private static final int TILE_HEIGHT = 40;
 		private static final int TILE_WIDTH = 36;
+		private ImageIcon icon;
+		private JPanel innerRack;
 
 		/**
-			* At term, this constructor must be receive in parameters a table of Tile form the model.
+			* At term, this constructor must be receive in parameters a table of Tile from the model.
 			*/
 		public Rack() {
-				//char TileRackLetterTest[] = {'S','C','R','A','B','B','L','E'};
-				//int TileRackValueTest[] = {1,4,1,8,8,2,1};
-				for (int i = 0; i < rack.length; i++) {
-						//Tile tileData = new Tile(TileRackLetterTest[i], TileRackValueTest[i]);
-						DTPicture DTIcon = new DTPicture(setImageTile());
-						DTIcon.setTransferHandler(new TileTransferHandler());
-						setOpaque(false);
-						add(initSquareRack(DTIcon),i);
-						//rack[i] = tileData;
-						setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				}
-				setBorder(BorderFactory.createLineBorder(Color.RED));
+				/** Construction of rack **/
 				setName("Rack");
-				setLayout(new GridLayout(1, 7, 0, 0));
-				setBounds( 201, 720, TILE_WIDTH*7+62, TILE_HEIGHT);
+				setImageRack();
+				add(new JLabel(this.icon));
+				setLayout(new GridLayout(1, 1, 1, 1));
+				setBounds( 170, 720, RACK_WIDTH, RACK_HEIGHT);
+				setOpaque(false);
 				setVisible(true);
+				setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				
+				/** Construction of rack elements **/
+				/*** Rack inner container ***/
+				innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
+				innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				innerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
+				innerRack.setBounds( 226, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				
+				for (int i = 0; i < RACK_LENGTH; i++) {
+						// Construct JPanel Element in the background of the rack and add it a DTPicture instance.
+						JPanel rackPanelBGElement = new JPanel(new GridLayout(1, 1));
+						rackPanelBGElement.add(initDTPicture());
+						rackPanelBGElement.setOpaque(false);
+						rackPanelBGElement.setVisible(true);
+						rackPanelBGElement.setSize(TILE_WIDTH, TILE_HEIGHT);
+						rackPanelBGElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+						innerRack.add(rackPanelBGElement, i);
+				}
 		}
 		
-		private JPanel initSquareRack(DTPicture dtp) {
-				JPanel JPaneTileRack = new JPanel(new GridLayout(1, 1));
-				JPaneTileRack.add(dtp);
-				JPaneTileRack.setOpaque(false);
-				JPaneTileRack.setVisible(true);
-				return JPaneTileRack;
+		public JPanel getInnerRack() {
+				return this.innerRack;
+		}
+		
+		private DTPicture initDTPicture() {
+				DTPicture dtp = new DTPicture(setImageTile());
+				dtp.setTransferHandler(new TileTransferHandler());
+				return dtp;
 		} 
 		
 		/*** Methods used for create ImageIcon ***/
+		
+		/**
+			* Set the image of the rack and resize it
+			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
+			* @see Image
+			*/
+		private void setImageRack(){
+				ImageIcon newIcon = createImageIcon("images/Rack_empty.png","Scrabble rack");
+				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
+				Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT,  Image.SCALE_SMOOTH);
+				this.icon = new ImageIcon(iconScaled);
+		}
 		
 		/**
 			* Set the image of the tile and resize it
