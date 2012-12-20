@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 
     ImageIcon icon;
     icon = ImageTools.createImageIcon("images/Tile.png","Tile");
-    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 36,ImageTools.getProportionnalHeight(icon, 37)));
+    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 42,ImageTools.getProportionnalHeight(icon, 40)));
     setImg(icon.getImage());
     
 		}
