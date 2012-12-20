@@ -1,17 +1,10 @@
 package gameboard;
 
 import common.ImageTools;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+import java.awt.Insets;
 import javax.swing.*;
-import vendor.MD5Util;
 
 /**
  *
@@ -19,116 +12,50 @@ import vendor.MD5Util;
  */
 public class SideMenu {
 		
-		private static final String gravatarUrl = "http://www.gravatar.com/avatar/";
-		private static JPanel panel;
-		private JLabel iconLabel, emailLabel, passwordLabel;
+	
+		private static JPanel panel, dropDownMenu;
+		private JButton playerButton;
 		private JTextField emailField;
 		private JPasswordField passwordField;
-		private JButton playButton, logInButton, signUpButton, playerButton;
-		private String email;
-		private char[] password;
-		private Box playBox, fieldsBox, buttonsBox;
 
 		public SideMenu()	{
 				panel = new JPanel();
-				panel.setPreferredSize(new Dimension(400,300));
+//				panel.setLayout(null);
+				panel.setBounds(715, 0, 450, 850);
+				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				this.initComponent();
 		}
-
 	
 		private void initComponent() {
-				
-//				PLAY AS GUEST PANEL
-				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
-				iconLabel = new JLabel(icon);
+				initPlayerButton();
+				initDropDownMenu();
+				panel.add(playerButton);
+				panel.add(dropDownMenu);
+		}
+		
+		private void initPlayerButton() {
 				playerButton = new JButton();
-				URL url = null;
-				try {
-						url = new URL(gravatarUrl + "fakeStringToGetDefaultGravatarLogo");
-				} catch (MalformedURLException ex) {
-						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				try {
-						playerButton.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
-				} catch (IOException ex) {
-						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				playBox = Box.createHorizontalBox();
-				playButton = new JButton("Play as guest");
-				playButton.addActionListener(new ActionListener(){
-						@Override
-      public void actionPerformed(ActionEvent arg0) {        
-//        TODO call the anonymous new game function
-								if (!Menu.getSaveCloseEnabled()) {
-										Menu.setSaveCloseEnabled(true);
-								}
-      }
-				});
+				playerButton.setPreferredSize(new Dimension(80,80));
+				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
+				Insets insets = panel.getInsets();
+				Dimension size = playerButton.getPreferredSize();
+				playerButton.setBounds(25 + insets.left, 5 + insets.top,
+                     size.width, size.height);
+		}
+		
+		private void initDropDownMenu() {
+				dropDownMenu = new JPanel();
+				dropDownMenu.setBounds(panel.getWidth()-100, playerButton.getHeight(), 100, 400);
+				dropDownMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				initDropDownItems();
+				dropDownMenu.add(emailField);
+				dropDownMenu.add(passwordField);
+		}
+		
+		private void initDropDownItems() {
+				emailField = new JTextField("email");
+				passwordField = new JPasswordField("password");
 				
-				playBox.add(iconLabel);
-				playBox.add(playButton);
-				playBox.add(playerButton);
-				
-//				FIELDS PANEL
-				fieldsBox = Box.createHorizontalBox();
-				fieldsBox.setPreferredSize(new Dimension(400, 100));
-				emailLabel = new JLabel("Email : ");
-				emailField = new JTextField();
-				emailField.setSize(new Dimension(90,25));
-				
-				fieldsBox.add(emailLabel);
-				fieldsBox.add(emailField);
-				
-				passwordLabel = new JLabel("Password : ");
-				passwordField = new JPasswordField();
-				passwordField.setSize(new Dimension(90,25));
-				
-				fieldsBox.add(passwordLabel);
-				fieldsBox.add(passwordField);
-				
-//				BUTTON PANEL
-				buttonsBox = Box.createHorizontalBox();
-				logInButton = new JButton("Log in");
-				logInButton.addActionListener(new ActionListener(){
-						@Override
-      public void actionPerformed(ActionEvent arg0) {   
-								email = emailField.getText();
-								password = passwordField.getPassword();
-//								TODO logIn(name,password);
-								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								String hash = MD5Util.md5Hex(email);
-								URL url = null;
-								try {
-										url = new URL(gravatarUrl + hash);
-								} catch (MalformedURLException ex) {
-										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-								}
-								try {
-										playerButton.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
-								} catch (IOException ex) {
-										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-								}
-      }
-				});
-				signUpButton = new JButton("Sign up");
-				signUpButton.addActionListener(new ActionListener(){
-						@Override
-      public void actionPerformed(ActionEvent arg0) {        
-								email = emailField.getText();
-								password = passwordField.getPassword();
-//								TODO signUp(name,password);
-								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								Menu.setPlayerName(email);
-//								popUp.setVisible(false);
-      }
-				});
-								
-				buttonsBox.add(logInButton);
-				buttonsBox.add(signUpButton);
-				
-				panel.add(playBox);
-				panel.add(fieldsBox); 
-				panel.add(buttonsBox);
 		}
 		
 		public static void setVisible(boolean visible) {

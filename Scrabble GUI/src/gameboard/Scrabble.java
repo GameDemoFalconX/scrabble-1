@@ -38,23 +38,21 @@ public class Scrabble {
 
 		private void initContainer() {
 				contentPane =  frame.getContentPane() ;
-				contentPane.setLayout(new BorderLayout());
-				mainPanel = new JPanel();
-				mainPanel.setLayout(null);
-    mainPanel.add(gameBoard, 0);
-    mainPanel.add(rackBackground, 0);
-    mainPanel.add(rack, 0);
-				mainPanel.add(shadeTile, 0);
-    mainPanel.add(gameGrid, 0);
-				contentPane.add(mainPanel, 0);
+				contentPane.setLayout(null);
+    contentPane.add(gameBoard, 0);
+    contentPane.add(rackBackground, 0);
+    contentPane.add(rack, 0);
+				contentPane.add(shadeTile, 0);
+    contentPane.add(gameGrid, 0);
     contentPane.setVisible(true);
 				sidePanel = SideMenu.getPanel();
-				contentPane.add(sidePanel, BorderLayout.EAST);
+				contentPane.add(sidePanel, 0);
 		}
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15 + 450, 850);
+//				System.out.println("Width = " + (gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15) );
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);

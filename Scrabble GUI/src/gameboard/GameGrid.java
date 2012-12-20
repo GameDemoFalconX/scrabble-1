@@ -1,6 +1,8 @@
 package gameboard;
 
+import java.awt.Color;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -16,8 +18,9 @@ public class GameGrid extends JPanel{
 				}
 								
 				setLayout(new GridLayout(15,15));
-				setBounds(75,25,598,658);
+				setBounds(5,5,691,701);
     setName("Grid");
+				setBorder(BorderFactory.createLineBorder(Color.black));
     setVisible(true);
 		}
 }
