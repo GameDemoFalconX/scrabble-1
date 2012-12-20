@@ -4,6 +4,9 @@ import common.ImageTools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 /**
@@ -13,10 +16,11 @@ import javax.swing.*;
 public class SideMenu {
 		
 	
-		private static JPanel panel, dropDownMenu;
-		private JButton playerButton;
-		private JTextField emailField;
-		private JPasswordField passwordField;
+	 private static JPanel panel, dropDownMenu;
+	 private JButton playerButton;
+		private JPopupMenu popupMenu;
+		private JMenuItem logSign, logOff;
+		private String email;
 
 		public SideMenu()	{
 				panel = new JPanel();
@@ -27,10 +31,9 @@ public class SideMenu {
 		}
 	
 		private void initComponent() {
+				initPopupMenu();
 				initPlayerButton();
-				initDropDownMenu();
 				panel.add(playerButton);
-				panel.add(dropDownMenu);
 		}
 		
 		private void initPlayerButton() {
@@ -41,22 +44,32 @@ public class SideMenu {
 				Dimension size = playerButton.getPreferredSize();
 				playerButton.setBounds(25 + insets.left, 5 + insets.top,
                      size.width, size.height);
+				playerButton.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+										popupMenu.show(e.getComponent(), e.getX(), e.getY());
+						}
+				});
 		}
 		
-		private void initDropDownMenu() {
-				dropDownMenu = new JPanel();
-				dropDownMenu.setBounds(panel.getWidth()-100, playerButton.getHeight(), 100, 400);
-				dropDownMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				initDropDownItems();
-				dropDownMenu.add(emailField);
-				dropDownMenu.add(passwordField);
+		private void initPopupMenu() {
+				popupMenu = new JPopupMenu();
+				logSign = new JMenuItem(new AbstractAction("Log in/Sign up") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, "Log in/Sign up comes here");
+      }
+				});
+				logOff = new JMenuItem(new AbstractAction("Log off") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, "Log off");
+      }
+				});
+				popupMenu.add(logSign);
+				popupMenu.add(logOff);
 		}
 		
-		private void initDropDownItems() {
-				emailField = new JTextField("email");
-				passwordField = new JPasswordField("password");
-				
-		}
 		
 		public static void setVisible(boolean visible) {
 				panel.setVisible(visible);
