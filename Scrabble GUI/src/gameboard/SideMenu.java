@@ -4,7 +4,6 @@ import common.EmailValidator;
 import common.ImageTools;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -15,8 +14,9 @@ import javax.swing.*;
 public class SideMenu {
 		
 	
-	 private static JPanel panel, dropDownMenu;
-	 private JButton playerButton, scrabbleButton;
+	 private static JPanel panel;
+		private GameBoard gameBoard;
+	 private JButton playerButton, scrabbleButton, gameBoardButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
 		private String email;
@@ -35,15 +35,17 @@ public class SideMenu {
 				panel.setBackground(Color.WHITE);
 				this.initComponent();
 		}
-	
+		
 		private void initComponent() {
 				emailValidator = new EmailValidator();
 				initPopupOnMenu();
 				initPopupOffMenu();
 				initPlayerButton();
 				initScrabbleButton();
+				initGameBoardButton();
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
+				panel.add(gameBoardButton);
 		}
 		
 		private void initPlayerButton() {
@@ -165,6 +167,19 @@ public class SideMenu {
 				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
 				scrabbleButton.setBackground(Color.WHITE);
 				scrabbleButton.setBorder(null);
+		}
+		
+		private void initGameBoardButton() {
+				gameBoardButton = new JButton("Change GameBoard");
+				gameBoardButton.setBounds(10, 10, 90, 20);
+				scrabbleButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								GameBoard.changeGameBoard();
+						}
+				});
+				
 		}
 			
 		public static void setVisible(boolean visible) {

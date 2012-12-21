@@ -1,7 +1,7 @@
 package gameboard;
 
+import common.ImageTools;
 import java.awt.Image;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,13 +13,14 @@ import javax.swing.JPanel;
 	*/
 public class GameBoard extends JPanel {
 		
-		private ImageIcon icon;
+		private static ImageIcon icon;
 		private static final int GB_HEIGHT = 710;
 		private static final int GB_WIDTH = 700;
+		private static boolean vintage = true;
 		
-		public GameBoard(){
+		public GameBoard() {
 				setImageGameBoard();
-				add(new JLabel(this.icon));
+				add(new JLabel(GameBoard.icon));
 				setVisible(true);
 				setLayout(new java.awt.GridLayout(1, 1, 1, 1)); //Allow to get rid of the gap between JPanel and JLabel
 				setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
@@ -30,22 +31,20 @@ public class GameBoard extends JPanel {
 			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
 			* @see Image
 			*/
-		private void setImageGameBoard(){
-				ImageIcon newIcon = createImageIcon("media/vintage_grid.jpg","Scrabble gameboard");
+		private static void setImageGameBoard() {
+				ImageIcon newIcon;
+				if (vintage) {
+						newIcon = ImageTools.createImageIcon("media/vintage_grid.jpg","Vintage gameboard");
+				} else {
+						newIcon = ImageTools.createImageIcon("media/modern_grid.png","Modern gameboard");
+				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
-				this.icon = new ImageIcon(iconScaled);
+				GameBoard.icon = new ImageIcon(iconScaled);
 		}
 		
-		/** Returns an ImageIcon, or null if the path was invalid. */
-		protected ImageIcon createImageIcon(String path, String description) {
-				ImageIcon newIcon = null;
-				URL imgURL = getClass().getResource(path);
-				if (imgURL != null) {
-						newIcon =  new ImageIcon(imgURL, description);
-				} else {
-						System.err.println("Couldn't find file : " + path);
-				}
-				return newIcon;
-		}		
+		public static void changeGameBoard() {
+				vintage = !vintage;
+				setImageGameBoard();				
+		}
 }
