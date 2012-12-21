@@ -24,7 +24,8 @@ public class panelGrid extends JPanel {
 				setOpaque(false);
 				setVisible(true);
 				setName("panelGrid");
-				new DropTarget(this, new panelDropTargetListener());
+				//new DropTarget(this, new panelDropTargetListener());
+				setTransferHandler(new TileTransferHandler());
 				this.coord = coord;
 		}
 		

@@ -49,9 +49,7 @@ public class panelDropTargetListener implements DropTargetListener {
 						if (e.isDataFlavorSupported(DataFlavor.imageFlavor)) {
 								e.acceptDrop(e.getDropAction());
 
-								String s;
 								Image data = (Image) t.getTransferData(DataFlavor.imageFlavor);
-
 								DTPicture dtp = new DTPicture(data);
 								cPanelGrid.add(dtp);
 								cPanelGrid.setBorder(BorderFactory.createLineBorder(Color.GRAY));

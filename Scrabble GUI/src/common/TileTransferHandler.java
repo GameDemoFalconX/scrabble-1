@@ -1,5 +1,6 @@
 package common;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -7,6 +8,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 
 /**
@@ -17,84 +19,44 @@ public class TileTransferHandler extends TransferHandler {
 		// Each instance represents the opaque concept of a data format as would appear on a clipboard, during drag and drop, or in a file system.
 		// DataFlavor objects are constant and never change once instantiated.
 		private static final DataFlavor flavors[] = { DataFlavor.imageFlavor };  // In your case the DataFlavor is representing by an image.
-		//private DTPicture DTElement;
+		private DTPicture DTElement;
+		private JPanel parentContainer;
 		private boolean shouldRemove; // Define if the source element must be remove whether the target component is able to drop the DTElement.
 
 		/*** TransferHandler - Import Methods ***/
 		
 		@Override
 		public boolean canImport(TransferSupport support) {
-				System.out.println("Support : "+support);
-				System.out.println("Support comp : "+support.getComponent().getName());
-				
-				// Check for String flavor
 				if (!support.isDataFlavorSupported(flavors[0])) {
 						return false;
 				}
-
-				// Fetch the drop location
-				DropLocation location = support.getDropLocation();
-
-				// Return whether we accept the location
 				return true;
-		}
-		
-		private boolean shouldAcceptDropLocation(DropLocation location) {
-				return location.getDropPoint().x > 0 && location.getDropPoint().x < 200;
 		}
 		
 		@Override
 		public boolean importData(TransferSupport support) {
-				System.out.println("Support : "+support);
-				System.out.println(support.getDropLocation().getDropPoint().getX()+" - "+support.getDropLocation().getDropPoint().getY());
 				if (!canImport(support)) {
 						return false;
 				}
-
-				System.out.println("importData - support comp : "+support.getComponent().getName());
-
 				
-				// Fetch the Transferable and its data
+				// Fetch the Transferable and its data (in our case this is an image)
 				Transferable t = support.getTransferable();
+				Image data = null;
 				try {
-						Image data = (Image) t.getTransferData(DataFlavor.imageFlavor);
+						data = (Image) t.getTransferData(DataFlavor.imageFlavor);
 				} catch (UnsupportedFlavorException e) {
 						System.out.println("Error with DataFlavor type");
 				} catch (IOException IOe) {
 						System.out.println("importData: I/O exception");
 				}
-				
-				// Fetch the drop location
-				DropLocation location = support.getDropLocation();
 
-				// Insert the data at this location
-				
+				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
+				DTPicture dtp = new DTPicture(data);
+				JPanel parent = (JPanel) support.getComponent();
+				JPanel p = (parent instanceof panelGrid) ? (panelGrid) parent : (panelRack) parent;
+				p.add(dtp);
 
 				return true;
-				/*if (LocateOfTile.getDndEnable() && !LocateOfTile.getLockDropOnTile()) {
-						// System.out.println("importData");
-						LocateOfTile.setBackTransfer(false);
-						Image image;
-						if (canImport(c, t.getTransferDataFlavors())) {
-								DTPicture pic = (DTPicture) c;
-								// Don't drop on myself.
-								if (sourcePic == pic) {
-										shouldRemove = false;
-										return true;
-								}
-								try {
-										image = (Image) t.getTransferData(pictureFlavor);
-										// Set the component to the new picture.
-										pic.image = image;
-										pic.repaint();
-										return true;
-								} catch (UnsupportedFlavorException ufe) {
-										System.out.println("importData: unsupported data flavor");
-								} catch (IOException ioe) {
-										System.out.println("importData: I/O exception");
-								}
-						}
-				}*/
 		}
 		
 		/*** TransferHandler - Export Methods ***/
@@ -108,21 +70,21 @@ public class TileTransferHandler extends TransferHandler {
 		@Override
 		protected Transferable createTransferable(JComponent c) {
 				// This method bundles up the data to be exported into a Transferable object in preparation for the transfer
+				System.out.println("Create Transferable");
+				DTElement = (DTPicture) c;				
+				parentContainer = (JPanel) DTElement.getParent();
+				displaySituation(parentContainer);
 				shouldRemove = true;
-				return new PictureTransferable((DTPicture) c);
+				return new PictureTransferable(DTElement);
 		}
 
 		@Override
 		protected void exportDone(JComponent c, Transferable t, int action) {
 				// This method is invoked after the export is complete. When the action is a MOVE, 
 				// the data needs to be removed from the source after the transfer is complete
-				//LocateOfTile.locateTile("To");
-				//LocateOfTile.setBackTransfer(false);
-				//LocateOfTile.setDndEnable(true);
 				if (shouldRemove && (action == MOVE)) {
-						Container parent = (Container) c.getParent(); // Get the parent of the DTElement (JPanel container)
-						System.out.println("Parent target : "+parent.getName());
-						parent.remove(c); // Remove this DTElement from this parent container.
+						parentContainer.remove(DTElement); // Remove this DTElement from this parent container.
+						parentContainer.repaint();
 				}
 		}
 		
@@ -134,7 +96,6 @@ public class TileTransferHandler extends TransferHandler {
     
 				PictureTransferable(DTPicture dtp) {
 						image = dtp.image;
-						System.out.println("Create transferable");
 				}
 
 				@Override
@@ -153,6 +114,16 @@ public class TileTransferHandler extends TransferHandler {
 				@Override
 				public boolean isDataFlavorSupported(DataFlavor flavor) {
 						return flavors[0].equals(flavor);
+				}
+		}
+		
+		private void displaySituation(JPanel parent) {
+				if (parent instanceof panelRack) {
+						panelRack p = (panelRack) parent;
+						System.out.println("Start drag from Rack - index : "+p.getPosition());
+				} else {
+						panelGrid p = (panelGrid) parent;
+						System.out.println("Start drag from Grid - [ "+p.getCoordinates().x+", "+p.getCoordinates().y+" ]");
 				}
 		}
 }
