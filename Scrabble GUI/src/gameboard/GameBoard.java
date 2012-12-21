@@ -26,7 +26,7 @@ public class GameBoard extends JPanel {
 		private ImageIcon icon;
 		private JPanel innerGrid;
 		
-		public GameBoard(){
+		public GameBoard() {
 				/** Construction of game board **/
 				setImageGameBoard();
 				add(new JLabel(this.icon));
@@ -48,7 +48,7 @@ public class GameBoard extends JPanel {
 				for (int x = 0; x < 15; x++) {
 						for (int y = 0; y < 15; y++) {
 								panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(x, y));
-								panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+								panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
 								innerGrid.add(panelGridElement, ind);
 								ind++;
 						}
@@ -64,7 +64,7 @@ public class GameBoard extends JPanel {
 			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
 			* @see Image
 			*/
-		private void setImageGameBoard(){
+		private void setImageGameBoard() {
 				ImageIcon newIcon = createImageIcon("images/Grid_72ppp.jpg","Scrabble game board");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);

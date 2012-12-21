@@ -28,7 +28,7 @@ public class LocateOfTile {
 		
 		public LocateOfTile(Shade shadeTile) {
 				this.shadeTile = shadeTile;
-				// The listener catch the component under the mouse:
+				// The listener catch the component under the mouse
 				Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 						@Override
 						public void eventDispatched(AWTEvent event) {

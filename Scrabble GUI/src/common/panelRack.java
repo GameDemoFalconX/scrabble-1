@@ -21,6 +21,7 @@ public class panelRack extends JPanel {
 				setSize(tw, th);
 				setOpaque(false);
 				setVisible(true);
+				setName("panelRack");
 				this.pos = pos;
 		}
 		
