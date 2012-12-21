@@ -2,6 +2,7 @@ package gameboard;
 
 import common.DTPicture;
 import common.TileTransferHandler;
+import common.panelRack;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -48,11 +49,8 @@ public class Rack extends JPanel {
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct JPanel Element in the background of the rack and add it a DTPicture instance.
-						JPanel rackPanelBGElement = new JPanel(new GridLayout(1, 1));
-						rackPanelBGElement.add(initDTPicture());
-						rackPanelBGElement.setOpaque(false);
-						rackPanelBGElement.setVisible(true);
-						rackPanelBGElement.setSize(TILE_WIDTH, TILE_HEIGHT);
+						panelRack rackPanelBGElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+						rackPanelBGElement.addDTElement(initDTPicture());
 						rackPanelBGElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						innerRack.add(rackPanelBGElement, i);
 				}
