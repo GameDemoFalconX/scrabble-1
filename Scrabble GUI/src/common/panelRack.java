@@ -22,6 +22,7 @@ public class panelRack extends JPanel {
 				setOpaque(false);
 				setVisible(true);
 				setName("panelRack");
+				setTransferHandler(new TileTransferHandler());
 				this.pos = pos;
 		}
 		

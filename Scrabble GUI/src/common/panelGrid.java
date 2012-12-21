@@ -2,7 +2,6 @@ package common;
 
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.dnd.DropTarget;
 import javax.swing.JPanel;
 
 /**
@@ -24,7 +23,6 @@ public class panelGrid extends JPanel {
 				setOpaque(false);
 				setVisible(true);
 				setName("panelGrid");
-				//new DropTarget(this, new panelDropTargetListener());
 				setTransferHandler(new TileTransferHandler());
 				this.coord = coord;
 		}

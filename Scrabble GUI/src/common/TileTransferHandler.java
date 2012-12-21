@@ -1,7 +1,5 @@
 package common;
 
-import java.awt.Color;
-import java.awt.Container;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -52,6 +50,7 @@ public class TileTransferHandler extends TransferHandler {
 
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
 				DTPicture dtp = new DTPicture(data);
+				dtp.setTransferHandler(new TileTransferHandler());
 				JPanel parent = (JPanel) support.getComponent();
 				JPanel p = (parent instanceof panelGrid) ? (panelGrid) parent : (panelRack) parent;
 				p.add(dtp);
