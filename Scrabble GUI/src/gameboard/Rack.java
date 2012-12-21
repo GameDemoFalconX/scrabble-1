@@ -35,7 +35,7 @@ public class Rack extends JPanel {
 				setImageRack();
 				add(new JLabel(this.icon));
 				setLayout(new GridLayout(1, 1, 1, 1));
-				setBounds( 170, 720, RACK_WIDTH, RACK_HEIGHT);
+				setBounds(170, 720, RACK_WIDTH, RACK_HEIGHT);
 				setOpaque(false);
 				setVisible(true);
 				setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
@@ -48,11 +48,11 @@ public class Rack extends JPanel {
 				innerRack.setBounds( 226, 720, TILE_WIDTH*7, TILE_HEIGHT);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {
-						// Construct JPanel Element in the background of the rack and add it a DTPicture instance.
-						panelRack rackPanelBGElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						rackPanelBGElement.addDTElement(initDTPicture());
-						rackPanelBGElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
-						innerRack.add(rackPanelBGElement, i);
+						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
+						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+						panelRackElement.addDTElement(initDTPicture());
+						panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+						innerRack.add(panelRackElement, i);
 				}
 		}
 		
