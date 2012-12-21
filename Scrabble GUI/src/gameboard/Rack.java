@@ -3,7 +3,6 @@ package gameboard;
 import common.DTPicture;
 import common.TileTransferHandler;
 import java.awt.GridLayout;
-import java.awt.Image;
 import javax.swing.JPanel;
 
 /**

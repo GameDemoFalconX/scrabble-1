@@ -51,7 +51,7 @@ public class Scrabble {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15 + 450, 850);
+				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15 + 300, 850);
 //				System.out.println("Width = " + (gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15) );
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());

@@ -17,25 +17,28 @@ public class SideMenu {
 	
 	 private static JPanel panel, dropDownMenu;
 	 private JButton playerButton;
-		private JPopupMenu popupMenu;
+		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
 		private String email;
 		private JTextField emailField;
 		private JPasswordField passwordField;
 		private char[] password;
 		private EmailValidator emailValidator;
+		private boolean on = false;
 
 		public SideMenu()	{
 				panel = new JPanel();
-//				panel.setLayout(null);
-				panel.setBounds(715, 0, 450, 850);
+//				panel.setLayout(new BorderLayout());
+				panel.setLayout(null);
+				panel.setBounds(715, 0, 300, 850);
 				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				this.initComponent();
 		}
 	
 		private void initComponent() {
 				emailValidator = new EmailValidator();
-				initPopupMenu();
+				initPopupOnMenu();
+				initPopupOffMenu();
 				initPlayerButton();
 				panel.add(playerButton);
 		}
@@ -43,6 +46,7 @@ public class SideMenu {
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
+//				playerButton.setBounds(panel.getWidth()-80, panel.getHeight()-80, 80, 80);
 				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
 				Insets insets = panel.getInsets();
 				Dimension size = playerButton.getPreferredSize();
@@ -51,23 +55,28 @@ public class SideMenu {
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mousePressed(MouseEvent e) {
-										popupMenu.show(e.getComponent(), e.getX(), e.getY());
+								if (on) {
+										popUpOffMenu.show(e.getComponent(), e.getX(), e.getY());
+								} else {
+										popUpOnMenu.show(e.getComponent(), e.getX(), e.getY());
+								}
+								
+//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
 						}
 				});
 		}
 		
-		private void initPopupMenu() {
-				popupMenu = new JPopupMenu();
+		private void initPopupOnMenu() {
+				popUpOnMenu = new JPopupMenu();
 				emailField = new JTextField("Email");
+				emailField.setPreferredSize(new Dimension(150,20));
 				emailField.addFocusListener(new FocusListener() {
-
 						@Override
 						public void focusGained(FocusEvent e) {
 								if (emailField.getText().equals("Email")) {
             emailField.setText("");
         }
 						}
-
 						@Override
 						public void focusLost(FocusEvent e) {
 								if (emailField.getText().equals("")) {
@@ -75,66 +84,73 @@ public class SideMenu {
         }
 						}
 				});
-				passwordField = new JPasswordField("Password");
+				
+				passwordField = new JPasswordField("aaaaaa");
+				passwordField.setPreferredSize(new Dimension(150,20));
 				passwordField.addFocusListener(new FocusListener() {
-
 						@Override
 						public void focusGained(FocusEvent e) {
-								if (emailField.getText().equals("Password")) {
-            emailField.setText("");
-        }
+//								if ("aaaaaa".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("");
+//        }
 						}
-
 						@Override
 						public void focusLost(FocusEvent e) {
-								if (emailField.getText().equals("")) {
-            emailField.setText("Password");
+								if ("".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("Password");
         }
 						}
 				});
+				
 				logIn = new JMenuItem(new AbstractAction("Log in") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
       }
 				});
+				
 				signUp = new JMenuItem(new AbstractAction("Sign Up") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
       }
 				});
+								
+				popUpOnMenu.add(emailField);
+				popUpOnMenu.add(passwordField);
+				popUpOnMenu.add(logIn);
+				popUpOnMenu.add(signUp);
+		}
+		
+		private void initPopupOffMenu() {
+				popUpOffMenu = new JPopupMenu();
 				logOff = new JMenuItem(new AbstractAction("Log off") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, "Log off");
+								resetPlayer();
       }
 				});
-				popupMenu.add(emailField);
-				popupMenu.add(passwordField);
-				popupMenu.add(logIn);
-				popupMenu.add(signUp);
-				popupMenu.add(logOff);
+				
+				popUpOffMenu.add(logOff);
 		}
-		
-		private void focusGained(FocusEvent e) {
-        if (emailField.getText().equals("Email")) {
-            //jTextArea1.setSelectionStart(0);
-            //jTextArea1.setSelectionEnd(jTextArea1.getText().length());
-            emailField.selectAll();
-        }
-    }
-		
 		
 		private void logInSignUp() {
 				email = emailField.getText();
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageTools.getGravatar(email));
+						on = true;
 				} else {
 						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
 														+ "email address");
 				}
+		}
+		
+		private void resetPlayer() {
+				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
+				emailField.setText("Email");
+				passwordField.setText("aaaaaa");
+				on = false;
 		}
 			
 		public static void setVisible(boolean visible) {
