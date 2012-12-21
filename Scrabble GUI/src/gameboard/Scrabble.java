@@ -15,7 +15,6 @@ public class Scrabble {
 		private Container contentPane;
 		private GameBoard gb;
 		private Rack rack;
-		private GameGrid gameGrid;
 		private Shade shadeTile;
 
 		public Scrabble()  {

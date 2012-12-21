@@ -4,6 +4,8 @@ import common.ImageTools;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
+// ###### DEPRECATED ######
+
 /**
  * 
  * @author Arnaud Morel <a.morel@hotmail.com>

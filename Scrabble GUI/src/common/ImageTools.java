@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
+// ###### DEPRECATED ######
+
 /**
 	* 
 	* @author Arnaud Morel <a.morel@hotmail.com>, R. FONCIER <ro.foncier@gmail.com>
