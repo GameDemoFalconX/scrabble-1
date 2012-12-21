@@ -55,6 +55,8 @@ public class TileTransferHandler extends TransferHandler {
 				JPanel parent = (JPanel) support.getComponent();
 				JPanel p = (parent instanceof panelGrid) ? (panelGrid) parent : (panelRack) parent;
 				p.add(dtp);
+				System.out.println("Add new DTElement to this new parent container");
+				p.repaint();
 
 				return true;
 		}
