@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 /**
 	* 
 	* @author Arnaud Morel <a.morel@hotmail.com>, R. FONCIER <ro.foncier@gmail.com>
+	* Bernard <bernard.debecker@gmail.com>
 	*/
 public class Rack extends JPanel {
 

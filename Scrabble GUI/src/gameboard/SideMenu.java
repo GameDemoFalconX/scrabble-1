@@ -16,7 +16,7 @@ public class SideMenu {
 		
 	
 	 private static JPanel panel, dropDownMenu;
-	 private JButton playerButton;
+	 private JButton playerButton, scrabbleButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
 		private String email;
@@ -30,8 +30,9 @@ public class SideMenu {
 				panel = new JPanel();
 //				panel.setLayout(new BorderLayout());
 				panel.setLayout(null);
-				panel.setBounds(715, 0, 300, 850);
+				panel.setBounds(700, 0, 300, 800);
 				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				panel.setBackground(Color.WHITE);
 				this.initComponent();
 		}
 	
@@ -40,18 +41,16 @@ public class SideMenu {
 				initPopupOnMenu();
 				initPopupOffMenu();
 				initPlayerButton();
+				initScrabbleButton();
 				panel.add(playerButton);
+				panel.add(scrabbleButton);
 		}
 		
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
-//				playerButton.setBounds(panel.getWidth()-80, panel.getHeight()-80, 80, 80);
+				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
 				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
-				Insets insets = panel.getInsets();
-				Dimension size = playerButton.getPreferredSize();
-				playerButton.setBounds(25 + insets.left, 5 + insets.top,
-                     size.width, size.height);
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mousePressed(MouseEvent e) {
@@ -151,6 +150,21 @@ public class SideMenu {
 				emailField.setText("Email");
 				passwordField.setText("aaaaaa");
 				on = false;
+		}
+		
+		private void initScrabbleButton() {
+				scrabbleButton = new JButton(ImageTools.createImageIcon("media/Scrabble.png","Scrabble"));
+				scrabbleButton.setPreferredSize(new Dimension(190,102));
+				scrabbleButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
+				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
+				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setBorder(null);
 		}
 			
 		public static void setVisible(boolean visible) {

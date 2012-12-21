@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @author Arnaud Morel <a.morel@hotmail.com>
+ * @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class GameGrid extends JPanel{
   

@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 /**
  * 
- * @author Arnaud Morel <a.morel@hotmail.com>
+ * @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 
  public final class Tile {

@@ -3,6 +3,7 @@ package gameboard;
 import common.GlassPane;
 import common.LocateOfTile;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -45,15 +46,17 @@ public class Scrabble {
 				contentPane.add(shadeTile, 0);
     contentPane.add(gameGrid, 0);
     contentPane.setVisible(true);
+				contentPane.setBackground(Color.WHITE);
 				sidePanel = SideMenu.getPanel();
 				contentPane.add(sidePanel, 0);
 		}
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15 + 300, 850);
+				frame.setSize(gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15 + 301, 850);
 //				System.out.println("Width = " + (gameBoard.getWidth() + gameBoard.getInsets().left+gameBoard.getInsets().right+15) );
 				frame.setContentPane(contentPane);
+				frame.setBackground(Color.WHITE);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
 				frame.setVisible(true);
