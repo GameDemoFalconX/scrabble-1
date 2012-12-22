@@ -50,16 +50,12 @@ public class TileTransferHandler extends TransferHandler {
 
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
 				DTPicture dtp = new DTPicture(data);
-				JPanel parent = (JPanel) support.getComponent();
-				if (parent instanceof panelGrid) {
-						panelGrid p = (panelGrid) parent;
-						p.addDTElement(dtp);
-						p.repaint();
-				} else {
-						panelRack p = (panelRack) parent;
-						p.addDTElement(dtp);
-						p.repaint();
-				}
+				JPanel parent = (JPanel) support.getComponent();		
+				parent.add(dtp);
+				// The validate method is used to cause a container to lay out its subcomponents again. It should be invoked 
+				// when this container's subcomponents are modified (added to or removed from the container, 
+				// or layout-related information changed) after the container has been displayed.
+				parent.validate();
 				System.out.println("Add new DTElement to this new parent container");
 				return true;
 		}
