@@ -57,6 +57,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		public void mousePressed(MouseEvent e) {
 				Component comp = e.getComponent(); // Obviously that concerns (a Tile within) a DTPicture instance
 				Point location = (Point)e.getPoint().clone();
+				comp.setVisible(false); // Hide the DTPicture source during the drap
 				
 				// Convert a point from a component's coordinate system to screen coordinates.
 				SwingUtilities.convertPointToScreen(location, comp);
@@ -77,13 +78,11 @@ public class DTPicture extends Picture implements MouseMotionListener {
   }
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-				setVisible(true);
-						
+		public void mouseReleased(MouseEvent e) {						
 				JComponent jComp = (JComponent)e.getSource(); // It concerns an instance of DTPicture
 				TransferHandler tHandler = jComp.getTransferHandler(); // Get the instance of TransferHandler for this component
 				tHandler.exportAsDrag(jComp, e, TransferHandler.COPY); // Causes the Swing drag support to be initiated
-
+				
 				Component comp =  e.getComponent();
 				Point location = (Point)e.getPoint().clone();
 				

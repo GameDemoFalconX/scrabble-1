@@ -52,10 +52,16 @@ public class TileTransferHandler extends TransferHandler {
 				DTPicture dtp = new DTPicture(data);
 				dtp.setTransferHandler(new TileTransferHandler());
 				JPanel parent = (JPanel) support.getComponent();
-				JPanel p = (parent instanceof panelGrid) ? (panelGrid) parent : (panelRack) parent;
-				p.add(dtp);
+				if (parent instanceof panelGrid) {
+						panelGrid p = (panelGrid) parent;
+						p.addDTElement(dtp);
+						p.repaint();
+				} else {
+						panelRack p = (panelRack) parent;
+						p.addDTElement(dtp);
+						p.repaint();
+				}
 				System.out.println("Add new DTElement to this new parent container");
-				p.repaint();
 
 				return true;
 		}
@@ -87,6 +93,7 @@ public class TileTransferHandler extends TransferHandler {
 						parentContainer.remove(DTElement); // Remove this DTElement from this parent container.
 						parentContainer.repaint();
 				}
+				System.out.println("End export done");
 		}
 		
 		/**
