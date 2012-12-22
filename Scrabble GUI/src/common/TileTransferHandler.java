@@ -50,7 +50,6 @@ public class TileTransferHandler extends TransferHandler {
 
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
 				DTPicture dtp = new DTPicture(data);
-				dtp.setTransferHandler(new TileTransferHandler());
 				JPanel parent = (JPanel) support.getComponent();
 				if (parent instanceof panelGrid) {
 						panelGrid p = (panelGrid) parent;
@@ -62,7 +61,6 @@ public class TileTransferHandler extends TransferHandler {
 						p.repaint();
 				}
 				System.out.println("Add new DTElement to this new parent container");
-
 				return true;
 		}
 		

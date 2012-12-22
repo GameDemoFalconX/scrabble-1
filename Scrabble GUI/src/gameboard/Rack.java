@@ -51,7 +51,7 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(initDTPicture());
+						panelRackElement.addDTElement(new DTPicture(setImageTile()));
 						panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						innerRack.add(panelRackElement, i);
 				}
@@ -60,12 +60,6 @@ public class Rack extends JPanel {
 		public JPanel getInnerRack() {
 				return this.innerRack;
 		}
-		
-		private DTPicture initDTPicture() {
-				DTPicture dtp = new DTPicture(setImageTile());
-				dtp.setTransferHandler(new TileTransferHandler());
-				return dtp;
-		} 
 		
 		/*** Methods used for create ImageIcon ***/
 		

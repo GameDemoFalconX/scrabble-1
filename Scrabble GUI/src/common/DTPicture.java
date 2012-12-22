@@ -32,6 +32,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				addMouseMotionListener(this);
 				setName("DTPicture");
 				setOpaque(false);
+				setTransferHandler(new TileTransferHandler());
 				setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		}
 

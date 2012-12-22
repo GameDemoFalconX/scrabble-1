@@ -1,7 +1,6 @@
 package gameboard;
 
 import common.GlassPane;
-import common.LocateOfTile;
 import java.awt.Container;
 import javax.swing.JFrame;
 
@@ -15,15 +14,11 @@ public class Scrabble {
 		private Container contentPane;
 		private GameBoard gb;
 		private Rack rack;
-		//private Shade shadeTile;
 
 		public Scrabble()  {
 				frame = new JFrame("Scrabble");
 				gb = new GameBoard();
 				rack = new Rack();
-				//shadeTile = new Shade();
-				//new LocateOfTile(shadeTile);
-				// ShadeTile.setVisibleShade(1, false);
 				initContainer();
 				initFrame();
 		}
