@@ -1,9 +1,10 @@
 package gameboard;
 
+import common.EmailValidator;
 import common.ImageTools;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -13,56 +14,179 @@ import javax.swing.*;
 public class SideMenu {
 		
 	
-		private static JPanel panel, dropDownMenu;
-		private JButton playerButton;
+	 private static JPanel panel;
+		private GameBoard gameBoard;
+	 private JButton playerButton, scrabbleButton, gameBoardButton;
+		private JPopupMenu popUpOnMenu, popUpOffMenu;
+		private JMenuItem logIn, signUp, logOff;
+		private String email;
 		private JTextField emailField;
 		private JPasswordField passwordField;
+		private char[] password;
+		private EmailValidator emailValidator;
+		private boolean playerIsLogged = false;
 
 		public SideMenu()	{
 				panel = new JPanel();
-//				panel.setLayout(null);
-				panel.setBounds(715, 0, 450, 850);
+//				panel.setLayout(new BorderLayout());
+				panel.setLayout(null);
+				panel.setBounds(700, 0, 300, 800);
 				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				panel.setBackground(Color.WHITE);
 				this.initComponent();
 		}
-	
+		
 		private void initComponent() {
+				emailValidator = new EmailValidator();
+				initPopupOnMenu();
+				initPopupOffMenu();
 				initPlayerButton();
-				initDropDownMenu();
+				initScrabbleButton();
+				initGameBoardButton();
 				panel.add(playerButton);
-				panel.add(dropDownMenu);
+				panel.add(scrabbleButton);
+				panel.add(gameBoardButton);
 		}
 		
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
+				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
 				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
-				Insets insets = panel.getInsets();
-				Dimension size = playerButton.getPreferredSize();
-				playerButton.setBounds(25 + insets.left, 5 + insets.top,
-                     size.width, size.height);
+				playerButton.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+								if (playerIsLogged) {
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
+								} else {
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
+								}
+								
+//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
+						}
+				});
 		}
 		
-		private void initDropDownMenu() {
-				dropDownMenu = new JPanel();
-				dropDownMenu.setBounds(panel.getWidth()-100, playerButton.getHeight(), 100, 400);
-				dropDownMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				initDropDownItems();
-				dropDownMenu.add(emailField);
-				dropDownMenu.add(passwordField);
+		private void initPopupOnMenu() {
+				popUpOnMenu = new JPopupMenu();
+				emailField = new JTextField("Email");
+				emailField.setPreferredSize(new Dimension(150,20));
+				emailField.addFocusListener(new FocusListener() {
+						@Override
+						public void focusGained(FocusEvent e) {
+								if (emailField.getText().equals("Email")) {
+            emailField.setText("");
+        }
+						}
+						@Override
+						public void focusLost(FocusEvent e) {
+								if (emailField.getText().equals("")) {
+            emailField.setText("Email");
+        }
+						}
+				});
+				
+				passwordField = new JPasswordField("aaaaaa");
+				passwordField.setPreferredSize(new Dimension(150,20));
+				passwordField.addFocusListener(new FocusListener() {
+						@Override
+						public void focusGained(FocusEvent e) {
+//								if ("aaaaaa".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("");
+//        }
+						}
+						@Override
+						public void focusLost(FocusEvent e) {
+								if ("".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("Password");
+        }
+						}
+				});
+				
+				logIn = new JMenuItem(new AbstractAction("Log in") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								logInSignUp();
+      }
+				});
+				
+				signUp = new JMenuItem(new AbstractAction("Sign Up") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								logInSignUp();
+      }
+				});
+								
+				popUpOnMenu.add(emailField);
+				popUpOnMenu.add(passwordField);
+				popUpOnMenu.add(logIn);
+				popUpOnMenu.add(signUp);
 		}
 		
-		private void initDropDownItems() {
-				emailField = new JTextField("email");
-				passwordField = new JPasswordField("password");
+		private void initPopupOffMenu() {
+				popUpOffMenu = new JPopupMenu();
+				logOff = new JMenuItem(new AbstractAction("Log off") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								resetPlayer();
+      }
+				});
+				
+				popUpOffMenu.add(logOff);
+		}
+		
+		private void logInSignUp() {
+				email = emailField.getText();
+				password = passwordField.getPassword();
+				if (EmailValidator.validate(email)) {
+						playerButton.setIcon(ImageTools.getGravatar(email));
+						playerIsLogged = true;
+				} else {
+						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
+														+ "email address");
+				}
+		}
+		
+		private void resetPlayer() {
+				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
+				emailField.setText("Email");
+				passwordField.setText("aaaaaa");
+				playerIsLogged = false;
+		}
+		
+		private void initScrabbleButton() {
+				scrabbleButton = new JButton(ImageTools.createImageIcon("media/Scrabble.png","Scrabble"));
+				scrabbleButton.setPreferredSize(new Dimension(190,102));
+				scrabbleButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
+				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
+				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setBorder(null);
+		}
+		
+		private void initGameBoardButton() {
+				gameBoardButton = new JButton("Modern");
+				gameBoardButton.setBounds(10, 10, 90, 20);
+				scrabbleButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								GameBoard.changeGameBoard();
+						}
+				});
 				
 		}
-		
+			
 		public static void setVisible(boolean visible) {
 				panel.setVisible(visible);
 		}
 		
-		public static JPanel getPanel() {
+		public JPanel getPanel() {
 				return panel;
 		}
 		

@@ -6,108 +6,126 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 
-
 /**
- *
- * @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>
- */
+	* @see  DataFlavor
+	* @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
+	*/
 public class TileTransferHandler extends TransferHandler {
-  DataFlavor pictureFlavor = DataFlavor.imageFlavor;
+		// Each instance represents the opaque concept of a data format as would appear on a clipboard, during drag and drop, or in a file system.
+		// DataFlavor objects are constant and never change once instantiated.
+		private static final DataFlavor flavors[] = { DataFlavor.imageFlavor };  // In your case the DataFlavor is representing by an image.
+		private DTPicture DTElement;
+		private JPanel parentContainer;
+		private boolean shouldRemove; // Define if the source element must be remove whether the target component is able to drop the DTElement.
 
-  DTPicture sourcePic;
+		/*** TransferHandler - Import Methods ***/
+		
+		@Override
+		public boolean canImport(TransferSupport support) {
+				if (!support.isDataFlavorSupported(flavors[0])) {
+						return false;
+				}
+				return true;
+		}
+		
+		@Override
+		public boolean importData(TransferSupport support) {
+				if (!canImport(support)) {
+						return false;
+				}
+				
+				// Fetch the Transferable and its data (in our case this is an image)
+				Transferable t = support.getTransferable();
+				Image data = null;
+				try {
+						data = (Image) t.getTransferData(DataFlavor.imageFlavor);
+				} catch (UnsupportedFlavorException e) {
+						System.out.println("Error with DataFlavor type");
+				} catch (IOException IOe) {
+						System.out.println("importData: I/O exception");
+				}
 
-  boolean shouldRemove;
+				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
+				DTPicture dtp = new DTPicture(data);
+				JPanel parent = (JPanel) support.getComponent();		
+				parent.add(dtp);
+				// The validate method is used to cause a container to lay out its subcomponents again. It should be invoked 
+				// when this container's subcomponents are modified (added to or removed from the container, 
+				// or layout-related information changed) after the container has been displayed.
+				parent.validate();
+				System.out.println("Add new DTElement to this new parent container");
+				return true;
+		}
+		
+		/*** TransferHandler - Export Methods ***/
+		
+		@Override
+		public int getSourceActions(JComponent c) {
+				// Returns the type of transfer actions supported by the source
+				return COPY_OR_MOVE; // An int representing a "move" transfer action.
+		}
+		
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+				// This method bundles up the data to be exported into a Transferable object in preparation for the transfer
+				System.out.println("Create Transferable");
+				DTElement = (DTPicture) c;				
+				parentContainer = (JPanel) DTElement.getParent();
+				displaySituation(parentContainer);
+				shouldRemove = true;
+				return new PictureTransferable(DTElement);
+		}
 
-    @Override
-  public boolean importData(JComponent c, Transferable t) {
-    if (LocateOfTile.getDndEnable() && !LocateOfTile.getLockDropOnTile()){
-//      System.out.println("importData");
-      LocateOfTile.setBackTransfer(false);
-      Image image;
-      if (canImport(c, t.getTransferDataFlavors())) {
-        DTPicture pic = (DTPicture) c;
-        //Don't drop on myself.
-        if (sourcePic == pic) {
-          shouldRemove = false;
-          return true;
-        }
-        try {
-          image = (Image) t.getTransferData(pictureFlavor);
-          //Set the component to the new picture.
-          pic.image = image;
-          pic.repaint();
-          return true;
-        } catch (UnsupportedFlavorException ufe) {
-          System.out.println("importData: unsupported data flavor");
-        } catch (IOException ioe) {
-          System.out.println("importData: I/O exception");
-        }
-      }
-    }
-    return false;
-  }
-
-    @Override
-  protected Transferable createTransferable(JComponent c) {
-//    System.out.println("createTransferable");
-    sourcePic = (DTPicture) c;
-    shouldRemove = true;
-    return new PictureTransferable(sourcePic);
-  }
-
-    @Override
-  public int getSourceActions(JComponent c) {
-    return COPY_OR_MOVE;
-  }
-
-    @Override
-  protected void exportDone(JComponent c, Transferable data, int action) {
-//    System.out.println("exportDone");
-    LocateOfTile.locateTile("To");
-    LocateOfTile.setBackTransfer(false);
-    LocateOfTile.setDndEnable(true);
-    if (shouldRemove && (action == MOVE)) {
-      sourcePic.setImage(null);
-    }
-    sourcePic = null;
-  }
-
-    @Override
-  public boolean canImport(JComponent c, DataFlavor[] flavors) {
-    for (int i = 0; i < flavors.length; i++) {
-      if (pictureFlavor.equals(flavors[i])) {
-        return true;
-      }
-    }
-    return false;
-  }
+		@Override
+		protected void exportDone(JComponent c, Transferable t, int action) {
+				// This method is invoked after the export is complete. When the action is a MOVE, 
+				// the data needs to be removed from the source after the transfer is complete
+				if (shouldRemove && (action == MOVE)) {
+						parentContainer.remove(DTElement); // Remove this DTElement from this parent container.
+						parentContainer.repaint();
+				}
+				System.out.println("End export done");
+		}
+		
+		/**
+			* Internal class which implements Transferable interface
+			*/
+		class PictureTransferable implements Transferable {
+				private Image image;
     
-  class PictureTransferable implements Transferable {
-    private Image image;
+				PictureTransferable(DTPicture dtp) {
+						image = dtp.image;
+				}
 
-    PictureTransferable(DTPicture pic) {
-      image = pic.image;
-    }
+				@Override
+				public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+						if (isDataFlavorSupported(flavor)) {
+								return image;
+						}
+						return null;
+				}
 
-      @Override
-    public Object getTransferData(DataFlavor flavor)
-        throws UnsupportedFlavorException {
-      if (!isDataFlavorSupported(flavor)) {
-        throw new UnsupportedFlavorException(flavor);
-      }
-      return image;
-    }
+				@Override
+				public DataFlavor[] getTransferDataFlavors() {
+						return flavors;
+				}
 
-      @Override
-    public DataFlavor[] getTransferDataFlavors() {
-      return new DataFlavor[] { pictureFlavor };
-    }
-
-      @Override
-    public boolean isDataFlavorSupported(DataFlavor flavor) {
-      return pictureFlavor.equals(flavor);
-    }
-  }
+				@Override
+				public boolean isDataFlavorSupported(DataFlavor flavor) {
+						return flavors[0].equals(flavor);
+				}
+		}
+		
+		private void displaySituation(JPanel parent) {
+				if (parent instanceof panelRack) {
+						panelRack p = (panelRack) parent;
+						System.out.println("Start drag from Rack - index : "+p.getPosition());
+				} else {
+						panelGrid p = (panelGrid) parent;
+						System.out.println("Start drag from Grid - [ "+p.getCoordinates().x+", "+p.getCoordinates().y+" ]");
+				}
+		}
 }
