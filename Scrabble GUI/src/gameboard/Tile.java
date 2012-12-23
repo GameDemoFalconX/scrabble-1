@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 
  public final class Tile {
 		
+		private final static int TILE_WIDTH = 46;
+		private final static int TILE_HEIGHT = 46;
 		private char letter;
 		private final int value;
   private Image img;
@@ -22,8 +24,8 @@ import javax.swing.ImageIcon;
 				this.value = value;
 
     ImageIcon icon;
-    icon = ImageTools.createImageIcon("images/Tile.png","Tile");
-    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), 42,ImageTools.getProportionnalHeight(icon, 40)));
+    icon = ImageTools.createImageIcon("media/vintage_tile.png","Tile");
+    icon = new ImageIcon(ImageTools.getScaledImage(icon.getImage(), TILE_WIDTH,ImageTools.getProportionnalHeight(icon, TILE_HEIGHT)));
     setImg(icon.getImage());
     
 		}

@@ -25,6 +25,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private GlassPane glass;
 		private BufferedImage imageGlass;
 		private boolean isLocked = false;
+		private boolean debug = true;
 
 		public DTPicture(Image image) {
 				super(image);
@@ -33,7 +34,9 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				setName("DTPicture");
 				setOpaque(false);
 				setTransferHandler(new TileTransferHandler());
-				setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				if (debug) {
+						setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				}
 		}
 
 		public void setImage(Image image) {

@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
-import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -23,9 +22,10 @@ public class GameBoard extends JPanel {
 		private static final int GB_WIDTH = 700;
 		private static final int GB_INNER_HEIGHT = 700;
 		private static final int GB_INNER_WIDTH = 691;
-		private static final int TILE_HEIGHT = 46;
-		private static final int TILE_WIDTH = 46;
+		private static final int TILE_HEIGHT = 45;
+		private static final int TILE_WIDTH = 42;
 		private static boolean vintage = true;		
+		private boolean debug = true;
 		private ImageIcon icon;
 		private JPanel innerGrid;
 		
@@ -36,12 +36,16 @@ public class GameBoard extends JPanel {
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
 				setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
 				setVisible(true);
-				setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				if (debug) {
+							setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				}
 				
 				/** Construction of grid elements **/
 				/*** Grid inner container ***/
 				innerGrid = new JPanel(new GridLayout(15,15, 0, 0));
-				innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				if (debug) {
+						innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				}
 				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
 				innerGrid.setBounds(5, 5, GB_INNER_WIDTH, GB_INNER_HEIGHT);
 				innerGrid.setOpaque(false);
@@ -51,7 +55,9 @@ public class GameBoard extends JPanel {
 				for (int x = 0; x < 15; x++) {
 						for (int y = 0; y < 15; y++) {
 								panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(x, y));
-								panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
+								if (debug) {
+										panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
+								}
 								innerGrid.add(panelGridElement, ind);
 								ind++;
 						}

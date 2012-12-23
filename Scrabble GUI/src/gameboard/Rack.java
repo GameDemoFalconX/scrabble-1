@@ -1,12 +1,11 @@
 package gameboard;
 
 import common.DTPicture;
-import common.TileTransferHandler;
+import common.ImageTools;
 import common.panelRack;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,10 +21,11 @@ public class Rack extends JPanel {
 		private static final int RACK_LENGTH = 7;
 		private static final int RACK_HEIGHT = 60;
 		private static final int RACK_WIDTH = 365;
-		private static final int TILE_HEIGHT = 40;
-		private static final int TILE_WIDTH = 36;
+		private static final int TILE_HEIGHT = 45;
+		private static final int TILE_WIDTH = 42;
 		private ImageIcon icon;
 		private JPanel innerRack;
+		private boolean debug = true;
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
@@ -39,21 +39,27 @@ public class Rack extends JPanel {
 				setBounds(170, 720, RACK_WIDTH, RACK_HEIGHT);
 				setOpaque(false);
 				setVisible(true);
-				setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				if (debug) {
+						setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				}
 				
 				/** Construction of rack elements **/
 				/*** Rack inner container ***/
 				innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
-				innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				if (debug) {
+						innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				}
 				innerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
-				innerRack.setBounds( 226, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				innerRack.setBounds( 200, 720, TILE_WIDTH*7, TILE_HEIGHT);
 				innerRack.setOpaque(false);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
 						panelRackElement.addDTElement(new DTPicture(setImageTile()));
-						panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+						if (debug) {
+								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+						}
 						innerRack.add(panelRackElement, i);
 				}
 		}
@@ -70,7 +76,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private void setImageRack(){
-				ImageIcon newIcon = createImageIcon("images/Rack_empty.png","Scrabble rack");
+				ImageIcon newIcon = ImageTools.createImageIcon("images/Rack_empty.png","Scrabble rack");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
@@ -82,21 +88,10 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private Image setImageTile(){
-				ImageIcon newIcon = createImageIcon("images/Tile.png","Scrabble tile");
+				ImageIcon newIcon = ImageTools.createImageIcon("media/vintage_tile.png","Scrabble tile");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT,  Image.SCALE_SMOOTH);
 				return iconScaled;
 		}
 		
-		/** Returns an ImageIcon, or null if the path was invalid. */
-		protected ImageIcon createImageIcon(String path, String description) {
-				ImageIcon newIcon = null;
-				URL imgURL = getClass().getResource(path);
-				if (imgURL != null) {
-						newIcon =  new ImageIcon(imgURL, description);
-				} else {
-						System.err.println("Couldn't find file : " + path);
-				}
-				return newIcon;
-		}
 }
