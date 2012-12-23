@@ -31,7 +31,7 @@ public class SideMenu {
 //				panel.setLayout(new BorderLayout());
 				panel.setLayout(null);
 				panel.setBounds(700, 0, 300, 800);
-				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				panel.setBackground(Color.WHITE);
 				this.initComponent();
 		}

@@ -25,7 +25,7 @@ public class GameBoard extends JPanel {
 		private static final int TILE_HEIGHT = 45;
 		private static final int TILE_WIDTH = 42;
 		private static boolean vintage = true;		
-		private boolean debug = true;
+		private boolean debug = false;
 		private ImageIcon icon;
 		private JPanel innerGrid;
 		
