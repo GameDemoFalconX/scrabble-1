@@ -2,10 +2,12 @@ package common;
 
 import gameboard.SideMenu;
 import gameboard.Tile;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,7 +48,7 @@ public class ImageTools {
 			* @param icoWidth - new width of icon
 			* @return newHeight - the new proportionate height
 			*/
-		public static int getProportionnalHeight(ImageIcon imgIco, int icoWidth){
+		public static int getProportionnalHeight(ImageIcon imgIco, int icoWidth) {
 				int newHeight = imgIco.getIconHeight() * icoWidth / imgIco.getIconWidth();
 				return newHeight;
 		}
@@ -58,7 +60,7 @@ public class ImageTools {
 			* @param h - desired height
 			* @return - the new resized image
 			*/
-		public static Image getScaledImage(Image srcImg, int w, int h){
+		public static Image getScaledImage(Image srcImg, int w, int h) {
 				BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
 				Graphics2D g2 = resizedImg.createGraphics();
 				g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);

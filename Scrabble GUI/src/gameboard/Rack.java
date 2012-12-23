@@ -4,8 +4,14 @@ import common.DTPicture;
 import common.ImageTools;
 import common.panelRack;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -56,7 +62,7 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(setImageTile()));
+						panelRackElement.addDTElement(new DTPicture(getTileImage("X", "10")));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}
@@ -90,8 +96,27 @@ public class Rack extends JPanel {
 		private Image setImageTile(){
 				ImageIcon newIcon = ImageTools.createImageIcon("media/vintage_tile.png","Scrabble tile");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
-				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT,  Image.SCALE_SMOOTH);
+				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
 				return iconScaled;
 		}
 		
+	public static Image getTileImage(String letter, String value) {
+				BufferedImage tile = null;
+				BufferedImage letterB = null;
+				BufferedImage valueB = null;
+				try {
+						tile = ImageIO.read(Rack.class.getResource("media/vintage_tile.png"));
+						letterB = ImageIO.read(Rack.class.getResource("media/letters/"+letter+".png"));
+						valueB = ImageIO.read(Rack.class.getResource("media/numbers/"+value+".png"));
+				} catch (IOException ex) {
+						Logger.getLogger(ImageTools.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
+				Graphics g = finalTile.getGraphics();
+				g.drawImage(tile, 0, 0, null);
+				g.drawImage(letterB, 0, 0, null);
+				g.drawImage(valueB, 0, 0, null);
+				Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
+				return result;
+		}
 }
