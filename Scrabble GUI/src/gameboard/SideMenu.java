@@ -24,7 +24,7 @@ public class SideMenu {
 		private JPasswordField passwordField;
 		private char[] password;
 		private EmailValidator emailValidator;
-		private boolean on = false;
+		private boolean playerIsLogged = false;
 
 		public SideMenu()	{
 				panel = new JPanel();
@@ -56,10 +56,10 @@ public class SideMenu {
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mousePressed(MouseEvent e) {
-								if (on) {
-										popUpOffMenu.show(e.getComponent(), e.getX(), e.getY());
+								if (playerIsLogged) {
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
 								} else {
-										popUpOnMenu.show(e.getComponent(), e.getX(), e.getY());
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
 								}
 								
 //								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
@@ -140,7 +140,7 @@ public class SideMenu {
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageTools.getGravatar(email));
-						on = true;
+						playerIsLogged = true;
 				} else {
 						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
 														+ "email address");
@@ -151,7 +151,7 @@ public class SideMenu {
 				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
 				emailField.setText("Email");
 				passwordField.setText("aaaaaa");
-				on = false;
+				playerIsLogged = false;
 		}
 		
 		private void initScrabbleButton() {
