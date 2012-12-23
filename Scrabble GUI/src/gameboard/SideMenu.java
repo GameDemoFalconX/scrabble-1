@@ -170,13 +170,13 @@ public class SideMenu {
 		}
 		
 		private void initGameBoardButton() {
-				gameBoardButton = new JButton("Change GameBoard");
+				gameBoardButton = new JButton("Modern");
 				gameBoardButton.setBounds(10, 10, 90, 20);
 				scrabbleButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								GameBoard.changeGameBoard();
+//								GameBoard.changeGameBoard();
 						}
 				});
 				
@@ -186,7 +186,7 @@ public class SideMenu {
 				panel.setVisible(visible);
 		}
 		
-		public static JPanel getPanel() {
+		public JPanel getPanel() {
 				return panel;
 		}
 		
