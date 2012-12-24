@@ -1,6 +1,6 @@
 package gameboard;
 
-import common.ImageTools;
+import common.ImageIconTools;
 import common.panelGrid;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -76,9 +76,9 @@ public class GameBoard extends JPanel {
 		private void setImageGameBoard() {
 				ImageIcon newIcon;
 				if (vintage) {
-						newIcon = ImageTools.createImageIcon("media/vintage_grid.png","Vintage gameboard");
+						newIcon = ImageIconTools.createImageIcon("media/vintage_grid.png","Vintage gameboard");
 				} else {
-						newIcon = ImageTools.createImageIcon("media/modern_grid.png","Modern gameboard");
+						newIcon = ImageIconTools.createImageIcon("media/modern_grid.png","Modern gameboard");
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
@@ -88,6 +88,5 @@ public class GameBoard extends JPanel {
 		public void changeGameBoard() {
 				vintage = !vintage;
 				setImageGameBoard();				
-		}
-			
+		}	
 }

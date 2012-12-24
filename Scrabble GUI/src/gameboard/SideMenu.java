@@ -1,7 +1,7 @@
 package gameboard;
 
 import common.EmailValidator;
-import common.ImageTools;
+import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
@@ -52,7 +52,7 @@ public class SideMenu {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
 				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
-				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mousePressed(MouseEvent e) {
@@ -139,7 +139,7 @@ public class SideMenu {
 				email = emailField.getText();
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
-						playerButton.setIcon(ImageTools.getGravatar(email));
+						playerButton.setIcon(ImageIconTools.getGravatar(email));
 						playerIsLogged = true;
 				} else {
 						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
@@ -148,14 +148,14 @@ public class SideMenu {
 		}
 		
 		private void resetPlayer() {
-				playerButton.setIcon(ImageTools.getGravatar("default@gravatar.logo"));
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				emailField.setText("Email");
 				passwordField.setText("aaaaaa");
 				playerIsLogged = false;
 		}
 		
 		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageTools.createImageIcon("media/Scrabble.png","Scrabble"));
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
 				scrabbleButton.addActionListener(new AbstractAction() {
 
