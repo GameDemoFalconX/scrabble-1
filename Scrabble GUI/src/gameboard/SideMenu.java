@@ -19,8 +19,9 @@ public class SideMenu {
 	 private JButton playerButton, scrabbleButton, gameBoardButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
-		private String email;
 		private JTextField emailField;
+		private JLabel score;
+		private String email;
 		private JPasswordField passwordField;
 		private char[] password;
 		private EmailValidator emailValidator;
@@ -36,11 +37,17 @@ public class SideMenu {
 				this.initComponent();
 		}
 		
+		public SideMenu(GameBoard gameBoard) {
+				this();
+				this.gameBoard = gameBoard;
+		}
+		
 		private void initComponent() {
 				emailValidator = new EmailValidator();
 				initPopupOnMenu();
 				initPopupOffMenu();
 				initPlayerButton();
+				initScoreLabel();
 				initScrabbleButton();
 				initGameBoardButton();
 				panel.add(playerButton);
@@ -65,6 +72,12 @@ public class SideMenu {
 //								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
 						}
 				});
+		}
+		
+		private void initScoreLabel() {
+				score = new JLabel("000");
+				score.setBounds(panel.getWidth()-150, 20, 60, 25);
+//				score.setFont();
 		}
 		
 		private void initPopupOnMenu() {
@@ -172,11 +185,11 @@ public class SideMenu {
 		private void initGameBoardButton() {
 				gameBoardButton = new JButton("Modern");
 				gameBoardButton.setBounds(10, 10, 90, 20);
-				scrabbleButton.addActionListener(new AbstractAction() {
+				gameBoardButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-//								GameBoard.changeGameBoard();
+								gameBoard.changeGameBoard();
 						}
 				});
 				
