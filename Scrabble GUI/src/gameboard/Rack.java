@@ -1,7 +1,7 @@
 package gameboard;
 
 import common.DTPicture;
-import common.ImageTools;
+import common.ImageIconTools;
 import common.panelRack;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -83,7 +83,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private void setImageRack(){
-				ImageIcon newIcon = ImageTools.createImageIcon("images/Rack_empty.png","Scrabble rack");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("images/Rack_empty.png","Scrabble rack");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
@@ -95,29 +95,29 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private Image setImageTile(){
-				ImageIcon newIcon = ImageTools.createImageIcon("media/vintage_tile.png","Scrabble tile");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("media/vintage_tile.png","Scrabble tile");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
 				return iconScaled;
 		}
 		
-	public static Image getTileImage(String letter, String value) {
-				BufferedImage tile = null;
-				BufferedImage letterB = null;
-				BufferedImage valueB = null;
-				try {
-						tile = ImageIO.read(Rack.class.getResource("media/vintage_tile.png"));
-						letterB = ImageIO.read(Rack.class.getResource("media/letters/"+letter+".png"));
-						valueB = ImageIO.read(Rack.class.getResource("media/numbers/"+value+".png"));
-				} catch (IOException ex) {
-						Logger.getLogger(ImageTools.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
-				Graphics g = finalTile.getGraphics();
-				g.drawImage(tile, 0, 0, null);
-				g.drawImage(letterB, 0, 0, null);
-				g.drawImage(valueB, 0, 0, null);
-				Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
-				return result;
-		}
+		public static Image getTileImage(String letter, String value) {
+					BufferedImage tile = null;
+					BufferedImage letterB = null;
+					BufferedImage valueB = null;
+					try {
+							tile = ImageIO.read(Rack.class.getResource("media/vintage_tile.png"));
+							letterB = ImageIO.read(Rack.class.getResource("media/letters/"+letter+".png"));
+							valueB = ImageIO.read(Rack.class.getResource("media/numbers/"+value+".png"));
+					} catch (IOException ex) {
+							Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
+					}
+					BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
+					Graphics g = finalTile.getGraphics();
+					g.drawImage(tile, 0, 0, null);
+					g.drawImage(letterB, 0, 0, null);
+					g.drawImage(valueB, 0, 0, null);
+					Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
+					return result;
+			}
 }
