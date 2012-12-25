@@ -1,5 +1,6 @@
 package gameboard;
 
+import com.sun.xml.internal.ws.message.saaj.SAAJHeader;
 import common.EmailValidator;
 import common.ImageIconTools;
 import java.awt.Color;
@@ -238,7 +239,16 @@ public class SideMenu {
 				} else{
 						score.setText(String.valueOf(tempScore));
 				}
-				
+		}
+		
+		public void setScore(int score) {
+				if (tempScore < 10) {
+						score.setText("00"+String.valueOf(tempScore));
+				} else if	(tempScore < 100) {
+						score.setText("0"+String.valueOf(tempScore));
+				} else{
+						score.setText(String.valueOf(tempScore));
+				}
 		}
 		
 }
