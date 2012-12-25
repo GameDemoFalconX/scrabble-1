@@ -4,7 +4,14 @@ import common.EmailValidator;
 import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -16,7 +23,7 @@ public class SideMenu {
 	
 	 private static JPanel panel;
 		private GameBoard gameBoard;
-	 private JButton playerButton, scrabbleButton, gameBoardButton;
+	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
 		private JTextField emailField;
@@ -53,6 +60,17 @@ public class SideMenu {
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
 				panel.add(gameBoardButton);
+				scoreTestButton = new JButton("inc score");
+				scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
+				scoreTestButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								incScore();
+						}
+				});
+				panel.add(scoreTestButton);
+				panel.add(score);
 		}
 		
 		private void initPlayerButton() {
@@ -76,8 +94,15 @@ public class SideMenu {
 		
 		private void initScoreLabel() {
 				score = new JLabel("000");
-				score.setBounds(panel.getWidth()-150, 20, 60, 25);
-//				score.setFont();
+				score.setBounds(panel.getWidth()-160, 24, 80, 80);
+				Font font = null;
+				try {
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("media/DS-DIGI.ttf").toURI()));
+				} catch (FontFormatException | IOException | URISyntaxException ex) {
+						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				font = font.deriveFont(Font.PLAIN, 48);
+				score.setFont(font);
 		}
 		
 		private void initPopupOnMenu() {
@@ -201,6 +226,19 @@ public class SideMenu {
 		
 		public JPanel getPanel() {
 				return panel;
+		}
+		
+	 public void incScore() {
+				int tempScore = Integer.parseInt(score.getText());
+				tempScore++;
+				if (tempScore < 10) {
+						score.setText("00"+String.valueOf(tempScore));
+				} else if	(tempScore < 100) {
+						score.setText("0"+String.valueOf(tempScore));
+				} else{
+						score.setText(String.valueOf(tempScore));
+				}
+				
 		}
 		
 }
