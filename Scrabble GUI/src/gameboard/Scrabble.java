@@ -41,9 +41,8 @@ public class Scrabble {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 320, 850);
+				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 307, 850);
 				frame.setContentPane(contentPane);
-				frame.setBackground(Color.WHITE);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
 				frame.setResizable(false);

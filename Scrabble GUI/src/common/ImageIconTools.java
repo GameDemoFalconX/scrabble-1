@@ -11,8 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import vendor.MD5Util;
 
-// ###### DEPRECATED ######
-
 /**
 	* 
 	* @author Arnaud Morel <a.morel@hotmail.com>, R. FONCIER <ro.foncier@gmail.com>,

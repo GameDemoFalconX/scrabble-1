@@ -8,7 +8,8 @@ import javax.swing.JComponent;
 
 /**
 	 *
-	 * @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
+	 * @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>,
+		* R. FONCIER <ro.foncier@gmail.com>
 	 */
 class Picture extends JComponent implements MouseListener {
 		

@@ -7,10 +7,11 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
-	* Hidden, by default. If you make the glass pane visible, then it's like a sheet of glass over all the other parts of the root pane.
+	* Hidden, by default. If you make the glass pane visible, then it's like a sheet
+	* of glass over all the other parts of the root pane.
 	* @see http://docs.oracle.com/javase/tutorial/uiswing/components/rootpane.html
-   * @author Arnaud Morel <a.morel@hotmail.com>, R. FONCIER <ro.foncier@gmail.com>
-   */
+ * @author Arnaud Morel <a.morel@hotmail.com>, R. FONCIER <ro.foncier@gmail.com>
+ */
 
 public class GlassPane extends JPanel {
 
