@@ -18,8 +18,7 @@ public class TileTransferHandler extends TransferHandler {
 		// Each instance represents the opaque concept of a data format as would appear on a clipboard, during drag and drop, or in a file system.
 		// DataFlavor objects are constant and never change once instantiated.
 		private static final DataFlavor flavors[] = { DataFlavor.imageFlavor };  // In your case the DataFlavor is representing by an image.
-		private DTPicture DTElement;
-		private JPanel parentContainer;
+		private static JPanel parentContainer;
 		private static boolean removeParent;
 
 		/*** TransferHandler - Import Methods ***/
@@ -35,7 +34,7 @@ public class TileTransferHandler extends TransferHandler {
 						System.out.println("Find DTPicture target");
 						return false;
 				}
-				
+				System.out.println("Target static class : "+parentContainer.getClass());
 				System.out.println("Target class : "+support.getComponent().getParent().getClass());
 				return true;
 		}
@@ -90,7 +89,7 @@ public class TileTransferHandler extends TransferHandler {
 		protected Transferable createTransferable(JComponent c) {
 				// This method bundles up the data to be exported into a Transferable object in preparation for the transfer
 				System.out.println("Create Transferable");
-				DTElement = (DTPicture) c;				
+				DTPicture DTElement = (DTPicture) c;				
 				parentContainer = (JPanel) DTElement.getParent();
 				Component [] l = parentContainer.getComponents();
 				for (int i = 0; i < l.length; i++) {
@@ -112,7 +111,7 @@ public class TileTransferHandler extends TransferHandler {
 						for (int i = 0; i < l.length; i++) {
 								System.out.println("exportDoneBefore - Parent sons ("+i+") : "+l[i].getClass());
 						}
-						parentContainer.remove(DTElement); // Remove this DTElement from this parent container.
+						parentContainer.remove(c); // Remove this DTElement from this parent container.
 						parentContainer.validate();
 						parentContainer.repaint();
 						Component [] k = parentContainer.getComponents();
