@@ -4,11 +4,13 @@ import common.DTPicture;
 import common.ImageIconTools;
 import common.panelRack;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -31,7 +33,7 @@ public class Rack extends JPanel {
 		private static final int TILE_WIDTH = 42;
 		private ImageIcon icon;
 		private JPanel innerRack;
-		private boolean debug = false;
+		private boolean debug = true;
 		private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 
 		/**
@@ -77,6 +79,31 @@ public class Rack extends JPanel {
 		
 		public boolean rackIsFull() {
 				return this.innerRack.getComponentCount() == RACK_LENGTH;
+		}
+		
+		/*** Methods used for re-arrange and exchange tiles ***/
+		public void reArrangeTiles() {
+				Random random = new Random();
+				random.nextInt();
+				for (int from = 0; from < RACK_LENGTH; from++) {
+						int to = from + random.nextInt(RACK_LENGTH - from);
+						swap(from, to);
+				}
+		}
+
+		private void swap(int from, int to) {
+				panelRack fromP = (panelRack) this.innerRack.getComponent(from);
+				panelRack toP = (panelRack) this.innerRack.getComponent(to);
+				
+				// Remove and add from
+				DTPicture tmp = (DTPicture) fromP.getComponent(0);
+				fromP.add(toP.getComponent(0));
+				
+				// Remove and add to
+				toP.add(tmp);
+				
+				this.innerRack.validate();
+				this.innerRack.repaint();
 		}
 		
 		/*** Methods used for create ImageIcon ***/

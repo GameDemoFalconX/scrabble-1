@@ -22,7 +22,7 @@ public class Scrabble {
 				frame = new JFrame("Scrabble");
 				gb = new GameBoard();
 				rack = new Rack();
-				sideMenu = new SideMenu(gb);
+				sideMenu = new SideMenu(gb, rack);
 				initContainer();
 				initFrame();
 		}

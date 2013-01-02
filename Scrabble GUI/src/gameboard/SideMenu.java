@@ -24,7 +24,7 @@ public class SideMenu {
 	 private static JPanel panel;
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
-										addWordButton;
+										addWordButton, arrangeButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
 		private JTextField emailField;
@@ -34,6 +34,7 @@ public class SideMenu {
 		private char[] password;
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
+		private Rack rack;
 
 		public SideMenu()	{
 				panel = new JPanel();
@@ -43,9 +44,10 @@ public class SideMenu {
 				this.initComponent();
 		}
 		
-		public SideMenu(GameBoard gameBoard) {
+		public SideMenu(GameBoard gameBoard, Rack rack) {
 				this();
 				this.gameBoard = gameBoard;
+				this.rack = rack;
 		}
 		
 		private void initComponent() {
@@ -57,10 +59,12 @@ public class SideMenu {
 				initScrabbleButton();
 				initGameBoardButton();
 				initAddWordButton();
+				initReArrangeButton();
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
 				panel.add(gameBoardButton);
 				panel.add(addWordButton);
+				panel.add(arrangeButton);
 				scoreTestButton = new JButton("inc score");
 				scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
 				scoreTestButton.addActionListener(new AbstractAction() {
@@ -213,6 +217,19 @@ public class SideMenu {
 						}
 				});
 				addWordButton.setVisible(false);
+		}
+		
+		private void initReArrangeButton() {
+				arrangeButton = new JButton("Re-Arrange");
+				arrangeButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-180, 100, 30);
+				arrangeButton.setVisible(true);
+				arrangeButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								rack.reArrangeTiles();
+						}
+				});
 		}
 		
 		private void logInSignUp() {
