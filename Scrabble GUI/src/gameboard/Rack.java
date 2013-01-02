@@ -94,13 +94,21 @@ public class Rack extends JPanel {
 		private void swap(int from, int to) {
 				panelRack fromP = (panelRack) this.innerRack.getComponent(from);
 				panelRack toP = (panelRack) this.innerRack.getComponent(to);
+				DTPicture tmp = null;
 				
-				// Remove and add from
-				DTPicture tmp = (DTPicture) fromP.getComponent(0);
-				fromP.add(toP.getComponent(0));
+				// Get the DTElement from the fromParent
+				if (fromP.getComponentCount() > 0) {
+						tmp = (DTPicture) fromP.getComponent(0);
+				}
+				// If the DTElement from the toParent is != null, add it on fromParent.
+				if (toP.getComponentCount() > 0) {
+						fromP.add(toP.getComponent(0));
+				} 
 				
-				// Remove and add to
-				toP.add(tmp);
+				// Add the content of tmp to toParent
+				if (tmp != null) {
+						toP.add(tmp);
+				} 
 				
 				this.innerRack.validate();
 				this.innerRack.repaint();
