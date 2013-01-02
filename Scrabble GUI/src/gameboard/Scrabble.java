@@ -31,7 +31,7 @@ public class Scrabble {
 		}
 
 		private void initContainer() {
-				bg = new JLabel(ImageIconTools.createImageIcon("media/background.png",""));
+				bg = new JLabel(ImageIconTools.createImageIcon("media/darker_background.png",""));
 				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				contentPane.setBackground(Color.WHITE);
