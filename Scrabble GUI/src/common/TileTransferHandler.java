@@ -58,7 +58,10 @@ public class TileTransferHandler extends TransferHandler {
 						parentT = (panelRack) support.getComponent().getParent();
 						if (parentSource instanceof panelRack) {
 								panelRack parentS = (panelRack) parentSource;
-								shiftTiles((JPanel)parentT.getParent(), parentS.getPosition()+1, ((panelRack)parentT).getPosition());
+								if (parentS.equals(parentT)) { // Avoid the drag and drop on the same tile (in place).
+										return false;
+								}
+								shiftTiles((JPanel)parentT.getParent(), parentS.getPosition(), ((panelRack)parentT).getPosition());
 						} else {
 								shiftTiles((JPanel)parentT.getParent(), findEmptyParent(((panelRack)parentT).getPosition()), ((panelRack)parentT).getPosition());
 						}
@@ -180,7 +183,30 @@ public class TileTransferHandler extends TransferHandler {
 		
 		/*** Methods used for shift Tile on rack ***/
 		private void shiftTiles(JPanel rack, int posStart, int posStop) {
+				// STEP 1 : Check the direction of shift and set index
+				int DEC = (posStart - posStop < 0) ? 1 : -1;
+				posStart += DEC;
 				
+				// STEP 2 : Save the first element in a temp variable
+				panelRack parentTmp = (panelRack) rack.getComponent(posStart);
+				DTPtmp = (parentTmp.getComponent(0) != null) ? (DTPicture) parentTmp.getComponent(0) : null;
+				
+				// STEP 3 : Loop over the rack to shift tiles.
+				while (posStart != posStop) {
+						panelRack pWriter = (panelRack) rack.getComponent(posStart);
+						panelRack pReader = (panelRack) rack.getComponent(posStart+DEC);
+						if (pWriter.getComponent(0) != null) {
+								pWriter.remove(0);
+						}
+						if (pReader.getComponent(0) != null) {
+								pWriter.add(pReader.getComponent(0));
+						}
+						posStart += DEC;
+				}
+				
+				// STEP 4 : Remove the last element to drop the dragged element.
+				parentTmp = (panelRack) rack.getComponent(posStart);
+				parentTmp.remove(0);
 		}
 		
 		private int findEmptyParent(int posTarget) {
