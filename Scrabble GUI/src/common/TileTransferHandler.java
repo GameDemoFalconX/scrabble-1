@@ -1,5 +1,6 @@
 package common;
 
+import gameboard.Rack;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -75,6 +76,9 @@ public class TileTransferHandler extends TransferHandler {
 				} else {
 						targetP = (JPanel) support.getComponent();
 				}
+				
+				if (sourceParent instanceof panelRack && targetP instanceof panelGrid) Rack.downTileNumber();
+				if (sourceParent instanceof panelGrid && targetP instanceof panelRack) Rack.upTileNumber();
 				
 				// Fetch the Transferable and its data (in our case this is an image)
 				Transferable t = support.getTransferable();

@@ -33,8 +33,9 @@ public class Rack extends JPanel {
 		private static final int TILE_WIDTH = 42;
 		private ImageIcon icon;
 		private JPanel innerRack;
-		private boolean debug = true;
+		private boolean debug = false;
 		private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
+		private static int tileNumber = RACK_LENGTH;
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
@@ -77,8 +78,16 @@ public class Rack extends JPanel {
 				return this.innerRack;
 		}
 		
+		public static void upTileNumber() {
+				tileNumber += 1;
+		}
+		
+		public static void downTileNumber() {
+				tileNumber -= 1;
+		}
+		
 		public boolean rackIsFull() {
-				return this.innerRack.getComponentCount() == RACK_LENGTH;
+				return tileNumber == RACK_LENGTH;
 		}
 		
 		/*** Methods used for re-arrange and exchange tiles ***/
