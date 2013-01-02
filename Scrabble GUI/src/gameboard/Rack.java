@@ -75,6 +75,10 @@ public class Rack extends JPanel {
 				return this.innerRack;
 		}
 		
+		public boolean rackIsFull() {
+				return this.innerRack.getComponentCount() == RACK_LENGTH;
+		}
+		
 		/*** Methods used for create ImageIcon ***/
 		
 		/**
