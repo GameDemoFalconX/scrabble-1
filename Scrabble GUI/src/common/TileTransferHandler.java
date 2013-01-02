@@ -11,7 +11,8 @@ import javax.swing.TransferHandler;
 
 /**
 	* @see  DataFlavor
-	* @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
+	* @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>, 
+	* R. FONCIER <ro.foncier@gmail.com>
 	*/
 public class TileTransferHandler extends TransferHandler {
 		// Each instance represents the opaque concept of a data format as would appear on a clipboard, during drag and drop, or in a file system.

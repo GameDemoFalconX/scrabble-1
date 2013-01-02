@@ -31,7 +31,8 @@ public class Rack extends JPanel {
 		private static final int TILE_WIDTH = 42;
 		private ImageIcon icon;
 		private JPanel innerRack;
-		private boolean debug = true;
+		private boolean debug = false;
+		private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
@@ -62,7 +63,7 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(getTileImage("X", "10")));
+						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1])));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}

@@ -25,14 +25,16 @@ public class GameBoard extends JPanel {
 		private static final int TILE_HEIGHT = 45;
 		private static final int TILE_WIDTH = 42;
 		private static boolean vintage = true;		
-		private boolean debug = true;
+		private JLabel background;
+		private boolean debug = false;
 		private ImageIcon icon;
 		private JPanel innerGrid;
 		
 		public GameBoard() {
 				/** Construction of game board **/
 				setImageGameBoard();
-				add(new JLabel(this.icon));
+				background = new JLabel(this.icon);
+				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
 				setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
 				setVisible(true);
@@ -87,6 +89,11 @@ public class GameBoard extends JPanel {
 		
 		public void changeGameBoard() {
 				vintage = !vintage;
-				setImageGameBoard();				
+				setImageGameBoard();		
+				remove(0);
+				background = new JLabel(icon);
+				add(background, 0);
+				repaint();
+				revalidate();
 		}	
 }

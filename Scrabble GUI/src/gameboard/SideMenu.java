@@ -4,7 +4,14 @@ import common.EmailValidator;
 import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -16,11 +23,13 @@ public class SideMenu {
 	
 	 private static JPanel panel;
 		private GameBoard gameBoard;
-	 private JButton playerButton, scrabbleButton, gameBoardButton;
+	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
+										addWordButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff;
-		private String email;
 		private JTextField emailField;
+		private JLabel score;
+		private String email;
 		private JPasswordField passwordField;
 		private char[] password;
 		private EmailValidator emailValidator;
@@ -28,12 +37,15 @@ public class SideMenu {
 
 		public SideMenu()	{
 				panel = new JPanel();
-//				panel.setLayout(new BorderLayout());
 				panel.setLayout(null);
 				panel.setBounds(700, 0, 300, 800);
-				panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				panel.setBackground(Color.WHITE);
+				panel.setOpaque(false);
 				this.initComponent();
+		}
+		
+		public SideMenu(GameBoard gameBoard) {
+				this();
+				this.gameBoard = gameBoard;
 		}
 		
 		private void initComponent() {
@@ -41,30 +53,25 @@ public class SideMenu {
 				initPopupOnMenu();
 				initPopupOffMenu();
 				initPlayerButton();
+				initScoreLabel();
 				initScrabbleButton();
 				initGameBoardButton();
+				initAddWordButton();
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
 				panel.add(gameBoardButton);
-		}
-		
-		private void initPlayerButton() {
-				playerButton = new JButton();
-				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
-				playerButton.addMouseListener(new MouseAdapter() {
+				panel.add(addWordButton);
+				scoreTestButton = new JButton("inc score");
+				scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
+				scoreTestButton.addActionListener(new AbstractAction() {
+
 						@Override
-						public void mousePressed(MouseEvent e) {
-								if (playerIsLogged) {
-										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
-								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
-								}
-								
-//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
+						public void actionPerformed(ActionEvent e) {
+								incScore();
 						}
 				});
+				panel.add(scoreTestButton);
+				panel.add(score);
 		}
 		
 		private void initPopupOnMenu() {
@@ -135,23 +142,36 @@ public class SideMenu {
 				popUpOffMenu.add(logOff);
 		}
 		
-		private void logInSignUp() {
-				email = emailField.getText();
-				password = passwordField.getPassword();
-				if (EmailValidator.validate(email)) {
-						playerButton.setIcon(ImageIconTools.getGravatar(email));
-						playerIsLogged = true;
-				} else {
-						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
-														+ "email address");
-				}
+		private void initPlayerButton() {
+				playerButton = new JButton();
+				playerButton.setPreferredSize(new Dimension(80,80));
+				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				playerButton.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+								if (playerIsLogged) {
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
+								} else {
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
+								}
+								
+//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
+						}
+				});
 		}
 		
-		private void resetPlayer() {
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
-				emailField.setText("Email");
-				passwordField.setText("aaaaaa");
-				playerIsLogged = false;
+		private void initScoreLabel() {
+				score = new JLabel("000");
+				score.setBounds(panel.getWidth()-160, 24, 80, 80);
+				Font font = null;
+				try {
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("media/DS-DIGI.ttf").toURI()));
+				} catch (FontFormatException | IOException | URISyntaxException ex) {
+						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				font = font.deriveFont(Font.PLAIN, 48);
+				score.setFont(font);
 		}
 		
 		private void initScrabbleButton() {
@@ -172,16 +192,48 @@ public class SideMenu {
 		private void initGameBoardButton() {
 				gameBoardButton = new JButton("Modern");
 				gameBoardButton.setBounds(10, 10, 90, 20);
-				scrabbleButton.addActionListener(new AbstractAction() {
+				gameBoardButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-//								GameBoard.changeGameBoard();
+								gameBoard.changeGameBoard();
 						}
 				});
-				
 		}
-			
+		
+		private void initAddWordButton() {
+				addWordButton = new JButton("Add word");
+				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 100, 30);
+				addWordButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								call the add word method on the controller
+								setAddWordVisible(false);
+						}
+				});
+				addWordButton.setVisible(false);
+		}
+		
+		private void logInSignUp() {
+				email = emailField.getText();
+				password = passwordField.getPassword();
+				if (EmailValidator.validate(email)) {
+						playerButton.setIcon(ImageIconTools.getGravatar(email));
+						playerIsLogged = true;
+				} else {
+						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
+														+ "email address");
+				}
+		}
+		
+		private void resetPlayer() {
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				emailField.setText("Email");
+				passwordField.setText("aaaaaa");
+				playerIsLogged = false;
+		}
+		
 		public static void setVisible(boolean visible) {
 				panel.setVisible(visible);
 		}
@@ -190,4 +242,33 @@ public class SideMenu {
 				return panel;
 		}
 		
+	 public void incScore() {
+				int tempScore = Integer.parseInt(score.getText());
+				tempScore++;
+				if (tempScore < 10) {
+						score.setText("00"+String.valueOf(tempScore));
+				} else if	(tempScore < 100) {
+						score.setText("0"+String.valueOf(tempScore));
+				} else{
+						score.setText(String.valueOf(tempScore));
+				}
+		}
+		
+		public void setScore(int score) {
+				if (score < 10) {
+						this.score.setText("00"+String.valueOf(score));
+				} else if	(score < 100) {
+						this.score.setText("0"+String.valueOf(score));
+				} else{
+						this.score.setText(String.valueOf(score));
+				}
+		}
+		
+		public void setAddWordVisible(boolean visibility) {
+				addWordButton.setVisible(visibility);
+		}
+		
+		public boolean isAddWordVisible() {
+				return addWordButton.isVisible();
+		}
 }

@@ -25,7 +25,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private GlassPane glass;
 		private BufferedImage imageGlass;
 		private boolean isLocked = false;
-		private boolean debug = true;
+		private boolean debug = false;
 
 		public DTPicture(Image image) {
 				super(image);
