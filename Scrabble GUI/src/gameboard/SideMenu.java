@@ -26,7 +26,7 @@ public class SideMenu {
 	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
 										addWordButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
-		private JMenuItem logIn, signUp, logOff;
+		private JMenuItem logIn, signUp, logOff, helpOn, helpOff;
 		private JTextField emailField;
 		private JLabel score;
 		private String email;
@@ -34,6 +34,7 @@ public class SideMenu {
 		private char[] password;
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
+		private boolean debug = true;
 
 		public SideMenu()	{
 				panel = new JPanel();
@@ -61,16 +62,18 @@ public class SideMenu {
 				panel.add(scrabbleButton);
 				panel.add(gameBoardButton);
 				panel.add(addWordButton);
-				scoreTestButton = new JButton("inc score");
-				scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
-				scoreTestButton.addActionListener(new AbstractAction() {
+				if (debug) {
+						scoreTestButton = new JButton("inc score");
+						scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
+						scoreTestButton.addActionListener(new AbstractAction() {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								incScore();
-						}
-				});
-				panel.add(scoreTestButton);
+								@Override
+								public void actionPerformed(ActionEvent e) {
+										incScore();
+								}
+						});
+						panel.add(scoreTestButton);
+				}
 				panel.add(score);
 		}
 		
@@ -123,11 +126,19 @@ public class SideMenu {
 								logInSignUp();
       }
 				});
+				
+				helpOn = new JMenuItem(new AbstractAction("Help") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
 								
 				popUpOnMenu.add(emailField);
 				popUpOnMenu.add(passwordField);
 				popUpOnMenu.add(logIn);
 				popUpOnMenu.add(signUp);
+				popUpOnMenu.add(helpOn);
 		}
 		
 		private void initPopupOffMenu() {
@@ -139,7 +150,15 @@ public class SideMenu {
       }
 				});
 				
+				helpOff = new JMenuItem(new AbstractAction("Help") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
+				
 				popUpOffMenu.add(logOff);
+				popUpOffMenu.add(helpOff);
 		}
 		
 		private void initPlayerButton() {
@@ -220,10 +239,15 @@ public class SideMenu {
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageIconTools.getGravatar(email));
-						playerIsLogged = true;
+						if (/*call log in player*/true) {
+								playerIsLogged = true;
+						} else {
+								JOptionPane.showMessageDialog(null, "Error, please try again.", 
+																"Error", JOptionPane.ERROR_MESSAGE);
+						}
 				} else {
-						JOptionPane.showInternalMessageDialog(null, email + "is not a valid "
-														+ "email address");
+						JOptionPane.showMessageDialog(null, email + "is not a valid "
+														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
 				}
 		}
 		
