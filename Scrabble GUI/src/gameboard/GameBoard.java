@@ -91,9 +91,10 @@ public class GameBoard extends JPanel {
 				vintage = !vintage;
 				setImageGameBoard();		
 				remove(0);
-				background = new JLabel(icon);
-				add(background, 0);
+				add(new JLabel(icon), 0);
+				validate();
 				repaint();
-				revalidate();
+				innerGrid.repaint();
+				innerGrid.setVisible(true);
 		}	
 }
