@@ -54,11 +54,14 @@ public class TileTransferHandler extends TransferHandler {
 				// The parent of this DTPicture should be a panelRack instance, thus we work on the rack.
 				workOnRack = (support.getComponent() instanceof DTPicture) ? true : false;
 				
+				System.out.println("workOnRack : "+workOnRack);
+				
 				if (workOnRack) {
 						parentT = (panelRack) support.getComponent().getParent();
 						if (parentSource instanceof panelRack) {
 								panelRack parentS = (panelRack) parentSource;
 								if (parentS.equals(parentT)) { // Avoid the drag and drop on the same tile (in place).
+										System.out.println("EQUALS");
 										return false;
 								}
 								shiftTiles((JPanel)parentT.getParent(), parentS.getPosition(), ((panelRack)parentT).getPosition());
@@ -131,6 +134,11 @@ public class TileTransferHandler extends TransferHandler {
 								System.out.println("exportDoneBefore - Parent sons ("+i+") : "+l[i].getClass());
 						}
 						parentSource.remove(c); // Remove this DTElement from this parent container.
+						if (workOnRack && DTPtmp != null) {
+								System.out.println("Add tmp element");
+								parentSource.add(DTPtmp);
+								DTPtmp = null;
+						}
 						parentSource.validate();
 						parentSource.repaint();
 						Component [] k = parentSource.getComponents();
@@ -183,30 +191,42 @@ public class TileTransferHandler extends TransferHandler {
 		
 		/*** Methods used for shift Tile on rack ***/
 		private void shiftTiles(JPanel rack, int posStart, int posStop) {
+				System.out.println("SHIFT");
 				// STEP 1 : Check the direction of shift and set index
 				int DEC = (posStart - posStop < 0) ? 1 : -1;
 				posStart += DEC;
 				
 				// STEP 2 : Save the first element in a temp variable
 				panelRack parentTmp = (panelRack) rack.getComponent(posStart);
-				DTPtmp = (parentTmp.getComponent(0) != null) ? (DTPicture) parentTmp.getComponent(0) : null;
+				if (parentTmp.getComponentCount() > 0 && parentTmp.getComponent(0) instanceof DTPicture) {
+						DTPtmp = (DTPicture) parentTmp.getComponent(0);
+				}
 				
 				// STEP 3 : Loop over the rack to shift tiles.
 				while (posStart != posStop) {
 						panelRack pWriter = (panelRack) rack.getComponent(posStart);
 						panelRack pReader = (panelRack) rack.getComponent(posStart+DEC);
-						if (pWriter.getComponent(0) != null) {
+						if (pWriter.getComponentCount() > 0 && pWriter.getComponent(0) instanceof DTPicture) {
 								pWriter.remove(0);
+								System.out.println("pWriter remove");
 						}
-						if (pReader.getComponent(0) != null) {
+						if (pReader.getComponentCount() > 0 && pReader.getComponent(0) instanceof DTPicture) {
 								pWriter.add(pReader.getComponent(0));
+								System.out.println("pWriter add");
 						}
+						pWriter.validate();
+						pWriter.repaint();
 						posStart += DEC;
 				}
 				
 				// STEP 4 : Remove the last element to drop the dragged element.
 				parentTmp = (panelRack) rack.getComponent(posStart);
-				parentTmp.remove(0);
+				if (parentTmp.getComponentCount() > 0 && parentTmp.getComponent(0) instanceof DTPicture) {
+						parentTmp.remove(0);
+						parentTmp.validate();
+						parentTmp.repaint();
+						System.out.println("Last element remove");
+				}
 		}
 		
 		private int findEmptyParent(int posTarget) {
