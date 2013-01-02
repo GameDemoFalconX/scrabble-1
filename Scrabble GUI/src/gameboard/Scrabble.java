@@ -4,7 +4,6 @@ import common.GlassPane;
 import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Container;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -20,7 +19,7 @@ public class Scrabble {
 		private GameBoard gb;
 		private Rack rack;
 		private SideMenu sideMenu;
-//		private JLabel bg;
+		private JLabel bg;
 		
 		public Scrabble() {
 				frame = new JFrame("Scrabble");
@@ -32,12 +31,12 @@ public class Scrabble {
 		}
 
 		private void initContainer() {
-//				bg = new JLabel(ImageIconTools.createImageIcon("media/background.jpg",""));
-//				bg.setBounds(0, 0, 1000, 681);
+				bg = new JLabel(ImageIconTools.createImageIcon("media/background.png",""));
+				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				contentPane.setBackground(Color.WHITE);
 				contentPane.setLayout(null);
-//				contentPane.add(bg, 0);
+				contentPane.add(bg, 0);
 				contentPane.add(gb, 0);
 				contentPane.add(gb.getInnerGrid(), 0);
 				contentPane.add(rack, 0);
