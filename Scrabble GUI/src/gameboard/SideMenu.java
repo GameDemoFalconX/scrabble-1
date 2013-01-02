@@ -191,6 +191,7 @@ public class SideMenu {
 				}
 				font = font.deriveFont(Font.PLAIN, 48);
 				score.setFont(font);
+				score.setForeground(Color.BLACK);
 		}
 		
 		private void initScrabbleButton() {
