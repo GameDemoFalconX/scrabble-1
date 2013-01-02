@@ -18,8 +18,10 @@ public class TileTransferHandler extends TransferHandler {
 		// Each instance represents the opaque concept of a data format as would appear on a clipboard, during drag and drop, or in a file system.
 		// DataFlavor objects are constant and never change once instantiated.
 		private static final DataFlavor flavors[] = { DataFlavor.imageFlavor };  // In your case the DataFlavor is representing by an image.
-		private static JPanel parentContainer;
+		private static JPanel parentSource;
+		private static DTPicture DTPtmp; // Allows to save a DTPicture instance during the shift tiles process.
 		private static boolean removeParent;
+		private static boolean workOnRack;
 
 		/*** TransferHandler - Import Methods ***/
 		
@@ -30,12 +32,11 @@ public class TileTransferHandler extends TransferHandler {
 						return false;
 				}
 				
-				if (support.getComponent() instanceof DTPicture) {
-						System.out.println("Find DTPicture target");
+				// We forbid the drop gesture over another DTPicture located on the grid.
+				if (support.getComponent() instanceof DTPicture && support.getComponent().getParent() instanceof panelGrid) {
+						System.out.println("Find DTPicture target on panelGrid");
 						return false;
 				}
-				System.out.println("Target static class : "+parentContainer.getClass());
-				System.out.println("Target class : "+support.getComponent().getParent().getClass());
 				return true;
 		}
 		
@@ -45,6 +46,24 @@ public class TileTransferHandler extends TransferHandler {
 				if (!canImport(support)) {
 						System.out.println("Import failed");
 						return false;
+				}
+				
+				// Parent target
+				JPanel parentT;
+				
+				// The parent of this DTPicture should be a panelRack instance, thus we work on the rack.
+				workOnRack = (support.getComponent() instanceof DTPicture) ? true : false;
+				
+				if (workOnRack) {
+						parentT = (panelRack) support.getComponent().getParent();
+						if (parentSource instanceof panelRack) {
+								panelRack parentS = (panelRack) parentSource;
+								shiftTiles((JPanel)parentT.getParent(), parentS.getPosition()+1, ((panelRack)parentT).getPosition());
+						} else {
+								shiftTiles((JPanel)parentT.getParent(), findEmptyParent(((panelRack)parentT).getPosition()), ((panelRack)parentT).getPosition());
+						}
+				} else {
+						parentT = (JPanel) support.getComponent();
 				}
 				
 				System.out.println("Import success");
@@ -62,17 +81,14 @@ public class TileTransferHandler extends TransferHandler {
 				System.out.println("Data import success");
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
 				DTPicture dtp = new DTPicture(data);
-				System.out.println("Start import 2");
-				System.out.println("Parent import : "+support.getComponent().getClass());
-				JPanel parent = (JPanel) support.getComponent();		
-				System.out.println("Parent import : "+parent.getClass());
-				parent.add(dtp);
+				System.out.println("Start import 2");				
+				parentT.add(dtp);
 				TileTransferHandler.removeParent = true;
 				System.out.println("Start import 3");
 				// The validate method is used to cause a container to lay out its subcomponents again. It should be invoked 
 				// when this container's subcomponents are modified (added to or removed from the container, 
 				// or layout-related information changed) after the container has been displayed.
-				parent.validate();
+				parentT.validate();
 				System.out.println("Add new DTElement to this new parent container");
 				return true;
 		}
@@ -90,12 +106,12 @@ public class TileTransferHandler extends TransferHandler {
 				// This method bundles up the data to be exported into a Transferable object in preparation for the transfer
 				System.out.println("Create Transferable");
 				DTPicture DTElement = (DTPicture) c;				
-				parentContainer = (JPanel) DTElement.getParent();
-				Component [] l = parentContainer.getComponents();
+				parentSource = (JPanel) DTElement.getParent();
+				Component [] l = parentSource.getComponents();
 				for (int i = 0; i < l.length; i++) {
 						System.out.println("Parent sons ("+i+") : "+l[i].getClass());
 				}
-				displaySituation(parentContainer);
+				displaySituation(parentSource);
 				TileTransferHandler.removeParent = false;
 				return new PictureTransferable(DTElement);
 		}
@@ -104,17 +120,17 @@ public class TileTransferHandler extends TransferHandler {
 		protected void exportDone(JComponent c, Transferable t, int action) {
 				// This method is invoked after the export is complete. When the action is a MOVE, 
 				// the data needs to be removed from the source after the transfer is complete
-				System.out.println("Parent class exportDone : "+parentContainer.getClass());
+				System.out.println("Parent class exportDone : "+parentSource.getClass());
 				System.out.println("remove : "+removeParent);
 				if (TileTransferHandler.removeParent && (action == MOVE)) {
-						Component [] l = parentContainer.getComponents();
+						Component [] l = parentSource.getComponents();
 						for (int i = 0; i < l.length; i++) {
 								System.out.println("exportDoneBefore - Parent sons ("+i+") : "+l[i].getClass());
 						}
-						parentContainer.remove(c); // Remove this DTElement from this parent container.
-						parentContainer.validate();
-						parentContainer.repaint();
-						Component [] k = parentContainer.getComponents();
+						parentSource.remove(c); // Remove this DTElement from this parent container.
+						parentSource.validate();
+						parentSource.repaint();
+						Component [] k = parentSource.getComponents();
 						for (int i = 0; i < k.length; i++) {
 								System.out.println("exportDoneAfter - Parent sons ("+i+") : "+k[i].getClass());
 						}
@@ -160,5 +176,14 @@ public class TileTransferHandler extends TransferHandler {
 						panelGrid p = (panelGrid) parent;
 						System.out.println("Start drag from Grid - [ "+p.getCoordinates().x+", "+p.getCoordinates().y+" ]");
 				}
+		}
+		
+		/*** Methods used for shift Tile on rack ***/
+		private void shiftTiles(JPanel rack, int posStart, int posStop) {
+				
+		}
+		
+		private int findEmptyParent(int posTarget) {
+				return 0;
 		}
 }
