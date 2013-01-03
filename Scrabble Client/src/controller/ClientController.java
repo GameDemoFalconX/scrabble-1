@@ -1,3 +1,8 @@
+/**
+	* 
+	* DEPRECATED ######
+	* 
+	*/
 package controller;
 
 import service.GameBoard;
