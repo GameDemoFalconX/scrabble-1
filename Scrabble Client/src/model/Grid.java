@@ -7,6 +7,8 @@ package model;
 public class Grid {
 	
 		private Tile[][] grid = new Tile[15][15];
+		private static final int [] x_neighbors = {-1, 1, 0, 0};
+		private static final int [] y_neighbors = {0, 0, -1, 1};
 		
 		public Grid() {
 				for (int x = 0; x <= 14; x++) {
@@ -30,7 +32,18 @@ public class Grid {
 				grid[x][y] = tile;
 		}
 		
-		protected void removeTile(int x, int y) {
+		protected Tile removeTile(int x, int y) {
+				Tile result = grid[x][y];
 				grid[x][y] = null;
+				return result;
+		}
+		
+		protected boolean hasNeighbors(int x, int y) {
+				int neighbors = 0;
+				int i = 0;
+				while (neighbors == 0 && i < x_neighbors.length) {
+						neighbors += (grid[x_neighbors[i]][y_neighbors[i]] != null) ? 1 : 0;
+				}
+				return neighbors > 0;
 		}
 }

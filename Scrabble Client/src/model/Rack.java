@@ -18,7 +18,7 @@ class Rack {
 			* Load tiles on the rack from formated data.
 			* @param formatedRack 
 			*/
-		protected final void loadRack(String formatedRack) {
+		private void loadRack(String formatedRack) {
 				String [] tileList = formatedRack.split("__");
 				for (int i = 0; i < rack.length; i++) {
 						String [] tileArgs = tileList[i].split(":");
@@ -34,8 +34,10 @@ class Rack {
 				rack[position] = tile;
 		}
 		
-		public void removeTile(Integer position) {
+		public Tile removeTile(Integer position) {
+				Tile result = rack[position];
 				rack[position] = null;
+				return result;
 		}
 		
 		/**
@@ -57,6 +59,22 @@ class Rack {
 
 				// STEP 4 : Remove the last element to drop the dragged element.
 				rack[startPos] = tmpTile;
+		}
+		
+		public int findEmptyParent(int targetPos) {
+				int index = 1;
+				int vacantPosition = -1;
+				while (vacantPosition == -1 && index < 7) {
+						if ((targetPos + index < 7) && (rack[targetPos + index] == null)) {
+								vacantPosition = targetPos + index;
+						} else {
+								if ((targetPos - index >= 0) && (rack[targetPos - index] == null)) {
+										vacantPosition = targetPos - index;
+								}
+						}
+						index++;
+				}
+				return vacantPosition;
 		}
 		
 		/**
