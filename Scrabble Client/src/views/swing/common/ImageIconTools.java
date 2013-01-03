@@ -1,7 +1,7 @@
 package common;
 
-import views.swing.gameboard.Scrabble;
-import views.swing.gameboard.SideMenu;
+import gameboard.Scrabble;
+import gameboard.SideMenu;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
