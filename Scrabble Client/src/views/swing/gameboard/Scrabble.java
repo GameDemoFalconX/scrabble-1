@@ -1,11 +1,11 @@
 package views.swing.gameboard;
 
-import common.GlassPane;
-import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import views.swing.common.GlassPane;
+import views.swing.common.ImageIconTools;
 
 /**
 	* Main class for Scrabble game

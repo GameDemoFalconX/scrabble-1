@@ -1,6 +1,6 @@
-package common;
+package views.swing.common;
 
-import gameboard.Rack;
+import views.swing.gameboard.Rack;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

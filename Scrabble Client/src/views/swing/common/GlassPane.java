@@ -1,4 +1,4 @@
-package common;
+package views.swing.common;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

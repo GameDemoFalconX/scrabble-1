@@ -1,7 +1,5 @@
 package views.swing.gameboard;
 
-import common.EmailValidator;
-import common.ImageIconTools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,6 +11,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import views.swing.common.EmailValidator;
+import views.swing.common.ImageIconTools;
 
 /**
  *

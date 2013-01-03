@@ -1,4 +1,4 @@
-package common;
+package views.swing.common;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

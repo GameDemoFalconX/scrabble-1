@@ -1,8 +1,5 @@
 package views.swing.gameboard;
 
-import common.DTPicture;
-import common.ImageIconTools;
-import common.panelRack;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -17,6 +14,9 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import views.swing.common.DTPicture;
+import views.swing.common.ImageIconTools;
+import views.swing.common.panelRack;
 
 /**
 	* 
