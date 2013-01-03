@@ -1,5 +1,7 @@
 package client.model;
 
+import model.Play;
+import model.Player;
 import client.connection.ClientProtocol;
 import common.Colors;
 import common.GameException;

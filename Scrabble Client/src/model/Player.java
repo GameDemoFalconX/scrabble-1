@@ -1,4 +1,4 @@
-package client.model;
+package model;
 
 import java.util.UUID;
 
@@ -8,44 +8,41 @@ import java.util.UUID;
  */
 public class Player {
 		
-		private String playerEmail;
-		private String playerPassword;
-		private UUID playerID;
+		private String email;
+		private String password;
+		private UUID id;
 		private boolean isAnonymous = false;
 		
 		public Player(String email, String pwd, String uuid) {
-				playerEmail = email;
-				playerPassword = pwd;
-				playerID = UUID.fromString(uuid);
+				this.email = email;
+				password = pwd;
+				id = UUID.fromString(uuid);
 		}
 		
 		public Player() {
 				isAnonymous = true;
-				playerID = UUID.randomUUID();
-				playerEmail = "PA"+playerID.toString();
+				id = UUID.randomUUID();
+				email = "PA"+id.toString();
 		}
 		
 		public String getPlayerEmail() {
-				return playerEmail;
+				return email;
 		}
 		
 		public void setPlayerEmail(String name) {
-				this.playerEmail = name;
+				this.email = name;
 		}
 		
 		public String getPlayerPassword() {
-				return playerPassword;
+				return password;
 		}
 		
 		public void setPlayerPassword(String pwd) {
-				this.playerPassword = pwd;
+				this.password = pwd;
 		}
 		
-		/**
-			* @return player ID. 
-			*/
 		public String getPlayerID() {
-				return playerID.toString();
+				return id.toString();
 		}
 		
 		/**

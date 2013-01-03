@@ -1,8 +1,8 @@
 package client.ctrl;
 
 import client.connection.ClientProtocol;
-import client.model.Play;
-import client.model.Player;
+import model.Play;
+import model.Player;
 import common.GameException;
 import common.Message;
 import org.apache.commons.lang3.tuple.Pair;

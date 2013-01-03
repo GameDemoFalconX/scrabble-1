@@ -1,7 +1,7 @@
 package client.view;
 
 import client.ctrl.ClientController;
-import client.model.Play;
+import model.Play;
 import common.Colors;
 import common.Message;
 import org.fusesource.jansi.AnsiConsole;

@@ -1,4 +1,4 @@
-package client.model;
+package model;
 
 import java.util.UUID;
 
@@ -7,46 +7,39 @@ import java.util.UUID;
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
-		private UUID playID;
-		private UUID owner;
+		private UUID id;
+		private UUID player;
 		private Integer score;
 		private Grid grid;
 		private Rack rack;
 		
-		public Play(String playerID, String playID) {
-				this.playID = UUID.fromString(playID);
-				owner = UUID.fromString(playerID);
-				score = 0;
-				grid = new Grid();
-				rack = new Rack();
+		/**
+			* Constructor for the launcher.
+			*/
+		public Play() {}
+		
+		public Play(String playerID, String playID, String formatedGrid, String formatedRack, int score) {
+				this.id = UUID.fromString(playID);
+				player = UUID.fromString(playerID);
+				this.score = score;
+				grid = (formatedGrid.equals("")) ? new Grid() : new Grid(formatedGrid);
+				rack = new Rack(formatedRack);
 		}
 		
 		public String getPlayID() {
-				return playID.toString();
+				return id.toString();
 		}
 		
-		public String getOwner() {
-				return owner.toString();
-		}
-
-		public Grid getGrid() {
-				return grid;
-		}
-		
-		public void setScore(Integer score) {
-				this.score = score;
+		public String getPlayer() {
+				return player.toString();
 		}
 		
 		public Integer getScore() {
 				return score;
 		}
 		
-		public String displayGrid() {
-				return grid.toString();
-		}
-		
-		public String displayRack() {
-				return rack.toString();
+		public void setScore(Integer score) {
+				this.score = score;
 		}
 		
 		public void loadTile(int x, int y, char letter, int value) {
@@ -74,7 +67,7 @@ public class Play {
 				String playerID = infos[0];
 				String gameID = infos[1];
 				String scoreAndTiles = infos[2];
-				if ((playerID.equals(owner.toString())) && (gameID.equals(playID.toString()))) {
+				if ((playerID.equals(player.toString())) && (gameID.equals(id.toString()))) {
 						String[] tileList = formatedWord.split("@@")[1].split("##");
 						for (int i = 0; i < tileList.length; i++) {
 								String [] coordAndTile = tileList[i].split(":");

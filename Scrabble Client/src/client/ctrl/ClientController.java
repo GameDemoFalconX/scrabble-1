@@ -1,7 +1,7 @@
 package client.ctrl;
 
 import client.model.GameBoard;
-import client.model.Player;
+import model.Player;
 import client.view.View;
 import common.EmailValidator;
 import common.GameException;
