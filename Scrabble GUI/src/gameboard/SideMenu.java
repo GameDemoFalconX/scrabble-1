@@ -1,140 +1,316 @@
 package gameboard;
 
-import common.ImageTools;
+import common.EmailValidator;
+import common.ImageIconTools;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import vendor.MD5Util;
 
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
 public class SideMenu {
-				
-		private static JPanel panel;
-		private JLabel iconLabel, playerLabel, emailLabel, passwordLabel;
+		
+	
+	 private static JPanel panel;
+		private GameBoard gameBoard;
+	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
+										addWordButton, arrangeButton;
+		private JPopupMenu popUpOnMenu, popUpOffMenu;
+		private JMenuItem logIn, signUp, logOff, helpOn, helpOff;
 		private JTextField emailField;
-		private JPasswordField passwordField;
-		private JButton playButton, logInButton, signUpButton;
+		private JLabel score;
 		private String email;
+		private JPasswordField passwordField;
 		private char[] password;
-		private Box playBox, fieldsBox, buttonsBox;
+		private EmailValidator emailValidator;
+		private boolean playerIsLogged = false;
+		private Rack rack;
+		private boolean debug = true;
 
 		public SideMenu()	{
 				panel = new JPanel();
-				panel.setPreferredSize(new Dimension(400,300));
+				panel.setLayout(null);
+				panel.setBounds(700, 0, 300, 800);
+				panel.setOpaque(false);
 				this.initComponent();
 		}
+		
+		public SideMenu(GameBoard gameBoard, Rack rack) {
+				this();
+				this.gameBoard = gameBoard;
+				this.rack = rack;
+		}
+		
+		private void initComponent() {
+				emailValidator = new EmailValidator();
+				initPopupOnMenu();
+				initPopupOffMenu();
+				initPlayerButton();
+				initScoreLabel();
+				initScrabbleButton();
+				initGameBoardButton();
+				initAddWordButton();
+				initReArrangeButton();
+				panel.add(playerButton);
+				panel.add(scrabbleButton);
+				panel.add(gameBoardButton);
+				panel.add(addWordButton);
+				panel.add(arrangeButton);
+				if (debug) {
+						scoreTestButton = new JButton("inc score");
+						scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
+						scoreTestButton.addActionListener(new AbstractAction() {
 
-		private void initComponent() {				
-//				PLAY AS GUEST PANEL
-				ImageIcon icon = ImageTools.createImageIcon("images/Scrabble.png","Scrabble");
-				iconLabel = new JLabel(icon);
-				playerLabel = new JLabel();
-				URL url = null;
-				try {
-						url = new URL("http://www.gravatar.com/avatar/"+"a");
-				} catch (MalformedURLException ex) {
-						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				try {
-						playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
-				} catch (IOException ex) {
-						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-				}
-				playBox = Box.createHorizontalBox();
-				playButton = new JButton("Play as guest");
-				playButton.addActionListener(new ActionListener(){
-						@Override
-      public void actionPerformed(ActionEvent arg0) {        
-//        TODO call the anonymous new game function
-								if (!Menu.getSaveCloseEnabled()) {
-										Menu.setSaveCloseEnabled(true);
+								@Override
+								public void actionPerformed(ActionEvent e) {
+										incScore();
 								}
+						});
+						panel.add(scoreTestButton);
+				}
+				panel.add(score);
+		}
+		
+		private void initPopupOnMenu() {
+				popUpOnMenu = new JPopupMenu();
+				emailField = new JTextField("Email");
+				emailField.setPreferredSize(new Dimension(150,20));
+				emailField.addFocusListener(new FocusListener() {
+						@Override
+						public void focusGained(FocusEvent e) {
+								if (emailField.getText().equals("Email")) {
+            emailField.setText("");
+        }
+						}
+						@Override
+						public void focusLost(FocusEvent e) {
+								if (emailField.getText().equals("")) {
+            emailField.setText("Email");
+        }
+						}
+				});
+				
+				passwordField = new JPasswordField("aaaaaa");
+				passwordField.setPreferredSize(new Dimension(150,20));
+				passwordField.addFocusListener(new FocusListener() {
+						@Override
+						public void focusGained(FocusEvent e) {
+//								if ("aaaaaa".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("");
+//        }
+						}
+						@Override
+						public void focusLost(FocusEvent e) {
+								if ("".equals(passwordField.getPassword().toString())) {
+            passwordField.setText("Password");
+        }
+						}
+				});
+				
+				logIn = new JMenuItem(new AbstractAction("Log in") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								logInSignUp();
       }
 				});
 				
-				playBox.add(iconLabel);
-				playBox.add(playButton);
-				playBox.add(playerLabel);
-				
-//				FIELDS PANEL
-				fieldsBox = Box.createHorizontalBox();
-				fieldsBox.setPreferredSize(new Dimension(400, 100));
-				emailLabel = new JLabel("Email : ");
-				emailField = new JTextField();
-				emailField.setSize(new Dimension(90,25));
-				
-				fieldsBox.add(emailLabel);
-				fieldsBox.add(emailField);
-				
-				passwordLabel = new JLabel("Password : ");
-				passwordField = new JPasswordField();
-				passwordField.setSize(new Dimension(90,25));
-				
-				fieldsBox.add(passwordLabel);
-				fieldsBox.add(passwordField);
-				
-//				BUTTON PANEL
-				buttonsBox = Box.createHorizontalBox();
-				logInButton = new JButton("Log in");
-				logInButton.addActionListener(new ActionListener(){
+				signUp = new JMenuItem(new AbstractAction("Sign Up") {
 						@Override
-      public void actionPerformed(ActionEvent arg0) {   
-								email = emailField.getText();
-								password = passwordField.getPassword();
-//								TODO logIn(name,password);
-								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								Menu.setPlayerName(email);
-								String hash = MD5Util.md5Hex(email);
-								URL url = null;
-								try {
-										url = new URL("http://www.gravatar.com/avatar/"+hash);
-								} catch (MalformedURLException ex) {
-										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-								}
-								try {
-										playerLabel.setIcon(new ImageIcon(ImageIO.read(url), "Gravatar"));
-								} catch (IOException ex) {
-										Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
-								}
+						public void actionPerformed(ActionEvent e) {
+								logInSignUp();
       }
 				});
-				signUpButton = new JButton("Sign up");
-				signUpButton.addActionListener(new ActionListener(){
+				
+				helpOn = new JMenuItem(new AbstractAction("Help") {
 						@Override
-      public void actionPerformed(ActionEvent arg0) {        
-								email = emailField.getText();
-								password = passwordField.getPassword();
-//								TODO signUp(name,password);
-								JOptionPane.showMessageDialog(null, "Email : "+email+", password : "+password, "Debug", JOptionPane.INFORMATION_MESSAGE);
-								Menu.setPlayerName(email);
-//								popUp.setVisible(false);
-      }
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", JOptionPane.INFORMATION_MESSAGE);
+						}
 				});
 								
-				buttonsBox.add(logInButton);
-				buttonsBox.add(signUpButton);
+				popUpOnMenu.add(emailField);
+				popUpOnMenu.add(passwordField);
+				popUpOnMenu.add(logIn);
+				popUpOnMenu.add(signUp);
+				popUpOnMenu.add(helpOn);
+		}
+		
+		private void initPopupOffMenu() {
+				popUpOffMenu = new JPopupMenu();
+				logOff = new JMenuItem(new AbstractAction("Log off") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								resetPlayer();
+      }
+				});
 				
-				panel.add(playBox);
-				panel.add(fieldsBox); 
-				panel.add(buttonsBox);
+				helpOff = new JMenuItem(new AbstractAction("Help") {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
+				
+				popUpOffMenu.add(logOff);
+				popUpOffMenu.add(helpOff);
+		}
+		
+		private void initPlayerButton() {
+				playerButton = new JButton();
+				playerButton.setPreferredSize(new Dimension(80,80));
+				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				playerButton.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+								if (playerIsLogged) {
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
+								} else {
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
+								}
+								
+//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
+						}
+				});
+		}
+		
+		private void initScoreLabel() {
+				score = new JLabel("000");
+				score.setBounds(panel.getWidth()-160, 24, 80, 80);
+				Font font = null;
+				try {
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("media/DS-DIGI.ttf").toURI()));
+				} catch (FontFormatException | IOException | URISyntaxException ex) {
+						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				font = font.deriveFont(Font.PLAIN, 48);
+				score.setFont(font);
+				score.setForeground(Color.BLACK);
+		}
+		
+		private void initScrabbleButton() {
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("media/Scrabble.png","Scrabble"));
+				scrabbleButton.setPreferredSize(new Dimension(190,102));
+				scrabbleButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
+						}
+				});
+				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
+				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setBorder(null);
+		}
+		
+		private void initGameBoardButton() {
+				gameBoardButton = new JButton("Modern");
+				gameBoardButton.setBounds(10, 10, 90, 20);
+				gameBoardButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								gameBoard.changeGameBoard();
+						}
+				});
+		}
+		
+		private void initAddWordButton() {
+				addWordButton = new JButton("Add word");
+				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 100, 30);
+				addWordButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								call the add word method on the controller
+								setAddWordVisible(false);
+						}
+				});
+				addWordButton.setVisible(false);
+		}
+		
+		private void initReArrangeButton() {
+				arrangeButton = new JButton("Re-Arrange");
+				arrangeButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-180, 100, 30);
+				arrangeButton.setVisible(true);
+				arrangeButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								rack.reArrangeTiles();
+						}
+				});
+		}
+		
+		private void logInSignUp() {
+				email = emailField.getText();
+				password = passwordField.getPassword();
+				if (EmailValidator.validate(email)) {
+						playerButton.setIcon(ImageIconTools.getGravatar(email));
+						if (/*call log in player*/true) {
+								playerIsLogged = true;
+						} else {
+								JOptionPane.showMessageDialog(null, "Error, please try again.", 
+																"Error", JOptionPane.ERROR_MESSAGE);
+						}
+				} else {
+						JOptionPane.showMessageDialog(null, email + "is not a valid "
+														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
+				}
+		}
+		
+		private void resetPlayer() {
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				emailField.setText("Email");
+				passwordField.setText("aaaaaa");
+				playerIsLogged = false;
 		}
 		
 		public static void setVisible(boolean visible) {
 				panel.setVisible(visible);
 		}
 		
-		public static JPanel getPanel() {
+		public JPanel getPanel() {
 				return panel;
 		}
 		
+	 public void incScore() {
+				int tempScore = Integer.parseInt(score.getText());
+				tempScore++;
+				if (tempScore < 10) {
+						score.setText("00"+String.valueOf(tempScore));
+				} else if	(tempScore < 100) {
+						score.setText("0"+String.valueOf(tempScore));
+				} else{
+						score.setText(String.valueOf(tempScore));
+				}
+		}
+		
+		public void setScore(int score) {
+				if (score < 10) {
+						this.score.setText("00"+String.valueOf(score));
+				} else if	(score < 100) {
+						this.score.setText("0"+String.valueOf(score));
+				} else{
+						this.score.setText(String.valueOf(score));
+				}
+		}
+		
+		public void setAddWordVisible(boolean visibility) {
+				addWordButton.setVisible(visibility);
+		}
+		
+		public boolean isAddWordVisible() {
+				return addWordButton.isVisible();
+		}
 }
