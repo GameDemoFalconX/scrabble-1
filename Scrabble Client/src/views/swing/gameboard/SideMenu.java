@@ -24,7 +24,7 @@ public class SideMenu extends JPanel {
 		
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, addWordButton,
-										arrangeButton, newGameButton, saveButton, loadButton;
+										arrangeButton, newGameButton, saveButton, loadButton, backgroundButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff, helpOn, helpOff, player;
 		private JTextField emailField;
@@ -34,7 +34,9 @@ public class SideMenu extends JPanel {
 		private char[] password;
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
+		private boolean vintage = true;
 		private Rack rack;
+		private Scrabble scrabble;
 
 		private SideMenu()	{
 				this.setLayout(null);
@@ -43,10 +45,11 @@ public class SideMenu extends JPanel {
 				this.initComponents();
 		}
 		
-		public SideMenu(GameBoard gameBoard, Rack rack) {
+		public SideMenu(GameBoard gameBoard, Rack rack, Scrabble scrabble) {
 				this();
 				this.gameBoard = gameBoard;
 				this.rack = rack;
+				this.scrabble = scrabble;
 		}
 		
 		private void initComponents() {
@@ -62,6 +65,7 @@ public class SideMenu extends JPanel {
 				initNewGameButton();
 				initSaveButton();
 				initLoadButton();
+				initBackgroundButton();
 				this.add(playerButton);
 				this.add(scrabbleButton);
 				this.add(gameBoardButton);
@@ -70,6 +74,7 @@ public class SideMenu extends JPanel {
 				this.add(newGameButton);
 				this.add(saveButton);
 				this.add(loadButton);
+				this.add(backgroundButton);
 				this.add(score);
 		}
 		
@@ -190,7 +195,11 @@ public class SideMenu extends JPanel {
 				}
 				font = font.deriveFont(Font.PLAIN, 48);
 				score.setFont(font);
-				score.setForeground(Color.WHITE);
+				if (vintage) {
+						score.setForeground(Color.WHITE);
+				} else {
+						score.setForeground(Color.BLACK);
+				}
 		}
 		
 		private void initScrabbleButton() {
@@ -212,8 +221,8 @@ public class SideMenu extends JPanel {
 		}
 		
 		private void initGameBoardButton() {
-				gameBoardButton = new JButton("Modern");
-				gameBoardButton.setBounds(10, 10, 90, 20);
+				gameBoardButton = new JButton("Gameboard");
+				gameBoardButton.setBounds(this.getWidth()/2-50, this.getHeight()-415, 110, 30);
 				gameBoardButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -222,6 +231,19 @@ public class SideMenu extends JPanel {
 						}
 				});
 				gameBoardButton.setVisible(true);
+		}
+		
+		private void initBackgroundButton() {
+				backgroundButton = new JButton("Background");
+				backgroundButton.setBounds(this.getWidth()/2-50, this.getHeight()-450, 110, 30);
+				backgroundButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								scrabble.changeBackground();
+						}
+				});
+				backgroundButton.setVisible(true);
 		}
 		
 		private void initAddWordButton() {

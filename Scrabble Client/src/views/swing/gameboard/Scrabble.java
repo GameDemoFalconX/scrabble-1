@@ -23,36 +23,38 @@ public class Scrabble {
 		private Rack rack;		
 		private SideMenu sideMenu;
 		private JLabel bg;
+		private ImageIcon icon;		
+		private boolean vintage = false;
 		
 		public Scrabble() {
 				frame = new JFrame("Scrabble");
 				gb = new GameBoard();
 				rack = new Rack();
-				sideMenu = new SideMenu(gb, rack);
+				sideMenu = new SideMenu(gb, rack, this);
 				initContainer();
 				initFrame();
 		}
 
 		private void initContainer() {
-				bg = new JLabel(ImageIconTools.createImageIcon(""
-												+ "/views/swing/media/b_w_background.png",""));
+				setImageBackground();
+				bg = new JLabel(icon);
 				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				contentPane.setBackground(Color.WHITE);
 				contentPane.setLayout(null);
-				contentPane.add(bg, 0);
-				contentPane.add(gb, 0);
-				contentPane.add(gb.getInnerGrid(), 0);
-				contentPane.add(rack, 0);
-				contentPane.add(rack.getInnerRack(), 0);
-				contentPane.add(sideMenu, 0);
+				contentPane.add(sideMenu,0);
+				contentPane.add(rack.getInnerRack(),1);
+				contentPane.add(gb.getInnerGrid(),2);
+				contentPane.add(rack,3);
+				contentPane.add(gb,4);
+				contentPane.add(bg,5);
 				contentPane.setVisible(true);
 		}
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("views/swing/media/icon.png"));
-				frame.setIconImage(icon);
+				Image favicon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("views/swing/media/icon.png"));
+				frame.setIconImage(favicon);
 				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 
 												SideMenu.SIDE_MENU_WIDTH, 850);
 				frame.setContentPane(contentPane);
@@ -60,6 +62,30 @@ public class Scrabble {
 				frame.setLocationRelativeTo(null);
 				frame.setResizable(false);
 				frame.setVisible(true);
+		}
+		
+		private void setImageBackground() {
+				ImageIcon newIcon;
+				if (vintage) {
+						newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Vintage background");
+				} else {
+						newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Modern background");
+				}
+				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
+				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
+				icon = new ImageIcon(iconScaled);
+		}
+		
+		public void changeBackground() {
+				contentPane.remove(5);
+				setImageBackground();
+				bg = new JLabel(icon);
+				contentPane.add(bg,5);
+				contentPane.validate();
+				contentPane.repaint();
+				frame.validate();
+				frame.repaint();
+				contentPane.setVisible(true);
 		}
 
 		/**
