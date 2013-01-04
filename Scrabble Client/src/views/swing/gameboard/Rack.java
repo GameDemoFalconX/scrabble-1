@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -90,30 +89,87 @@ public class Rack extends JPanel {
 		}
 		
 		/*** Methods used for re-arrange and exchange tiles ***/
-		public void reArrangeTiles(int [] positions) {
-				int w = 0;
-				int r = positions[w];
-				while()
-				panelRack reader = (panelRack) this.innerRack.getComponent();
-				panelRack toP = (panelRack) this.innerRack.getComponent(to);
-				DTPicture tmp = null;
-
-				// Get the DTElement from the fromParent
-				if (fromP.getComponentCount() > 0) {
-						tmp = (DTPicture) fromP.getComponent(0);
+		public void reArrangeTiles(int [] positions) { // TODO : Find later a smarter solution
+				JPanel newInnerRack = new JPanel(new GridLayout(1, 7, 0, 0));
+				newInnerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
+				newInnerRack.setBounds( 200, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				newInnerRack.setOpaque(false);
+				
+				for (int i = 0; i < RACK_LENGTH; i++) {
+						panelRack reader = (panelRack) this.innerRack.getComponent(positions[i]);
+						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+						panelRackElement.addDTElement((DTPicture) reader.getComponent(0));
+						newInnerRack.add(panelRackElement, i);
 				}
-				// If the DTElement from the toParent is != null, add it on fromParent.
-				if (toP.getComponentCount() > 0) {
-						fromP.add(toP.getComponent(0));
-				} 
-
-				// Add the content of tmp to toParent
-				if (tmp != null) {
-						toP.add(tmp);
-				} 
-
+				this.innerRack = newInnerRack;
 				this.innerRack.validate();
 				this.innerRack.repaint();								
+		}
+		
+		/*** Methods used for shift Tile on rack ***/
+		/**
+			* Allows to shift the neighbors tiles of the dragged element.
+			* This method works in 3 steps :
+			*				- Save the first element. i.e the first neighbor of the dragged element from its source position.
+			*				- Shift all tiles contained between this first element and the target position.
+			*				- Remove the element located on the target position for drop the dragged tile.
+			* @param posStart, posStop 
+			*/
+		private void shiftTiles(int startPos, int stopPos) {
+				DTPicture DTPtmp;
+				// STEP 1 : Check the direction of shift and set index
+				int DEC = (startPos - stopPos < 0) ? 1 : -1;
+				startPos += DEC;
+				
+				// STEP 2 : Save the first element in a temp variable
+				panelRack tmpParent = (panelRack) innerRack.getComponent(startPos);
+				if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
+						DTPtmp = (DTPicture) tmpParent.getComponent(0);
+				}
+				
+				// STEP 3 : Loop over the rack to shift tiles.
+				while (startPos != stopPos) {
+						panelRack writerP = (panelRack) innerRack.getComponent(startPos);
+						panelRack readerP = (panelRack) innerRack.getComponent(startPos+DEC);
+						if (writerP.getComponentCount() > 0 && writerP.getComponent(0) instanceof DTPicture) {
+								writerP.remove(0);
+						}
+						if (readerP.getComponentCount() > 0 && readerP.getComponent(0) instanceof DTPicture) {
+								writerP.add(readerP.getComponent(0));
+						}
+						writerP.validate();
+						writerP.repaint();
+						startPos += DEC;
+				}
+				
+				// STEP 4 : Remove the last element to drop the dragged element.
+				tmpParent = (panelRack) innerRack.getComponent(startPos);
+				if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
+						tmpParent.remove(0);
+						tmpParent.validate();
+						tmpParent.repaint();
+				}
+		}
+		
+		/**
+			* Return the first free position close to the target position.
+			* @param rack, targetPos
+			* @return vacantPosition
+			*/
+		private int findEmptyParent(int targetPos) {
+				int index = 1;
+				int vacantPosition = -1;
+				while (vacantPosition == -1 && index < 7) {
+						if ((targetPos + index < 7) && ((panelRack) innerRack.getComponent(targetPos + index)).getComponentCount() == 0) {
+								vacantPosition = targetPos + index;
+						} else {
+								if ((targetPos - index >= 0) && ((panelRack) innerRack.getComponent(targetPos - index)).getComponentCount() == 0) {
+										vacantPosition = targetPos - index;
+								}
+						}
+						index++;
+				}
+				return vacantPosition;
 		}
 		
 		/*** Methods used for create ImageIcon ***/

@@ -198,6 +198,7 @@ public class Play {
 				}
 		}
 		
+		// @condition : the rack should be full
 		public void reArrangeRack() {
 				fireRackReArrange(rack.reArrangeTiles());
 		}
