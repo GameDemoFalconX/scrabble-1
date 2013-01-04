@@ -32,7 +32,7 @@ public class Scrabble {
 
 		private void initContainer() {
 				bg = new JLabel(ImageIconTools.createImageIcon(""
-												+ "/views/swing/media/darker_background.png",""));
+												+ "/views/swing/media/b_w_background.png",""));
 				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				contentPane.setBackground(Color.WHITE);
@@ -42,7 +42,7 @@ public class Scrabble {
 				contentPane.add(gb.getInnerGrid(), 0);
 				contentPane.add(rack, 0);
 				contentPane.add(rack.getInnerRack(), 0);
-				contentPane.add(sideMenu.getPanel(), 0);
+				contentPane.add(sideMenu, 0);
 				contentPane.setVisible(true);
 		}
 		

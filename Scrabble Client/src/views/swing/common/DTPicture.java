@@ -1,12 +1,11 @@
 package views.swing.common;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Image;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -92,6 +91,15 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				
 				// Convert a point from a component's coordinate system to screen coordinates.
 				SwingUtilities.convertPointToScreen(location, comp);
+				//Movement mouse for the refresh's bug on Windows.
+    int CooX = location.x+1;
+    int CooY = location.y+1;
+    try {
+      Robot robot = new Robot();
+      robot.mouseMove(CooX, CooY);
+    } catch (AWTException ex) {
+      Logger.getLogger(DTPicture.class.getName()).log(Level.SEVERE, null, ex);
+    }
 				// Convert a point from a screen coordinates to a component's coordinate system.
 				SwingUtilities.convertPointFromScreen(location, glass);
 

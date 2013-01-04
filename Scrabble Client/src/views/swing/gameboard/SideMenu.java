@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import model.utils.EasterEgg;
 import views.swing.common.EmailValidator;
 import views.swing.common.ImageIconTools;
 
@@ -19,13 +18,13 @@ import views.swing.common.ImageIconTools;
  *
  * @author Bernard <bernard.debecker@gmail.com>
  */
-public class SideMenu {
+public class SideMenu extends JPanel {
 		
 		public static final int SIDE_MENU_WIDTH = 250;
-	 private static JPanel panel;
+		
 		private GameBoard gameBoard;
-	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
-										addWordButton, arrangeButton, newGameButton, saveButton, loadButton;
+	 private JButton playerButton, scrabbleButton, gameBoardButton, addWordButton,
+										arrangeButton, newGameButton, saveButton, loadButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff, helpOn, helpOff, player;
 		private JTextField emailField;
@@ -36,14 +35,12 @@ public class SideMenu {
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
 		private Rack rack;
-		private boolean debug = true;
 
 		public SideMenu()	{
-				panel = new JPanel();
-				panel.setLayout(null);
-				panel.setBounds(700, 0, SIDE_MENU_WIDTH, 800);
-				panel.setOpaque(false);
-				this.initComponent();
+				this.setLayout(null);
+				this.setBounds(700, 0, SIDE_MENU_WIDTH, 800);
+				this.setOpaque(false);
+				this.initComponents();
 		}
 		
 		public SideMenu(GameBoard gameBoard, Rack rack) {
@@ -52,7 +49,7 @@ public class SideMenu {
 				this.rack = rack;
 		}
 		
-		private void initComponent() {
+		private void initComponents() {
 				emailValidator = new EmailValidator();
 				initPopupOnMenu();
 				initPopupOffMenu();
@@ -65,27 +62,15 @@ public class SideMenu {
 				initNewGameButton();
 				initSaveButton();
 				initLoadButton();
-				panel.add(playerButton);
-				panel.add(scrabbleButton);
-				panel.add(gameBoardButton);
-				panel.add(addWordButton);
-				panel.add(arrangeButton);
-				panel.add(newGameButton);
-				panel.add(saveButton);
-				panel.add(loadButton);
-				if (debug) {
-						scoreTestButton = new JButton("inc score");
-						scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	30);
-						scoreTestButton.addActionListener(new AbstractAction() {
-
-								@Override
-								public void actionPerformed(ActionEvent e) {
-										incScore();
-								}
-						});
-						panel.add(scoreTestButton);
-				}
-				panel.add(score);
+				this.add(playerButton);
+				this.add(scrabbleButton);
+				this.add(gameBoardButton);
+				this.add(addWordButton);
+				this.add(arrangeButton);
+				this.add(newGameButton);
+				this.add(saveButton);
+				this.add(loadButton);
+				this.add(score);
 		}
 		
 		private void initPopupOnMenu() {
@@ -179,7 +164,7 @@ public class SideMenu {
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(panel.getWidth()-87, 1, 80, 80);
+				playerButton.setBounds(this.getWidth()-87, 1, 80, 80);
 				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
@@ -195,7 +180,7 @@ public class SideMenu {
 		
 		private void initScoreLabel() {
 				score = new JLabel("000");
-				score.setBounds(panel.getWidth()-160, 24, 80, 80);
+				score.setBounds(this.getWidth()-160, 24, 80, 80);
 				Font font = null;
 				try {
 						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(
@@ -205,7 +190,7 @@ public class SideMenu {
 				}
 				font = font.deriveFont(Font.PLAIN, 48);
 				score.setFont(font);
-				score.setForeground(Color.BLACK);
+				score.setForeground(Color.WHITE);
 		}
 		
 		private void initScrabbleButton() {
@@ -220,7 +205,7 @@ public class SideMenu {
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
-				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
+				scrabbleButton.setBounds(this.getWidth()/2-95, this.getHeight()-103, 190, 102);
 				scrabbleButton.setBackground(Color.WHITE);
 				scrabbleButton.setOpaque(false);
 				scrabbleButton.setBorder(null);
@@ -241,7 +226,7 @@ public class SideMenu {
 		
 		private void initAddWordButton() {
 				addWordButton = new JButton("Add word");
-				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 110, 30);
+				addWordButton.setBounds(this.getWidth()/2-50, this.getHeight()-140, 110, 30);
 				addWordButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -255,7 +240,7 @@ public class SideMenu {
 		
 		private void initArrangeButton() {
 				arrangeButton = new JButton("Shuffle rack");
-				arrangeButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-175, 110, 30);
+				arrangeButton.setBounds(this.getWidth()/2-50, this.getHeight()-175, 110, 30);
 				arrangeButton.setVisible(true);
 				arrangeButton.addActionListener(new AbstractAction() {
 
@@ -268,7 +253,7 @@ public class SideMenu {
 		
 		private void	initNewGameButton() {
 				newGameButton = new JButton("New game");
-				newGameButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-330, 110, 30);
+				newGameButton.setBounds(this.getWidth()/2-50, this.getHeight()-330, 110, 30);
 				newGameButton.setVisible(true);
 				newGameButton.addActionListener(new AbstractAction() {
 
@@ -281,7 +266,7 @@ public class SideMenu {
 		
 		private void	initSaveButton() {
 				saveButton = new JButton("Save game");
-				saveButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-295, 110, 30);
+				saveButton.setBounds(this.getWidth()/2-50, this.getHeight()-295, 110, 30);
 				saveButton.setVisible(false);
 				saveButton.addActionListener(new AbstractAction() {
 
@@ -294,7 +279,7 @@ public class SideMenu {
 		
 		private void initLoadButton() {
 				loadButton = new JButton("Load game");
-				loadButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-260, 110, 30);
+				loadButton.setBounds(this.getWidth()/2-50, this.getHeight()-260, 110, 30);
 				loadButton.setText("Load game");
 				loadButton.setVisible(false);
 				loadButton.addActionListener(new AbstractAction() {
@@ -311,7 +296,7 @@ public class SideMenu {
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageIconTools.getGravatar(email));
-						if (/*call log in player*/true) {
+						if (/*call log in player*/true) { // TODO insert log in player here
 								playerLogged();
 						} else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
@@ -338,27 +323,7 @@ public class SideMenu {
 				saveButton.setVisible(false);
 				loadButton.setVisible(false);
 		}
-		
-		public static void setVisible(boolean visible) {
-				panel.setVisible(visible);
-		}
-		
-		public JPanel getPanel() {
-				return panel;
-		}
-		
-	 public void incScore() {
-				int tempScore = Integer.parseInt(score.getText());
-				tempScore++;
-				if (tempScore < 10) {
-						score.setText("00"+String.valueOf(tempScore));
-				} else if	(tempScore < 100) {
-						score.setText("0"+String.valueOf(tempScore));
-				} else{
-						score.setText(String.valueOf(tempScore));
-				}
-		}
-		
+				
 		public void setScore(int score) {
 				if (score < 10) {
 						this.score.setText("00"+String.valueOf(score));
