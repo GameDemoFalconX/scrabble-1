@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import model.utils.EasterEgg;
 import views.swing.common.EmailValidator;
 import views.swing.common.ImageIconTools;
 
@@ -26,7 +27,7 @@ public class SideMenu {
 	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
 										addWordButton, arrangeButton, newGameButton, saveButton, loadButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
-		private JMenuItem logIn, signUp, logOff, helpOn, helpOff;
+		private JMenuItem logIn, signUp, logOff, helpOn, helpOff, player;
 		private JTextField emailField;
 		private JLabel score;
 		private String email;
@@ -35,7 +36,7 @@ public class SideMenu {
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
 		private Rack rack;
-		private boolean debug = false;
+		private boolean debug = true;
 
 		public SideMenu()	{
 				panel = new JPanel();
@@ -105,7 +106,6 @@ public class SideMenu {
         }
 						}
 				});
-				
 				passwordField = new JPasswordField("aaaaaa");
 				passwordField.setPreferredSize(new Dimension(180,20));
 				passwordField.addFocusListener(new FocusListener() {
@@ -146,10 +146,17 @@ public class SideMenu {
 				popUpOnMenu.add(logIn);
 				popUpOnMenu.add(signUp);
 				popUpOnMenu.add(helpOn);
+				popUpOnMenu.setPreferredSize(new Dimension(180,100));
 		}
 		
 		private void initPopupOffMenu() {
 				popUpOffMenu = new JPopupMenu();
+				player = new JMenuItem(new AbstractAction(email) {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								statistics ?
+      }
+				});
 				logOff = new JMenuItem(new AbstractAction("Log off") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -163,8 +170,10 @@ public class SideMenu {
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
+				popUpOffMenu.add(player);
 				popUpOffMenu.add(logOff);
 				popUpOffMenu.add(helpOff);
+				popUpOffMenu.setPreferredSize(new Dimension(180,60));
 		}
 		
 		private void initPlayerButton() {
@@ -176,9 +185,9 @@ public class SideMenu {
 						@Override
 						public void mousePressed(MouseEvent e) {
 								if (playerIsLogged) {
-										popUpOffMenu.show(e.getComponent(), playerButton.getX()-144, playerButton.getY()+79);
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-262, playerButton.getY()+79);
 								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-264, playerButton.getY()+79);
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-262, playerButton.getY()+79);
 								}
 						}
 				});
@@ -316,6 +325,7 @@ public class SideMenu {
 		
 		private void playerLogged() {
 				playerIsLogged = true;
+				initPopupOffMenu();
 				saveButton.setVisible(true);
 				loadButton.setVisible(true);
 		}

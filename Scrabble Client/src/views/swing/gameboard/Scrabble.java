@@ -17,7 +17,7 @@ public class Scrabble {
 		private JFrame frame;
 		private Container contentPane;
 		private GameBoard gb;
-		private Rack rack;
+		private Rack rack;		
 		private SideMenu sideMenu;
 		private JLabel bg;
 		
