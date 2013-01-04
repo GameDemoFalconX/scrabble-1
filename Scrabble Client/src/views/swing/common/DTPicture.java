@@ -8,9 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
 
 /**
   *
@@ -26,6 +25,8 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private BufferedImage imageGlass;
 		private boolean isLocked = false;
 		private boolean debug = false;
+		private JPanel sourceParent;
+		private JPanel targetParent;
 
 		public DTPicture(Image image) {
 				super(image);
@@ -33,7 +34,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				addMouseMotionListener(this);
 				setName("DTPicture");
 				setOpaque(false);
-				setTransferHandler(new TileTransferHandler());
+				//setTransferHandler(new TileTransferHandler());
 				if (debug) {
 						setBorder(BorderFactory.createLineBorder(Color.BLUE));
 				}
@@ -63,6 +64,9 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				Point location = (Point)e.getPoint().clone();
 				comp.setVisible(false); // Hide the DTPicture source during the drap
 				
+				// Get the source parent of this DTPicture
+				sourceParent = (JPanel) comp.getParent();
+				
 				// Convert a point from a component's coordinate system to screen coordinates.
 				SwingUtilities.convertPointToScreen(location, comp);
 				// Convert a point from a screen coordinates to a component's coordinate system.
@@ -83,12 +87,17 @@ public class DTPicture extends Picture implements MouseMotionListener {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {						
+				/* Stand-by the drag and drop
 				JComponent jComp = (JComponent)e.getSource(); // It concerns an instance of DTPicture
 				TransferHandler tHandler = jComp.getTransferHandler(); // Get the instance of TransferHandler for this component
 				tHandler.exportAsDrag(jComp, e, TransferHandler.COPY); // Causes the Swing drag support to be initiated
+				*/
 				
 				Component comp =  e.getComponent();
 				Point location = (Point)e.getPoint().clone();
+				
+				// Get the target parent of this DTPicture
+				targetParent = (JPanel) Utils.findParentUnderGlassPaneAt(comp, location);
 				
 				// Convert a point from a component's coordinate system to screen coordinates.
 				SwingUtilities.convertPointToScreen(location, comp);
