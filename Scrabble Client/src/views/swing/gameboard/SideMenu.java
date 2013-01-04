@@ -189,7 +189,7 @@ public class SideMenu {
 				score.setBounds(panel.getWidth()-160, 24, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("media/DS-DIGI.ttf").toURI()));
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -199,7 +199,7 @@ public class SideMenu {
 		}
 		
 		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageIconTools.createImageIcon("media/Scrabble.png","Scrabble"));
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
 				scrabbleButton.addActionListener(new AbstractAction() {
 

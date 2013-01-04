@@ -1,11 +1,10 @@
 package service;
 
-import service.connection.ClientProtocol;
 import model.Play;
 import model.Player;
 import model.utils.GameException;
 import model.utils.Message;
-import org.apache.commons.lang3.tuple.Pair;
+import service.connection.ClientProtocol;
 
 /**
  * 
@@ -259,18 +258,18 @@ public class gameService {
 								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						case Message.NEW_GAME_ANONYM_ERROR:
 								throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
-						case LOAD_GAME_LIST_ERROR:
+						case Message.LOAD_GAME_LIST_ERROR:
 								view.initMenu("Warning! You don't have yet any saved games!", "", null);
 								break;
-						case LOAD_GAME_ERROR:
+						case Message.LOAD_GAME_ERROR:
 								view.firstMenu("An error has been encountered during the server processing! Please try again.");
 								break;
-						case DELETE_ANONYM_ERROR:
+						case Message.DELETE_ANONYM_ERROR:
 								// Pass : because anonymous player isn't logged on the server.
 								break;
-						case TILE_EXCHANGE_ERROR:
+						case Message.TILE_EXCHANGE_ERROR:
 								break;
-						case GAME_IDENT_ERROR:
+						case Message.GAME_IDENT_ERROR:
 								break;								
 						default:
 								throw new GameException(GameException.typeErr.CONN_KO);
