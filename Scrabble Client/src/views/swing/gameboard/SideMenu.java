@@ -20,7 +20,7 @@ import views.swing.common.ImageIconTools;
  */
 public class SideMenu {
 		
-	
+		public static final int SIDE_MENU_WIDTH = 250;
 	 private static JPanel panel;
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
@@ -35,12 +35,12 @@ public class SideMenu {
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
 		private Rack rack;
-		private boolean debug = true;
+		private boolean debug = false;
 
 		public SideMenu()	{
 				panel = new JPanel();
 				panel.setLayout(null);
-				panel.setBounds(700, 0, 300, 800);
+				panel.setBounds(700, 0, SIDE_MENU_WIDTH, 800);
 				panel.setOpaque(false);
 				this.initComponent();
 		}
@@ -134,7 +134,8 @@ public class SideMenu {
 				helpOn = new JMenuItem(new AbstractAction("Help") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", 
+																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
 								
@@ -157,7 +158,8 @@ public class SideMenu {
 				helpOff = new JMenuItem(new AbstractAction("Help") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
+																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
 				
@@ -168,7 +170,7 @@ public class SideMenu {
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
+				playerButton.setBounds(panel.getWidth()-87, 1, 80, 80);
 				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
@@ -189,7 +191,8 @@ public class SideMenu {
 				score.setBounds(panel.getWidth()-160, 24, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource("/views/swing/media/DS-DIGI.ttf").toURI()));
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(
+														"/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -199,17 +202,20 @@ public class SideMenu {
 		}
 		
 		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/Scrabble.png","Scrabble"));
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon(
+												"/views/swing/media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
 				scrabbleButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", 
+																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
 				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
 				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setOpaque(false);
 				scrabbleButton.setBorder(null);
 		}
 		
@@ -223,6 +229,7 @@ public class SideMenu {
 								gameBoard.changeGameBoard();
 						}
 				});
+				gameBoardButton.setVisible(false);
 		}
 		
 		private void initAddWordButton() {

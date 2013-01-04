@@ -31,7 +31,8 @@ public class Scrabble {
 		}
 
 		private void initContainer() {
-				bg = new JLabel(ImageIconTools.createImageIcon("/views/swing/media/darker_background.png",""));
+				bg = new JLabel(ImageIconTools.createImageIcon(""
+												+ "/views/swing/media/darker_background.png",""));
 				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				contentPane.setBackground(Color.WHITE);
@@ -47,7 +48,8 @@ public class Scrabble {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 307, 850);
+				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 
+												SideMenu.SIDE_MENU_WIDTH, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
