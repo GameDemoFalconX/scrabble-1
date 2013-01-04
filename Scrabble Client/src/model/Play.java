@@ -6,6 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.swing.event.EventListenerList;
+import model.event.RackListener;
+import model.event.RackReArrangeEvent;
+import model.event.TileFromGridToGridEvent;
+import model.event.TileFromGridToRackEvent;
+import model.event.TileFromGridToRackWithShiftEvent;
+import model.event.TileFromRackToGridEvent;
+import model.event.TileFromRackToRackEvent;
+import model.event.TileFromRackToRackWithShiftEvent;
+import model.event.TileListener;
 
 /**
  * 
@@ -18,11 +28,16 @@ public class Play {
 		private Grid grid;
 		private Rack rack;
 		private  Map<Point, Tile> newWord = new HashMap<>();
+		private EventListenerList tileListeners;
+		private EventListenerList rackListeners;
 		
 		/**
 			* Constructor for the launcher.
 			*/
-		public Play() {}
+		public Play() {
+				tileListeners = new EventListenerList();
+				rackListeners = new EventListenerList();
+		}
 		
 		public void initPlay(String playerID, String playID, String formatedGrid, String formatedRack, int score) {
 				this.id = UUID.fromString(playID);
@@ -46,6 +61,80 @@ public class Play {
 		
 		public void setScore(Integer score) {
 				this.score = score;
+		}
+		
+		/*** Methods used for add or remove the different listeners ***/
+		public void addTileListener(TileListener listener){
+				tileListeners.add(TileListener.class, listener);
+		}
+		
+		public void addRackListener(RackListener listener){
+				rackListeners.add(RackListener.class, listener);
+		}
+
+		public void removeTileListener(TileListener listener){
+				tileListeners.remove(TileListener.class, listener);
+		}
+		
+		public void removeRackListener(RackListener listener){
+				rackListeners.remove(RackListener.class, listener);
+		}
+		
+		/*** Methods used to notify changes to all listeners ***/
+		public void fireTileMovedFromRackToGrid(int sourcePos, int x, int y){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToGrid(new TileFromRackToGridEvent(this, sourcePos, x, y));
+				}
+		}
+		
+		public void fireTileMovedFromRackToRack(int sourcePos, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToRack(new TileFromRackToRackEvent(this, sourcePos, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromRackToRackWithShift(int sourcePos, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToRackWithShift(new TileFromRackToRackWithShiftEvent(this, sourcePos, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromGridToGrid(int sX, int sY, int tX, int tY){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToGrid(new TileFromGridToGridEvent(this, sX, sY, tX, tY));
+				}
+		}
+		
+		public void fireTileMovedFromGridToRack(int x, int y, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToRack(new TileFromGridToRackEvent(this, x, y, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromGridToRackWithShift(int x, int y, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToRackWithShift(new TileFromGridToRackWithShiftEvent(this, x, y, targetPos));
+				}
+		}
+		
+		public void fireRackReArrange(int[] positions){
+				RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+				for(RackListener l : listeners){
+						l.rackReArrange(new RackReArrangeEvent(this, positions));
+				}
 		}
 		
 		/*** Methods used for the movement of tiles ***/
@@ -78,33 +167,39 @@ public class Play {
 		public void createWord(int sourcePos, int x, int y) {
 				newWord.put(new Point(x, y), rack.getTile(sourcePos));
 				deplaceTileFromRackToGrid(sourcePos, x, y);
+				fireTileMovedFromRackToGrid(sourcePos, x, y);
 		}
 		
 		public void modifiedWord(int sX, int sY, int tX, int tY) {
 				newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
 				newWord.remove(new Point(tX, tY));
 				deplaceTileFromGridToGrid(sX, sY, tX, tY);
+				fireTileMovedFromGridToGrid(sX, sY, tX, tY);
 		}
 		
 		public void removeLetterFromWord(int x, int y, int targetPos) {
 				newWord.remove(new Point(x, y));
 				if (rack.getTile(targetPos) != null) {
 						deplaceTileFromGridToRackWithShift(x, y, targetPos);
+						fireTileMovedFromGridToRackWithShift(x, y, targetPos);
 				} else {
 						deplaceTileFromGridToRack(x, y, targetPos);
+						fireTileMovedFromGridToRack(x, y, targetPos);
 				}
 		}
 		
 		public void organizeRack(int sourcePos, int targetPos) {
 				if (rack.getTile(targetPos) != null) {
 						shiftTilesOnRack(sourcePos, targetPos);
+						fireTileMovedFromRackToRackWithShift(sourcePos, targetPos);
 				} else {
 						deplaceTileOnRack(sourcePos, targetPos);
+						fireTileMovedFromRackToRack(sourcePos, targetPos);
 				}
 		}
 		
 		public void reArrangeRack() {
-				rack.reArrangeTiles();
+				fireRackReArrange(rack.reArrangeTiles());
 		}
 		
 		public void validateWord() {

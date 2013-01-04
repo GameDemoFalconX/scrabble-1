@@ -80,14 +80,18 @@ class Rack {
 		/**
 			* This method allows to re-arrange the tiles on rack.
 			* @condition the rack should be full
+			* @return array of new index
 			*/
-		public void reArrangeTiles() {
+		public int[] reArrangeTiles() {
+				int [] result = new int[rack.length];
 				Random random = new Random();
 				random.nextInt();
 				for (int from = 0; from < rack.length; from++) {
 						int to = from + random.nextInt(rack.length - from);
+						result[from] = to;
 						swap(from, to);
 				}
+				return result;
 		}
 
 		private void swap(int from, int to) {
