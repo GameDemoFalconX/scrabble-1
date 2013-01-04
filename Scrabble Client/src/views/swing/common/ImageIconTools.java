@@ -1,4 +1,4 @@
-package common;
+package views.swing.common;
 
 import views.swing.gameboard.Scrabble;
 import views.swing.gameboard.SideMenu;

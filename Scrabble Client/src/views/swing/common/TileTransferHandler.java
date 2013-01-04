@@ -1,4 +1,4 @@
-package common;
+package views.swing.common;
 
 import views.swing.gameboard.Rack;
 import java.awt.Image;
