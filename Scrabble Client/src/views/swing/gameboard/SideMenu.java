@@ -24,7 +24,7 @@ public class SideMenu {
 	 private static JPanel panel;
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
-										addWordButton, arrangeButton;
+										addWordButton, arrangeButton, newGameButton, saveButton, loadButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff, helpOn, helpOff;
 		private JTextField emailField;
@@ -60,15 +60,21 @@ public class SideMenu {
 				initScrabbleButton();
 				initGameBoardButton();
 				initAddWordButton();
-				initReArrangeButton();
+				initArrangeButton();
+				initNewGameButton();
+				initSaveButton();
+				initLoadButton();
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
 				panel.add(gameBoardButton);
 				panel.add(addWordButton);
 				panel.add(arrangeButton);
+				panel.add(newGameButton);
+				panel.add(saveButton);
+				panel.add(loadButton);
 				if (debug) {
 						scoreTestButton = new JButton("inc score");
-						scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	25);
+						scoreTestButton.setBounds(panel.getWidth()- 100, 100, 100,	30);
 						scoreTestButton.addActionListener(new AbstractAction() {
 
 								@Override
@@ -84,7 +90,7 @@ public class SideMenu {
 		private void initPopupOnMenu() {
 				popUpOnMenu = new JPopupMenu();
 				emailField = new JTextField("Email");
-				emailField.setPreferredSize(new Dimension(150,20));
+				emailField.setPreferredSize(new Dimension(180,20));
 				emailField.addFocusListener(new FocusListener() {
 						@Override
 						public void focusGained(FocusEvent e) {
@@ -101,7 +107,7 @@ public class SideMenu {
 				});
 				
 				passwordField = new JPasswordField("aaaaaa");
-				passwordField.setPreferredSize(new Dimension(150,20));
+				passwordField.setPreferredSize(new Dimension(180,20));
 				passwordField.addFocusListener(new FocusListener() {
 						@Override
 						public void focusGained(FocusEvent e) {
@@ -116,21 +122,18 @@ public class SideMenu {
         }
 						}
 				});
-				
 				logIn = new JMenuItem(new AbstractAction("Log in") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
       }
 				});
-				
 				signUp = new JMenuItem(new AbstractAction("Sign Up") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
       }
 				});
-				
 				helpOn = new JMenuItem(new AbstractAction("Help") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -138,7 +141,6 @@ public class SideMenu {
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
-								
 				popUpOnMenu.add(emailField);
 				popUpOnMenu.add(passwordField);
 				popUpOnMenu.add(logIn);
@@ -154,7 +156,6 @@ public class SideMenu {
 								resetPlayer();
       }
 				});
-				
 				helpOff = new JMenuItem(new AbstractAction("Help") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -162,7 +163,6 @@ public class SideMenu {
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
-				
 				popUpOffMenu.add(logOff);
 				popUpOffMenu.add(helpOff);
 		}
@@ -176,12 +176,10 @@ public class SideMenu {
 						@Override
 						public void mousePressed(MouseEvent e) {
 								if (playerIsLogged) {
-										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
+										popUpOffMenu.show(e.getComponent(), playerButton.getX()-144, playerButton.getY()+79);
 								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-264, playerButton.getY()+79);
 								}
-								
-//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
 						}
 				});
 		}
@@ -234,7 +232,7 @@ public class SideMenu {
 		
 		private void initAddWordButton() {
 				addWordButton = new JButton("Add word");
-				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 100, 30);
+				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 110, 30);
 				addWordButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -246,9 +244,9 @@ public class SideMenu {
 				addWordButton.setVisible(false);
 		}
 		
-		private void initReArrangeButton() {
-				arrangeButton = new JButton("Re-Arrange");
-				arrangeButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-180, 100, 30);
+		private void initArrangeButton() {
+				arrangeButton = new JButton("Shuffle rack");
+				arrangeButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-175, 110, 30);
 				arrangeButton.setVisible(true);
 				arrangeButton.addActionListener(new AbstractAction() {
 
@@ -259,13 +257,53 @@ public class SideMenu {
 				});
 		}
 		
+		private void	initNewGameButton() {
+				newGameButton = new JButton("New game");
+				newGameButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-330, 110, 30);
+				newGameButton.setVisible(true);
+				newGameButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								newGame();
+						}
+				});
+		}
+		
+		private void	initSaveButton() {
+				saveButton = new JButton("Save game");
+				saveButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-295, 110, 30);
+				saveButton.setVisible(false);
+				saveButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								saveGame();
+						}
+				});
+		}
+		
+		private void initLoadButton() {
+				loadButton = new JButton("Load game");
+				loadButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-260, 110, 30);
+				loadButton.setText("Load game");
+				loadButton.setVisible(false);
+				loadButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								loadGame();
+						}
+				});
+		}
+		
 		private void logInSignUp() {
 				email = emailField.getText();
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageIconTools.getGravatar(email));
 						if (/*call log in player*/true) {
-								playerIsLogged = true;
+								playerLogged();
 						} else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
 																"Error", JOptionPane.ERROR_MESSAGE);
@@ -276,11 +314,19 @@ public class SideMenu {
 				}
 		}
 		
+		private void playerLogged() {
+				playerIsLogged = true;
+				saveButton.setVisible(true);
+				loadButton.setVisible(true);
+		}
+		
 		private void resetPlayer() {
 				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				emailField.setText("Email");
 				passwordField.setText("aaaaaa");
 				playerIsLogged = false;
+				saveButton.setVisible(false);
+				loadButton.setVisible(false);
 		}
 		
 		public static void setVisible(boolean visible) {
