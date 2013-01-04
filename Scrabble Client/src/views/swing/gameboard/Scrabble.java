@@ -1,9 +1,12 @@
 package views.swing.gameboard;
 
+import controller.GameController;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import views.GameView;
 import views.swing.common.GlassPane;
 import views.swing.common.ImageIconTools;
 
@@ -12,7 +15,7 @@ import views.swing.common.ImageIconTools;
 	* @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>,
 	* R. FONCIER <ro.foncier@gmail.com>
 	*/
-public class Scrabble {
+public class Scrabble extends GameView implements ActionListener {
     
 		private JFrame frame;
 		private Container contentPane;
@@ -21,7 +24,12 @@ public class Scrabble {
 		private SideMenu sideMenu;
 		private JLabel bg;
 		
-		public Scrabble() {
+		public Scrabble(GameController controller) {
+				super(controller);
+				buildFrame();
+		}
+		
+		private void buildFrame() {
 				frame = new JFrame("Scrabble");
 				gb = new GameBoard();
 				rack = new Rack();
@@ -29,7 +37,7 @@ public class Scrabble {
 				initContainer();
 				initFrame();
 		}
-
+		
 		private void initContainer() {
 				bg = new JLabel(ImageIconTools.createImageIcon("media/background.png",""));
 				bg.setBounds(0, 0, 1024, 1024);
