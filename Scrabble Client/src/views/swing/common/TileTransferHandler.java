@@ -1,6 +1,5 @@
 package views.swing.common;
 
-import views.swing.gameboard.Rack;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+import views.swing.gameboard.Rack;
 
 /**
 	* @see  DataFlavor

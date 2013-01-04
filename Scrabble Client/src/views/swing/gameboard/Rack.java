@@ -90,20 +90,14 @@ public class Rack extends JPanel {
 		}
 		
 		/*** Methods used for re-arrange and exchange tiles ***/
-		public void reArrangeTiles() {
-				Random random = new Random();
-				random.nextInt();
-				for (int from = 0; from < RACK_LENGTH; from++) {
-						int to = from + random.nextInt(RACK_LENGTH - from);
-						swap(from, to);
-				}
-		}
-
-		private void swap(int from, int to) {
-				panelRack fromP = (panelRack) this.innerRack.getComponent(from);
+		public void reArrangeTiles(int [] positions) {
+				int w = 0;
+				int r = positions[w];
+				while()
+				panelRack reader = (panelRack) this.innerRack.getComponent();
 				panelRack toP = (panelRack) this.innerRack.getComponent(to);
 				DTPicture tmp = null;
-				
+
 				// Get the DTElement from the fromParent
 				if (fromP.getComponentCount() > 0) {
 						tmp = (DTPicture) fromP.getComponent(0);
@@ -112,14 +106,14 @@ public class Rack extends JPanel {
 				if (toP.getComponentCount() > 0) {
 						fromP.add(toP.getComponent(0));
 				} 
-				
+
 				// Add the content of tmp to toParent
 				if (tmp != null) {
 						toP.add(tmp);
 				} 
-				
+
 				this.innerRack.validate();
-				this.innerRack.repaint();
+				this.innerRack.repaint();								
 		}
 		
 		/*** Methods used for create ImageIcon ***/
