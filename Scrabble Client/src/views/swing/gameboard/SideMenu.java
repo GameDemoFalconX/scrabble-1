@@ -36,7 +36,7 @@ public class SideMenu extends JPanel {
 		private boolean playerIsLogged = false;
 		private Rack rack;
 
-		public SideMenu()	{
+		private SideMenu()	{
 				this.setLayout(null);
 				this.setBounds(700, 0, SIDE_MENU_WIDTH, 800);
 				this.setOpaque(false);
@@ -221,7 +221,7 @@ public class SideMenu extends JPanel {
 								gameBoard.changeGameBoard();
 						}
 				});
-				gameBoardButton.setVisible(false);
+				gameBoardButton.setVisible(true);
 		}
 		
 		private void initAddWordButton() {

@@ -2,6 +2,9 @@ package views.swing.gameboard;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import views.swing.common.GlassPane;
@@ -48,6 +51,8 @@ public class Scrabble {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("views/swing/media/icon.png"));
+				frame.setIconImage(icon);
 				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 
 												SideMenu.SIDE_MENU_WIDTH, 850);
 				frame.setContentPane(contentPane);
