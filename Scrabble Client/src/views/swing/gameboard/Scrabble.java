@@ -24,7 +24,7 @@ public class Scrabble {
 		private SideMenu sideMenu;
 		private JLabel bg;
 		private ImageIcon icon;		
-		private boolean vintage = false;
+		private boolean vintage = true;
 		
 		public Scrabble() {
 				frame = new JFrame("Scrabble");
