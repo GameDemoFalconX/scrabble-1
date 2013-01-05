@@ -78,10 +78,10 @@ public class Scrabble {
 		}
 		
 		public void changeBackground() {
-				contentPane.remove(5);
+				vintage = !vintage;
 				setImageBackground();
-				bg = new JLabel(icon);
-				contentPane.add(bg,5);
+				bg.setIcon(icon);
+				bg.repaint();
 				contentPane.validate();
 				contentPane.repaint();
 				frame.validate();
