@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import views.swing.gameboard.Scrabble;
+import views.swing.gameboard.Game;
 
 /**
   *
@@ -22,7 +22,7 @@ import views.swing.gameboard.Scrabble;
 	*/
 public class DTPicture extends Picture implements MouseMotionListener {
 
-		private Scrabble scrabble;
+		private Game scrabble;
 		private GlassPane glass;
 		private BufferedImage imageGlass;
 		private boolean isLocked = false;
@@ -30,7 +30,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private JPanel sourceParent;
 		private JPanel targetParent;
 
-		public DTPicture(Image image, Scrabble scrabble) {
+		public DTPicture(Image image, Game scrabble) {
 				super(image);
 				this.scrabble = scrabble;
 				this.glass = GlassPane.getInstance();

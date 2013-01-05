@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import model.event.RackReArrangeEvent;
 import model.event.TileFromGridToGridEvent;
 import model.event.TileFromGridToRackEvent;
@@ -26,7 +27,7 @@ import views.swing.common.panelRack;
 	* @author Arnaud Morel <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>,
 	* R. FONCIER <ro.foncier@gmail.com>
 	*/
-public class Scrabble extends GameView  {
+public class Game extends GameView  {
     
 		private JFrame frame;
 		private Container contentPane;
@@ -36,7 +37,7 @@ public class Scrabble extends GameView  {
 		private JLabel frameBackground;
 		private JButton reArrangeButton;
 		
-		public Scrabble(GameController controller) {
+		public Game(GameController controller) {
 				super(controller);
 				buildScrabble();
 		}
@@ -51,7 +52,7 @@ public class Scrabble extends GameView  {
 		}
 		
 		private void initContainer() {
-				frameBackground = new JLabel(ImageIconTools.createImageIcon("media/background.png",""));
+				frameBackground = new JLabel(ImageIconTools.createImageIcon("../media/background.png",""));
 				frameBackground.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
 				//contentPane.setBackground(Color.WHITE);
@@ -61,7 +62,6 @@ public class Scrabble extends GameView  {
 				contentPane.add(gameboard.getInnerGrid(), 0);
 				contentPane.add(rack, 0);
 				contentPane.add(rack.getInnerRack(), 0);
-				//contentPane.add(sideMenu.getPanel(), 0);
 				initReArrangeButton();
 				contentPane.setVisible(true);
 		}
@@ -87,6 +87,10 @@ public class Scrabble extends GameView  {
 								getController().notifyReArrangeRack();
 						}
 				});
+		}
+		
+		public void setMenu(JPanel menu) {
+				contentPane.add(menu, 0);
 		}
 		
 		@Override

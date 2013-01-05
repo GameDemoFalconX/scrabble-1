@@ -38,7 +38,7 @@ public class Rack extends JPanel {
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
 			*/
-		public Rack(Scrabble scrabble) {
+		public Rack(Game scrabble) {
 				/** Construction of rack **/
 				setName("Rack");
 				setImageRack();
@@ -180,7 +180,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private void setImageRack(){
-				ImageIcon newIcon = ImageIconTools.createImageIcon("images/Rack_empty.png","Scrabble rack");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("../media/Rack_empty.png","Scrabble rack");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
@@ -192,7 +192,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private Image setImageTile(){
-				ImageIcon newIcon = ImageIconTools.createImageIcon("media/vintage_tile.png","Scrabble tile");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("../media/vintage_tile.png","Scrabble tile");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
 				return iconScaled;
@@ -203,9 +203,9 @@ public class Rack extends JPanel {
 					BufferedImage letterB = null;
 					BufferedImage valueB = null;
 					try {
-							tile = ImageIO.read(Rack.class.getResource("media/vintage_tile.png"));
-							letterB = ImageIO.read(Rack.class.getResource("media/letters/"+letter+".png"));
-							valueB = ImageIO.read(Rack.class.getResource("media/numbers/"+value+".png"));
+							tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
+							letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter+".png"));
+							valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
 					} catch (IOException ex) {
 							Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
 					}

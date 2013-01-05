@@ -78,9 +78,9 @@ public class GameBoard extends JPanel {
 		private void setImageGameBoard() {
 				ImageIcon newIcon;
 				if (vintage) {
-						newIcon = ImageIconTools.createImageIcon("media/vintage_grid.png","Vintage gameboard");
+						newIcon = ImageIconTools.createImageIcon("../media/vintage_grid.png","Vintage gameboard");
 				} else {
-						newIcon = ImageIconTools.createImageIcon("media/modern_grid.png","Modern gameboard");
+						newIcon = ImageIconTools.createImageIcon("../media/modern_grid.png","Modern gameboard");
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);

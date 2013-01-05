@@ -5,12 +5,12 @@
 	*/
 package controller;
 
-import service.GameBoard;
-import model.Player;
 import client.view.View;
+import model.Player;
 import model.utils.EmailValidator;
 import model.utils.GameException;
 import model.utils.Message;
+import service.GameBoard;
 
 /**
  *
@@ -29,10 +29,11 @@ public class ClientController {
 		/**
 		  * @param args the command line arguments
 		  */
+		/*
 		public static void main(String[] args) {
 				ClientController clientCtrl = new ClientController(args);
 				clientCtrl.firstShow();
-		}
+		}*/
   
 		public ClientController(String[] args) {
 				switch (args.length) {
