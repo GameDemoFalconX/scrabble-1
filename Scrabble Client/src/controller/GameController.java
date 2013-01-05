@@ -1,26 +1,32 @@
 package controller;
 
+import javax.swing.JPanel;
 import model.Play;
 import views.GameView;
-import views.swing.gameboard.Scrabble;
+import views.swing.gameboard.Game;
 
 /**
  * 
  * @author Romain <ro.foncier@gmail.com>
  */
 public class GameController {
+		
 		public GameView MainView = null;
 		private Play play = null; // Model in MVC Architecture
 
 		public GameController (Play play){
 				this.play = play;
-				MainView = new Scrabble(this);
+				MainView = new Game(this);
 				addListenersToModel();
 		}
 
 		private void addListenersToModel() {
 				play.addTileListener(MainView);
 				play.addRackListener(MainView);
+		}
+		
+		public void addMenuToView(JPanel menu) {
+				((Game) MainView).setMenu(menu);
 		}
 
 		public void displayViews(){
