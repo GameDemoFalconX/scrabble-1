@@ -29,7 +29,7 @@ public class Rack extends JPanel {
 		private static final int RACK_HEIGHT = 60;
 		private static final int RACK_WIDTH = 365;
 		private static final int TILE_HEIGHT = 45;
-		private static final int TILE_WIDTH = 42;
+		private static final int TILE_WIDTH = 43;
 		private ImageIcon icon;
 		private JPanel innerRack;
 		private boolean debug = false;
@@ -59,7 +59,7 @@ public class Rack extends JPanel {
 						innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
 				}
 				innerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
-				innerRack.setBounds(195, 737, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
+				innerRack.setBounds(192, 737, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
 				innerRack.setOpaque(false);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {

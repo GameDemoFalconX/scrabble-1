@@ -19,11 +19,11 @@ import views.swing.common.panelGrid;
 public class GameBoard extends JPanel {
 		
 		private static final int GB_HEIGHT = 710;
-		private static final int GB_WIDTH = 700;
-		private static final int GB_INNER_HEIGHT = 702;
-		private static final int GB_INNER_WIDTH = 691;
+		private static final int GB_WIDTH = 708;
+		private static final int GB_INNER_HEIGHT = 705;
+		private static final int GB_INNER_WIDTH = 701;
 		private static final int TILE_HEIGHT = 45;
-		private static final int TILE_WIDTH = 42;
+		private static final int TILE_WIDTH = 43;
 		private static boolean vintage = true;		
 		private JLabel background;
 		private boolean debug = false;
@@ -36,20 +36,28 @@ public class GameBoard extends JPanel {
 				background = new JLabel(this.icon);
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
-				setBounds( 10, 10, icon.getIconWidth(), icon.getIconHeight());
+				setBounds(10,10, icon.getIconWidth(), icon.getIconHeight());
 				setVisible(true);
 				if (debug) {
-							setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+						setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				} else {
+						setBorder(BorderFactory.createLineBorder(Color.WHITE));
 				}
 				
 				/** Construction of grid elements **/
 				/*** Grid inner container ***/
-				innerGrid = new JPanel(new GridLayout(15,15, 0, 0));
+				innerGrid = new JPanel(new GridLayout(15,15, 1, 1));
 				if (debug) {
 						innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				} else {
+						if (vintage) {
+								innerGrid.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+						} else {
+								innerGrid.setBorder(BorderFactory.createLineBorder(new Color(190,39,39)));
+						}
 				}
-				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
-				innerGrid.setBounds(15, 14, GB_INNER_WIDTH, GB_INNER_HEIGHT);
+//				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
+				innerGrid.setBounds(14, 12, GB_INNER_WIDTH, GB_INNER_HEIGHT);
 				innerGrid.setOpaque(false);
 				
 				// Construct panelGrid Elements which contain DTPicture instances.
@@ -92,6 +100,11 @@ public class GameBoard extends JPanel {
 				setImageGameBoard();		
 				remove(0);
 				add(new JLabel(icon), 0);
+				if (vintage) {
+						innerGrid.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+				} else {
+						innerGrid.setBorder(BorderFactory.createLineBorder(new Color(190,39,39)));
+				}
 				validate();
 				repaint();
 				innerGrid.repaint();

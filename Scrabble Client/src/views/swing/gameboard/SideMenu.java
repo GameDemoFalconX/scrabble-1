@@ -40,7 +40,7 @@ public class SideMenu extends JPanel {
 
 		private SideMenu()	{
 				this.setLayout(null);
-				this.setBounds(700, 0, SIDE_MENU_WIDTH, 800);
+				this.setBounds(710, 0, SIDE_MENU_WIDTH, 800);
 				this.setOpaque(false);
 				this.initComponents();
 		}
@@ -257,7 +257,7 @@ public class SideMenu extends JPanel {
 								setAddWordVisible(false);
 						}
 				});
-				addWordButton.setVisible(false);
+				addWordButton.setVisible(true);
 		}
 		
 		private void initArrangeButton() {
