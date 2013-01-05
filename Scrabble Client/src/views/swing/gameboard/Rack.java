@@ -29,7 +29,7 @@ public class Rack extends JPanel {
 		private static final int RACK_HEIGHT = 60;
 		private static final int RACK_WIDTH = 365;
 		private static final int TILE_HEIGHT = 45;
-		private static final int TILE_WIDTH = 42;
+		private static final int TILE_WIDTH = 43;
 		private ImageIcon icon;
 		private JPanel innerRack;
 		private boolean debug = false;

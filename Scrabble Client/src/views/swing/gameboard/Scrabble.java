@@ -19,7 +19,7 @@ public class Scrabble {
     
 		private JFrame frame;
 		private Container contentPane;
-		private GameBoard gb;
+		private GameBoard gb; 
 		private Rack rack;		
 		private SideMenu sideMenu;
 		private JLabel bg;
@@ -57,6 +57,7 @@ public class Scrabble {
 				frame.setIconImage(favicon);
 				frame.setSize(gb.getWidth() + gb.getInsets().left+gb.getInsets().right + 
 												SideMenu.SIDE_MENU_WIDTH, 850);
+				System.out.println(gb.getWidth() + gb.getInsets().left+gb.getInsets().right);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
