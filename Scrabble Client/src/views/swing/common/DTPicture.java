@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import views.swing.gameboard.Scrabble;
 
 /**
   *
@@ -21,6 +22,7 @@ import javax.swing.SwingUtilities;
 	*/
 public class DTPicture extends Picture implements MouseMotionListener {
 
+		private Scrabble scrabble;
 		private GlassPane glass;
 		private BufferedImage imageGlass;
 		private boolean isLocked = false;
@@ -28,8 +30,9 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private JPanel sourceParent;
 		private JPanel targetParent;
 
-		public DTPicture(Image image) {
+		public DTPicture(Image image, Scrabble scrabble) {
 				super(image);
+				this.scrabble = scrabble;
 				this.glass = GlassPane.getInstance();
 				addMouseMotionListener(this);
 				setName("DTPicture");
@@ -98,6 +101,8 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				
 				// Get the target parent of this DTPicture
 				targetParent = (JPanel) Utils.findParentUnderGlassPaneAt(comp, location);
+				// Notifiy controller about this user gesture
+				notifyController();
 				
 				// Convert a point from a component's coordinate system to screen coordinates.
 				SwingUtilities.convertPointToScreen(location, comp);
@@ -125,4 +130,16 @@ public class DTPicture extends Picture implements MouseMotionListener {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {}
+		
+		private void notifyController() {
+				if (sourceParent instanceof panelRack && targetParent instanceof panelGrid) {
+						scrabble.getController().notifyCreateWord(((panelRack) sourceParent).getPosition(), ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
+				} else if (sourceParent instanceof panelGrid && targetParent instanceof panelGrid) {
+						scrabble.getController().notifyModifiedWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
+				} else if (sourceParent instanceof panelGrid && targetParent instanceof panelRack) {
+						scrabble.getController().notifyRemoveLetterFromWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelRack) targetParent).getPosition());
+				} else if (sourceParent instanceof panelRack && targetParent instanceof panelRack) {
+						scrabble.getController().notifyOrganizeRack(((panelRack) sourceParent).getPosition(), ((panelRack) targetParent).getPosition());
+				}
+		}
 }

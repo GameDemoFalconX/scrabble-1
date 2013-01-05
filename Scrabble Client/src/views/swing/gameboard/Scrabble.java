@@ -41,7 +41,7 @@ public class Scrabble extends GameView  {
 		private void buildScrabble() {
 				frame = new JFrame("Scrabble");
 				gameboard = new GameBoard();
-				rack = new Rack();
+				rack = new Rack(this);
 				//sideMenu = new SideMenu(gb, rack);
 				initContainer();
 				initFrame();

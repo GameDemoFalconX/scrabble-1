@@ -38,7 +38,7 @@ public class Rack extends JPanel {
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
 			*/
-		public Rack() {
+		public Rack(Scrabble scrabble) {
 				/** Construction of rack **/
 				setName("Rack");
 				setImageRack();
@@ -64,7 +64,7 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1])));
+						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1]), scrabble));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}
