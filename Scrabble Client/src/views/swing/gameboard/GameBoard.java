@@ -18,7 +18,7 @@ import views.swing.common.panelGrid;
 	*/
 public class GameBoard extends JPanel {
 		
-		private static final int GB_HEIGHT = 710;
+		private static final int GB_HEIGHT = 709;
 		private static final int GB_WIDTH = 708;
 		private static final int GB_INNER_HEIGHT = 705;
 		private static final int GB_INNER_WIDTH = 701;
