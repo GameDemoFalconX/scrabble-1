@@ -169,7 +169,7 @@ public class SideMenu extends JPanel {
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(this.getWidth()-87, 1, 80, 80);
+				playerButton.setBounds(this.getWidth()-97, 11, 80, 80);
 				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
@@ -177,7 +177,7 @@ public class SideMenu extends JPanel {
 								if (playerIsLogged) {
 										popUpOffMenu.show(e.getComponent(), playerButton.getX()-262, playerButton.getY()+79);
 								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-262, playerButton.getY()+79);
+										popUpOnMenu.show(e.getComponent(), playerButton.getX()-252, playerButton.getY()+69);
 								}
 						}
 				});
@@ -185,7 +185,7 @@ public class SideMenu extends JPanel {
 		
 		private void initScoreLabel() {
 				score = new JLabel("000");
-				score.setBounds(this.getWidth()-160, 24, 80, 80);
+				score.setBounds(this.getWidth()-170, 34, 80, 80);
 				Font font = null;
 				try {
 						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(

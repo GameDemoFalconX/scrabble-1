@@ -45,7 +45,7 @@ public class Rack extends JPanel {
 				setImageRack();
 				add(new JLabel(this.icon));
 				setLayout(new GridLayout(1, 1, 1, 1));
-				setBounds(170, 720, RACK_WIDTH, RACK_HEIGHT);
+				setBounds(180, 740, RACK_WIDTH, RACK_HEIGHT);
 				setOpaque(false);
 				setVisible(true);
 				if (debug) {
@@ -59,7 +59,7 @@ public class Rack extends JPanel {
 						innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
 				}
 				innerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
-				innerRack.setBounds(185, 717, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
+				innerRack.setBounds(195, 737, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
 				innerRack.setOpaque(false);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {

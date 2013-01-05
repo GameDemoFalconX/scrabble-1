@@ -20,7 +20,7 @@ public class GameBoard extends JPanel {
 		
 		private static final int GB_HEIGHT = 710;
 		private static final int GB_WIDTH = 700;
-		private static final int GB_INNER_HEIGHT = 700;
+		private static final int GB_INNER_HEIGHT = 702;
 		private static final int GB_INNER_WIDTH = 691;
 		private static final int TILE_HEIGHT = 45;
 		private static final int TILE_WIDTH = 42;
@@ -36,7 +36,7 @@ public class GameBoard extends JPanel {
 				background = new JLabel(this.icon);
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
-				setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
+				setBounds( 10, 10, icon.getIconWidth(), icon.getIconHeight());
 				setVisible(true);
 				if (debug) {
 							setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
@@ -49,7 +49,7 @@ public class GameBoard extends JPanel {
 						innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
 				}
 				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
-				innerGrid.setBounds(5, 5, GB_INNER_WIDTH, GB_INNER_HEIGHT);
+				innerGrid.setBounds(15, 14, GB_INNER_WIDTH, GB_INNER_HEIGHT);
 				innerGrid.setOpaque(false);
 				
 				// Construct panelGrid Elements which contain DTPicture instances.
