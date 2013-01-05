@@ -115,7 +115,7 @@ public class Rack extends JPanel {
 			*				- Remove the element located on the target position for drop the dragged tile.
 			* @param posStart, posStop 
 			*/
-		private void shiftTiles(int startPos, int stopPos) {
+		protected void shiftTiles(int startPos, int stopPos) {
 				DTPicture DTPtmp;
 				// STEP 1 : Check the direction of shift and set index
 				int DEC = (startPos - stopPos < 0) ? 1 : -1;
@@ -156,7 +156,7 @@ public class Rack extends JPanel {
 			* @param rack, targetPos
 			* @return vacantPosition
 			*/
-		private int findEmptyParent(int targetPos) {
+		protected int findEmptyParent(int targetPos) {
 				int index = 1;
 				int vacantPosition = -1;
 				while (vacantPosition == -1 && index < 7) {

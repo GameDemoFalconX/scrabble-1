@@ -2,6 +2,7 @@ package views.swing.gameboard;
 
 import controller.GameController;
 import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -17,6 +18,8 @@ import model.event.TileFromRackToRackWithShiftEvent;
 import views.GameView;
 import views.swing.common.GlassPane;
 import views.swing.common.ImageIconTools;
+import views.swing.common.panelGrid;
+import views.swing.common.panelRack;
 
 /**
 	* Main class for Scrabble game
@@ -99,32 +102,48 @@ public class Scrabble extends GameView  {
 		/*** Methods used to modify the view from model notifications ***/
 		@Override
 		public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
-				
+				Point tP= event.getTargetPosition();
+				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
+				targetParent.add(sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromRackToRack(TileFromRackToRackEvent event) {
-				
+				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+				targetParent.add(sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromRackToRackWithShift(TileFromRackToRackWithShiftEvent event) {
-				
+				rack.shiftTiles(event.getSourcePosition(), event.getTargetPosition());
 		}
 		
 		@Override
 		public void tileMovedFromGridToGrid(TileFromGridToGridEvent event) {
-				
+				Point sP = event.getSourcePosition();
+				Point tP= event.getTargetPosition();
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
+				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
+				targetParent.add(sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromGridToRack(TileFromGridToRackEvent event) {
-				
+				Point sP = event.getSourcePosition();
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
+				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+				targetParent.add(sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromGridToRackWithShift(TileFromGridToRackWithShiftEvent event) {
-				
+				rack.shiftTiles(rack.findEmptyParent(event.getTargetPosition()), event.getTargetPosition());
+				Point sP = event.getSourcePosition();
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
+				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+				targetParent.add(sourceParent.getComponent(0));
 		}
 		
 		@Override
