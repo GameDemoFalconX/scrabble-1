@@ -53,7 +53,7 @@ public class Settings extends JDialog {
 				backgroundPanel.setBorder(BorderFactory.createTitledBorder("Background"));
 				lightRadioButton = new JRadioButton(new ImageIcon(ImageIconTools.
 												createImageIcon("/views/swing/media/light_bg_icon.png", null).
-												getImage().getScaledInstance(45, 45,  Image.SCALE_SMOOTH)));
+												getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH)));
 				lightRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {

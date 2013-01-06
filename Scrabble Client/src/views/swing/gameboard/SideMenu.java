@@ -1,10 +1,9 @@
 package views.swing.gameboard;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,21 +22,18 @@ public class SideMenu extends JPanel {
 		public static final int SIDE_MENU_WIDTH = 250;
 		
 		private GameBoard gameBoard;
-	 private JButton playerButton, scrabbleButton, gameBoardButton, addWordButton,
-										arrangeButton, newGameButton, saveButton, loadButton, backgroundButton,
-										logSignButton, playAsGuestButton, settingsButton;
-		private JPopupMenu popUpOnMenu, popUpOffMenu;
-		private JMenuItem logIn, signUp, helpOn, logOff, helpOff;
+	 private JButton playerButton, scrabbleButton, addWordButton, arrangeButton, 
+										newGameButton, saveButton, loadButton, logSignButton, signUpButton,
+										playAsGuestButton, settingsButton;
+		private JPopupMenu popupMenu;
+		private JMenuItem logOff, helpOff;
 		private JTextField emailField;
 		private JLabel score;
 		private String email;
 		private JPasswordField passwordField;
 		private char[] password;
-		private EmailValidator emailValidator;
-		private boolean playerIsLogged = false;
 		private boolean vintage = true;
 		private boolean debug = false;
-		private boolean popup = false;
 		private Rack rack;
 		private Scrabble scrabble;
 
@@ -56,122 +52,35 @@ public class SideMenu extends JPanel {
 		}
 		
 		private void initComponents() {
-				emailValidator = new EmailValidator();
-				initThis();
-				initPopupOnMenu();
-				initPopupOffMenu();
+				initPopupMenu();
 				initPlayerButton();
 				initScoreLabel();
 				initScrabbleButton();
-//				initGameBoardButton();
 				initAddWordButton();
 				initArrangeButton();
 				initNewGameButton();
 				initSaveButton();
 				initLoadButton();
-//				initBackgroundButton();
 				initPlayAsGuestButton();
-				initLogInSignUpButton();
+				initLogInButton();
+				initSignUpButton();
 				initSettingsButton();
 				this.add(playerButton);
 				this.add(scrabbleButton);
-//				this.add(gameBoardButton);
 				this.add(addWordButton);
 				this.add(arrangeButton);
 				this.add(newGameButton);
 				this.add(saveButton);
 				this.add(loadButton);
-//				this.add(backgroundButton);
 				this.add(playAsGuestButton);
 				this.add(logSignButton);
+				this.add(signUpButton);
 				this.add(settingsButton);
 				this.add(score);
 		}
-		
-		private void initThis() {
-				this.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-								if (!playerIsLogged) {
-										playerButton.setVisible(false);
-										popUpOnMenu.setVisible(false);
-										popUpOffMenu.setVisible(false);
-								} else if (popup) {
-										popup = !popup;
-										popUpOnMenu.setVisible(false);
-										popUpOffMenu.setVisible(false);
-								}
-						}
-						
-				});
-		}
-		
-		private void initPopupOnMenu() {
-				popUpOnMenu = new JPopupMenu();
-				emailField = new JTextField("Email");
-				emailField.setPreferredSize(new Dimension(180,20));
-				emailField.addFocusListener(new FocusListener() {
-						@Override
-						public void focusGained(FocusEvent e) {
-								if (emailField.getText().equals("Email")) {
-            emailField.setText("");
-        }
-						}
-						@Override
-						public void focusLost(FocusEvent e) {
-								if (emailField.getText().equals("")) {
-            emailField.setText("Email");
-        }
-						}
-				});
-				passwordField = new JPasswordField("aaaaaa");
-				passwordField.setPreferredSize(new Dimension(180,20));
-				passwordField.addFocusListener(new FocusListener() {
-						@Override
-						public void focusGained(FocusEvent e) {
-//								if ("aaaaaa".equals(passwordField.getPassword().toString())) {
-            passwordField.setText("");
-//        }
-						}
-						@Override
-						public void focusLost(FocusEvent e) {
-								if ("".equals(passwordField.getPassword().toString())) {
-            passwordField.setText("Password");
-        }
-						}
-				});
-				logIn = new JMenuItem(new AbstractAction("Log in") {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								logInSignUp();
-								popup = false;
-      }
-				});
-				signUp = new JMenuItem(new AbstractAction("Sign Up") {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								logInSignUp();
-								popup = false;
-      }
-				});
-				helpOn = new JMenuItem(new AbstractAction("Help") {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", 
-																JOptionPane.INFORMATION_MESSAGE);
-								popup = false;
-						}
-				});
-				popUpOnMenu.add(emailField);
-				popUpOnMenu.add(passwordField);
-				popUpOnMenu.add(logIn);
-				popUpOnMenu.add(signUp);
-				popUpOnMenu.add(helpOn);
-				popUpOnMenu.setPreferredSize(new Dimension(180,100));
-		}
-		
-		private void initPopupOffMenu() {
-				popUpOffMenu = new JPopupMenu();
+
+		private void initPopupMenu() {
+				popupMenu = new JPopupMenu();
 				logOff = new JMenuItem(new AbstractAction("Log off") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -184,35 +93,22 @@ public class SideMenu extends JPanel {
 						public void actionPerformed(ActionEvent e) {
 								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
 																JOptionPane.INFORMATION_MESSAGE);
-								popup = false;
 						}
 				});
 				helpOff.setSize(200, 20);
-				popUpOffMenu.add(logOff);
-				popUpOffMenu.add(helpOff);
+				popupMenu.add(logOff);
+				popupMenu.add(helpOff);
 		}
 		
 		private void initPlayerButton() {
 				playerButton = new JButton();
-				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(this.getWidth()-97, 11, 80, 80);
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				playerButton.setBounds(this.getWidth()-77, 11, 60, 60);
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								if (popup) {
-										popup = false;
-										popUpOffMenu.setVisible(false);
-										popUpOnMenu.setVisible(false);
-								} else {
-										popup = true;
-										if (playerIsLogged) {
-												popUpOffMenu.show(e.getComponent(), playerButton.getX()-134, playerButton.getY()+69);
-										} else {
-												popUpOnMenu.show(e.getComponent(), playerButton.getX()-252, playerButton.getY()+69);
-										}
-										
-								}
+								popupMenu.show(e.getComponent(), playerButton.getX()-174, playerButton.getY()+49);
 						}
 				});
 				playerButton.setVisible(debug);
@@ -220,7 +116,7 @@ public class SideMenu extends JPanel {
 		
 		private void initScoreLabel() {
 				score = new JLabel("000");
-				score.setBounds(this.getWidth()-170, 34, 80, 80);
+				score.setBounds(this.getWidth()-170, 14, 80, 80);
 				Font font = null;
 				try {
 						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(
@@ -255,32 +151,6 @@ public class SideMenu extends JPanel {
 				scrabbleButton.setOpaque(false);
 				scrabbleButton.setBorder(null);
 		}
-		
-//		private void initGameBoardButton() {
-//				gameBoardButton = new JButton("Gameboard");
-//				gameBoardButton.setBounds(this.getWidth()/2-50, this.getHeight()-415, 110, 30);
-//				gameBoardButton.addActionListener(new AbstractAction() {
-//
-//						@Override
-//						public void actionPerformed(ActionEvent e) {
-//								gameBoard.changeGameBoard();
-//						}
-//				});
-//				gameBoardButton.setVisible(debug);
-//		}
-		
-//		private void initBackgroundButton() {
-//				backgroundButton = new JButton("Background");
-//				backgroundButton.setBounds(this.getWidth()/2-50, this.getHeight()-450, 110, 30);
-//				backgroundButton.addActionListener(new AbstractAction() {
-//
-//						@Override
-//						public void actionPerformed(ActionEvent e) {
-//								scrabble.changeBackground();
-//						}
-//				});
-//				backgroundButton.setVisible(debug);
-//		}
 		
 		private void initAddWordButton() {
 				addWordButton = new JButton("Add word");
@@ -358,22 +228,34 @@ public class SideMenu extends JPanel {
 						public void actionPerformed(ActionEvent e) {
 //								playAsGuest();
 								playerAnonym();
-								popup = false;
 						}
 				});
 		}
 			
-		private void initLogInSignUpButton() {
-				logSignButton = new JButton("Log in/sign up");
+		private void initLogInButton() {
+				logSignButton = new JButton("Log in");
 				logSignButton.setBounds(this.getWidth()/2-50, 235, 110, 30);
 				logSignButton.setVisible(true);
 				logSignButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							popup = true;
-							playerButton.setVisible(true);
-							popUpOnMenu.setVisible(true);
+								LogSign logSign = new LogSign(getThis(),"Log in");
+								logSign.showLogSign();
+						}
+				});
+		}
+		
+		private void initSignUpButton() {
+				signUpButton = new JButton("Sign up");
+				signUpButton.setBounds(this.getWidth()/2-50, 270, 110, 30);
+				signUpButton.setVisible(true);
+				signUpButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								LogSign logSign = new LogSign(getThis(),"Sign up");
+								logSign.showLogSign();
 						}
 				});
 		}
@@ -382,7 +264,8 @@ public class SideMenu extends JPanel {
 				email = emailField.getText();
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
-						playerButton.setIcon(ImageIconTools.getGravatar(email));
+						playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 						if (/*call log in player*/true) { // TODO insert log in player here
 								playerLogged();
 						} else {
@@ -396,10 +279,12 @@ public class SideMenu extends JPanel {
 		}
 		
 		public void playerLogged() {
-				playerIsLogged = true;
-				initPopupOffMenu();
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				initPopupMenu();
 				logSignButton.setVisible(false);
 				playAsGuestButton.setVisible(false);
+				signUpButton.setVisible(false);
 				newGameButton.setVisible(true);
 				saveButton.setVisible(true);
 				loadButton.setVisible(true);
@@ -411,10 +296,10 @@ public class SideMenu extends JPanel {
 		
 		private void playerAnonym() {
 				email = "Anonym player";
-				playerIsLogged = true;
-				initPopupOffMenu();
+				initPopupMenu();
 				logSignButton.setVisible(false);
 				playAsGuestButton.setVisible(false);
+				signUpButton.setVisible(false);
 				newGameButton.setVisible(true);
 				arrangeButton.setVisible(true);
 				playerButton.setVisible(true);
@@ -423,11 +308,9 @@ public class SideMenu extends JPanel {
 		}
 		
 		private void reset() {
-				popup = false;
-				emailField.setText("Email");
-				passwordField.setText("aaaaaa");
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
-				playerIsLogged = false;
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				playerButton.setVisible(false);
 				newGameButton.setVisible(false);
 				saveButton.setVisible(false);
 				loadButton.setVisible(false);
@@ -436,6 +319,7 @@ public class SideMenu extends JPanel {
 				settingsButton.setVisible(false);
 				score.setVisible(false);
 				logSignButton.setVisible(true);
+				signUpButton.setVisible(true);
 				playAsGuestButton.setVisible(true);
 		}
 				
@@ -469,5 +353,14 @@ public class SideMenu extends JPanel {
 								settings.showSettings();
 						}
 				});
+		}
+		
+		private SideMenu getThis() {
+				return this;
+		}
+		
+		public void setInformations(String email, char[] password) {
+				this.email = email;
+				this.password = password;
 		}
 }
