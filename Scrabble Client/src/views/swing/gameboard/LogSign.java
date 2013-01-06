@@ -4,9 +4,7 @@ package views.swing.gameboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import javax.swing.*;
 import model.utils.EmailValidator;
 
@@ -17,33 +15,39 @@ import model.utils.EmailValidator;
 public class LogSign extends JDialog {
 		
 		private SideMenu sideMenu;
-		private JPanel emailFieldPanel,passwordFieldPanel, buttonsPanel, fakePanel1, fakePanel2;
+		private JPanel textPanel, emailFieldPanel,passwordFieldPanel, buttonsPanel;
 		private JButton validateButton, cancelButton;
 		private JTextField emailField;
 		private JPasswordField passwordField;
+		private JLabel text;
+		private EmailValidator emailValidator;
 		
-		
-		private LogSign(JFrame frame, String title, int cheat) {
+		private LogSign(JFrame frame, String title, int deepThought) {
     super(frame, title, true);
-    this.setSize(200, 130);
+    this.setSize(300, 160);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
 				this.setBackground(Color.WHITE);
     this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				this.setLayout(new BorderLayout());
 				initComponents();
-				if (cheat == 42) {
-//						Everything is answered.
+				if (deepThought == 42) {
+						System.out.println("But the Ultimate Question itself is unknown.");
 				}
-				validateButton.requestFocusInWindow();
+				this.addWindowListener(new WindowAdapter() {
+						public void WindowOpened(WindowEvent e) {
+								validateButton.requestFocusInWindow();
+						}
+				});
 		}
 		
 		public LogSign(SideMenu sideMenu, String title) {
-				this(null, title, 42);
+				this(null, title, ((6*3)*4)-30);
 				this.sideMenu = sideMenu;
 		}
 
 		private void initComponents() {
+				emailValidator = new EmailValidator();
 				initFieldsPanel();
 				initButtonsPanel();
 				add(emailFieldPanel, BorderLayout.NORTH);
@@ -52,25 +56,32 @@ public class LogSign extends JDialog {
 		}
 
 		private void initFieldsPanel() {
+				text = new JLabel("Please enter your email address and password");
+				textPanel = new JPanel();
+				textPanel.setOpaque(false);
+				textPanel.add(text);
+				
 				emailFieldPanel = new JPanel();
 				emailFieldPanel.setOpaque(false);
-				emailField = new JTextField("enter@your.email");
+				emailFieldPanel.setLayout(new BorderLayout());
+				emailField = new JTextField("Email address");
 				emailField.setPreferredSize(new Dimension(180,25));
 				emailField.addFocusListener(new FocusListener() {
 						@Override
 						public void focusGained(FocusEvent e) {
-								if (emailField.getText().equals("enter@your.email")) {
+								if (emailField.getText().equals("Email address")) {
             emailField.setText("");
         }
 						}
 						@Override
 						public void focusLost(FocusEvent e) {
 								if (emailField.getText().equals("")) {
-            emailField.setText("enter@your.email");
+            emailField.setText("Email address");
         }
 						}
 				});
-				emailFieldPanel.add(emailField);
+				emailFieldPanel.add(textPanel, BorderLayout.NORTH);
+				emailFieldPanel.add(emailField, BorderLayout.CENTER);
 				
 				passwordFieldPanel= new JPanel();
 				passwordFieldPanel.setOpaque(false);
@@ -96,7 +107,7 @@ public class LogSign extends JDialog {
 		private void initButtonsPanel() {
 				buttonsPanel = new JPanel();
 				buttonsPanel.setOpaque(false);
-				buttonsPanel.setSize(450,120);
+//				buttonsPanel.setSize(450,120);
 				validateButton = new JButton(this.getTitle());
 				validateButton.setSize(110,30);
 				validateButton.addActionListener(new AbstractAction() {
@@ -107,8 +118,12 @@ public class LogSign extends JDialog {
 										if (EmailValidator.validate(emailField.getText())) {
 												if ("Sign up".equals(validateButton.getText())) {
 														sideMenu.setInformations(emailField.getText(), passwordField.getPassword());
+														sideMenu.playerLogged();
+														dispose();
 												} else {
 														sideMenu.setInformations(emailField.getText(), passwordField.getPassword());
+														sideMenu.playerLogged();
+														dispose();
 												}
 										} else {
 												JOptionPane.showMessageDialog(null, "\""+emailField.getText() + "\" is not a valid "
