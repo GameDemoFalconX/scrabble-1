@@ -57,6 +57,10 @@ public class GameController {
 				play.reArrangeRack();
 		}
 		
+		public void notifyExchangeTiles() {
+				// Call model
+		}
+		
 		public void notifyValidWord(){
 				play.validateWord();
 		}

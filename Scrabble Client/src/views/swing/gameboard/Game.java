@@ -37,7 +37,7 @@ public class Game extends GameView  {
 		private Rack rack;
 		//private SideMenu sideMenu;
 		private JLabel frameBackground;
-		private JButton reArrangeButton;
+		private JButton reArrangeButton, exchangeButton, validWordButton;
 		
 		public Game(GameController controller) {
 				super(controller);
@@ -49,7 +49,6 @@ public class Game extends GameView  {
 				JLPaneOfFrame = frame.getLayeredPane();
 				gameboard = new GameBoard();
 				rack = new Rack(this, JLPaneOfFrame);
-				//sideMenu = new SideMenu(gb, rack);
 				initContainer();
 				initFrame();
 		}
@@ -58,21 +57,20 @@ public class Game extends GameView  {
 				frameBackground = new JLabel(ImageIconTools.createImageIcon("../media/background.png",""));
 				frameBackground.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
-				//contentPane.setBackground(Color.WHITE);
 				contentPane.setLayout(null);
 				contentPane.add(frameBackground, 0);
 				contentPane.add(gameboard, 0);
 				contentPane.add(gameboard.getInnerGrid(), 0);
 				contentPane.add(rack, 0);
 				contentPane.add(rack.getInnerRack(), 0);
-				initReArrangeButton();
-				contentPane.add(reArrangeButton, 0);
+				//initReArrangeButton();
+				//contentPane.add(reArrangeButton, 0);
 				contentPane.setVisible(true);
 		}
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left+gameboard.getInsets().right + 307, 850);
+				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left+gameboard.getInsets().right + 250, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
@@ -80,22 +78,10 @@ public class Game extends GameView  {
 				frame.setVisible(true);
 		}
 		
-		private void initReArrangeButton() {
-				reArrangeButton = new JButton("Arrange");
-				reArrangeButton.setBounds(100, 720, 80, 80);
-				reArrangeButton.setOpaque(true);
-				reArrangeButton.setVisible(true);
-				reArrangeButton.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								getController().notifyReArrangeRack();
-						}
-				});
-		}
-		
 		public void setMenu(JPanel menu) {
 				contentPane.add(menu, 0);
+				contentPane.validate();
+				contentPane.repaint();
 		}
 		
 		@Override
@@ -106,6 +92,47 @@ public class Game extends GameView  {
 		@Override
 		public void display() {
 				frame.setVisible(true);
+		}
+		
+		/*** Methods used for initialize game buttons ***/
+		
+		private void initReArrangeButton() {
+				reArrangeButton = new JButton("Arrange");
+				reArrangeButton.setBounds(30, 720, 60, 60);
+				reArrangeButton.setVisible(true);
+				reArrangeButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								getController().notifyReArrangeRack();
+						}
+				});
+		}
+		
+		private void initExchangeButton() {
+				exchangeButton = new JButton("Exchange");
+				exchangeButton.setBounds(100, 720, 60, 60);
+				exchangeButton.setVisible(true);
+				exchangeButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								getController().notifyExchangeTiles();
+						}
+				});
+		}
+		
+		private void initValidWordButton() {
+				validWordButton = new JButton("Valide");
+				validWordButton.setBounds(500, 720, 60, 60);
+				validWordButton.setVisible(true);
+				validWordButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								getController().notifyValidWord();
+						}
+				});
 		}
 		
 		/*** Methods used to modify the view from model notifications ***/

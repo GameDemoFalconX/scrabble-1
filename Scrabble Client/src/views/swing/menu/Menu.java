@@ -24,10 +24,10 @@ import views.swing.gameboard.Blah;
 public class Menu extends MenuView {
 		
 		private static JPanel panel;
-		private JButton PlayAsGuestButton, LoginButton, SignupButton, QuitButton;
+		private JButton PlayAsGuestButton, LoginButton, SignupButton, scrabbleButton;
 		
-		private JButton playerButton, scrabbleButton, gameBoardButton, scoreTestButton,
-										addWordButton;
+		/*
+		private JButton playerButton, gameBoardButton, scoreTestButton, addWordButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, logOff, helpOn, helpOff;
 		private JTextField emailField;
@@ -38,6 +38,7 @@ public class Menu extends MenuView {
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
 		private boolean debug = true;
+		*/
 
 		public Menu(MenuController controller)	{
 				super(controller);
@@ -47,22 +48,25 @@ public class Menu extends MenuView {
 		private void buildMenu() {
 				panel = new JPanel();
 				panel.setLayout(null);
-				panel.setBounds(700, 0, 300, 800);
+				panel.setBounds(700, 0, 250, 800);
 				panel.setOpaque(false);
 				initComponent();
-				setVisible(true);
 		}
 
 		private void initComponent() {
 				initPlayAsGuestButton();
 				initLoginButton();
 				initSignupButton();
-				initQuitButton();
+				initScrabbleButton();
 				panel.add(PlayAsGuestButton);
 				panel.add(LoginButton);
 				panel.add(SignupButton);
-				panel.add(QuitButton);
+				panel.add(scrabbleButton);
 				panel.validate();
+		}
+		
+		public JPanel getPanel() {
+				return panel;
 		}
 		
 		private void initPlayAsGuestButton() {
@@ -104,17 +108,19 @@ public class Menu extends MenuView {
 				SignupButton.setVisible(true);
 		}
 		
-		private void initQuitButton() {
-				QuitButton = new JButton("Quit");
-				QuitButton.setBounds(panel.getWidth()/2-80, 350, 160, 30);
-				QuitButton.addActionListener(new AbstractAction() {
+		private void initScrabbleButton() {
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png","Scrabble"));
+				scrabbleButton.setPreferredSize(new Dimension(190,102));
+				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
+				//scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setBorder(null);
+				scrabbleButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								// Call controller
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
-				QuitButton.setVisible(true);
 		}
 		
 		/*
@@ -152,6 +158,7 @@ public class Menu extends MenuView {
 				panel.add(score);
 		}*/
 		
+		/*
 		private void initPopupOnMenu() {
 				popUpOnMenu = new JPopupMenu();
 				emailField = new JTextField("Email");
@@ -228,14 +235,15 @@ public class Menu extends MenuView {
 				popUpOffMenu.add(logOff);
 				popUpOffMenu.add(helpOff);
 		}
-		
+		*/
 		/*** Methods used for login, sign up or logout ***/
+		/*
 		private void logInSignUp() {
 				email = emailField.getText();
 				password = passwordField.getPassword();
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(ImageIconTools.getGravatar(email));
-						if (/*call log in player*/true) {
+						if (true) {
 								playerIsLogged = true;
 						} else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
@@ -255,7 +263,7 @@ public class Menu extends MenuView {
 		}
 		
 		/*** ***/
-		
+		/*
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setPreferredSize(new Dimension(80,80));
@@ -289,21 +297,6 @@ public class Menu extends MenuView {
 				score.setForeground(Color.BLACK);
 		}
 		
-		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageIconTools.createImageIcon("media/Scrabble.png","Scrabble"));
-				scrabbleButton.setPreferredSize(new Dimension(190,102));
-				scrabbleButton.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
-						}
-				});
-				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
-				scrabbleButton.setBackground(Color.WHITE);
-				scrabbleButton.setBorder(null);
-		}
-		
 		private void initGameBoardButton() {
 				gameBoardButton = new JButton("Modern");
 				gameBoardButton.setBounds(10, 10, 90, 20);
@@ -334,9 +327,6 @@ public class Menu extends MenuView {
 				panel.setVisible(visible);
 		}
 		
-		public JPanel getPanel() {
-				return panel;
-		}
 		
 	 public void incScore() {
 				int tempScore = Integer.parseInt(score.getText());
@@ -366,5 +356,5 @@ public class Menu extends MenuView {
 		
 		public boolean isAddWordVisible() {
 				return addWordButton.isVisible();
-		}
+		}*/
 }
