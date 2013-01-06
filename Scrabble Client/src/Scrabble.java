@@ -10,7 +10,7 @@ import model.Play;
 public class Scrabble {
 
 		public static void main(String[] args) {
-				Play play = new Play();
+				Play play = new Play(args);
 				GameController gameController = new GameController(play);
 				MenuController menuController = new MenuController(play);
 				gameController.addMenuToView(menuController.getPanelMenu());

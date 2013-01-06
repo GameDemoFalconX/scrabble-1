@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import model.event.InitMenuToPlayEvent;
 import views.MenuView;
 import views.swing.common.EmailValidator;
 import views.swing.common.ImageIconTools;
@@ -76,7 +77,7 @@ public class Menu extends MenuView {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								// Call controller
+								getController().notifyPlayAsGuest();
 						}
 				});
 				PlayAsGuestButton.setVisible(true);
@@ -121,6 +122,11 @@ public class Menu extends MenuView {
 								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
+		}
+		
+		@Override
+		public void initMenuToPlay(InitMenuToPlayEvent event) {
+				// Init the menu view
 		}
 		
 		/*

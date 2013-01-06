@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import model.event.InitRackEvent;
 import model.event.RackReArrangeEvent;
 import model.event.TileFromGridToGridEvent;
 import model.event.TileFromGridToRackEvent;
@@ -48,7 +49,7 @@ public class Game extends GameView  {
 				frame = new JFrame("Scrabble");
 				JLPaneOfFrame = frame.getLayeredPane();
 				gameboard = new GameBoard();
-				rack = new Rack(this, JLPaneOfFrame);
+				rack = new Rack();
 				initContainer();
 				initFrame();
 		}
@@ -63,8 +64,6 @@ public class Game extends GameView  {
 				contentPane.add(gameboard.getInnerGrid(), 0);
 				contentPane.add(rack, 0);
 				contentPane.add(rack.getInnerRack(), 0);
-				//initReArrangeButton();
-				//contentPane.add(reArrangeButton, 0);
 				contentPane.setVisible(true);
 		}
 		
@@ -76,6 +75,17 @@ public class Game extends GameView  {
 				frame.setLocationRelativeTo(null);
 				frame.setResizable(false);
 				frame.setVisible(true);
+		}
+		
+		private void initGameButtons() {
+				initReArrangeButton();
+				initExchangeButton();
+				initValidWordButton();
+				contentPane.add(reArrangeButton, 0);
+				contentPane.add(exchangeButton, 0);
+				contentPane.add(validWordButton, 0);
+				contentPane.validate();
+				contentPane.repaint();
 		}
 		
 		public void setMenu(JPanel menu) {
@@ -186,5 +196,14 @@ public class Game extends GameView  {
 		@Override
 		public void rackReArrange(RackReArrangeEvent event) {
 				rack.reArrangeTiles(event.getNewPositions());
+		}
+		
+		@Override
+		public void initRack(InitRackEvent event) {
+				// Init Rack
+				rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame);
+				
+				// Init buttons inside the GameView
+				initGameButtons();
 		}
 }

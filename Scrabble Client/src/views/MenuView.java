@@ -1,12 +1,13 @@
 package views;
 
 import controller.MenuController;
+import model.event.MenuListener;
 
 /**
  * 
  * @author Romain <ro.foncier@gmail.com>
  */
-public class MenuView {
+public abstract class MenuView implements MenuListener {
 
 		private MenuController controller = null;
 

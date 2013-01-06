@@ -1,11 +1,11 @@
 package service.connection;
 
-import model.utils.Message;
-import model.utils.Protocol;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import model.utils.Message;
+import model.utils.Protocol;
 
 /**
  *

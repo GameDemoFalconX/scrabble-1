@@ -21,11 +21,14 @@ public class MenuController {
 		}
 
 		private void addListenersToModel() {
-				//play.addTileListener(MainView);
-				//play.addRackListener(MainView);
+				play.addMenuListener(MainView);
 		}
 
 		public JPanel getPanelMenu() {
 				return ((Menu) MainView).getPanel();
+		}
+		
+		public void notifyPlayAsGuest(){
+				play.playAsGuest();
 		}
 }

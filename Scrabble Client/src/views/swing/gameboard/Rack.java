@@ -33,13 +33,13 @@ public class Rack extends JPanel {
 		private ImageIcon icon;
 		private JPanel innerRack;
 		private boolean debug = false;
-		private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 		private static int tileNumber = RACK_LENGTH;
+		//private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
 			*/
-		public Rack(Game scrabble, JLayeredPane jlp) {
+		public Rack() {
 				/** Construction of rack **/
 				setName("Rack");
 				setImageRack();
@@ -65,7 +65,6 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1]), scrabble, jlp));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}
@@ -87,6 +86,16 @@ public class Rack extends JPanel {
 		
 		public boolean rackIsFull() {
 				return tileNumber == RACK_LENGTH;
+		}
+		
+		/*** Method used to load tiles on rack ***/
+		public void loadTilesOnRack(String [][] newTiles, Game scrabble, JLayeredPane jlp) {
+				for (int i = 0; i < RACK_LENGTH; i++) {
+						panelRack parent = (panelRack) innerRack.getComponent(i);
+						if (parent.getComponentCount() == 0) {
+								parent.addDTElement(new DTPicture(getTileImage(newTiles[i][0], newTiles[i][1]), scrabble, jlp));
+						}
+				}
 		}
 		
 		/*** Methods used for re-arrange and exchange tiles ***/
