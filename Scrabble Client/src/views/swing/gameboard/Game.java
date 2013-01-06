@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import model.event.RackReArrangeEvent;
 import model.event.TileFromGridToGridEvent;
@@ -30,6 +31,7 @@ import views.swing.common.panelRack;
 public class Game extends GameView  {
     
 		private JFrame frame;
+		private JLayeredPane JLPaneOfFrame;
 		private Container contentPane;
 		private GameBoard gameboard;
 		private Rack rack;
@@ -44,8 +46,9 @@ public class Game extends GameView  {
 		
 		private void buildScrabble() {
 				frame = new JFrame("Scrabble");
+				JLPaneOfFrame = frame.getLayeredPane();
 				gameboard = new GameBoard();
-				rack = new Rack(this);
+				rack = new Rack(this, JLPaneOfFrame);
 				//sideMenu = new SideMenu(gb, rack);
 				initContainer();
 				initFrame();
@@ -63,6 +66,7 @@ public class Game extends GameView  {
 				contentPane.add(rack, 0);
 				contentPane.add(rack.getInnerRack(), 0);
 				initReArrangeButton();
+				contentPane.add(reArrangeButton, 0);
 				contentPane.setVisible(true);
 		}
 		
@@ -79,6 +83,7 @@ public class Game extends GameView  {
 		private void initReArrangeButton() {
 				reArrangeButton = new JButton("Arrange");
 				reArrangeButton.setBounds(100, 720, 80, 80);
+				reArrangeButton.setOpaque(true);
 				reArrangeButton.setVisible(true);
 				reArrangeButton.addActionListener(new AbstractAction() {
 

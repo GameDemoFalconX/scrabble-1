@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import views.swing.common.DTPicture;
 import views.swing.common.ImageIconTools;
@@ -38,7 +39,7 @@ public class Rack extends JPanel {
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
 			*/
-		public Rack(Game scrabble) {
+		public Rack(Game scrabble, JLayeredPane jlp) {
 				/** Construction of rack **/
 				setName("Rack");
 				setImageRack();
@@ -64,7 +65,7 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1]), scrabble));
+						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1]), scrabble, jlp));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}

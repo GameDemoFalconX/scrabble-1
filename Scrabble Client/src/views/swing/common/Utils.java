@@ -1,10 +1,8 @@
 package views.swing.common;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Point;
-import javax.swing.RootPaneContainer;
-import javax.swing.SwingUtilities;
+import javax.swing.JLayeredPane;
 
 /**
  * 
@@ -12,16 +10,22 @@ import javax.swing.SwingUtilities;
  */
 public class Utils {
 
-		public static Component findParentUnderGlassPaneAt(Component top, Point p) {
-				Component c = null;
-
-				if (top.isShowing()) {
-						if (top instanceof RootPaneContainer) {
-								c = ((RootPaneContainer) top).getLayeredPane().findComponentAt(SwingUtilities.convertPoint(top, p, ((RootPaneContainer) top).getLayeredPane()));
-						} else {
-								c = ((Container) top).findComponentAt(p);
+		public static Component findParentUnderGlassPaneAt(JLayeredPane jlp, Point p) {
+				Component parent = null;
+				// Find component at this specific point
+				Component target = jlp.findComponentAt(p);
+				
+				// Check the type of target in all cases
+				if (target instanceof panelRack || target instanceof panelGrid) {
+						parent = target;
+				} else if (target instanceof DTPicture) {
+						DTPicture targetDTP = (DTPicture) target;
+						if (targetDTP.getParent() instanceof panelRack) {
+								parent = targetDTP.getParent();
 						}
+						// Only case to handle because if the target is a DTPicture inside the grid : no action required.
 				}
-				return c;
+				
+				return parent;
 		}
 }

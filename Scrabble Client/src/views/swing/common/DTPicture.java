@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import views.swing.gameboard.Game;
@@ -25,15 +26,17 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		private Game scrabble;
 		private GlassPane glass;
 		private BufferedImage imageGlass;
+		private JLayeredPane JLPane;
 		private boolean isLocked = false;
 		private boolean debug = false;
 		private JPanel sourceParent;
 		private JPanel targetParent;
 
-		public DTPicture(Image image, Game scrabble) {
+		public DTPicture(Image image, Game scrabble, JLayeredPane jlp) {
 				super(image);
 				this.scrabble = scrabble;
 				this.glass = GlassPane.getInstance();
+				JLPane = jlp;
 				addMouseMotionListener(this);
 				setName("DTPicture");
 				setOpaque(false);
@@ -99,16 +102,17 @@ public class DTPicture extends Picture implements MouseMotionListener {
 				Component comp =  e.getComponent();
 				Point location = (Point)e.getPoint().clone();
 				
-				// Get the target parent of this DTPicture
-				targetParent = (JPanel) Utils.findParentUnderGlassPaneAt(comp, location);
-				// Notifiy controller about this user gesture
-				notifyController();
-				
 				// Convert a point from a component's coordinate system to screen coordinates.
-				SwingUtilities.convertPointToScreen(location, comp);
+				SwingUtilities.convertPointToScreen(location, comp);				
 				// Convert a point from a screen coordinates to a component's coordinate system.
 				SwingUtilities.convertPointFromScreen(location, glass);
-
+				
+				// Get the target parent of this DTPicture
+				targetParent = (JPanel) Utils.findParentUnderGlassPaneAt(JLPane, location);
+				System.out.println("Target parent : "+targetParent.getClass());
+				// Notifiy controller about this user gesture
+				//notifyController();
+								
 				// Update the GlassPane
 				glass.setLocation(location);
 				glass.setImage(null);

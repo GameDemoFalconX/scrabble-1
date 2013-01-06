@@ -50,6 +50,7 @@ public class Menu extends MenuView {
 				panel.setBounds(700, 0, 300, 800);
 				panel.setOpaque(false);
 				initComponent();
+				setVisible(true);
 		}
 
 		private void initComponent() {
