@@ -24,9 +24,10 @@ public class SideMenu extends JPanel {
 		
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, addWordButton,
-										arrangeButton, newGameButton, saveButton, loadButton, backgroundButton;
+										arrangeButton, newGameButton, saveButton, loadButton, backgroundButton,
+										logSignButton, playAsGuestButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
-		private JMenuItem logIn, signUp, logOff, helpOn, helpOff, player;
+		private JMenuItem logIn, signUp, helpOn, logOff, helpOff;
 		private JTextField emailField;
 		private JLabel score;
 		private String email;
@@ -35,6 +36,8 @@ public class SideMenu extends JPanel {
 		private EmailValidator emailValidator;
 		private boolean playerIsLogged = false;
 		private boolean vintage = true;
+		private boolean debug = false;
+		private boolean popup = false;
 		private Rack rack;
 		private Scrabble scrabble;
 
@@ -54,6 +57,7 @@ public class SideMenu extends JPanel {
 		
 		private void initComponents() {
 				emailValidator = new EmailValidator();
+				initThis();
 				initPopupOnMenu();
 				initPopupOffMenu();
 				initPlayerButton();
@@ -66,6 +70,8 @@ public class SideMenu extends JPanel {
 				initSaveButton();
 				initLoadButton();
 				initBackgroundButton();
+				initPlayAsGuestbutton();
+				initLogInSignUpbutton();
 				this.add(playerButton);
 				this.add(scrabbleButton);
 				this.add(gameBoardButton);
@@ -75,7 +81,27 @@ public class SideMenu extends JPanel {
 				this.add(saveButton);
 				this.add(loadButton);
 				this.add(backgroundButton);
+				this.add(playAsGuestButton);
+				this.add(logSignButton);
 				this.add(score);
+		}
+		
+		private void initThis() {
+				this.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+								if (!playerIsLogged) {
+										playerButton.setVisible(false);
+										popUpOnMenu.setVisible(false);
+										popUpOffMenu.setVisible(false);
+								} else if (popup) {
+										popup = !popup;
+										popUpOnMenu.setVisible(false);
+										popUpOffMenu.setVisible(false);
+								}
+						}
+						
+				});
 		}
 		
 		private void initPopupOnMenu() {
@@ -116,12 +142,14 @@ public class SideMenu extends JPanel {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
+								popup = false;
       }
 				});
 				signUp = new JMenuItem(new AbstractAction("Sign Up") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								logInSignUp();
+								popup = false;
       }
 				});
 				helpOn = new JMenuItem(new AbstractAction("Help") {
@@ -129,6 +157,7 @@ public class SideMenu extends JPanel {
 						public void actionPerformed(ActionEvent e) {
 								JOptionPane.showMessageDialog(null, Blah.HELP_ON, "Help", 
 																JOptionPane.INFORMATION_MESSAGE);
+								popup = false;
 						}
 				});
 				popUpOnMenu.add(emailField);
@@ -141,29 +170,24 @@ public class SideMenu extends JPanel {
 		
 		private void initPopupOffMenu() {
 				popUpOffMenu = new JPopupMenu();
-				player = new JMenuItem(new AbstractAction(email) {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-//								statistics ?
-      }
-				});
 				logOff = new JMenuItem(new AbstractAction("Log off") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								resetPlayer();
+								reset();
       }
 				});
+				logOff.setSize(200, 20);
 				helpOff = new JMenuItem(new AbstractAction("Help") {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
 																JOptionPane.INFORMATION_MESSAGE);
+								popup = false;
 						}
 				});
-				popUpOffMenu.add(player);
+				helpOff.setSize(200, 20);
 				popUpOffMenu.add(logOff);
 				popUpOffMenu.add(helpOff);
-				popUpOffMenu.setPreferredSize(new Dimension(180,60));
 		}
 		
 		private void initPlayerButton() {
@@ -173,14 +197,23 @@ public class SideMenu extends JPanel {
 				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
-						public void mousePressed(MouseEvent e) {
-								if (playerIsLogged) {
-										popUpOffMenu.show(e.getComponent(), playerButton.getX()-262, playerButton.getY()+79);
+						public void mouseClicked(MouseEvent e) {
+								if (popup) {
+										popup = false;
+										popUpOffMenu.setVisible(false);
+										popUpOnMenu.setVisible(false);
 								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-252, playerButton.getY()+69);
+										popup = true;
+										if (playerIsLogged) {
+												popUpOffMenu.show(e.getComponent(), playerButton.getX()-134, playerButton.getY()+69);
+										} else {
+												popUpOnMenu.show(e.getComponent(), playerButton.getX()-252, playerButton.getY()+69);
+										}
+										
 								}
 						}
 				});
+				playerButton.setVisible(debug);
 		}
 		
 		private void initScoreLabel() {
@@ -200,6 +233,7 @@ public class SideMenu extends JPanel {
 				} else {
 						score.setForeground(Color.BLACK);
 				}
+				score.setVisible(debug);
 		}
 		
 		private void initScrabbleButton() {
@@ -230,7 +264,7 @@ public class SideMenu extends JPanel {
 								gameBoard.changeGameBoard();
 						}
 				});
-				gameBoardButton.setVisible(true);
+				gameBoardButton.setVisible(debug);
 		}
 		
 		private void initBackgroundButton() {
@@ -243,7 +277,7 @@ public class SideMenu extends JPanel {
 								scrabble.changeBackground();
 						}
 				});
-				backgroundButton.setVisible(true);
+				backgroundButton.setVisible(debug);
 		}
 		
 		private void initAddWordButton() {
@@ -257,13 +291,13 @@ public class SideMenu extends JPanel {
 								setAddWordVisible(false);
 						}
 				});
-				addWordButton.setVisible(true);
+				addWordButton.setVisible(debug);
 		}
 		
 		private void initArrangeButton() {
 				arrangeButton = new JButton("Shuffle rack");
 				arrangeButton.setBounds(this.getWidth()/2-50, this.getHeight()-175, 110, 30);
-				arrangeButton.setVisible(true);
+				arrangeButton.setVisible(debug);
 				arrangeButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -276,7 +310,7 @@ public class SideMenu extends JPanel {
 		private void	initNewGameButton() {
 				newGameButton = new JButton("New game");
 				newGameButton.setBounds(this.getWidth()/2-50, this.getHeight()-330, 110, 30);
-				newGameButton.setVisible(true);
+				newGameButton.setVisible(debug);
 				newGameButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -289,7 +323,7 @@ public class SideMenu extends JPanel {
 		private void	initSaveButton() {
 				saveButton = new JButton("Save game");
 				saveButton.setBounds(this.getWidth()/2-50, this.getHeight()-295, 110, 30);
-				saveButton.setVisible(false);
+				saveButton.setVisible(debug);
 				saveButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -302,13 +336,42 @@ public class SideMenu extends JPanel {
 		private void initLoadButton() {
 				loadButton = new JButton("Load game");
 				loadButton.setBounds(this.getWidth()/2-50, this.getHeight()-260, 110, 30);
-				loadButton.setText("Load game");
-				loadButton.setVisible(false);
+				loadButton.setVisible(debug);
 				loadButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 //								loadGame();
+						}
+				});
+		}
+		
+		private void initPlayAsGuestbutton() {
+				playAsGuestButton = new JButton("Play as guest");
+				playAsGuestButton.setBounds(this.getWidth()/2-50, 200, 110, 30);
+				playAsGuestButton.setVisible(true);
+				playAsGuestButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								playAsGuest();
+								playerAnonym();
+								popup = false;
+						}
+				});
+		}
+			
+		private void initLogInSignUpbutton() {
+				logSignButton = new JButton("Log in/sign up");
+				logSignButton.setBounds(this.getWidth()/2-50, 235, 110, 30);
+				logSignButton.setVisible(true);
+				logSignButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							popup = true;
+							playerButton.setVisible(true);
+							popUpOnMenu.setVisible(true);
 						}
 				});
 		}
@@ -325,25 +388,50 @@ public class SideMenu extends JPanel {
 																"Error", JOptionPane.ERROR_MESSAGE);
 						}
 				} else {
-						JOptionPane.showMessageDialog(null, email + "is not a valid "
+						JOptionPane.showMessageDialog(null, "\""+email + "\" is not a valid "
 														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
 				}
 		}
 		
-		private void playerLogged() {
+		public void playerLogged() {
 				playerIsLogged = true;
 				initPopupOffMenu();
+				logSignButton.setVisible(false);
+				playAsGuestButton.setVisible(false);
+				newGameButton.setVisible(true);
 				saveButton.setVisible(true);
 				loadButton.setVisible(true);
+				arrangeButton.setVisible(true);
+				playerButton.setVisible(true);
+				score.setVisible(true);
 		}
 		
-		private void resetPlayer() {
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+		private void playerAnonym() {
+				email = "Anonym player";
+				playerIsLogged = true;
+				initPopupOffMenu();
+				logSignButton.setVisible(false);
+				playAsGuestButton.setVisible(false);
+				newGameButton.setVisible(true);
+				arrangeButton.setVisible(true);
+				playerButton.setVisible(true);
+				score.setVisible(true);
+		}
+		
+		private void reset() {
+				popup = false;
 				emailField.setText("Email");
 				passwordField.setText("aaaaaa");
+				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
 				playerIsLogged = false;
+				newGameButton.setVisible(false);
 				saveButton.setVisible(false);
 				loadButton.setVisible(false);
+				arrangeButton.setVisible(false);
+				playerButton.setVisible(false);
+				score.setVisible(false);
+				logSignButton.setVisible(true);
+				playAsGuestButton.setVisible(true);
 		}
 				
 		public void setScore(int score) {
