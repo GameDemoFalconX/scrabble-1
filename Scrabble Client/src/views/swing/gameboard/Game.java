@@ -122,6 +122,7 @@ public class Game extends GameView  {
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.add(sourceParent.getComponent(0));
+				// Set the targetParent componenet visible.
 		}
 		
 		@Override

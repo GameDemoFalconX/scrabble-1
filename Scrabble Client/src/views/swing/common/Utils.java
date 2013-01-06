@@ -10,6 +10,12 @@ import javax.swing.JLayeredPane;
  */
 public class Utils {
 
+		/**
+			* Return the parentContainer at this position only whether it's panelRack or panelGrid instances
+			* @param jlp
+			* @param p
+			* @return JPanel or null in bad cases
+			*/
 		public static Component findParentUnderGlassPaneAt(JLayeredPane jlp, Point p) {
 				Component parent = null;
 				// Find component at this specific point
