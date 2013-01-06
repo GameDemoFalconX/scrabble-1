@@ -24,7 +24,6 @@ public class Scrabble {
 		private SideMenu sideMenu;
 		private JLabel bg;
 		private ImageIcon icon;		
-		private boolean vintage = true;
 		
 		public Scrabble() {
 				frame = new JFrame("Scrabble");
@@ -36,7 +35,7 @@ public class Scrabble {
 		}
 
 		private void initContainer() {
-				setImageBackground();
+				setImageBackground("darkest");
 				bg = new JLabel(icon);
 				bg.setBounds(0, 0, 1024, 1024);
 				contentPane =  frame.getContentPane() ;
@@ -64,21 +63,28 @@ public class Scrabble {
 				frame.setVisible(true);
 		}
 		
-		private void setImageBackground() {
+		private void setImageBackground(String type) {
 				ImageIcon newIcon;
-				if (vintage) {
-						newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Vintage background");
-				} else {
-						newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Modern background");
+				switch (type){
+						case "light":newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Light background");
+								break;
+						case "dark":newIcon = ImageIconTools.createImageIcon("/views/swing/media/dark_background.png","Light background");
+								break;
+						case "darker":newIcon = ImageIconTools.createImageIcon("/views/swing/media/darker_background.png","Light background");
+								break;
+						case "darkest":newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Light background");
+								break;
+						case "black":newIcon = ImageIconTools.createImageIcon("/views/swing/media/b_w_background.png","Light background");
+								break;
+						default: newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","darkest background");
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
 				icon = new ImageIcon(iconScaled);
 		}
 		
-		public void changeBackground() {
-				vintage = !vintage;
-				setImageBackground();
+		public void changeBackground(String type) {
+				setImageBackground(type);
 				bg.setIcon(icon);
 				bg.repaint();
 				contentPane.validate();

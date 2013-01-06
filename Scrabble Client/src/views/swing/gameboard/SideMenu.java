@@ -25,7 +25,7 @@ public class SideMenu extends JPanel {
 		private GameBoard gameBoard;
 	 private JButton playerButton, scrabbleButton, gameBoardButton, addWordButton,
 										arrangeButton, newGameButton, saveButton, loadButton, backgroundButton,
-										logSignButton, playAsGuestButton;
+										logSignButton, playAsGuestButton, settingsButton;
 		private JPopupMenu popUpOnMenu, popUpOffMenu;
 		private JMenuItem logIn, signUp, helpOn, logOff, helpOff;
 		private JTextField emailField;
@@ -63,26 +63,28 @@ public class SideMenu extends JPanel {
 				initPlayerButton();
 				initScoreLabel();
 				initScrabbleButton();
-				initGameBoardButton();
+//				initGameBoardButton();
 				initAddWordButton();
 				initArrangeButton();
 				initNewGameButton();
 				initSaveButton();
 				initLoadButton();
-				initBackgroundButton();
-				initPlayAsGuestbutton();
-				initLogInSignUpbutton();
+//				initBackgroundButton();
+				initPlayAsGuestButton();
+				initLogInSignUpButton();
+				initSettingsButton();
 				this.add(playerButton);
 				this.add(scrabbleButton);
-				this.add(gameBoardButton);
+//				this.add(gameBoardButton);
 				this.add(addWordButton);
 				this.add(arrangeButton);
 				this.add(newGameButton);
 				this.add(saveButton);
 				this.add(loadButton);
-				this.add(backgroundButton);
+//				this.add(backgroundButton);
 				this.add(playAsGuestButton);
 				this.add(logSignButton);
+				this.add(settingsButton);
 				this.add(score);
 		}
 		
@@ -254,31 +256,31 @@ public class SideMenu extends JPanel {
 				scrabbleButton.setBorder(null);
 		}
 		
-		private void initGameBoardButton() {
-				gameBoardButton = new JButton("Gameboard");
-				gameBoardButton.setBounds(this.getWidth()/2-50, this.getHeight()-415, 110, 30);
-				gameBoardButton.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								gameBoard.changeGameBoard();
-						}
-				});
-				gameBoardButton.setVisible(debug);
-		}
+//		private void initGameBoardButton() {
+//				gameBoardButton = new JButton("Gameboard");
+//				gameBoardButton.setBounds(this.getWidth()/2-50, this.getHeight()-415, 110, 30);
+//				gameBoardButton.addActionListener(new AbstractAction() {
+//
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//								gameBoard.changeGameBoard();
+//						}
+//				});
+//				gameBoardButton.setVisible(debug);
+//		}
 		
-		private void initBackgroundButton() {
-				backgroundButton = new JButton("Background");
-				backgroundButton.setBounds(this.getWidth()/2-50, this.getHeight()-450, 110, 30);
-				backgroundButton.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								scrabble.changeBackground();
-						}
-				});
-				backgroundButton.setVisible(debug);
-		}
+//		private void initBackgroundButton() {
+//				backgroundButton = new JButton("Background");
+//				backgroundButton.setBounds(this.getWidth()/2-50, this.getHeight()-450, 110, 30);
+//				backgroundButton.addActionListener(new AbstractAction() {
+//
+//						@Override
+//						public void actionPerformed(ActionEvent e) {
+//								scrabble.changeBackground();
+//						}
+//				});
+//				backgroundButton.setVisible(debug);
+//		}
 		
 		private void initAddWordButton() {
 				addWordButton = new JButton("Add word");
@@ -346,7 +348,7 @@ public class SideMenu extends JPanel {
 				});
 		}
 		
-		private void initPlayAsGuestbutton() {
+		private void initPlayAsGuestButton() {
 				playAsGuestButton = new JButton("Play as guest");
 				playAsGuestButton.setBounds(this.getWidth()/2-50, 200, 110, 30);
 				playAsGuestButton.setVisible(true);
@@ -361,7 +363,7 @@ public class SideMenu extends JPanel {
 				});
 		}
 			
-		private void initLogInSignUpbutton() {
+		private void initLogInSignUpButton() {
 				logSignButton = new JButton("Log in/sign up");
 				logSignButton.setBounds(this.getWidth()/2-50, 235, 110, 30);
 				logSignButton.setVisible(true);
@@ -404,6 +406,7 @@ public class SideMenu extends JPanel {
 				arrangeButton.setVisible(true);
 				playerButton.setVisible(true);
 				score.setVisible(true);
+				settingsButton.setVisible(true);
 		}
 		
 		private void playerAnonym() {
@@ -415,6 +418,7 @@ public class SideMenu extends JPanel {
 				newGameButton.setVisible(true);
 				arrangeButton.setVisible(true);
 				playerButton.setVisible(true);
+				settingsButton.setVisible(true);
 				score.setVisible(true);
 		}
 		
@@ -429,6 +433,7 @@ public class SideMenu extends JPanel {
 				loadButton.setVisible(false);
 				arrangeButton.setVisible(false);
 				playerButton.setVisible(false);
+				settingsButton.setVisible(false);
 				score.setVisible(false);
 				logSignButton.setVisible(true);
 				playAsGuestButton.setVisible(true);
@@ -450,5 +455,19 @@ public class SideMenu extends JPanel {
 		
 		public boolean isAddWordVisible() {
 				return addWordButton.isVisible();
+		}
+
+		private void initSettingsButton() {
+				settingsButton = new JButton("Settings");
+				settingsButton.setBounds(this.getWidth()/2-50, 365, 110, 30);
+				settingsButton.setVisible(false);
+				settingsButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								Settings settings = new Settings(gameBoard, scrabble);
+								settings.showSettings();
+						}
+				});
 		}
 }

@@ -32,7 +32,7 @@ public class GameBoard extends JPanel {
 		
 		public GameBoard() {
 				/** Construction of game board **/
-				setImageGameBoard();
+				setImageGameBoard("vintage");
 				background = new JLabel(this.icon);
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
@@ -83,21 +83,27 @@ public class GameBoard extends JPanel {
 			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
 			* @see Image
 			*/
-		private void setImageGameBoard() {
+		private void setImageGameBoard(String type) {
 				ImageIcon newIcon;
-				if (vintage) {
-						newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
-				} else {
-						newIcon = ImageIconTools.createImageIcon("/views/swing/media/modern_grid.png","Modern gameboard");
+				switch (type) {
+						case "vintage": newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
+								break;
+						case "modern": newIcon = ImageIconTools.createImageIcon("/views/swing/media/modern_grid.png","Modern gameboard");
+								break;
+						default: newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
 				icon = new ImageIcon(iconScaled);
 		}
 		
-		public void changeGameBoard() {
-				vintage = !vintage;
-				setImageGameBoard();		
+		public void changeGameBoard(String type) {
+				setImageGameBoard(type);		
+				if ("vintage".equals(type)) {
+						vintage = true;
+				} else {
+						vintage = false;
+				}
 				remove(0);
 				add(new JLabel(icon), 0);
 				if (vintage) {
