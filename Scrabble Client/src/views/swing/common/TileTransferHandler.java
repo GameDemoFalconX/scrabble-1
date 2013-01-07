@@ -92,8 +92,8 @@ public class TileTransferHandler extends TransferHandler {
 				}
 				
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
-				DTPicture dtp = new DTPicture(data);
-				targetP.add(dtp);
+				//DTPicture dtp = new DTPicture(data);
+				//targetP.add(dtp);
 				TileTransferHandler.removeParent = true; // Allows to remove the element contained on the source container.
 				
 				// The validate method is used to cause a container to lay out its subcomponents again. It should be invoked 

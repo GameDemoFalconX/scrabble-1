@@ -213,12 +213,14 @@ public class Play {
 		
 		/*** Methods used for the creation of words ***/
 		public void createWord(int sourcePos, int x, int y) {
+				System.out.println("Created word in Play");
 				newWord.put(new Point(x, y), rack.getTile(sourcePos));
 				deplaceTileFromRackToGrid(sourcePos, x, y);
 				fireTileMovedFromRackToGrid(sourcePos, x, y);
 		}
 		
 		public void modifiedWord(int sX, int sY, int tX, int tY) {
+				System.out.println("Modified word in Play");
 				newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
 				newWord.remove(new Point(tX, tY));
 				deplaceTileFromGridToGrid(sX, sY, tX, tY);
@@ -226,6 +228,7 @@ public class Play {
 		}
 		
 		public void removeLetterFromWord(int x, int y, int targetPos) {
+				System.out.println("Remove letter from word in Play");
 				newWord.remove(new Point(x, y));
 				if (rack.getTile(targetPos) != null) {
 						deplaceTileFromGridToRackWithShift(x, y, targetPos);
@@ -237,6 +240,7 @@ public class Play {
 		}
 		
 		public void organizeRack(int sourcePos, int targetPos) {
+				System.out.println("Organize rack in Play");
 				if (rack.getTile(targetPos) != null) {
 						shiftTilesOnRack(sourcePos, targetPos);
 						fireTileMovedFromRackToRackWithShift(sourcePos, targetPos);

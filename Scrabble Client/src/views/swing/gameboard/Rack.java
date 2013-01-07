@@ -209,22 +209,26 @@ public class Rack extends JPanel {
 		}
 		
 		public static Image getTileImage(String letter, String value) {
-					BufferedImage tile = null;
-					BufferedImage letterB = null;
-					BufferedImage valueB = null;
-					try {
-							tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
-							letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter+".png"));
-							valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
-					} catch (IOException ex) {
-							Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
-					}
-					BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
-					Graphics g = finalTile.getGraphics();
-					g.drawImage(tile, 0, 0, null);
-					g.drawImage(letterB, 0, 0, null);
-					g.drawImage(valueB, 0, 0, null);
-					Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
-					return result;
-			}
+				BufferedImage tile = null;
+				BufferedImage letterB = null;
+				BufferedImage valueB = null;
+				try {
+						tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
+						if (!letter.equals("?")) {
+								letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter+".png"));
+								valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
+						}
+				} catch (IOException ex) {
+						Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
+				Graphics g = finalTile.getGraphics();
+				g.drawImage(tile, 0, 0, null);
+				if (!letter.equals("?")) {	
+						g.drawImage(letterB, 0, 0, null);
+						g.drawImage(valueB, 0, 0, null);
+				}
+				Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
+				return result;
+		}
 }

@@ -19,6 +19,7 @@ import model.event.TileFromRackToGridEvent;
 import model.event.TileFromRackToRackEvent;
 import model.event.TileFromRackToRackWithShiftEvent;
 import views.GameView;
+import views.swing.common.DTPicture;
 import views.swing.common.GlassPane;
 import views.swing.common.ImageIconTools;
 import views.swing.common.panelGrid;
@@ -134,7 +135,7 @@ public class Game extends GameView  {
 		
 		private void initValidWordButton() {
 				validWordButton = new JButton("Valide");
-				validWordButton.setBounds(500, 720, 60, 60);
+				validWordButton.setBounds(550, 720, 60, 60);
 				validWordButton.setVisible(true);
 				validWordButton.addActionListener(new AbstractAction() {
 
@@ -151,15 +152,15 @@ public class Game extends GameView  {
 				Point tP= event.getTargetPosition();
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
 				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
-				targetParent.add(sourceParent.getComponent(0));
+				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromRackToRack(TileFromRackToRackEvent event) {
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
-				targetParent.add(sourceParent.getComponent(0));
-				// Set the targetParent componenet visible.
+				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
+				// Set the targetParent component visible.
 		}
 		
 		@Override
@@ -173,7 +174,7 @@ public class Game extends GameView  {
 				Point tP= event.getTargetPosition();
 				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
 				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
-				targetParent.add(sourceParent.getComponent(0));
+				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 		}
 		
 		@Override
@@ -194,16 +195,16 @@ public class Game extends GameView  {
 		}
 		
 		@Override
-		public void rackReArrange(RackReArrangeEvent event) {
-				rack.reArrangeTiles(event.getNewPositions());
-		}
-		
-		@Override
 		public void initRack(InitRackEvent event) {
 				// Init Rack
 				rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame);
 				
 				// Init buttons inside the GameView
 				initGameButtons();
+		}
+		
+		@Override
+		public void rackReArrange(RackReArrangeEvent event) {
+				rack.reArrangeTiles(event.getNewPositions());
 		}
 }

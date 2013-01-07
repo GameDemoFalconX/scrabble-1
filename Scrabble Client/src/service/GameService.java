@@ -24,6 +24,7 @@ public class GameService {
 								port = Integer.valueOf(args[1].trim()).intValue();
 								break;
 				}
+				servProtocol = new ClientProtocol(IPaddress, port);
 		}
 		
 		//*** List of services ***//
@@ -103,12 +104,16 @@ public class GameService {
 			* @throws GameException 
 			*/
 		public String [] createNewPlay(String playerID, boolean anonymous) throws GameException {
+				String [] args = null;
 				Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID) : servProtocol.sendRequest(Message.NEW_GAME,  playerID);
 				
 				if (serverResponse != null) {
 						switch(serverResponse.getHeader()) {
 								case Message.NEW_GAME_SUCCESS:
-										String [] args = new String(serverResponse.getBody()).split("##");
+										args = new String(serverResponse.getBody()).split("##");
+										return args;
+								case Message.NEW_GAME_ANONYM_SUCCESS:
+										args = new String(serverResponse.getBody()).split("##");
 										return args;
 								default:
 										exceptionTriggered(serverResponse.getHeader());
@@ -116,7 +121,7 @@ public class GameService {
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-				return null;
+				return args;
 		}
 		
 		/**

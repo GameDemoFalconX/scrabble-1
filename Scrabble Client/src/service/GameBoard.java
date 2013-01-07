@@ -4,7 +4,7 @@
 	* 
 	* 
 	*/
-
+/*
 package service;
 
 import model.Play;
@@ -20,6 +20,7 @@ import org.fusesource.jansi.AnsiConsole;
  * The class that link the ClientProtocol and the Play class
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
+/*
 public class GameBoard {
     
 		private ClientProtocol gbProtocol;
@@ -33,17 +34,12 @@ public class GameBoard {
 			* @param IPaddress the IP address as a String
 			* @param port the port as a String
 			*/
+/*
 		public GameBoard(String IPaddress, int port) {
 				this();
 				gbProtocol = new ClientProtocol(IPaddress, port);
 		}
 		
-		/**
-			* @return current Play instance.
-			*/
-		public Play getPlay() {
-				return this.cPlay;
-		}
     
 		/**
 			* Ask the server to log or create a new Player.
@@ -52,6 +48,7 @@ public class GameBoard {
 			* @return a new Player if it's created, otherwise nothing.
 			* @throws GameException that inform
 			*/
+/*
 		public Player newPlayer(String name, String password) throws GameException {
 				// Hash password before to send it
 				try {
@@ -85,6 +82,7 @@ public class GameBoard {
 			* @return a new Player if the login is successfull, otherwise nothing.
 			* @throws GameException 
 			*/
+/*
 		public Player loginPlayer(String name, String password) throws GameException {
 				Player player = null;
 				// Hash password before to send it
@@ -119,6 +117,7 @@ public class GameBoard {
 			* @param playerID
 			* @throws GameException 
 			*/
+/*
 		public void logoutPlayer(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.LOGOUT,  playerID);
 				if (serverResponse != null) {
@@ -138,6 +137,7 @@ public class GameBoard {
 			* @param playerID the player ID as a String
 			* @throws GameException 
 			*/
+/*
 		public void createNewPlay(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME,  playerID);
 				
@@ -163,6 +163,7 @@ public class GameBoard {
 			* @param playerID as a String
 			* @throws GameException 
 			*/
+/*
 		public void createNewPlayAnonym(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID);
 				
@@ -188,6 +189,7 @@ public class GameBoard {
 			* @param playerID the player ID as a String
 			* @throws GameException 
 			*/
+/*
 		public void deleteAnonym(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.DELETE_ANONYM,  playerID);
 				
@@ -208,6 +210,7 @@ public class GameBoard {
 			* @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
 			* @throws GameException 
 			*/
+/*
 		public int addWord(String formatedWord) throws GameException {
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
 				Message serverResponse = gbProtocol.sendRequest(Message.PASS_WORD,  cPlay.getOwner()
@@ -234,6 +237,7 @@ public class GameBoard {
 			* @param pos the position as a Integer
 			* @return 
 			*/
+/*
 		public boolean isTileBlank(Integer pos) {
 				return cPlay.isTileBlank(pos);
 		}
@@ -244,6 +248,7 @@ public class GameBoard {
 			* @param position the position of the two tiles as a String
 			* @throws GameException 
 			*/
+/*
 		public void switchTiles(String position) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.TILE_SWITCH,  cPlay.getOwner()
 												+"##"+position);
@@ -265,6 +270,7 @@ public class GameBoard {
 			* @param position the position(s) of the tiles the player want to exchange as a String.
 			* @throws GameException 
 			*/
+/*
 		public void changeTiles(String position) throws GameException {
 				if ("".equals(position)) {
 						position += "1 2 3 4 5 6 7";
@@ -291,6 +297,7 @@ public class GameBoard {
 			* @return
 			* @throws GameException 
 			*/
+/*
 		public String [] loadPlayList(String playerID) throws GameException {
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME_LIST,  playerID);
 				if (serverResponse != null) {
@@ -317,6 +324,7 @@ public class GameBoard {
 			* @param playID the ID of the play as a String
 			* @throws GameException 
 			*/
+/*
 		public void loadGame(String playerID, String playInfos) throws GameException {
 				String [] playArgs = playInfos.split("__");
 				Message serverResponse = gbProtocol.sendRequest(Message.LOAD_GAME,  playerID+"_"+playArgs[0]);
@@ -369,6 +377,7 @@ public class GameBoard {
 			* @param type
 			* @return type
 			*/
+/*
 		private int typeSave(int type) {
 				switch(type) {
 						case Message.JUST_SAVE:
@@ -389,6 +398,7 @@ public class GameBoard {
 			* @return the hashed password as a String
 			* @throws Exception 
 			*/
+/*
 		private String hashPassword(String password) throws Exception {
 				MessageDigest md = MessageDigest.getInstance("SHA-256");
 				md.update(password.getBytes());
@@ -401,4 +411,4 @@ public class GameBoard {
 				}
 				return sb.toString();
 		}
-}
+}*/
