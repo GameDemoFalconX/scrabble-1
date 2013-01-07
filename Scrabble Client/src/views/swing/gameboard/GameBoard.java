@@ -18,6 +18,11 @@ import views.swing.common.panelGrid;
 	*/
 public class GameBoard extends JPanel {
 		
+		private static final String VINTAGE_PATH = "/views/swing/media/vintage_grid.png";
+		public  static final String TYPE_VINTAGE = "vintage";
+		private static final String MODERN_PATH = "/views/swing/media/modern_grid.png";
+		public static final String TYPE_MODERN = "modern";
+		
 		private static final int GB_HEIGHT = 709;
 		private static final int GB_WIDTH = 708;
 		private static final int GB_INNER_HEIGHT = 705;
@@ -31,7 +36,7 @@ public class GameBoard extends JPanel {
 		
 		public GameBoard() {
 				/** Construction of game board **/
-				background = new JLabel(setImageGameBoard("vintage"));
+				background = new JLabel(setImageGameBoard(TYPE_VINTAGE));
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
 				setBounds(10,10, background.getIcon().getIconWidth(), background.getIcon().getIconHeight());
@@ -84,11 +89,11 @@ public class GameBoard extends JPanel {
 		private ImageIcon setImageGameBoard(String type) {
 				ImageIcon newIcon;
 				switch (type) {
-						case "vintage": newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
+						case TYPE_VINTAGE: newIcon = ImageIconTools.createImageIcon(VINTAGE_PATH, TYPE_VINTAGE);
 								break;
-						case "modern": newIcon = ImageIconTools.createImageIcon("/views/swing/media/modern_grid.png","Modern gameboard");
+						case TYPE_MODERN: newIcon = ImageIconTools.createImageIcon(MODERN_PATH,TYPE_MODERN);
 								break;
-						default: newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
+						default: newIcon = ImageIconTools.createImageIcon(VINTAGE_PATH, TYPE_VINTAGE);
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
