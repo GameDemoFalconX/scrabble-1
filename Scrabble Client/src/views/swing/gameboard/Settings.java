@@ -14,7 +14,6 @@ import views.swing.common.ImageIconTools;
  */
 public class Settings extends JDialog {
 		
-		private GameBoard gameboard;
 		private Game game;
 		private JPanel backgroundPanel, gameboardPanel;
 		private JRadioButton lightRadioButton, darkRadioButton, darkerRadioButton, 
@@ -22,7 +21,7 @@ public class Settings extends JDialog {
 										modernRadioButton;
 		
 		
-		private Settings(JFrame frame) {
+		private Settings(JFrame frame, int letter) {
     super(frame, "Settings", true);
     this.setSize(450, 120);
     this.setLocationRelativeTo(null);
@@ -33,9 +32,8 @@ public class Settings extends JDialog {
 				initComponents();
 		}
 		
-		public Settings(GameBoard gameboard, Game game) {
-				this(null);
-				this.gameboard = gameboard;
+		public Settings(Game game) {
+				this(null, 42);
 				this.game = game;
 		}
 
@@ -57,7 +55,7 @@ public class Settings extends JDialog {
 				lightRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								game.changeBackground("light");
+								game.changeBackground(Game.TYPE_LIGHT);
 						}
 				});
 				backgroundPanel.add(lightRadioButton);
@@ -68,7 +66,8 @@ public class Settings extends JDialog {
 				darkRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								game.changeBackground("dark");
+								game.changeBackground(Game.TYPE_DARK);
+								darkRadioButton.setBorder(BorderFactory.createLineBorder(Color.RED));
 						}
 				});
 				backgroundPanel.add(darkRadioButton);
@@ -79,7 +78,7 @@ public class Settings extends JDialog {
 				darkerRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								game.changeBackground("darker");
+								game.changeBackground(Game.TYPE_DARKER);
 						}
 				});
 				backgroundPanel.add(darkerRadioButton);
@@ -90,7 +89,7 @@ public class Settings extends JDialog {
 				darkerstRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								game.changeBackground("darkest");
+								game.changeBackground(Game.TYPE_DARKEST);
 						}
 				});
 				backgroundPanel.add(darkerstRadioButton);
@@ -100,7 +99,7 @@ public class Settings extends JDialog {
 				blackRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								game.changeBackground("black");
+								game.changeBackground(Game.TYPE_BLACK);
 						}
 				});
 				backgroundPanel.add(blackRadioButton);
@@ -117,7 +116,7 @@ public class Settings extends JDialog {
 				vintageRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								gameboard.changeGameBoard("vintage");
+								game.changeGameBoard(GameBoard.TYPE_VINTAGE);
 						}
 				});
 				gameboardPanel.add(vintageRadioButton);
@@ -128,7 +127,7 @@ public class Settings extends JDialog {
 				modernRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								gameboard.changeGameBoard("modern");
+								game.changeGameBoard(GameBoard.TYPE_MODERN);
 						}
 				});
 				gameboardPanel.add(modernRadioButton);

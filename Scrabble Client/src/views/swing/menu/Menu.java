@@ -18,6 +18,7 @@ import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
 import views.swing.gameboard.Game;
+import views.swing.gameboard.Settings;
 
 /**
  *
@@ -227,8 +228,8 @@ public class Menu extends MenuView {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-//								Settings settings = new Settings(gameBoard, scrabble);
-//								settings.showSettings();
+								Settings settings = new Settings(game);
+								settings.showSettings();
 						}
 				});
 		}

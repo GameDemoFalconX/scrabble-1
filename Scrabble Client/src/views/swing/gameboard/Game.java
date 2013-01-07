@@ -34,6 +34,18 @@ import views.swing.common.panelRack;
 	* R. FONCIER <ro.foncier@gmail.com>
 	*/
 public class Game extends GameView  {
+		
+		private static final String LIGHT_PATH = "/views/swing/media/background.png" ;
+		private static final String DARK_PATH = "/views/swing/media/dark_background.png" ;
+		private static final String DARKER_PATH = "/views/swing/media/darker_background.png" ;
+		private static final String DARKEST_PATH = "/views/swing/media/darkest_background.png" ;
+		private static final String BLACK_PATH = "/views/swing/media/b_w_background.png" ;
+		public static final String TYPE_LIGHT = "light" ;
+		public static final String TYPE_DARK = "dark" ;
+		public static final String TYPE_DARKER = "darker" ;
+		public static final String TYPE_DARKEST = "darkest" ;
+		public static final String TYPE_BLACK = "black" ;
+		
     
 		private JFrame frame;
 		private JLayeredPane JLPaneOfFrame;
@@ -58,7 +70,7 @@ public class Game extends GameView  {
 		}
 		
 		private void initContainer() {
-				frameBackground = new JLabel(ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png",""));
+				frameBackground = new JLabel(ImageIconTools.createImageIcon(DARKEST_PATH,TYPE_DARKEST));
 				frameBackground.setBounds(0, 0, 1024, 1024);
 				contentPane = frame.getContentPane() ;
 				contentPane.setLayout(null);
@@ -155,23 +167,23 @@ public class Game extends GameView  {
 		private ImageIcon setImageBackground(String type) {
 				ImageIcon newIcon;
 				switch (type){
-						case "light":
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Light background");
+						case TYPE_LIGHT:
+								newIcon = ImageIconTools.createImageIcon(LIGHT_PATH,TYPE_LIGHT);
 								break;
-						case "dark":
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/dark_background.png","Light background");
+						case TYPE_DARK:
+								newIcon = ImageIconTools.createImageIcon(DARK_PATH,TYPE_DARK);
 								break;
-						case "darker":
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darker_background.png","Light background");
+						case TYPE_DARKER:
+								newIcon = ImageIconTools.createImageIcon(DARKER_PATH,TYPE_DARKER);
 								break;
-						case "darkest":
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Light background");
+						case TYPE_DARKEST:
+								newIcon = ImageIconTools.createImageIcon(DARKEST_PATH,TYPE_DARKEST);
 								break;
-						case "black":
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/b_w_background.png","Light background");
+						case TYPE_BLACK:
+								newIcon = ImageIconTools.createImageIcon(BLACK_PATH,TYPE_BLACK);
 								break;
 						default: 
-								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","darkest background");
+								newIcon = ImageIconTools.createImageIcon(DARKEST_PATH,TYPE_DARKEST);
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
@@ -186,6 +198,10 @@ public class Game extends GameView  {
 				frame.validate();
 				frame.repaint();
 				contentPane.setVisible(true);
+		}
+		
+		public void changeGameBoard(String type) {
+				gameboard.changeGameBoard(type);
 		}
 		
 		/*** Methods used to modify the view from model notifications ***/
