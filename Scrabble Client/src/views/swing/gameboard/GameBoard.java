@@ -18,12 +18,12 @@ import views.swing.common.panelGrid;
 	*/
 public class GameBoard extends JPanel {
 		
-		private static final int GB_HEIGHT = 710;
-		private static final int GB_WIDTH = 700;
-		private static final int GB_INNER_HEIGHT = 700;
-		private static final int GB_INNER_WIDTH = 691;
+		private static final int GB_HEIGHT = 709;
+		private static final int GB_WIDTH = 708;
+		private static final int GB_INNER_HEIGHT = 705;
+		private static final int GB_INNER_WIDTH = 701;
 		private static final int TILE_HEIGHT = 45;
-		private static final int TILE_WIDTH = 42;
+		private static final int TILE_WIDTH = 43;
 		private static boolean vintage = true;		
 		private JLabel background;
 		private boolean debug = false;
@@ -32,24 +32,32 @@ public class GameBoard extends JPanel {
 		
 		public GameBoard() {
 				/** Construction of game board **/
-				setImageGameBoard();
+				setImageGameBoard("vintage");
 				background = new JLabel(this.icon);
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
-				setBounds( 0, 0, icon.getIconWidth(), icon.getIconHeight());
+				setBounds(10,10, icon.getIconWidth(), icon.getIconHeight());
 				setVisible(true);
 				if (debug) {
-							setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+						setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
+				} else {
+						setBorder(BorderFactory.createLineBorder(Color.WHITE));
 				}
 				
 				/** Construction of grid elements **/
 				/*** Grid inner container ***/
-				innerGrid = new JPanel(new GridLayout(15,15, 0, 0));
+				innerGrid = new JPanel(new GridLayout(15,15, 1, 1));
 				if (debug) {
 						innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+				} else {
+						if (vintage) {
+								innerGrid.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+						} else {
+								innerGrid.setBorder(BorderFactory.createLineBorder(new Color(190,39,39)));
+						}
 				}
-				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
-				innerGrid.setBounds(5, 5, GB_INNER_WIDTH, GB_INNER_HEIGHT);
+//				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
+				innerGrid.setBounds(14, 12, GB_INNER_WIDTH, GB_INNER_HEIGHT);
 				innerGrid.setOpaque(false);
 				
 				// Construct panelGrid Elements which contain DTPicture instances.
@@ -75,23 +83,34 @@ public class GameBoard extends JPanel {
 			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
 			* @see Image
 			*/
-		private void setImageGameBoard() {
+		private void setImageGameBoard(String type) {
 				ImageIcon newIcon;
-				if (vintage) {
-						newIcon = ImageIconTools.createImageIcon("../media/vintage_grid.png","Vintage gameboard");
-				} else {
-						newIcon = ImageIconTools.createImageIcon("../media/modern_grid.png","Modern gameboard");
+				switch (type) {
+						case "vintage": newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
+								break;
+						case "modern": newIcon = ImageIconTools.createImageIcon("/views/swing/media/modern_grid.png","Modern gameboard");
+								break;
+						default: newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
 				icon = new ImageIcon(iconScaled);
 		}
 		
-		public void changeGameBoard() {
-				vintage = !vintage;
-				setImageGameBoard();		
+		public void changeGameBoard(String type) {
+				setImageGameBoard(type);		
+				if ("vintage".equals(type)) {
+						vintage = true;
+				} else {
+						vintage = false;
+				}
 				remove(0);
 				add(new JLabel(icon), 0);
+				if (vintage) {
+						innerGrid.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+				} else {
+						innerGrid.setBorder(BorderFactory.createLineBorder(new Color(190,39,39)));
+				}
 				validate();
 				repaint();
 				innerGrid.repaint();

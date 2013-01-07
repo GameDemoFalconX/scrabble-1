@@ -29,7 +29,7 @@ public class Rack extends JPanel {
 		private static final int RACK_HEIGHT = 60;
 		private static final int RACK_WIDTH = 365;
 		private static final int TILE_HEIGHT = 45;
-		private static final int TILE_WIDTH = 42;
+		private static final int TILE_WIDTH = 43;
 		private ImageIcon icon;
 		private JPanel innerRack;
 		private boolean debug = false;
@@ -45,7 +45,7 @@ public class Rack extends JPanel {
 				setImageRack();
 				add(new JLabel(this.icon));
 				setLayout(new GridLayout(1, 1, 1, 1));
-				setBounds(170, 720, RACK_WIDTH, RACK_HEIGHT);
+				setBounds(180, 740, RACK_WIDTH, RACK_HEIGHT);
 				setOpaque(false);
 				setVisible(true);
 				if (debug) {
@@ -59,7 +59,7 @@ public class Rack extends JPanel {
 						innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
 				}
 				innerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
-				innerRack.setBounds( 200, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				innerRack.setBounds(192, 737, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
 				innerRack.setOpaque(false);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {
@@ -179,7 +179,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private void setImageRack(){
-				ImageIcon newIcon = ImageIconTools.createImageIcon("../media/Rack_empty.png","Scrabble rack");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("/views/swing/media/Rack_empty.png","Scrabble rack");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT,  Image.SCALE_SMOOTH);
 				this.icon = new ImageIcon(iconScaled);
@@ -191,7 +191,7 @@ public class Rack extends JPanel {
 			* @see Image
 			*/
 		private Image setImageTile(){
-				ImageIcon newIcon = ImageIconTools.createImageIcon("../media/vintage_tile.png","Scrabble tile");
+				ImageIcon newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_tile.png","Scrabble tile");
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
 				return iconScaled;

@@ -134,6 +134,7 @@ public class Menu extends MenuView {
 				this();
 				this.gameBoard = gameBoard;
 				this.rack = rack;
+				this.scrabble = scrabble;
 		}
 
 		private void initComponent() {
@@ -143,7 +144,6 @@ public class Menu extends MenuView {
 				initPlayerButton();
 				initScoreLabel();
 				initScrabbleButton();
-				initGameBoardButton();
 				initAddWordButton();
 				panel.add(playerButton);
 				panel.add(scrabbleButton);
@@ -229,17 +229,18 @@ public class Menu extends MenuView {
 								resetPlayer();
 						}
 				});
-				
+				logOff.setSize(200, 20);
 				helpOff = new JMenuItem(new AbstractAction("Help") {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
+																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
-				
-				popUpOffMenu.add(logOff);
-				popUpOffMenu.add(helpOff);
+				helpOff.setSize(200, 20);
+				popupMenu.add(logOff);
+				popupMenu.add(helpOff);
 		}
 		*/
 		/*** Methods used for login, sign up or logout ***/
@@ -272,52 +273,59 @@ public class Menu extends MenuView {
 		/*
 		private void initPlayerButton() {
 				playerButton = new JButton();
-				playerButton.setPreferredSize(new Dimension(80,80));
-				playerButton.setBounds(panel.getWidth()-80, 1, 80, 80);
-				playerButton.setIcon(ImageIconTools.getGravatar("default@gravatar.logo"));
+				playerButton.setBounds(this.getWidth()-77, 11, 60, 60);
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
-						public void mousePressed(MouseEvent e) {
-								if (playerIsLogged) {
-										popUpOffMenu.show(e.getComponent(), playerButton.getX()-202, playerButton.getY()+79);
-								} else {
-										popUpOnMenu.show(e.getComponent(), playerButton.getX()-292, playerButton.getY()+79);
-								}
-								
-//								popupMenu.show(e.getComponent(), playerButton.getX(), playerButton.getY());
+						public void mouseClicked(MouseEvent e) {
+								popupMenu.show(e.getComponent(), playerButton.getX()-174, playerButton.getY()+49);
 						}
 				});
+				playerButton.setVisible(debug);
 		}
 		
 		private void initScoreLabel() {
 				score = new JLabel("000");
-				score.setBounds(panel.getWidth()-160, 24, 80, 80);
+				score.setBounds(this.getWidth()-170, 14, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("media/DS-DIGI.ttf").toURI()));
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(
+														"/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				font = font.deriveFont(Font.PLAIN, 48);
 				score.setFont(font);
-				score.setForeground(Color.BLACK);
+				if (vintage) {
+						score.setForeground(Color.WHITE);
+				} else {
+						score.setForeground(Color.BLACK);
+				}
+				score.setVisible(debug);
 		}
 		
-		private void initGameBoardButton() {
-				gameBoardButton = new JButton("Modern");
-				gameBoardButton.setBounds(10, 10, 90, 20);
-				gameBoardButton.addActionListener(new AbstractAction() {
+		private void initScrabbleButton() {
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon(
+												"/views/swing/media/Scrabble.png","Scrabble"));
+				scrabbleButton.setPreferredSize(new Dimension(190,102));
+				scrabbleButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								//gameBoard.changeGameBoard();
+								JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", 
+																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
+				scrabbleButton.setBounds(this.getWidth()/2-95, this.getHeight()-103, 190, 102);
+				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setOpaque(false);
+				scrabbleButton.setBorder(null);
 		}
 		
 		private void initAddWordButton() {
 				addWordButton = new JButton("Add word");
-				addWordButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-140, 100, 30);
+				addWordButton.setBounds(this.getWidth()/2-50, this.getHeight()-140, 110, 30);
 				addWordButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -326,26 +334,166 @@ public class Menu extends MenuView {
 								setAddWordVisible(false);
 						}
 				});
-				addWordButton.setVisible(false);
+				addWordButton.setVisible(debug);
 		}
 		
-		public static void setVisible(boolean visible) {
-				panel.setVisible(visible);
+		private void initArrangeButton() {
+				arrangeButton = new JButton("Shuffle rack");
+				arrangeButton.setBounds(this.getWidth()/2-50, this.getHeight()-175, 110, 30);
+				arrangeButton.setVisible(debug);
+				arrangeButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								rack.reArrangeTiles();
+						}
+				});
 		}
 		
+		private void	initNewGameButton() {
+				newGameButton = new JButton("New game");
+				newGameButton.setBounds(this.getWidth()/2-50, this.getHeight()-330, 110, 30);
+				newGameButton.setVisible(debug);
+				newGameButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								newGame();
+						}
+				});
+		}
 		
-	 public void incScore() {
-				int tempScore = Integer.parseInt(score.getText());
-				tempScore++;
-				if (tempScore < 10) {
-						score.setText("00"+String.valueOf(tempScore));
-				} else if	(tempScore < 100) {
-						score.setText("0"+String.valueOf(tempScore));
-				} else{
-						score.setText(String.valueOf(tempScore));
+		private void	initSaveButton() {
+				saveButton = new JButton("Save game");
+				saveButton.setBounds(this.getWidth()/2-50, this.getHeight()-295, 110, 30);
+				saveButton.setVisible(debug);
+				saveButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								saveGame();
+						}
+				});
+		}
+		
+		private void initLoadButton() {
+				loadButton = new JButton("Load game");
+				loadButton.setBounds(this.getWidth()/2-50, this.getHeight()-260, 110, 30);
+				loadButton.setVisible(debug);
+				loadButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								loadGame();
+						}
+				});
+		}
+		
+		private void initPlayAsGuestButton() {
+				playAsGuestButton = new JButton("Play as guest");
+				playAsGuestButton.setBounds(this.getWidth()/2-50, 200, 110, 30);
+				playAsGuestButton.setVisible(true);
+				playAsGuestButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								playAsGuest();
+								playerAnonym();
+						}
+				});
+		}
+			
+		private void initLogInButton() {
+				logSignButton = new JButton("Log in");
+				logSignButton.setBounds(this.getWidth()/2-50, 235, 110, 30);
+				logSignButton.setVisible(true);
+				logSignButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								LogSign logSign = new LogSign(getThis(),"Log in");
+								logSign.showLogSign();
+						}
+				});
+		}
+		
+		private void initSignUpButton() {
+				signUpButton = new JButton("Sign up");
+				signUpButton.setBounds(this.getWidth()/2-50, 270, 110, 30);
+				signUpButton.setVisible(true);
+				signUpButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								LogSign logSign = new LogSign(getThis(),"Sign up");
+								logSign.showLogSign();
+						}
+				});
+		}
+		
+		private void logInSignUp() {
+				email = emailField.getText();
+				password = passwordField.getPassword();
+				if (EmailValidator.validate(email)) {
+						playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+						if (/*call log in player*/true) { // TODO insert log in player here
+								playerLogged();
+						} /*else {
+								JOptionPane.showMessageDialog(null, "Error, please try again.", 
+																"Error", JOptionPane.ERROR_MESSAGE);
+						}*/
+				} else {
+						JOptionPane.showMessageDialog(null, "\""+email + "\" is not a valid "
+														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
 				}
 		}
 		
+		public void playerLogged() {
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				initPopupMenu();
+				logSignButton.setVisible(false);
+				playAsGuestButton.setVisible(false);
+				signUpButton.setVisible(false);
+				newGameButton.setVisible(true);
+				saveButton.setVisible(true);
+				loadButton.setVisible(true);
+				arrangeButton.setVisible(true);
+				playerButton.setVisible(true);
+				score.setVisible(true);
+				settingsButton.setVisible(true);
+		}
+		
+		private void playerAnonym() {
+				email = "Anonym player";
+				initPopupMenu();
+				logSignButton.setVisible(false);
+				playAsGuestButton.setVisible(false);
+				signUpButton.setVisible(false);
+				newGameButton.setVisible(true);
+				arrangeButton.setVisible(true);
+				playerButton.setVisible(true);
+				settingsButton.setVisible(true);
+				score.setVisible(true);
+		}
+		
+		private void reset() {
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				playerButton.setVisible(false);
+				newGameButton.setVisible(false);
+				saveButton.setVisible(false);
+				loadButton.setVisible(false);
+				arrangeButton.setVisible(false);
+				playerButton.setVisible(false);
+				settingsButton.setVisible(false);
+				score.setVisible(false);
+				logSignButton.setVisible(true);
+				signUpButton.setVisible(true);
+				playAsGuestButton.setVisible(true);
+		}
+				
 		public void setScore(int score) {
 				if (score < 10) {
 						this.score.setText("00"+String.valueOf(score));
@@ -362,5 +510,28 @@ public class Menu extends MenuView {
 		
 		public boolean isAddWordVisible() {
 				return addWordButton.isVisible();
-		}*/
+		}
+
+		private void initSettingsButton() {
+				settingsButton = new JButton("Settings");
+				settingsButton.setBounds(this.getWidth()/2-50, 365, 110, 30);
+				settingsButton.setVisible(false);
+				settingsButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+								Settings settings = new Settings(gameBoard, scrabble);
+								settings.showSettings();
+						}
+				});
+		}
+		
+		private SideMenu getThis() {
+				return this;
+		}
+		
+		public void setInformations(String email, char[] password) {
+				this.email = email;
+				this.password = password;
+		}
 }
