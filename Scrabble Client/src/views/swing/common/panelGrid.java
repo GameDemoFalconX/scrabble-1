@@ -32,6 +32,7 @@ public class panelGrid extends JPanel {
 			* @param dtp 
 			*/
 		public void addDTElement(DTPicture dtp) {
+				dtp.setVisible(true);
 				add(dtp);
 		}
 		

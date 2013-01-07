@@ -1,7 +1,7 @@
 package views.swing.common;
 
-import views.swing.gameboard.Scrabble;
-import views.swing.gameboard.SideMenu;
+import views.swing.gameboard.Game;
+import views.swing.menu.Menu;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,7 +23,7 @@ public class ImageIconTools {
 		/** Returns an ImageIcon, or null if the path was invalid. */
 		public static ImageIcon createImageIcon(String path, String description) {
 				ImageIcon newIcon = null;
-				URL imgURL = Scrabble.class.getResource(path);
+				URL imgURL = Game.class.getResource(path);
 				if (imgURL != null) {
 						newIcon =  new ImageIcon(imgURL, description);
 				} else {
@@ -37,7 +37,7 @@ public class ImageIconTools {
 				try {
 						url = new URL(path);
 				} catch (MalformedURLException ex) {
-						Logger.getLogger(SideMenu.class.getName()).log(Level.SEVERE, null, ex);
+						Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				return url;
 		}

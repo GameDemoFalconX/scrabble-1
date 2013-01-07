@@ -1,6 +1,5 @@
 package views.swing.common;
 
-import views.swing.gameboard.Rack;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
+import views.swing.gameboard.Rack;
 
 /**
 	* @see  DataFlavor
@@ -92,8 +92,8 @@ public class TileTransferHandler extends TransferHandler {
 				}
 				
 				// Create a new DTPicture element from the image transferred and add it to the target container (panelGrid or panelRack)
-				DTPicture dtp = new DTPicture(data);
-				targetP.add(dtp);
+				//DTPicture dtp = new DTPicture(data);
+				//targetP.add(dtp);
 				TileTransferHandler.removeParent = true; // Allows to remove the element contained on the source container.
 				
 				// The validate method is used to cause a container to lay out its subcomponents again. It should be invoked 

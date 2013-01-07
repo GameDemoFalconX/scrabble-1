@@ -1,28 +1,55 @@
 package model;
 
 import java.awt.Point;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import javax.swing.event.EventListenerList;
+import model.event.InitMenuToPlayEvent;
+import model.event.InitRackEvent;
+import model.event.MenuListener;
+import model.event.RackListener;
+import model.event.RackReArrangeEvent;
+import model.event.TileFromGridToGridEvent;
+import model.event.TileFromGridToRackEvent;
+import model.event.TileFromGridToRackWithShiftEvent;
+import model.event.TileFromRackToGridEvent;
+import model.event.TileFromRackToRackEvent;
+import model.event.TileFromRackToRackWithShiftEvent;
+import model.event.TileListener;
+import model.utils.GameException;
+import service.GameService;
 
 /**
  * 
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
+		private GameService service;
 		private UUID id;
-		private UUID player;
+		private Player player;
 		private Integer score;
 		private Grid grid;
 		private Rack rack;
 		private  Map<Point, Tile> newWord = new HashMap<>();
+		private EventListenerList tileListeners;
+		private EventListenerList rackListeners;
+		private EventListenerList menuListeners;
 		
 		/**
 			* Constructor for the launcher.
 			*/
-		public Play() {}
+		public Play(String [] args) {
+				service = new GameService(args);
+				tileListeners = new EventListenerList();
+				rackListeners = new EventListenerList();
+				menuListeners = new EventListenerList();
+		}
 		
-		public void initPlay(String playerID, String playID, String formatedGrid, String formatedRack, int score) {
+		public void initPlay(String playID, String formatedGrid, String formatedRack, int score) {
 				this.id = UUID.fromString(playID);
-				player = UUID.fromString(playerID);
 				this.score = score;
 				grid = (formatedGrid.equals("")) ? new Grid() : new Grid(formatedGrid);
 				rack = new Rack(formatedRack);
@@ -42,6 +69,120 @@ public class Play {
 		
 		public void setScore(Integer score) {
 				this.score = score;
+		}
+		
+		/*** Methods used for add or remove the different listeners ***/
+		public void addTileListener(TileListener listener){
+				tileListeners.add(TileListener.class, listener);
+		}
+		
+		public void addRackListener(RackListener listener){
+				rackListeners.add(RackListener.class, listener);
+		}
+		
+		public void addMenuListener(MenuListener listener){
+				menuListeners.add(MenuListener.class, listener);
+		}
+
+		public void removeTileListener(TileListener listener){
+				tileListeners.remove(TileListener.class, listener);
+		}
+		
+		public void removeRackListener(RackListener listener){
+				rackListeners.remove(RackListener.class, listener);
+		}
+		
+		public void removeMenuListener(MenuListener listener){
+				menuListeners.remove(MenuListener.class, listener);
+		}
+		
+		/*** Methods used to notify changes to all listeners ***/
+		public void fireTileMovedFromRackToGrid(int sourcePos, int x, int y){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToGrid(new TileFromRackToGridEvent(this, sourcePos, x, y));
+				}
+		}
+		
+		public void fireTileMovedFromRackToRack(int sourcePos, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToRack(new TileFromRackToRackEvent(this, sourcePos, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromRackToRackWithShift(int sourcePos, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromRackToRackWithShift(new TileFromRackToRackWithShiftEvent(this, sourcePos, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromGridToGrid(int sX, int sY, int tX, int tY){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToGrid(new TileFromGridToGridEvent(this, sX, sY, tX, tY));
+				}
+		}
+		
+		public void fireTileMovedFromGridToRack(int x, int y, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToRack(new TileFromGridToRackEvent(this, x, y, targetPos));
+				}
+		}
+		
+		public void fireTileMovedFromGridToRackWithShift(int x, int y, int targetPos){
+				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
+
+				for(TileListener l : listeners){
+						l.tileMovedFromGridToRackWithShift(new TileFromGridToRackWithShiftEvent(this, x, y, targetPos));
+				}
+		}
+		
+		public void fireRackReArrange(int[] positions){
+				RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+				for(RackListener l : listeners){
+						l.rackReArrange(new RackReArrangeEvent(this, positions));
+				}
+		}
+		
+		public void fireInitGameToPlay(String newRack){
+				RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+				for(RackListener l : listeners){
+						l.initRack(new InitRackEvent(this, newRack));
+				}
+		}
+		
+		public void fireInitMenuToPlay(boolean anonymous, String email, int score){
+				MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+				for(MenuListener l : listeners){
+						l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, score));
+				}
+		}
+		
+		/*** Methods used for create new player and play ***/
+		public void playAsGuest() {
+				String [] response = null;
+				player = new Player();
+				try {
+						response = service.createNewPlay(player.getPlayerID(), true);
+				} catch (GameException ge) {
+						// catch exception header and fire message to view
+				}
+				initPlay(response[0], "", response[1], 0);
+				
+				// Dispatch the model modifications to all listeners
+				fireInitGameToPlay(response[1]);
+				fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
 		}
 		
 		/*** Methods used for the movement of tiles ***/
@@ -72,35 +213,46 @@ public class Play {
 		
 		/*** Methods used for the creation of words ***/
 		public void createWord(int sourcePos, int x, int y) {
+				System.out.println("Created word in Play");
 				newWord.put(new Point(x, y), rack.getTile(sourcePos));
 				deplaceTileFromRackToGrid(sourcePos, x, y);
+				fireTileMovedFromRackToGrid(sourcePos, x, y);
 		}
 		
 		public void modifiedWord(int sX, int sY, int tX, int tY) {
+				System.out.println("Modified word in Play");
 				newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
 				newWord.remove(new Point(tX, tY));
 				deplaceTileFromGridToGrid(sX, sY, tX, tY);
+				fireTileMovedFromGridToGrid(sX, sY, tX, tY);
 		}
 		
 		public void removeLetterFromWord(int x, int y, int targetPos) {
+				System.out.println("Remove letter from word in Play");
 				newWord.remove(new Point(x, y));
 				if (rack.getTile(targetPos) != null) {
 						deplaceTileFromGridToRackWithShift(x, y, targetPos);
+						fireTileMovedFromGridToRackWithShift(x, y, targetPos);
 				} else {
 						deplaceTileFromGridToRack(x, y, targetPos);
+						fireTileMovedFromGridToRack(x, y, targetPos);
 				}
 		}
 		
 		public void organizeRack(int sourcePos, int targetPos) {
+				System.out.println("Organize rack in Play");
 				if (rack.getTile(targetPos) != null) {
 						shiftTilesOnRack(sourcePos, targetPos);
+						fireTileMovedFromRackToRackWithShift(sourcePos, targetPos);
 				} else {
 						deplaceTileOnRack(sourcePos, targetPos);
+						fireTileMovedFromRackToRack(sourcePos, targetPos);
 				}
 		}
 		
+		// @condition : the rack should be full
 		public void reArrangeRack() {
-				rack.reArrangeTiles();
+				fireRackReArrange(rack.reArrangeTiles());
 		}
 		
 		public void validateWord() {

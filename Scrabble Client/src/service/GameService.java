@@ -1,6 +1,5 @@
 package service;
 
-import model.Play;
 import model.Player;
 import model.utils.GameException;
 import model.utils.Message;
@@ -10,15 +9,12 @@ import service.connection.ClientProtocol;
  * 
  * @author Romain Foncier <ro.foncier at gmail.com>
  */
-public class gameService {
+public class GameService {
 		private ClientProtocol servProtocol;
-		// The two next variables should be put in the controller
-		private Play cPlay;
-		private Player player;
 		private static String IPaddress = "localhost";
 		private static int port = 8189; 
 		
-		public gameService(String [] args) {
+		public GameService(String [] args) {
 				switch (args.length) {
 						case 1:
 								IPaddress = args[0];
@@ -28,6 +24,7 @@ public class gameService {
 								port = Integer.valueOf(args[1].trim()).intValue();
 								break;
 				}
+				servProtocol = new ClientProtocol(IPaddress, port);
 		}
 		
 		//*** List of services ***//
@@ -106,23 +103,25 @@ public class gameService {
 			* @return Play instance otherwise null
 			* @throws GameException 
 			*/
-		public Play createNewPlay(String playerID) throws GameException {
-				Message serverResponse = servProtocol.sendRequest(Message.NEW_GAME,  playerID);
+		public String [] createNewPlay(String playerID, boolean anonymous) throws GameException {
+				String [] args = null;
+				Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID) : servProtocol.sendRequest(Message.NEW_GAME,  playerID);
 				
 				if (serverResponse != null) {
 						switch(serverResponse.getHeader()) {
 								case Message.NEW_GAME_SUCCESS:
-										String [] args = new String(serverResponse.getBody()).split("##");
-										Play newPlay = new Play(playerID, args[0]);
-										newPlay.loadRack(args[1]); 
-										return newPlay;
+										args = new String(serverResponse.getBody()).split("##");
+										return args;
+								case Message.NEW_GAME_ANONYM_SUCCESS:
+										args = new String(serverResponse.getBody()).split("##");
+										return args;
 								default:
 										exceptionTriggered(serverResponse.getHeader());
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-				return null;
+				return args;
 		}
 		
 		/**
@@ -131,6 +130,7 @@ public class gameService {
 			* @return Play instance otherwise null
 			* @throws GameException 
 			*/
+		/*
 		public Play createNewPlayAnonym(String playerID) throws GameException {
 				Message serverResponse = servProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID);
 				
@@ -148,7 +148,7 @@ public class gameService {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
 				return null;
-		}
+		}*/
 		
 		/**
 			* Ask the server to delete an anonym player.
@@ -156,6 +156,7 @@ public class gameService {
 			* @return True if the player is successfully deleted otherwise false
 			* @throws GameException 
 			*/
+		/*
 		public boolean deleteAnonym(String playerID) throws GameException {
 				Message serverResponse = servProtocol.sendRequest(Message.DELETE_ANONYM,  playerID);
 				
@@ -196,6 +197,7 @@ public class gameService {
 			* @param position the position of the two tiles as a String
 			* @throws GameException 
 			*/
+		/*
 		public void switchTiles() throws GameException {
 				Message serverResponse = servProtocol.sendRequest(Message.TILE_SWITCH,  cPlay.getOwner()
 												+"##"+position);
@@ -217,6 +219,7 @@ public class gameService {
 			* @param position the position(s) of the tiles the player want to exchange as a String.
 			* @throws GameException 
 			*/
+		/*
 		public void changeTiles(String position) throws GameException {
 				if ("".equals(position)) {
 						position += "1 2 3 4 5 6 7";
@@ -257,20 +260,7 @@ public class gameService {
 						case Message.PLAYER_NOT_LOGGED:
 								throw new GameException(GameException.typeErr.PLAYER_NOT_LOGGED);
 						case Message.NEW_GAME_ANONYM_ERROR:
-								throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);
-						case Message.LOAD_GAME_LIST_ERROR:
-								view.initMenu("Warning! You don't have yet any saved games!", "", null);
-								break;
-						case Message.LOAD_GAME_ERROR:
-								view.firstMenu("An error has been encountered during the server processing! Please try again.");
-								break;
-						case Message.DELETE_ANONYM_ERROR:
-								// Pass : because anonymous player isn't logged on the server.
-								break;
-						case Message.TILE_EXCHANGE_ERROR:
-								break;
-						case Message.GAME_IDENT_ERROR:
-								break;								
+								throw new GameException(GameException.typeErr.NEW_GAME_ANONYM_ERROR);					
 						default:
 								throw new GameException(GameException.typeErr.CONN_KO);
 				}			

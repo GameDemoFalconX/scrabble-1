@@ -31,6 +31,7 @@ public class panelRack extends JPanel {
 			* @param dtp 
 			*/
 		public void addDTElement(DTPicture dtp) {
+				dtp.setVisible(true);
 				add(dtp);
 		}
 		

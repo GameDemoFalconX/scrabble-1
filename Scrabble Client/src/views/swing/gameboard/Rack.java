@@ -6,13 +6,13 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import views.swing.common.DTPicture;
 import views.swing.common.ImageIconTools;
@@ -33,8 +33,8 @@ public class Rack extends JPanel {
 		private ImageIcon icon;
 		private JPanel innerRack;
 		private boolean debug = false;
-		private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 		private static int tileNumber = RACK_LENGTH;
+		//private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
@@ -65,7 +65,6 @@ public class Rack extends JPanel {
 				for (int i = 0; i < RACK_LENGTH; i++) {
 						// Construct panelRack Element in the background of the rack and add it a DTPicture instance.
 						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-						panelRackElement.addDTElement(new DTPicture(getTileImage(testRack[i][0], testRack[i][1])));
 						if (debug) {
 								panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
 						}
@@ -89,37 +88,87 @@ public class Rack extends JPanel {
 				return tileNumber == RACK_LENGTH;
 		}
 		
-		/*** Methods used for re-arrange and exchange tiles ***/
-		public void reArrangeTiles() {
-				Random random = new Random();
-				random.nextInt();
-				for (int from = 0; from < RACK_LENGTH; from++) {
-						int to = from + random.nextInt(RACK_LENGTH - from);
-						swap(from, to);
+		/*** Method used to load tiles on rack ***/
+		public void loadTilesOnRack(String [][] newTiles, Game scrabble, JLayeredPane jlp) {
+				for (int i = 0; i < RACK_LENGTH; i++) {
+						panelRack parent = (panelRack) innerRack.getComponent(i);
+						if (parent.getComponentCount() == 0) {
+								parent.addDTElement(new DTPicture(getTileImage(newTiles[i][0], newTiles[i][1]), scrabble, jlp));
+						}
 				}
 		}
-
-		private void swap(int from, int to) {
-				panelRack fromP = (panelRack) this.innerRack.getComponent(from);
-				panelRack toP = (panelRack) this.innerRack.getComponent(to);
-				DTPicture tmp = null;
+		
+		/*** Methods used for re-arrange and exchange tiles ***/
+		public void reArrangeTiles(int [] positions) { // TODO : Find later a smarter solution
+				JPanel newInnerRack = new JPanel(new GridLayout(1, 7, 0, 0));
+				newInnerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
+				newInnerRack.setBounds( 200, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				newInnerRack.setOpaque(false);
 				
-				// Get the DTElement from the fromParent
-				if (fromP.getComponentCount() > 0) {
-						tmp = (DTPicture) fromP.getComponent(0);
+				for (int i = 0; i < RACK_LENGTH; i++) {
+						panelRack reader = (panelRack) this.innerRack.getComponent(positions[i]);
+						panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+						panelRackElement.addDTElement((DTPicture) reader.getComponent(0));
+						newInnerRack.add(panelRackElement, i);
 				}
-				// If the DTElement from the toParent is != null, add it on fromParent.
-				if (toP.getComponentCount() > 0) {
-						fromP.add(toP.getComponent(0));
-				} 
-				
-				// Add the content of tmp to toParent
-				if (tmp != null) {
-						toP.add(tmp);
-				} 
-				
+				this.innerRack = newInnerRack;
 				this.innerRack.validate();
-				this.innerRack.repaint();
+				this.innerRack.repaint();								
+		}
+		
+		/*** Methods used for shift Tile on rack ***/
+		/**
+			* Allows to shift the neighbors tiles of the dragged element.
+			* This method works in 3 steps :
+			*				- Save the first element. i.e the first neighbor of the dragged element from its source position.
+			*				- Shift all tiles contained between this first element and the target position.
+			*				- Remove the element located on the target position for drop the dragged tile.
+			* @param posStart, posStop 
+			*/
+		protected void shiftTiles(int startPos, int stopPos) {
+				DTPicture DTPtmp = null;
+				// STEP 1 : Check the direction of shift and set index
+				int DEC = (startPos - stopPos < 0) ? 1 : -1;
+				
+				// STEP 2 : Save the first element in a temp variable
+				panelRack tmpParent = (panelRack) innerRack.getComponent(startPos);
+				if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
+						DTPtmp = (DTPicture) tmpParent.getComponent(0);
+				}
+				
+				// STEP 3 : Loop over the rack to shift tiles.
+				while (startPos != stopPos) {
+						panelRack writerP = (panelRack) innerRack.getComponent(startPos);
+						panelRack readerP = (panelRack) innerRack.getComponent(startPos+DEC);
+					
+						if (readerP.getComponentCount() > 0 && readerP.getComponent(0) instanceof DTPicture) {
+								writerP.add(readerP.getComponent(0));
+						}
+						writerP.validate();
+						writerP.repaint();
+						startPos += DEC;
+				}
+		}
+		
+		/**
+			* Return the first free position close to the target position.
+			* @param rack, targetPos
+			* @return vacantPosition
+			*/
+		protected int findEmptyParent(int targetPos) {
+				int index = 1;
+				int vacantPosition = -1;
+				while (vacantPosition == -1 && index < 7) {
+						if ((targetPos + index < 7) && ((panelRack) innerRack.getComponent(targetPos + index)).getComponentCount() == 0) {
+								vacantPosition = targetPos + index;
+						} else {
+								if ((targetPos - index >= 0) && ((panelRack) innerRack.getComponent(targetPos - index)).getComponentCount() == 0) {
+										vacantPosition = targetPos - index;
+								}
+						}
+						index++;
+				}
+				return vacantPosition;
 		}
 		
 		/*** Methods used for create ImageIcon ***/
@@ -149,22 +198,26 @@ public class Rack extends JPanel {
 		}
 		
 		public static Image getTileImage(String letter, String value) {
-					BufferedImage tile = null;
-					BufferedImage letterB = null;
-					BufferedImage valueB = null;
-					try {
-							tile = ImageIO.read(Rack.class.getResource("/views/swing/media/vintage_tile.png"));
-							letterB = ImageIO.read(Rack.class.getResource("/views/swing/media/letters/"+letter+".png"));
-							valueB = ImageIO.read(Rack.class.getResource("/views/swing/media/numbers/"+value+".png"));
-					} catch (IOException ex) {
-							Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
-					}
-					BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
-					Graphics g = finalTile.getGraphics();
-					g.drawImage(tile, 0, 0, null);
-					g.drawImage(letterB, 0, 0, null);
-					g.drawImage(valueB, 0, 0, null);
-					Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
-					return result;
-			}
+				BufferedImage tile = null;
+				BufferedImage letterB = null;
+				BufferedImage valueB = null;
+				try {
+						tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
+						if (!letter.equals("?")) {
+								letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter.toLowerCase()+".png"));
+								valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
+						}
+				} catch (IOException ex) {
+						Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				BufferedImage finalTile = new BufferedImage(437, 481, BufferedImage.TYPE_INT_ARGB);
+				Graphics g = finalTile.getGraphics();
+				g.drawImage(tile, 0, 0, null);
+				if (!letter.equals("?")) {	
+						g.drawImage(letterB, 0, 0, null);
+						g.drawImage(valueB, 0, 0, null);
+				}
+				Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
+				return result;
+		}
 }
