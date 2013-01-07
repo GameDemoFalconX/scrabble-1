@@ -17,7 +17,6 @@ import model.event.InitMenuToPlayEvent;
 import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
-import views.swing.gameboard.Settings;
 
 /**
  *
@@ -38,6 +37,10 @@ public class Menu extends MenuView {
 				buildMenu();
 		}
 		
+		public JPanel getPanel() {
+				return panel;
+		}
+		
 		private void buildMenu() {
 				panel = new JPanel();
 				panel.setLayout(null);
@@ -46,36 +49,60 @@ public class Menu extends MenuView {
 				initComponent();
 		}
 
+		/*** Methods used to load Menu components in specific cases ***/
 		private void initComponent() {
 				initPlayAsGuestButton();
 				initLoginButton();
 				initSignupButton();
 				initScrabbleButton();
-				initPlayerButton();
-				initPopupMenu();
-				initScoreLabel();
-				initNewGameButton();
-				initLoadButton();
-				initSaveButton();
-				initSettingsButton();
 				panel.add(playAsGuestButton);
 				panel.add(loginButton);
 				panel.add(signupButton);
 				panel.add(scrabbleButton);
-				panel.add(playerButton);
-				panel.add(newGameButton);
-				panel.add(saveButton);
-				panel.add(loadButton);
-				panel.add(settingsButton);
-				panel.add(score);
 				panel.validate();
-				panel.repaint();
+				//panel.repaint();
 		}
 		
-		public JPanel getPanel() {
-				return panel;
+		private void loadPlay(boolean anonymous, String email, int score) {
+				// Remove unused elements
+				panel.remove(playAsGuestButton);
+				panel.remove(loginButton);
+				panel.remove(signupButton);
+				
+				// Init new components
+				initPlayerButton(anonymous, email);
+				initPopupMenu();
+				initScoreLabel();
+				initSettingsButton();
+				panel.add(playerButton);
+				panel.add(this.score);
+				panel.add(settingsButton);
+				
+				if (!anonymous) {
+						initNewGameButton();
+						initLoadButton();
+						panel.add(newGameButton);
+						panel.add(loadButton);
+				}
+				panel.validate();
 		}
 		
+		private void reset() {
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				playerButton.setVisible(false);
+				newGameButton.setVisible(false);
+				saveButton.setVisible(false);
+				loadButton.setVisible(false);
+				playerButton.setVisible(false);
+				settingsButton.setVisible(false);
+				score.setVisible(false);
+				playAsGuestButton.setVisible(true);
+				loginButton.setVisible(true);
+				signupButton.setVisible(true);
+		}
+		
+		/*** Methods used to load the menu components ***/
 		private void initPlayAsGuestButton() {
 				playAsGuestButton = new JButton("Play as guest");
 				playAsGuestButton.setBounds(panel.getWidth()/2-50, 200, 110, 30);
@@ -131,30 +158,21 @@ public class Menu extends MenuView {
 				});
 		}
 		
-		@Override
-		public void initMenuToPlay(InitMenuToPlayEvent event) {
-				if (event.isAnonym()) {
-						playerAnonym();
-				} else {
-						playerLogged(event.getPlayerEmail());
-				}
-		}
-		
-		private void initPlayerButton() {
-				playerButton = new JButton();
+		private void initPlayerButton(boolean anonymous, String email) {
+				Icon icon = (anonymous) ? new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)) : new ImageIcon(ImageIconTools.getGravatar(email)
+												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+				playerButton = new JButton(icon);
 				playerButton.setBounds(panel.getWidth()-77, 11, 60, 60);
-				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
-												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								popUpMenu.show(e.getComponent(), playerButton.getX()-174, playerButton.getY()+49);
 						}
 				});
-				playerButton.setVisible(false);
 		}
 		
-			private void initPopupMenu() {
+		private void initPopupMenu() {
 				popUpMenu = new JPopupMenu();
 				logOff = new JMenuItem(new AbstractAction("Log off") {
 						
@@ -176,8 +194,8 @@ public class Menu extends MenuView {
 				popUpMenu.add(logOff);
 				popUpMenu.add(helpOff);
 		}
-			
-			private void initScoreLabel() {
+		
+		private void initScoreLabel() {
 				score = new JLabel("000");
 				score.setBounds(panel.getWidth()-170, 14, 80, 80);
 				Font font = null;
@@ -194,17 +212,19 @@ public class Menu extends MenuView {
 				} else {
 						score.setForeground(Color.BLACK);
 				}
-				score.setVisible(false);
 		}
-			
-		public void setScore(int score) {
-				if (score < 10) {
-						this.score.setText("00"+String.valueOf(score));
-				} else if	(score < 100) {
-						this.score.setText("0"+String.valueOf(score));
-				} else{
-						this.score.setText(String.valueOf(score));
-				}
+		
+		private void initSettingsButton() {
+				settingsButton = new JButton("Settings");
+				settingsButton.setBounds(panel.getWidth()/2-50, 365, 110, 30);
+				settingsButton.addActionListener(new AbstractAction() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//								Settings settings = new Settings(gameBoard, scrabble);
+//								settings.showSettings();
+						}
+				});
 		}
 		
 		private void	initNewGameButton() {
@@ -217,20 +237,6 @@ public class Menu extends MenuView {
 //								newGame();
 						}
 				});
-				newGameButton.setVisible(false);
-		}
-		
-		private void	initSaveButton() {
-				saveButton = new JButton("Save game");
-				saveButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-295, 110, 30);
-				saveButton.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-//								saveGame();
-						}
-				});
-				saveButton.setVisible(false);
 		}
 		
 		private void initLoadButton() {
@@ -243,63 +249,33 @@ public class Menu extends MenuView {
 //								loadGame();
 						}
 				});
-				loadButton.setVisible(false);
 		}
 		
-		public void playerLogged(String email) {
-				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
-												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-				initPopupMenu();
-				playAsGuestButton.setVisible(false);
-				signupButton.setVisible(false);
-				loginButton.setVisible(false);
-				newGameButton.setVisible(true);
-				saveButton.setVisible(true);
-				loadButton.setVisible(true);
-				playerButton.setVisible(true);
-				score.setVisible(true);
-				settingsButton.setVisible(true);
-		}
-		
-		private void playerAnonym() {
-				initPopupMenu();
-				playAsGuestButton.setVisible(false);
-				signupButton.setVisible(false);
-				loginButton.setVisible(false);
-				newGameButton.setVisible(true);
-				playerButton.setVisible(true);
-				settingsButton.setVisible(true);
-				score.setVisible(true);
-		}
-		
-		private void reset() {
-				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
-												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-				playerButton.setVisible(false);
-				newGameButton.setVisible(false);
-				saveButton.setVisible(false);
-				loadButton.setVisible(false);
-				playerButton.setVisible(false);
-				settingsButton.setVisible(false);
-				score.setVisible(false);
-				playAsGuestButton.setVisible(true);
-				loginButton.setVisible(true);
-				signupButton.setVisible(true);
-		}
-		
-	
-
-		private void initSettingsButton() {
-				settingsButton = new JButton("Settings");
-				settingsButton.setBounds(panel.getWidth()/2-50, 365, 110, 30);
-				settingsButton.setVisible(false);
-				settingsButton.addActionListener(new AbstractAction() {
+		private void	initSaveButton() {
+				saveButton = new JButton("Save game");
+				saveButton.setBounds(panel.getWidth()/2-50, panel.getHeight()-295, 110, 30);
+				saveButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-//								Settings settings = new Settings(gameBoard, scrabble);
-//								settings.showSettings();
+//								saveGame();
 						}
 				});
+		}
+		
+		/*** Methods used to update the Menu view from the model notifications ***/
+		@Override
+		public void initMenuToPlay(InitMenuToPlayEvent event) {
+				loadPlay(event.isAnonym(), event.getPlayerEmail(), event.getScore());
+		}
+			
+		public void setScore(int score) {
+				if (score < 10) {
+						this.score.setText("00"+String.valueOf(score));
+				} else if	(score < 100) {
+						this.score.setText("0"+String.valueOf(score));
+				} else{
+						this.score.setText(String.valueOf(score));
+				}
 		}
 }

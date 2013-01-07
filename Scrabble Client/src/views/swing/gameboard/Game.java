@@ -140,7 +140,7 @@ public class Game extends GameView  {
 		
 		private void initValidWordButton() {
 				validWordButton = new JButton("Valide");
-				validWordButton.setBounds(550, 737, 60, 60);
+				validWordButton.setBounds(560, 737, 60, 60);
 				validWordButton.setVisible(true);
 				validWordButton.setEnabled(false);
 				validWordButton.addActionListener(new AbstractAction() {
