@@ -1,9 +1,11 @@
 package views.swing.gameboard;
 
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Robot;
 import java.awt.event.*;
 import javax.swing.*;
 import model.utils.EmailValidator;
@@ -34,11 +36,6 @@ public class LogSign extends JDialog {
 				if (deepThought == 42) {
 						System.out.println("But the Ultimate Question itself is unknown.");
 				}
-				this.addWindowListener(new WindowAdapter() {
-						public void WindowOpened(WindowEvent e) {
-								validateButton.requestFocusInWindow();
-						}
-				});
 		}
 		
 		public LogSign(SideMenu sideMenu, String title) {
@@ -48,11 +45,19 @@ public class LogSign extends JDialog {
 
 		private void initComponents() {
 				emailValidator = new EmailValidator();
-				initFieldsPanel();
 				initButtonsPanel();
-				add(emailFieldPanel, BorderLayout.NORTH);
-				add(passwordFieldPanel, BorderLayout.CENTER);
+				initFieldsPanel();
 				add(buttonsPanel,BorderLayout.SOUTH);
+				add(passwordFieldPanel, BorderLayout.CENTER);
+				add(emailFieldPanel, BorderLayout.NORTH);
+				try {
+						Robot robot = new Robot();
+						robot.keyPress(KeyEvent.VK_SHIFT);
+						robot.keyPress(KeyEvent.VK_TAB);
+						robot.keyRelease(KeyEvent.VK_TAB);
+						robot.keyRelease(KeyEvent.VK_SHIFT);
+				} catch (AWTException e) {
+				}
 		}
 
 		private void initFieldsPanel() {
@@ -66,6 +71,7 @@ public class LogSign extends JDialog {
 				emailFieldPanel.setLayout(new BorderLayout());
 				emailField = new JTextField("Email address");
 				emailField.setPreferredSize(new Dimension(180,25));
+				emailField.setSize(180, 25);
 				emailField.addFocusListener(new FocusListener() {
 						@Override
 						public void focusGained(FocusEvent e) {
@@ -81,12 +87,13 @@ public class LogSign extends JDialog {
 						}
 				});
 				emailFieldPanel.add(textPanel, BorderLayout.NORTH);
-				emailFieldPanel.add(emailField, BorderLayout.CENTER);
+//				emailFieldPanel.add(emailField, BorderLayout.CENTER);
 				
 				passwordFieldPanel= new JPanel();
 				passwordFieldPanel.setOpaque(false);
 				passwordField = new JPasswordField("Password");
 				passwordField.setPreferredSize(new Dimension(180,25));
+				passwordField.setLayout(new BorderLayout());
 				passwordField.addFocusListener(new FocusListener() {
 						@Override
 						public void focusGained(FocusEvent e) {
@@ -101,7 +108,8 @@ public class LogSign extends JDialog {
         }
 						}
 				});
-				passwordFieldPanel.add(passwordField);
+				passwordFieldPanel.add(emailField, BorderLayout.CENTER);
+				passwordFieldPanel.add(passwordField, BorderLayout.SOUTH);
 		}
 
 		private void initButtonsPanel() {

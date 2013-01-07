@@ -268,10 +268,10 @@ public class SideMenu extends JPanel {
 												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 						if (/*call log in player*/true) { // TODO insert log in player here
 								playerLogged();
-						} else {
+						} /*else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
 																"Error", JOptionPane.ERROR_MESSAGE);
-						}
+						}*/
 				} else {
 						JOptionPane.showMessageDialog(null, "\""+email + "\" is not a valid "
 														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
