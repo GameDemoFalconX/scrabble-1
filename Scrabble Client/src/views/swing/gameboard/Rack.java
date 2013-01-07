@@ -126,10 +126,9 @@ public class Rack extends JPanel {
 			* @param posStart, posStop 
 			*/
 		protected void shiftTiles(int startPos, int stopPos) {
-				DTPicture DTPtmp;
+				DTPicture DTPtmp = null;
 				// STEP 1 : Check the direction of shift and set index
 				int DEC = (startPos - stopPos < 0) ? 1 : -1;
-				startPos += DEC;
 				
 				// STEP 2 : Save the first element in a temp variable
 				panelRack tmpParent = (panelRack) innerRack.getComponent(startPos);
@@ -141,23 +140,13 @@ public class Rack extends JPanel {
 				while (startPos != stopPos) {
 						panelRack writerP = (panelRack) innerRack.getComponent(startPos);
 						panelRack readerP = (panelRack) innerRack.getComponent(startPos+DEC);
-						if (writerP.getComponentCount() > 0 && writerP.getComponent(0) instanceof DTPicture) {
-								writerP.remove(0);
-						}
+					
 						if (readerP.getComponentCount() > 0 && readerP.getComponent(0) instanceof DTPicture) {
 								writerP.add(readerP.getComponent(0));
 						}
 						writerP.validate();
 						writerP.repaint();
 						startPos += DEC;
-				}
-				
-				// STEP 4 : Remove the last element to drop the dragged element.
-				tmpParent = (panelRack) innerRack.getComponent(startPos);
-				if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
-						tmpParent.remove(0);
-						tmpParent.validate();
-						tmpParent.repaint();
 				}
 		}
 		
@@ -215,7 +204,7 @@ public class Rack extends JPanel {
 				try {
 						tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
 						if (!letter.equals("?")) {
-								letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter+".png"));
+								letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter.toLowerCase()+".png"));
 								valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
 						}
 				} catch (IOException ex) {
