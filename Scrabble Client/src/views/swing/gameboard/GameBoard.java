@@ -27,16 +27,14 @@ public class GameBoard extends JPanel {
 		private static boolean vintage = true;		
 		private JLabel background;
 		private boolean debug = false;
-		private ImageIcon icon;
 		private JPanel innerGrid;
 		
 		public GameBoard() {
 				/** Construction of game board **/
-				setImageGameBoard("vintage");
-				background = new JLabel(this.icon);
+				background = new JLabel(setImageGameBoard("vintage"));
 				add(background);
 				setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
-				setBounds(10,10, icon.getIconWidth(), icon.getIconHeight());
+				setBounds(10,10, background.getIcon().getIconWidth(), background.getIcon().getIconHeight());
 				setVisible(true);
 				if (debug) {
 						setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
@@ -83,7 +81,7 @@ public class GameBoard extends JPanel {
 			* @see ImageIcon : An implementation of the Icon interface that paints Icons from Images
 			* @see Image
 			*/
-		private void setImageGameBoard(String type) {
+		private ImageIcon setImageGameBoard(String type) {
 				ImageIcon newIcon;
 				switch (type) {
 						case "vintage": newIcon = ImageIconTools.createImageIcon("/views/swing/media/vintage_grid.png","Vintage gameboard");
@@ -94,18 +92,17 @@ public class GameBoard extends JPanel {
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(GB_WIDTH, GB_HEIGHT,  Image.SCALE_SMOOTH);
-				icon = new ImageIcon(iconScaled);
+				return new ImageIcon(iconScaled);
 		}
 		
 		public void changeGameBoard(String type) {
-				setImageGameBoard(type);		
 				if ("vintage".equals(type)) {
 						vintage = true;
 				} else {
 						vintage = false;
 				}
 				remove(0);
-				add(new JLabel(icon), 0);
+				add(new JLabel(setImageGameBoard(type)), 0);
 				if (vintage) {
 						innerGrid.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 				} else {

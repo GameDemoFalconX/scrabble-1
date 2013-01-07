@@ -9,7 +9,6 @@ import java.awt.Robot;
 import java.awt.event.*;
 import javax.swing.*;
 import model.utils.EmailValidator;
-import views.swing.menu.Menu;
 
 /**
  *
@@ -17,7 +16,6 @@ import views.swing.menu.Menu;
  */
 public class LogSign extends JDialog {
 		
-		private Menu menu;
 		private JPanel textPanel, emailFieldPanel,passwordFieldPanel, buttonsPanel;
 		private JButton validateButton, cancelButton;
 		private JTextField emailField;
@@ -39,9 +37,8 @@ public class LogSign extends JDialog {
 				}
 		}
 		
-		public LogSign(Menu menu, String title) {
+		public LogSign(String title) {
 				this(null, title, ((6*3)*4)-30);
-				this.menu = menu;
 		}
 
 		private void initComponents() {
@@ -143,9 +140,7 @@ public class LogSign extends JDialog {
 								}
 						}
 				});
-				buttonsPanel.add(validateButton, BorderLayout.EAST);
-
-				
+				buttonsPanel.add(validateButton, BorderLayout.EAST);		
 				cancelButton = new JButton("Cancel");
 				cancelButton.setSize(110,30);
 				cancelButton.addActionListener(new AbstractAction() {
@@ -156,11 +151,9 @@ public class LogSign extends JDialog {
 						}
 				});
 				buttonsPanel.add(cancelButton, BorderLayout.EAST);
-				
 		}
 		
 		public void showLogSign() {
 				this.setVisible(true);
 		}
-		
 }

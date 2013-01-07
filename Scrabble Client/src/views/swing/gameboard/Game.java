@@ -1,9 +1,10 @@
-package views.swing.gameboard;
 
+package views.swing.gameboard;
 import controller.GameController;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -39,7 +40,6 @@ public class Game extends GameView  {
 		private Container contentPane;
 		private GameBoard gameboard;
 		private Rack rack;
-		//private SideMenu sideMenu;
 		private JLabel frameBackground;
 		private JButton reArrangeButton, exchangeButton, validWordButton;
 		
@@ -58,9 +58,9 @@ public class Game extends GameView  {
 		}
 		
 		private void initContainer() {
-				frameBackground = new JLabel(ImageIconTools.createImageIcon("../media/background.png",""));
+				frameBackground = new JLabel(ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png",""));
 				frameBackground.setBounds(0, 0, 1024, 1024);
-				contentPane =  frame.getContentPane() ;
+				contentPane = frame.getContentPane() ;
 				contentPane.setLayout(null);
 				contentPane.add(frameBackground, 0);
 				contentPane.add(gameboard, 0);
@@ -72,7 +72,10 @@ public class Game extends GameView  {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left+gameboard.getInsets().right + 250, 850);
+				Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("views/swing/media/icon.png"));
+				icon = icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+				frame.setIconImage(icon);
+				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
