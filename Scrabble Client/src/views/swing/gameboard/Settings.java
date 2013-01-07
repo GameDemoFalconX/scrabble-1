@@ -67,7 +67,6 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_DARK);
-								darkRadioButton.setBorder(BorderFactory.createLineBorder(Color.RED));
 						}
 				});
 				backgroundPanel.add(darkRadioButton);

@@ -1,6 +1,7 @@
 
 package views.swing.gameboard;
 import controller.GameController;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Point;
@@ -45,6 +46,9 @@ public class Game extends GameView  {
 		public static final String TYPE_DARKER = "darker" ;
 		public static final String TYPE_DARKEST = "darkest" ;
 		public static final String TYPE_BLACK = "black" ;
+		private static final String SHUFFLE_PATH = "/views/swing/media/shuffle_rack_icon.png";
+		private static final String VALID_WORD_PATH = "/views/swing/media/add_word_icon.png";
+		private static final String EXCHANGE_PATH = "/views/swing/media/exchange_tile_icon.png";
 		
     
 		private JFrame frame;
@@ -53,7 +57,7 @@ public class Game extends GameView  {
 		private GameBoard gameboard;
 		private Rack rack;
 		private JLabel frameBackground;
-		private JButton reArrangeButton, exchangeButton, validWordButton;
+		private JButton shuffleButton, exchangeButton, validWordButton;
 		
 		public Game(GameController controller) {
 				super(controller);
@@ -96,10 +100,10 @@ public class Game extends GameView  {
 		}
 		
 		private void initGameButtons() {
-				initReArrangeButton();
+				initShuffleButton();
 				initExchangeButton();
 				initValidWordButton();
-				contentPane.add(reArrangeButton, 0);
+				contentPane.add(shuffleButton, 0);
 				contentPane.add(exchangeButton, 0);
 				contentPane.add(validWordButton, 0);
 				contentPane.validate();
@@ -124,11 +128,14 @@ public class Game extends GameView  {
 		
 		/*** Methods used for initialize game buttons ***/
 		
-		private void initReArrangeButton() {
-				reArrangeButton = new JButton("Arrange");
-				reArrangeButton.setBounds(30, 737, 60, 60);
-				reArrangeButton.setVisible(true);
-				reArrangeButton.addActionListener(new AbstractAction() {
+		private void initShuffleButton() {
+				shuffleButton = new JButton(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
+				shuffleButton.setBounds(30, 737, 60, 60);
+				shuffleButton.setVisible(true);
+				shuffleButton.setOpaque(true);
+				shuffleButton.setBorder(null);
+				shuffleButton.setBackground(new Color(255, 255, 255, 100));
+				shuffleButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -138,9 +145,12 @@ public class Game extends GameView  {
 		}
 		
 		private void initExchangeButton() {
-				exchangeButton = new JButton("Exchange");
+				exchangeButton = new JButton(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
 				exchangeButton.setBounds(100, 737, 60, 60);
 				exchangeButton.setVisible(true);
+				exchangeButton.setOpaque(true);
+				exchangeButton.setBorder(null);
+				exchangeButton.setBackground(new Color(255, 255, 255, 100));
 				exchangeButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -151,9 +161,12 @@ public class Game extends GameView  {
 		}
 		
 		private void initValidWordButton() {
-				validWordButton = new JButton("Valide");
+				validWordButton = new JButton(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
 				validWordButton.setBounds(560, 737, 60, 60);
 				validWordButton.setVisible(true);
+				validWordButton.setOpaque(true);
+				validWordButton.setBorder(null);
+				validWordButton.setBackground(new Color(255, 255, 255, 200));
 				//validWordButton.setEnabled(false);
 				validWordButton.addActionListener(new AbstractAction() {
 
@@ -169,21 +182,27 @@ public class Game extends GameView  {
 				switch (type){
 						case TYPE_LIGHT:
 								newIcon = ImageIconTools.createImageIcon(LIGHT_PATH,TYPE_LIGHT);
+								setButtonsBackground(false);
 								break;
 						case TYPE_DARK:
 								newIcon = ImageIconTools.createImageIcon(DARK_PATH,TYPE_DARK);
+								setButtonsBackground(false);
 								break;
 						case TYPE_DARKER:
 								newIcon = ImageIconTools.createImageIcon(DARKER_PATH,TYPE_DARKER);
+								setButtonsBackground(false);
 								break;
 						case TYPE_DARKEST:
 								newIcon = ImageIconTools.createImageIcon(DARKEST_PATH,TYPE_DARKEST);
+								setButtonsBackground(true);
 								break;
 						case TYPE_BLACK:
 								newIcon = ImageIconTools.createImageIcon(BLACK_PATH,TYPE_BLACK);
+								setButtonsBackground(true);
 								break;
 						default: 
 								newIcon = ImageIconTools.createImageIcon(DARKEST_PATH,TYPE_DARKEST);
+								setButtonsBackground(true);
 				}
 				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
 				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
@@ -269,5 +288,18 @@ public class Game extends GameView  {
 		@Override
 		public void rackReArrange(RackReArrangeEvent event) {
 				rack.reArrangeTiles(event.getNewPositions());
+		}
+		
+		
+		public void setButtonsBackground(boolean dark) {
+				if (dark) {
+						shuffleButton.setOpaque(true);
+						validWordButton.setOpaque(true);
+						exchangeButton.setOpaque(true);
+				} else {
+						shuffleButton.setOpaque(false);
+						validWordButton.setOpaque(false);
+						exchangeButton.setOpaque(false);
+				}
 		}
 }
