@@ -437,12 +437,12 @@ public class Menu extends MenuView {
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
 												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-						if (/*call log in player*/true) { // TODO insert log in player here
+						if (true) { // TODO insert log in player here
 								playerLogged();
-						} /*else {
+						} else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
 																"Error", JOptionPane.ERROR_MESSAGE);
-						}*/
+						}
 				} else {
 						JOptionPane.showMessageDialog(null, "\""+email + "\" is not a valid "
 														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
@@ -533,5 +533,5 @@ public class Menu extends MenuView {
 		public void setInformations(String email, char[] password) {
 				this.email = email;
 				this.password = password;
-		}
+		}*/
 }

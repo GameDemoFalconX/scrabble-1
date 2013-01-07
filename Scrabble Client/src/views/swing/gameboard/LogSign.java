@@ -9,6 +9,7 @@ import java.awt.Robot;
 import java.awt.event.*;
 import javax.swing.*;
 import model.utils.EmailValidator;
+import views.swing.menu.Menu;
 
 /**
  *
@@ -16,7 +17,7 @@ import model.utils.EmailValidator;
  */
 public class LogSign extends JDialog {
 		
-		private SideMenu sideMenu;
+		private Menu menu;
 		private JPanel textPanel, emailFieldPanel,passwordFieldPanel, buttonsPanel;
 		private JButton validateButton, cancelButton;
 		private JTextField emailField;
@@ -38,9 +39,9 @@ public class LogSign extends JDialog {
 				}
 		}
 		
-		public LogSign(SideMenu sideMenu, String title) {
+		public LogSign(Menu menu, String title) {
 				this(null, title, ((6*3)*4)-30);
-				this.sideMenu = sideMenu;
+				this.menu = menu;
 		}
 
 		private void initComponents() {
@@ -125,12 +126,12 @@ public class LogSign extends JDialog {
 								if (!"".equals(emailField.getText())/* && !"".equals(new String(passwordField.getPassword()))*/) {
 										if (EmailValidator.validate(emailField.getText())) {
 												if ("Sign up".equals(validateButton.getText())) {
-														sideMenu.setInformations(emailField.getText(), passwordField.getPassword());
-														sideMenu.playerLogged();
+														//menu.setInformations(emailField.getText(), passwordField.getPassword());
+														//menu.playerLogged();
 														dispose();
 												} else {
-														sideMenu.setInformations(emailField.getText(), passwordField.getPassword());
-														sideMenu.playerLogged();
+														//menu.setInformations(emailField.getText(), passwordField.getPassword());
+														//menu.playerLogged();
 														dispose();
 												}
 										} else {
