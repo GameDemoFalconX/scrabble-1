@@ -17,7 +17,6 @@ import views.swing.menu.Menu;
  */
 public class LogSign extends JDialog {
 		
-		private Menu menu;
 		private JPanel textPanel, emailFieldPanel,passwordFieldPanel, buttonsPanel;
 		private JButton validateButton, cancelButton;
 		private JTextField emailField;
@@ -39,9 +38,8 @@ public class LogSign extends JDialog {
 				}
 		}
 		
-		public LogSign(Menu menu, String title) {
+		public LogSign(String title) {
 				this(null, title, ((6*3)*4)-30);
-				this.menu = menu;
 		}
 
 		private void initComponents() {

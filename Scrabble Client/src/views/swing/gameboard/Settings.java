@@ -111,27 +111,27 @@ public class Settings extends JDialog {
 				gameboardPanel.setOpaque(false);
 				gameboardPanel.setSize(220,60);
 				gameboardPanel.setBorder(BorderFactory.createTitledBorder("Gameboard"));
-				lightRadioButton = new JRadioButton(new ImageIcon(ImageIconTools.
+				vintageRadioButton = new JRadioButton(new ImageIcon(ImageIconTools.
 												createImageIcon("/views/swing/media/vintage_gb_icon.png", null).
 												getImage().getScaledInstance(45, 45,  Image.SCALE_SMOOTH)));
-				lightRadioButton.addMouseListener(new MouseAdapter() {
+				vintageRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								gameboard.changeGameBoard("vintage");
 						}
 				});
-				gameboardPanel.add(lightRadioButton);
+				gameboardPanel.add(vintageRadioButton);
 				
-				darkRadioButton = new JRadioButton(new ImageIcon(ImageIconTools.
+				modernRadioButton = new JRadioButton(new ImageIcon(ImageIconTools.
 												createImageIcon("/views/swing/media/modern_gb_icon.png", null).
 												getImage().getScaledInstance(45, 45,  Image.SCALE_SMOOTH)));
-				darkRadioButton.addMouseListener(new MouseAdapter() {
+				modernRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								gameboard.changeGameBoard("modern");
 						}
 				});
-				gameboardPanel.add(darkRadioButton);
+				gameboardPanel.add(modernRadioButton);
 		}
 		
 		public void showSettings() {

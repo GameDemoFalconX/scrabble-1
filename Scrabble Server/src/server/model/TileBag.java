@@ -93,9 +93,9 @@ public class TileBag {
 			*/
 		private int getValue() {
 				double rand = random.nextDouble();
-				if (rand < 0.05) {								// 5% 2 letters
+				if (rand < 0.03) {								// 3% 2 letters
 						return 0;
-				} else if (rand < 0.50) {			// 45% for 71 letters
+				} else if (rand < 0.50) {			// 47% for 71 letters
 						return 1;
 				} else if (rand < 0.64) {			// 14% for 8 letters
 						return 2;

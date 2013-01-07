@@ -4,6 +4,7 @@ import controller.GameController;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -39,7 +40,6 @@ public class Game extends GameView  {
 		private Container contentPane;
 		private GameBoard gameboard;
 		private Rack rack;
-		//private SideMenu sideMenu;
 		private JLabel frameBackground;
 		private JButton reArrangeButton, exchangeButton, validWordButton;
 		
@@ -72,6 +72,9 @@ public class Game extends GameView  {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("views/swing/media/icon.png"));
+				icon = icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+				frame.setIconImage(icon);
 				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
