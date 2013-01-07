@@ -1,6 +1,5 @@
 package controller;
 
-import javax.swing.JPanel;
 import model.Play;
 import views.MenuView;
 import views.swing.menu.Menu;
@@ -24,8 +23,8 @@ public class MenuController {
 				play.addMenuListener(MainView);
 		}
 
-		public JPanel getPanelMenu() {
-				return ((Menu) MainView).getPanel();
+		public Menu getMenu() {
+				return (Menu) MainView;
 		}
 		
 		public void notifyPlayAsGuest(){

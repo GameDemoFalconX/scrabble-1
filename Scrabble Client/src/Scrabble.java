@@ -13,7 +13,7 @@ public class Scrabble {
 				Play play = new Play(args);
 				GameController gameController = new GameController(play);
 				MenuController menuController = new MenuController(play);
-				gameController.addMenuToView(menuController.getPanelMenu());
+				gameController.addMenuToView(menuController.getMenu());
 				gameController.displayViews();
 		}
 }

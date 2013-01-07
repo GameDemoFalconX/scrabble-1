@@ -17,6 +17,7 @@ import model.event.InitMenuToPlayEvent;
 import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
+import views.swing.gameboard.Game;
 
 /**
  *
@@ -25,6 +26,7 @@ import views.swing.gameboard.Blah;
 public class Menu extends MenuView {
 		
 		private static JPanel panel;
+		private Game game;
 		private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
 										playerButton, settingsButton, newGameButton, saveButton, loadButton;
 		private JPopupMenu popUpMenu;
@@ -39,6 +41,10 @@ public class Menu extends MenuView {
 		
 		public JPanel getPanel() {
 				return panel;
+		}
+		
+		public void setGame(Game game) {
+				this.game = game;
 		}
 		
 		private void buildMenu() {

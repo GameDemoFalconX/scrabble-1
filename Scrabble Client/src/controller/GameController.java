@@ -1,9 +1,9 @@
 package controller;
 
-import javax.swing.JPanel;
 import model.Play;
 import views.GameView;
 import views.swing.gameboard.Game;
+import views.swing.menu.Menu;
 
 /**
  * 
@@ -25,8 +25,9 @@ public class GameController {
 				play.addRackListener(MainView);
 		}
 		
-		public void addMenuToView(JPanel menu) {
-				((Game) MainView).setMenu(menu);
+		public void addMenuToView(Menu menu) {
+				((Game) MainView).setMenu(menu.getPanel());
+				menu.setGame((Game) MainView);
 		}
 
 		public void displayViews(){
