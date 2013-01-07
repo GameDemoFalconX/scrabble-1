@@ -3,18 +3,10 @@ package views.swing.menu;
 import controller.MenuController;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import model.event.InitMenuToPlayEvent;
 import views.MenuView;
-import views.swing.common.EmailValidator;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
 
@@ -25,7 +17,7 @@ import views.swing.gameboard.Blah;
 public class Menu extends MenuView {
 		
 		private static JPanel panel;
-		private JButton PlayAsGuestButton, LoginButton, SignupButton, scrabbleButton;
+		private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton;
 		
 		/*
 		private JButton playerButton, gameBoardButton, scoreTestButton, addWordButton;
@@ -59,9 +51,9 @@ public class Menu extends MenuView {
 				initLoginButton();
 				initSignupButton();
 				initScrabbleButton();
-				panel.add(PlayAsGuestButton);
-				panel.add(LoginButton);
-				panel.add(SignupButton);
+				panel.add(playAsGuestButton);
+				panel.add(loginButton);
+				panel.add(signupButton);
 				panel.add(scrabbleButton);
 				panel.validate();
 		}
@@ -71,49 +63,50 @@ public class Menu extends MenuView {
 		}
 		
 		private void initPlayAsGuestButton() {
-				PlayAsGuestButton = new JButton("Play As Guest");
-				PlayAsGuestButton.setBounds(panel.getWidth()/2-80, 200, 160, 30);
-				PlayAsGuestButton.addActionListener(new AbstractAction() {
+				playAsGuestButton = new JButton("Play As Guest");
+				playAsGuestButton.setBounds(panel.getWidth()/2-80, 200, 160, 30);
+				playAsGuestButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								getController().notifyPlayAsGuest();
 						}
 				});
-				PlayAsGuestButton.setVisible(true);
+				playAsGuestButton.setVisible(true);
 		}
 		
 		private void initLoginButton() {
-				LoginButton = new JButton("Log In");
-				LoginButton.setBounds(panel.getWidth()/2-80, 250, 160, 30);
-				LoginButton.addActionListener(new AbstractAction() {
+				loginButton = new JButton("Log In");
+				loginButton.setBounds(panel.getWidth()/2-80, 250, 160, 30);
+				loginButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								// Call controller
 						}
 				});
-				LoginButton.setVisible(true);
+				loginButton.setVisible(true);
 		}
 		
 		private void initSignupButton() {
-				SignupButton = new JButton("Sign Up");
-				SignupButton.setBounds(panel.getWidth()/2-80, 300, 160, 30);
-				SignupButton.addActionListener(new AbstractAction() {
+				signupButton = new JButton("Sign Up");
+				signupButton.setBounds(panel.getWidth()/2-80, 300, 160, 30);
+				signupButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								// Call controller
 						}
 				});
-				SignupButton.setVisible(true);
+				signupButton.setVisible(true);
 		}
 		
 		private void initScrabbleButton() {
 				scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
-				scrabbleButton.setBounds(panel.getWidth()/2-95, panel.getHeight()-103, 190, 102);
-				//scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setBounds(panel.getWidth()/2-80, panel.getHeight()-103, 190, 102);
+				scrabbleButton.setBackground(Color.WHITE);
+				scrabbleButton.setOpaque(false);
 				scrabbleButton.setBorder(null);
 				scrabbleButton.addActionListener(new AbstractAction() {
 
@@ -128,8 +121,8 @@ public class Menu extends MenuView {
 		public void initMenuToPlay(InitMenuToPlayEvent event) {
 				// Init the menu view
 		}
+	/*	
 		
-		/*
 		public Menu(GameBoard gameBoard, Rack rack) {
 				this();
 				this.gameBoard = gameBoard;
@@ -162,9 +155,9 @@ public class Menu extends MenuView {
 						panel.add(scoreTestButton);
 				}
 				panel.add(score);
-		}*/
+		}
 		
-		/*
+		
 		private void initPopupOnMenu() {
 				popUpOnMenu = new JPopupMenu();
 				emailField = new JTextField("Email");
@@ -242,7 +235,7 @@ public class Menu extends MenuView {
 				popupMenu.add(logOff);
 				popupMenu.add(helpOff);
 		}
-		*/
+		
 		/*** Methods used for login, sign up or logout ***/
 		/*
 		private void logInSignUp() {
@@ -269,8 +262,6 @@ public class Menu extends MenuView {
 				playerIsLogged = false;
 		}
 		
-		/*** ***/
-		/*
 		private void initPlayerButton() {
 				playerButton = new JButton();
 				playerButton.setBounds(this.getWidth()-77, 11, 60, 60);
@@ -290,7 +281,7 @@ public class Menu extends MenuView {
 				score.setBounds(this.getWidth()-170, 14, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(SideMenu.class.getResource(
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource(
 														"/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -437,18 +428,19 @@ public class Menu extends MenuView {
 				if (EmailValidator.validate(email)) {
 						playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
 												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-						if (/*call log in player*/true) { // TODO insert log in player here
+						if (true) { // TODO insert log in player here
 								playerLogged();
-						} /*else {
+						} else {
 								JOptionPane.showMessageDialog(null, "Error, please try again.", 
 																"Error", JOptionPane.ERROR_MESSAGE);
-						}*/
+						}
 				} else {
 						JOptionPane.showMessageDialog(null, "\""+email + "\" is not a valid "
 														+ "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
 				}
-		}
-		
+		} 
+		*/
+		/*
 		public void playerLogged() {
 				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar(email)
 												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
@@ -526,7 +518,7 @@ public class Menu extends MenuView {
 				});
 		}
 		
-		private SideMenu getThis() {
+		private Menu getThis() {
 				return this;
 		}
 		
@@ -534,4 +526,5 @@ public class Menu extends MenuView {
 				this.email = email;
 				this.password = password;
 		}
+		 */
 }

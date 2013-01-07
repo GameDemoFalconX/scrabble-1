@@ -15,7 +15,7 @@ import views.swing.common.ImageIconTools;
 public class Settings extends JDialog {
 		
 		private GameBoard gameboard;
-		private Scrabble scrabble;
+		private Game game;
 		private JPanel backgroundPanel, gameboardPanel;
 		private JRadioButton lightRadioButton, darkRadioButton, darkerRadioButton, 
 										darkerstRadioButton, blackRadioButton, vintageRadioButton, 
@@ -33,10 +33,10 @@ public class Settings extends JDialog {
 				initComponents();
 		}
 		
-		public Settings(GameBoard gameboard, Scrabble scrabble) {
+		public Settings(GameBoard gameboard, Game game) {
 				this(null);
 				this.gameboard = gameboard;
-				this.scrabble = scrabble;
+				this.game = game;
 		}
 
 		private void initComponents() {
@@ -57,7 +57,7 @@ public class Settings extends JDialog {
 				lightRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								scrabble.changeBackground("light");
+								game.changeBackground("light");
 						}
 				});
 				backgroundPanel.add(lightRadioButton);
@@ -68,7 +68,7 @@ public class Settings extends JDialog {
 				darkRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								scrabble.changeBackground("dark");
+								game.changeBackground("dark");
 						}
 				});
 				backgroundPanel.add(darkRadioButton);
@@ -79,7 +79,7 @@ public class Settings extends JDialog {
 				darkerRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								scrabble.changeBackground("darker");
+								game.changeBackground("darker");
 						}
 				});
 				backgroundPanel.add(darkerRadioButton);
@@ -90,7 +90,7 @@ public class Settings extends JDialog {
 				darkerstRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								scrabble.changeBackground("darkest");
+								game.changeBackground("darkest");
 						}
 				});
 				backgroundPanel.add(darkerstRadioButton);
@@ -100,7 +100,7 @@ public class Settings extends JDialog {
 				blackRadioButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								scrabble.changeBackground("black");
+								game.changeBackground("black");
 						}
 				});
 				backgroundPanel.add(blackRadioButton);

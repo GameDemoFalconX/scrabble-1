@@ -1,10 +1,12 @@
-package views.swing.gameboard;
 
+package views.swing.gameboard;
 import controller.GameController;
 import java.awt.Container;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,9 +58,9 @@ public class Game extends GameView  {
 		}
 		
 		private void initContainer() {
-				frameBackground = new JLabel(ImageIconTools.createImageIcon("../media/background.png",""));
+				frameBackground = new JLabel(ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png",""));
 				frameBackground.setBounds(0, 0, 1024, 1024);
-				contentPane =  frame.getContentPane() ;
+				contentPane = frame.getContentPane() ;
 				contentPane.setLayout(null);
 				contentPane.add(frameBackground, 0);
 				contentPane.add(gameboard, 0);
@@ -70,7 +72,7 @@ public class Game extends GameView  {
 		
 		private void initFrame() {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left+gameboard.getInsets().right + 250, 850);
+				frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
 				frame.setContentPane(contentPane);
 				frame.setGlassPane(GlassPane.getInstance());
 				frame.setLocationRelativeTo(null);
@@ -144,6 +146,36 @@ public class Game extends GameView  {
 								getController().notifyValidWord();
 						}
 				});
+		}
+		
+		private ImageIcon setImageBackground(String type) {
+				ImageIcon newIcon;
+				switch (type){
+						case "light":newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Light background");
+								break;
+						case "dark":newIcon = ImageIconTools.createImageIcon("/views/swing/media/dark_background.png","Light background");
+								break;
+						case "darker":newIcon = ImageIconTools.createImageIcon("/views/swing/media/darker_background.png","Light background");
+								break;
+						case "darkest":newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Light background");
+								break;
+						case "black":newIcon = ImageIconTools.createImageIcon("/views/swing/media/b_w_background.png","Light background");
+								break;
+						default: newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","darkest background");
+				}
+				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
+				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
+				return new ImageIcon(iconScaled);
+		}
+		
+		public void changeBackground(String type) {
+				frameBackground.setIcon(setImageBackground(type));
+				frameBackground.repaint();
+				contentPane.validate();
+				contentPane.repaint();
+				frame.validate();
+				frame.repaint();
+				contentPane.setVisible(true);
 		}
 		
 		/*** Methods used to modify the view from model notifications ***/
