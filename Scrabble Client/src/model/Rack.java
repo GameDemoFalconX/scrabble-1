@@ -83,21 +83,27 @@ class Rack {
 			* @return array of new index
 			*/
 		public int[] reArrangeTiles() {
-				int [] result = new int[rack.length];
+				int [] result = {0, 1, 2 ,3 , 4, 5, 6};
+				Tile [] newRack = new Tile[rack.length];
 				Random random = new Random();
 				random.nextInt();
-				for (int from = 0; from < rack.length; from++) {
-						int to = from + random.nextInt(rack.length - from);
-						result[from] = to;
-						swap(from, to);
+				for (int from = 0; from < result.length; from++) {
+						int to = from + random.nextInt(result.length - from);
+						swap(result, from, to);
 				}
+				
+				// Update the new rack
+				for (int i = 0; i < rack.length; i++) {
+						newRack[i] = rack[result[i]];
+				}
+				rack = newRack;
 				return result;
 		}
 
-		private void swap(int from, int to) {
-				Tile tmpTile = rack[from];
-				rack[from] = rack[to];
-				rack[to] = tmpTile;
+		private void swap(int [] index, int from, int to) {
+				int tmp = index[from];
+				index[from] = index[to];
+				index[to] = tmp;
 		}
 		
 		/**

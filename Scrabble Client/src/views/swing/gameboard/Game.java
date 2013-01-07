@@ -194,7 +194,6 @@ public class Game extends GameView  {
 				Point tP= event.getTargetPosition();
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
 				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.x*15)+tP.y);
-				System.out.println("Point : "+tP+" - targetParent coord : "+targetParent.getCoordinates());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 		}
 		
@@ -252,6 +251,9 @@ public class Game extends GameView  {
 		
 		@Override
 		public void rackReArrange(RackReArrangeEvent event) {
+				contentPane.remove(rack.getInnerRack());
 				rack.reArrangeTiles(event.getNewPositions());
+				contentPane.add(rack.getInnerRack(), 0);
+				contentPane.validate();
 		}
 }

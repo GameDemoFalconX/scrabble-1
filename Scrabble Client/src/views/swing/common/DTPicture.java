@@ -151,16 +151,12 @@ public class DTPicture extends Picture implements MouseMotionListener {
 		
 		private void notifyController() {
 				if (sourceParent instanceof panelRack && targetParent instanceof panelGrid) {
-						System.out.println("R to G");
 						scrabble.getController().notifyCreateWord(((panelRack) sourceParent).getPosition(), ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
 				} else if (sourceParent instanceof panelGrid && targetParent instanceof panelGrid) {
-						System.out.println("G to G");
 						scrabble.getController().notifyModifiedWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
 				} else if (sourceParent instanceof panelGrid && targetParent instanceof panelRack) {
-						System.out.println("G to R");
 						scrabble.getController().notifyRemoveLetterFromWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelRack) targetParent).getPosition());
 				} else if (sourceParent instanceof panelRack && targetParent instanceof panelRack) {
-						System.out.println("R to R");
 						scrabble.getController().notifyOrganizeRack(((panelRack) sourceParent).getPosition(), ((panelRack) targetParent).getPosition());
 				}
 		}

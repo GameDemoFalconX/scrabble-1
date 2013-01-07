@@ -102,7 +102,7 @@ public class Rack extends JPanel {
 		public void reArrangeTiles(int [] positions) { // TODO : Find later a smarter solution
 				JPanel newInnerRack = new JPanel(new GridLayout(1, 7, 0, 0));
 				newInnerRack.setSize(TILE_WIDTH*7, TILE_HEIGHT);
-				newInnerRack.setBounds( 200, 720, TILE_WIDTH*7, TILE_HEIGHT);
+				newInnerRack.setBounds(192, 737, (TILE_WIDTH + 7)*7, TILE_HEIGHT);
 				newInnerRack.setOpaque(false);
 				
 				for (int i = 0; i < RACK_LENGTH; i++) {
@@ -113,7 +113,7 @@ public class Rack extends JPanel {
 				}
 				this.innerRack = newInnerRack;
 				this.innerRack.validate();
-				this.innerRack.repaint();								
+				this.innerRack.repaint();
 		}
 		
 		/*** Methods used for shift Tile on rack ***/
