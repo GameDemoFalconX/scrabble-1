@@ -6,20 +6,30 @@ package model;
 */
 public class Tile {
 		
-		private final char letter;
+		private  char letter;
 		private final int value;
+		private final boolean isBlank;
 
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
+				this.isBlank = (letter == '?');
 		}
 
 		public char getLetter() {
 			return letter;
 		}
+		
+		public void setLetter(char newLetter) {
+				this.letter = newLetter;
+		}
 
 		public int getValue() {
 				return value;
+		}
+		
+		public boolean isBlank() {
+				return this.isBlank;
 		}
 		
 		@Override

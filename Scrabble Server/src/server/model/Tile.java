@@ -2,12 +2,13 @@ package server.model;
 
 /**
  * Model that contains the letter and the value of a Tile.
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
  */
 public class Tile {
 
 		private char letter;
 		private final int value;
+		private final boolean isBlank;
 		private int  x;
 		private int y;
 		private int rackPosition = -1; // By default, this value equals -1 (i.e not in the rack)
@@ -22,11 +23,13 @@ public class Tile {
 		public Tile(char letter, int value) {
 				this.letter = letter;
 				this.value = value;
+				this.isBlank = (letter == '?');
 		}
 		
 		public Tile(char letter, int value, boolean status) {
 				this.letter = letter;
 				this.value = value;
+				this.isBlank = (letter == '?');
 				this.status = status;
 		}
 		
@@ -48,6 +51,10 @@ public class Tile {
 			*/
 		public int getValue() {
 				return value;
+		}
+		
+		public boolean isBlank() {
+				return this.isBlank;
 		}
 		
 		/**
@@ -84,7 +91,7 @@ public class Tile {
 		
 		/**
 			* Gets the status of this tile
-			* @return True if the tile has just been placed on the gameboard.
+			* @return True if the tile has just been placed on the game board.
 			*/
 		public boolean getStatus() {
 				return status;

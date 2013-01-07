@@ -172,7 +172,8 @@ public class GameService {
 
 		/**
 			* Ask the server to check the passed word
-			* @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
+			* @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...
+			* where [tile] = L:X:Y and [tile blank] = ?L:x:y
 			* @return String with new score and new rack if the word is correctly placed otherwise only new score.
 			* @throws GameException 
 			*/
