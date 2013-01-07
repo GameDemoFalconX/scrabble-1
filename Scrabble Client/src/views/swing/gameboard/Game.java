@@ -2,9 +2,11 @@ package views.swing.gameboard;
 
 import controller.GameController;
 import java.awt.Container;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -109,7 +111,7 @@ public class Game extends GameView  {
 		
 		private void initReArrangeButton() {
 				reArrangeButton = new JButton("Arrange");
-				reArrangeButton.setBounds(30, 720, 60, 60);
+				reArrangeButton.setBounds(30, 737, 60, 60);
 				reArrangeButton.setVisible(true);
 				reArrangeButton.addActionListener(new AbstractAction() {
 
@@ -122,7 +124,7 @@ public class Game extends GameView  {
 		
 		private void initExchangeButton() {
 				exchangeButton = new JButton("Exchange");
-				exchangeButton.setBounds(100, 720, 60, 60);
+				exchangeButton.setBounds(100, 737, 60, 60);
 				exchangeButton.setVisible(true);
 				exchangeButton.addActionListener(new AbstractAction() {
 
@@ -135,8 +137,9 @@ public class Game extends GameView  {
 		
 		private void initValidWordButton() {
 				validWordButton = new JButton("Valide");
-				validWordButton.setBounds(550, 720, 60, 60);
+				validWordButton.setBounds(550, 737, 60, 60);
 				validWordButton.setVisible(true);
+				validWordButton.setEnabled(false);
 				validWordButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -144,6 +147,42 @@ public class Game extends GameView  {
 								getController().notifyValidWord();
 						}
 				});
+		}
+		
+		private ImageIcon setImageBackground(String type) {
+				ImageIcon newIcon;
+				switch (type){
+						case "light":
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/background.png","Light background");
+								break;
+						case "dark":
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/dark_background.png","Light background");
+								break;
+						case "darker":
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darker_background.png","Light background");
+								break;
+						case "darkest":
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","Light background");
+								break;
+						case "black":
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/b_w_background.png","Light background");
+								break;
+						default: 
+								newIcon = ImageIconTools.createImageIcon("/views/swing/media/darkest_background.png","darkest background");
+				}
+				// SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
+				Image iconScaled = newIcon.getImage().getScaledInstance(1024, 1024,  Image.SCALE_SMOOTH);
+				return new ImageIcon(iconScaled);
+		}
+
+		public void changeBackground(String type) {
+				frameBackground.setIcon(setImageBackground(type));
+				frameBackground.repaint();
+				contentPane.validate();
+				contentPane.repaint();
+				frame.validate();
+				frame.repaint();
+				contentPane.setVisible(true);
 		}
 		
 		/*** Methods used to modify the view from model notifications ***/
