@@ -67,7 +67,7 @@ public class GameBoard extends JPanel {
 				int ind = 0; // Index for the layout
 				for (int x = 0; x < 15; x++) {
 						for (int y = 0; y < 15; y++) {
-								panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(x, y));
+								panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(y, x));
 								if (debug) {
 										panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
 								}

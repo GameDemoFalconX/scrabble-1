@@ -252,7 +252,7 @@ public class Game extends GameView  {
 		public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
 				Point tP= event.getTargetPosition();
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.x*15)+tP.y);
+				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.downTileNumber();
 		}
@@ -278,15 +278,15 @@ public class Game extends GameView  {
 		public void tileMovedFromGridToGrid(TileFromGridToGridEvent event) {
 				Point sP = event.getSourcePosition();
 				Point tP= event.getTargetPosition();
-				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.x*15)+sP.y);
-				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.x*15)+tP.y);
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
+				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 		}
 		
 		@Override
 		public void tileMovedFromGridToRack(TileFromGridToRackEvent event) {
 				Point sP = event.getSourcePosition();
-				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.x*15)+sP.y);
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.upTileNumber();
@@ -296,7 +296,7 @@ public class Game extends GameView  {
 		public void tileMovedFromGridToRackWithShift(TileFromGridToRackWithShiftEvent event) {
 				rack.shiftTiles(rack.findEmptyParent(event.getTargetPosition()), event.getTargetPosition());
 				Point sP = event.getSourcePosition();
-				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.x*15)+sP.y);
+				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y*15)+sP.x);
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.upTileNumber();
