@@ -238,12 +238,18 @@ public class Game extends GameView  {
 		public void setButtonsBackground(boolean dark) {
 				if (dark) {
 						shuffleButton.setIcon(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
+						shuffleButton.setOpaque(false);
 						validWordButton.setIcon(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
+						validWordButton.setOpaque(false);
 						exchangeButton.setIcon(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
+						exchangeButton.setOpaque(false);
 				} else {
 						shuffleButton.setIcon(ImageIconTools.createImageIcon(DARK_SHUFFLE_PATH, null));
+						shuffleButton.setOpaque(false);
 						validWordButton.setIcon(ImageIconTools.createImageIcon(DARK_VALID_WORD_PATH, null));
+						validWordButton.setOpaque(false);
 						exchangeButton.setIcon(ImageIconTools.createImageIcon(DARK_EXCHANGE_PATH, null));
+						exchangeButton.setOpaque(false);
 				}
 		}
 		

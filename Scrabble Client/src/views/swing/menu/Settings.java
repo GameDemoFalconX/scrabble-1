@@ -1,4 +1,4 @@
-package views.swing.gameboard;
+package views.swing.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,7 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import views.swing.common.ImageIconTools;
-import views.swing.menu.Menu;
+import views.swing.gameboard.Game;
+import views.swing.gameboard.GameBoard;
 
 /**
  *
@@ -20,24 +21,21 @@ public class Settings extends JDialog {
 		private JPanel backgroundPanel, gameboardPanel;
 		private JRadioButton lightRadioButton, darkRadioButton, darkerRadioButton, 
 										darkerstRadioButton, blackRadioButton, vintageRadioButton, 
-										modernRadioButton;
-				
-		private Settings(JFrame frame, int number) {
-		super(frame, "Settings", true);
-		this.setSize(450, 120);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
-		this.setBackground(Color.WHITE);
-		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setLayout(new BorderLayout());
-		if (number == 6) {
-				System.out.println("I'm not a number, I'm a free man !");
-		}
+										modernRadioButton;		
+		
+		private Settings(JFrame frame) {
+				super(frame, "Settings", true);
+				this.setSize(450, 120);
+				this.setLocationRelativeTo(null);
+				this.setResizable(false);
+				this.setBackground(Color.WHITE);
+				this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				this.setLayout(new BorderLayout());
 				initComponents();
 		}
 		
 		public Settings(Game game, Menu menu) {
-				this(null, 6);
+				this(null);
 				this.game = game;
 				this.menu = menu;
 		}

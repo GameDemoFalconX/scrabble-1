@@ -17,7 +17,6 @@ import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
 import views.swing.gameboard.Game;
-import views.swing.gameboard.Settings;
 
 /**
  *
@@ -25,7 +24,7 @@ import views.swing.gameboard.Settings;
  */
 public class Menu extends MenuView {
 		
-		private static JPanel panel;
+		private static JPanel panel, playerPanel;
 		private Game game;
 		private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
 										playerButton, settingsButton, newGameButton, saveButton, loadButton;
@@ -84,8 +83,8 @@ public class Menu extends MenuView {
 				initPopupMenu();
 				initScoreLabel();
 				initSettingsButton();
-				panel.add(playerButton);
-				panel.add(this.score);
+				initPlayerPanel();
+				panel.add(playerPanel);
 				panel.add(settingsButton);
 				
 				if (!anonymous) {
@@ -97,17 +96,17 @@ public class Menu extends MenuView {
 				panel.validate();
 		}
 		
-		private void reset() {
+		private void logOut() {
 				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-				playerButton.setVisible(false);
-				playerButton.setVisible(false);
-				settingsButton.setVisible(false);
-				score.setVisible(false);
+				panel.remove(playerPanel);
+				panel.remove(settingsButton);
 				panel.add(playAsGuestButton);
 				panel.add(loginButton);
 				panel.add(signupButton);
+				panel.validate();
+				panel.repaint();
 		}
-		
+				
 		/*** Methods used to load the menu components ***/
 		private void initPlayAsGuestButton() {
 				playAsGuestButton = new JButton("Play as guest");
@@ -170,10 +169,13 @@ public class Menu extends MenuView {
 												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 				playerButton = new JButton(icon);
 				playerButton.setBounds(panel.getWidth()-77, 11, 60, 60);
+				playerButton.setBackground(Color.WHITE);
+				playerButton.setBorder(null);
+				playerButton.setOpaque(false);
 				playerButton.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-								popUpMenu.show(e.getComponent(), playerButton.getX()-174, playerButton.getY()+49);
+								popUpMenu.show(e.getComponent(), playerButton.getX()-119, playerButton.getY()+55);
 						}
 				});
 		}
@@ -184,7 +186,7 @@ public class Menu extends MenuView {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								reset();
+								logOut();
 						}
 				});
 				logOff.setSize(200, 20);
@@ -192,7 +194,7 @@ public class Menu extends MenuView {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
+								JOptionPane.showMessageDialog(null, Blah.HELP, "Help", 
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
@@ -234,6 +236,15 @@ public class Menu extends MenuView {
 								settings.showSettings();
 						}
 				});
+		}
+		
+		private void initPlayerPanel() {
+				playerPanel = new JPanel();
+				playerPanel.setBorder(null);
+				playerPanel.setBounds(30, 10, panel.getWidth()-30, 70);
+				playerPanel.setBackground(new Color(154, 154, 154, 70));
+				playerPanel.add(score);
+				playerPanel.add(playerButton);
 		}
 		
 		private void	initNewGameButton() {

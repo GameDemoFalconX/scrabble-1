@@ -1,4 +1,4 @@
-package views.swing.gameboard;
+package views.swing.menu;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
@@ -22,7 +22,7 @@ public class LogSign extends JDialog {
 		private JLabel text;
 		private EmailValidator emailValidator;
 		
-		private LogSign(JFrame frame, String title, int deepThought) {
+		private LogSign(JFrame frame, String title) {
 				super(frame, title, true);
 				this.setSize(300, 160);
 				this.setLocationRelativeTo(null);
@@ -31,13 +31,10 @@ public class LogSign extends JDialog {
 				this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				this.setLayout(new BorderLayout());
 				initComponents();
-				if (deepThought == 42) {
-						System.out.println("But the Ultimate Question itself is unknown.");
-				}
 		}
 		
 		public LogSign(String title) {
-				this(null, title, ((6*3)*4)-30);
+				this(null, title);
 		}
 
 		private void initComponents() {
