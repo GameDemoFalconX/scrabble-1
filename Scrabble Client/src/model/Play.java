@@ -42,6 +42,11 @@ public class Play {
 		private EventListenerList menuListeners;
 		private EventListenerList errorListeners;
 		
+		// Integrity error
+		private final static int FIRST_WORD_NUMBER = 1;
+		private final static int FIRST_WORD_POSITION = 2;
+		private final static int FLOATING_TILES = 3;
+		
 		/**
 			* Constructor for the launcher.
 			*/
@@ -273,79 +278,93 @@ public class Play {
 		}
 		
 		public void validateWord() {
-				int orientation = checkWordIntegrity();
-				if (orientation > 0) {
-						String o = (orientation > 1) ? "V" : "H";
-						String formatedWord = formatData();
-						try {
-								System.out.println(o+"@@"+formatedWord);
-								service.passWord(player.getPlayerID(), this.getPlayID(), o+"@@"+formatedWord);
-						} catch (GameException ge) {
-								// Fire errors
-						}
-				}
-		}
-		
-		private int checkWordIntegrity() {
+				String formatedWord = "";
 				int orientation = 1;
-				// Step 0 - First check about the first word
-				Boolean done = (this.firstWord) ? (newWord.size() > 1) : true;
+				int done = 0; // indicator of integrity
 				
-				if (done) {
+				// Step 0 - First check about the first word
+				done = (this.firstWord && newWord.size() < 1) ? FIRST_WORD_NUMBER : 0;
+				
+				if (done < 1) {
 						Set set = this.newWord.entrySet(); 
 						Iterator i = set.iterator();
 
 						// Step 1 - Check the first tile
+						System.out.println("Valid word - start step 1");
 						Map.Entry firstTile = (Map.Entry)i.next();
 						Point p1 = (Point) firstTile.getKey();
-						//done =  grid.hasNeighbors(p1.x, p1.y);
-
-						// Step 2 - Second tile
-						if (done && newWord.size() > 1) {
-								Map.Entry secondTile = (Map.Entry)i.next(); 
-								Point p2 = (Point) secondTile.getKey();
-								orientation = defineWordOrientation(p1.x, p1.y, p2.x, p2.y);
-
-								if (orientation > 0) {
-										while(done && i.hasNext()) { 
-												Map.Entry otherTile = (Map.Entry)i.next(); 
-												Point np = (Point) otherTile.getKey();
-												//done = (grid.hasNeighbors(np.x, np.y)) && (orientation == defineWordOrientation(p1.x, p1.y, np.x, np.y));
+						System.out.println("P1 : "+p1);
+						done = (this.firstWord && !(firstWordPosition(p1.x, p1.y))) ? FIRST_WORD_POSITION : (grid.hasNeighbors(p1.x, p1.y)) ? 0 : FLOATING_TILES;
+						
+						if (done < 1) {
+								// Format the first letter
+								formatedWord += formatData(p1, (Tile) firstTile.getValue());
+								
+								if (newWord.size() > 1) {
+										// Step 2 - Second tile
+										System.out.println("Valid word - start step 2");
+										Map.Entry secondTile = (Map.Entry)i.next(); 
+										Point p2 = (Point) secondTile.getKey();
+										System.out.println("P2 : "+p2);
+										orientation = defineWordOrientation(p1.x, p1.y, p2.x, p2.y);
+										done = (orientation > 0) ? 0 : FLOATING_TILES;
+										
+										if (done < 1) {
+												// Format the second letter
+												formatedWord += "##"+formatData(p2, (Tile) secondTile.getValue());
+												
+												// Step 3 - Other tile(s)
+												System.out.println("Valid word - start step 3");
+												while(done < 1 && i.hasNext()) { 
+														Map.Entry otherTile = (Map.Entry)i.next(); 
+														Point po = (Point) otherTile.getKey();
+														done = ((grid.hasNeighbors(po.x, po.y)) && (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y))) ? 0 : FLOATING_TILES;
+														if (done < 1) {
+																// Format the other letter(s)
+																formatedWord += "##"+formatData(po, (Tile) otherTile.getValue());
+														}
+												}
 										}
-								} else {
-										done = false;
 								}
 						}
 				}
-				return (done) ? orientation : 0;
+				
+				System.out.println("Valid word - check done : "+done);
+				
+				switch (done) {
+						case 0:
+								System.out.println(orientation+"@@"+formatedWord);
+								/*
+								try {
+										System.out.println(orientation+"@@"+formatedWord);
+										service.passWord(player.getPlayerID(), this.getPlayID(), orientation+"@@"+formatedWord);
+								} catch (GameException ge) {
+										// Fire errors
+								}*/
+								break;
+						case FIRST_WORD_NUMBER:
+								fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
+								break;
+						case FIRST_WORD_POSITION:
+								fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
+								break;
+						case FLOATING_TILES:
+								fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
+								break;
+				}
 		}
 		
 		private int defineWordOrientation(int x1, int y1, int x2, int y2) {
 				return (x1 == x2) ? 1 : (y1 == y2) ? 2 : 0;
 		}
 		
-		private String formatData() {
-				String data = "";
-				Set set = this.newWord.entrySet(); 
-				Iterator i = set.iterator();
-				
-				while(i.hasNext()) { 
-						Map.Entry tile = (Map.Entry)i.next();
-						Point p = (Point) tile.getKey();
-						Tile t = (Tile) tile.getValue();
-						String d = t.getLetter()+":"+p.x+":"+p.y;
-						data += (t.isBlank()) ? "?"+d : d;
-						data += (i.hasNext()) ? "##" : "";
-				}
-				return data;
+		private String formatData(Point p, Tile tile) {
+				String data = tile.getLetter()+":"+p.x+":"+p.y;
+				return (tile.isBlank()) ? "?"+data : data;
 		}
 		
-		private void validFirstWord() {
-				if (newWord.size() > 1) {
-						
-				} else {
-						
-				}
+		private boolean firstWordPosition(int x, int y) {
+				return (x == 7) ? true : (y == 7) ? true : false;
 		}
 		
 		/**
