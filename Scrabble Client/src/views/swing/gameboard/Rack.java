@@ -202,10 +202,10 @@ public class Rack extends JPanel {
 				BufferedImage letterB = null;
 				BufferedImage valueB = null;
 				try {
-						tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
+						tile = ImageIO.read(Rack.class.getResource("/views/swing/media/vintage_tile.png"));
 						if (!letter.equals("?")) {
-								letterB = ImageIO.read(Rack.class.getResource("../media/letters/"+letter.toLowerCase()+".png"));
-								valueB = ImageIO.read(Rack.class.getResource("../media/numbers/"+value+".png"));
+								letterB = ImageIO.read(Rack.class.getResource("/views/swing/media/letters/"+letter.toLowerCase()+".png"));
+								valueB = ImageIO.read(Rack.class.getResource("/views/swing/media/numbers/"+value+".png"));
 						}
 				} catch (IOException ex) {
 						Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);

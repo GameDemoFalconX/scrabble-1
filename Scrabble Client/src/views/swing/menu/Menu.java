@@ -1,12 +1,10 @@
 package views.swing.menu;
 
 import controller.MenuController;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Image;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -95,18 +93,14 @@ public class Menu extends MenuView {
 		}
 		
 		private void reset() {
-				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
-												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 				playerButton.setVisible(false);
-				newGameButton.setVisible(false);
-				saveButton.setVisible(false);
-				loadButton.setVisible(false);
 				playerButton.setVisible(false);
 				settingsButton.setVisible(false);
 				score.setVisible(false);
-				playAsGuestButton.setVisible(true);
-				loginButton.setVisible(true);
-				signupButton.setVisible(true);
+				panel.add(playAsGuestButton);
+				panel.add(loginButton);
+				panel.add(signupButton);
 		}
 		
 		/*** Methods used to load the menu components ***/
@@ -150,7 +144,7 @@ public class Menu extends MenuView {
 		}
 		
 		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png","Scrabble"));
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
 				scrabbleButton.setBounds(panel.getWidth()/2-80, panel.getHeight()-103, 190, 102);
 				scrabbleButton.setBackground(Color.WHITE);
@@ -207,8 +201,7 @@ public class Menu extends MenuView {
 				score.setBounds(panel.getWidth()-170, 14, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource(
-														"/views/swing/media/DS-DIGI.ttf").toURI()));
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -222,17 +215,25 @@ public class Menu extends MenuView {
 		}
 		
 		private void initSettingsButton() {
-				settingsButton = new JButton("Settings");
-				settingsButton.setBounds(panel.getWidth()/2-50, 365, 110, 30);
+				settingsButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
+				settingsButton.setBounds(panel.getWidth()-77,panel.getHeight()-173, 60, 60);
+				settingsButton.setOpaque(false);
+				settingsButton.setBorder(null);
+    settingsButton.setBackground(Color.WHITE);
+    settingsButton.setRolloverEnabled(false);
 				settingsButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								Settings settings = new Settings(game);
+								Settings settings = new Settings(game, getMenu());
 								settings.showSettings();
 						}
 				});
 		}
+  
+  private Menu getMenu() {
+    return this;
+  }
 		
 		private void	initNewGameButton() {
 				newGameButton = new JButton("New game");
@@ -285,4 +286,14 @@ public class Menu extends MenuView {
 						this.score.setText(String.valueOf(score));
 				}
 		}
+  
+  public void setIcons(boolean dark) {
+    if (dark) {
+      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
+      score.setForeground(Color.WHITE);
+    } else {
+      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/dark_settings_icon.png", null));
+      score.setForeground(Color.BLACK);
+    }
+  }
 }

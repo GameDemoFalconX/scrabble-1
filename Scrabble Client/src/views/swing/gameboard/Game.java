@@ -36,19 +36,23 @@ import views.swing.common.panelRack;
 	*/
 public class Game extends GameView  {
 		
-		private static final String LIGHT_PATH = "/views/swing/media/background.png" ;
-		private static final String DARK_PATH = "/views/swing/media/dark_background.png" ;
-		private static final String DARKER_PATH = "/views/swing/media/darker_background.png" ;
-		private static final String DARKEST_PATH = "/views/swing/media/darkest_background.png" ;
-		private static final String BLACK_PATH = "/views/swing/media/b_w_background.png" ;
+  private static final String PATH_MEDIA = "/views/swing/media/";
+		private static final String LIGHT_PATH = PATH_MEDIA + "background.png" ;
+		private static final String DARK_PATH = PATH_MEDIA + "dark_background.png" ;
+		private static final String DARKER_PATH = PATH_MEDIA + "darker_background.png" ;
+		private static final String DARKEST_PATH = PATH_MEDIA + "darkest_background.png" ;
+		private static final String BLACK_PATH = PATH_MEDIA + "/b_w_background.png" ;
 		public static final String TYPE_LIGHT = "light" ;
 		public static final String TYPE_DARK = "dark" ;
 		public static final String TYPE_DARKER = "darker" ;
 		public static final String TYPE_DARKEST = "darkest" ;
 		public static final String TYPE_BLACK = "black" ;
-		private static final String SHUFFLE_PATH = "/views/swing/media/shuffle_rack_icon.png";
-		private static final String VALID_WORD_PATH = "/views/swing/media/add_word_icon.png";
-		private static final String EXCHANGE_PATH = "/views/swing/media/exchange_tile_icon.png";
+		private static final String SHUFFLE_PATH = PATH_MEDIA + "light_shuffle_rack_icon.png";
+		private static final String VALID_WORD_PATH = PATH_MEDIA + "light_add_word_icon.png";
+		private static final String EXCHANGE_PATH = PATH_MEDIA + "light_exchange_tile_icon.png";
+		private static final String DARK_SHUFFLE_PATH = PATH_MEDIA + "shuffle_rack_icon.png";
+		private static final String DARK_VALID_WORD_PATH = PATH_MEDIA + "add_word_icon.png";
+		private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
 		
     
 		private JFrame frame;
@@ -132,9 +136,9 @@ public class Game extends GameView  {
 				shuffleButton = new JButton(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
 				shuffleButton.setBounds(30, 737, 60, 60);
 				shuffleButton.setVisible(true);
-				shuffleButton.setOpaque(true);
+				shuffleButton.setOpaque(false);
 				shuffleButton.setBorder(null);
-				shuffleButton.setBackground(new Color(255, 255, 255, 100));
+    shuffleButton.setBackground(Color.WHITE);
 				shuffleButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -148,9 +152,9 @@ public class Game extends GameView  {
 				exchangeButton = new JButton(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
 				exchangeButton.setBounds(100, 737, 60, 60);
 				exchangeButton.setVisible(true);
-				exchangeButton.setOpaque(true);
+				exchangeButton.setOpaque(false);
 				exchangeButton.setBorder(null);
-				exchangeButton.setBackground(new Color(255, 255, 255, 100));
+    exchangeButton.setBackground(Color.WHITE);
 				exchangeButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -164,9 +168,9 @@ public class Game extends GameView  {
 				validWordButton = new JButton(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
 				validWordButton.setBounds(560, 737, 60, 60);
 				validWordButton.setVisible(true);
-				validWordButton.setOpaque(true);
+				validWordButton.setOpaque(false);
 				validWordButton.setBorder(null);
-				validWordButton.setBackground(new Color(255, 255, 255, 200));
+    validWordButton.setBackground(Color.WHITE);
 				//validWordButton.setEnabled(false);
 				validWordButton.addActionListener(new AbstractAction() {
 
@@ -295,13 +299,13 @@ public class Game extends GameView  {
 		
 		public void setButtonsBackground(boolean dark) {
 				if (dark) {
-						shuffleButton.setOpaque(true);
-						validWordButton.setOpaque(true);
-						exchangeButton.setOpaque(true);
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
 				} else {
-						shuffleButton.setOpaque(false);
-						validWordButton.setOpaque(false);
-						exchangeButton.setOpaque(false);
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(DARK_SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(DARK_VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(DARK_EXCHANGE_PATH, null));
 				}
 		}
 }
