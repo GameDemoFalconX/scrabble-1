@@ -121,7 +121,11 @@ public class DTPicture extends Picture implements MouseMotionListener {
 								if (!targetParent.equals(sourceParent)) { // Do nothing on the same place (source == target)
 										// Notifiy controller about this user gesture
 										notifyController();
+								} else {
+										comp.setVisible(true);
 								}
+						} else {
+								comp.setVisible(true);
 						}
 
 						// Update the GlassPane
