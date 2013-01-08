@@ -189,7 +189,7 @@ public class Menu extends MenuView {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(null, Blah.HELP_OFF, "Help", 
+								JOptionPane.showMessageDialog(null, Blah.HELP, "Help", 
 																JOptionPane.INFORMATION_MESSAGE);
 						}
 				});
