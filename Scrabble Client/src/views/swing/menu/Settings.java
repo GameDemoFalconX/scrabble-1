@@ -9,7 +9,6 @@ import javax.swing.*;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Game;
 import views.swing.gameboard.GameBoard;
-import views.swing.menu.Menu;
 
 /**
  *
@@ -25,7 +24,7 @@ public class Settings extends JDialog {
 										modernRadioButton;
 		
 		
-		private Settings(JFrame frame, int number) {
+		private Settings(JFrame frame) {
     super(frame, "Settings", true);
     this.setSize(450, 120);
     this.setLocationRelativeTo(null);
@@ -33,14 +32,11 @@ public class Settings extends JDialog {
 				this.setBackground(Color.WHITE);
     this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				this.setLayout(new BorderLayout());
-    if (number == 6) {
-      System.out.println("I'm not a number, I'm a free man !");
-    }
 				initComponents();
 		}
 		
 		public Settings(Game game, Menu menu) {
-				this(null, 6);
+				this(null);
 				this.game = game;
     this.menu = menu;
 		}
