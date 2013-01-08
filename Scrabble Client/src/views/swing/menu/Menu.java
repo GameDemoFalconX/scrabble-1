@@ -93,18 +93,14 @@ public class Menu extends MenuView {
 		}
 		
 		private void reset() {
-				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
-												.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
 				playerButton.setVisible(false);
-				newGameButton.setVisible(false);
-				saveButton.setVisible(false);
-				loadButton.setVisible(false);
 				playerButton.setVisible(false);
 				settingsButton.setVisible(false);
 				score.setVisible(false);
-				playAsGuestButton.setVisible(true);
-				loginButton.setVisible(true);
-				signupButton.setVisible(true);
+				panel.add(playAsGuestButton);
+				panel.add(loginButton);
+				panel.add(signupButton);
 		}
 		
 		/*** Methods used to load the menu components ***/
@@ -221,9 +217,9 @@ public class Menu extends MenuView {
 		private void initSettingsButton() {
 				settingsButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
 				settingsButton.setBounds(panel.getWidth()-77,panel.getHeight()-173, 60, 60);
-				settingsButton.setOpaque(true);
+				settingsButton.setOpaque(false);
 				settingsButton.setBorder(null);
-				settingsButton.setBackground(new Color(255, 255, 255, 1));
+    settingsButton.setBackground(Color.WHITE);
     settingsButton.setRolloverEnabled(false);
 				settingsButton.addActionListener(new AbstractAction() {
 
