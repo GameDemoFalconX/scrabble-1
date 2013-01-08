@@ -31,7 +31,6 @@ public class Menu extends MenuView {
 		private JMenuItem logOff, helpOff;
 		private boolean dark = true;
 		private JLabel score;
-		private JButton test;
 		
 		public Menu(MenuController controller)	{
 				super(controller);
@@ -52,18 +51,6 @@ public class Menu extends MenuView {
 				panel.setBounds(700, 0, 250, 800);
 				panel.setOpaque(false);
 				initComponent();
-				test = new JButton("Blank");
-				test.setBounds(panel.getWidth()/2-50, 150, 110, 30);
-				test.addActionListener(new AbstractAction() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								BlankDialog bd = new BlankDialog(null);
-								String res = bd.showBlank();
-								JOptionPane.showMessageDialog(panel, res, res, JOptionPane.DEFAULT_OPTION);
-						}
-				});
-				panel.add(test);
 		}
 
 		/*** Methods used to load Menu components in specific cases ***/
