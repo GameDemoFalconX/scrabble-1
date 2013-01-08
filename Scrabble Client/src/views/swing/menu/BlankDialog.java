@@ -62,7 +62,8 @@ public class BlankDialog extends JDialog {
 		}
 		
 		private void initTileButton() {
-				tileButton = new JButton(new ImageIcon(makeTileIcon(lettersList.get(index))));
+				tileButton = new JButton();
+				tileButton.setIcon(new ImageIcon(makeTileIcon(lettersList.get(index))));
 				tileButton.setSize(60, 60);
 				tileButton.setBackground(Color.WHITE);
 				tileButton.setOpaque(false);
