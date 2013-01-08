@@ -21,6 +21,7 @@ import model.event.TileFromRackToGridEvent;
 import model.event.TileFromRackToRackEvent;
 import model.event.TileFromRackToRackWithShiftEvent;
 import model.event.TileListener;
+import model.event.UpdateScoreEvent;
 import model.utils.GameException;
 import service.GameService;
 
@@ -171,7 +172,7 @@ public class Play {
 				}
 		}
 		
-		public void fireInitGameToPlay(String newRack){
+		public void fireInitRackToPlay(String newRack){
 				RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
 				for(RackListener l : listeners){
@@ -184,6 +185,14 @@ public class Play {
 
 				for(MenuListener l : listeners){
 						l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, score));
+				}
+		}
+		
+		public void fireUpdateScore(int score){
+				MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+				for(MenuListener l : listeners){
+						l.updateScore(new UpdateScoreEvent(this, score));
 				}
 		}
 		
@@ -207,7 +216,7 @@ public class Play {
 				initPlay(response[0], "", response[1], 0);
 				
 				// Dispatch the model modifications to all listeners
-				fireInitGameToPlay(response[1]);
+				fireInitRackToPlay(response[1]);
 				fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
 		}
 		
@@ -242,6 +251,8 @@ public class Play {
 				newWord.put(new Point(x, y), rack.getTile(sourcePos));
 				deplaceTileFromRackToGrid(sourcePos, x, y);
 				fireTileMovedFromRackToGrid(sourcePos, x, y);
+				grid.printGrid();
+				displayNewWord();
 		}
 		
 		public void modifiedWord(int sX, int sY, int tX, int tY) {
@@ -249,6 +260,8 @@ public class Play {
 				newWord.remove(new Point(sX, sY));
 				deplaceTileFromGridToGrid(sX, sY, tX, tY);
 				fireTileMovedFromGridToGrid(sX, sY, tX, tY);
+				grid.printGrid();
+				displayNewWord();
 		}
 		
 		public void removeLetterFromWord(int x, int y, int targetPos) {
@@ -260,6 +273,8 @@ public class Play {
 						deplaceTileFromGridToRack(x, y, targetPos);
 						fireTileMovedFromGridToRack(x, y, targetPos);
 				}
+				grid.printGrid();
+				displayNewWord();
 		}
 		
 		public void organizeRack(int sourcePos, int targetPos) {
@@ -290,7 +305,7 @@ public class Play {
 						Iterator i = set.iterator();
 
 						// Step 1 - Check the first tile
-						System.out.println("Valid word - start step 1");
+						System.out.println("Valid word - start step 1 - done : "+done);
 						Map.Entry firstTile = (Map.Entry)i.next();
 						Point p1 = (Point) firstTile.getKey();
 						System.out.println("P1 : "+p1);
@@ -302,7 +317,7 @@ public class Play {
 								
 								if (newWord.size() > 1) {
 										// Step 2 - Second tile
-										System.out.println("Valid word - start step 2");
+										System.out.println("Valid word - start step 2 - done : "+done);
 										Map.Entry secondTile = (Map.Entry)i.next(); 
 										Point p2 = (Point) secondTile.getKey();
 										System.out.println("P2 : "+p2);
@@ -314,7 +329,7 @@ public class Play {
 												formatedWord += "##"+formatData(p2, (Tile) secondTile.getValue());
 												
 												// Step 3 - Other tile(s)
-												System.out.println("Valid word - start step 3");
+												System.out.println("Valid word - start step 3 - done : "+done);
 												while(done < 1 && i.hasNext()) { 
 														Map.Entry otherTile = (Map.Entry)i.next(); 
 														Point po = (Point) otherTile.getKey();
@@ -333,14 +348,19 @@ public class Play {
 				
 				switch (done) {
 						case 0:
-								System.out.println(orientation+"@@"+formatedWord);
-								/*
 								try {
-										System.out.println(orientation+"@@"+formatedWord);
-										service.passWord(player.getPlayerID(), this.getPlayID(), orientation+"@@"+formatedWord);
+										String [] response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation+"@@"+formatedWord);
+										
+										// Update model
+										setScore(Integer.parseInt(response[0]));
+										rack.reLoadRack(response[1]);
+										
+										// Dispatch the model modifications to all listeners
+										fireUpdateScore(Integer.parseInt(response[0]));
+										fireInitRackToPlay(response[1]);
 								} catch (GameException ge) {
 										// Fire errors
-								}*/
+								}
 								break;
 						case FIRST_WORD_NUMBER:
 								fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
@@ -364,6 +384,7 @@ public class Play {
 		}
 		
 		private boolean firstWordPosition(int x, int y) {
+				System.out.println("First position : "+((x == 7) ? true : (y == 7) ? true : false));
 				return (x == 7) ? true : (y == 7) ? true : false;
 		}
 		

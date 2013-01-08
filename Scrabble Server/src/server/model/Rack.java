@@ -36,12 +36,20 @@ class Rack {
 		}
 		
 		/**
-			* Get Tile at the specific index in the rack.
-			* @param i
-			* @return 
+			* Get the first Tile with the letter given in parameter.
+			* @param char
+			* @return Tile
 			*/
-		protected Tile getTile(int i) {
-				return rack[i];
+		protected Tile getTile(char l) {
+				Tile res = null;
+				boolean found = false;
+				int i = 0;
+				while(!found && i < rack.length) {
+						res = rack[i];
+						found = (res.getLetter() == l);
+						i++;
+				}
+				return res;
 		}
 		
 		/**
@@ -51,6 +59,18 @@ class Rack {
 			*/
 		protected void setTile(int i, Tile newTile) {
 				rack[i] = newTile;
+		}
+		
+		protected void putTile(Tile newTile) {
+				boolean found = false;
+				int i = 0;
+				while(!found && i < rack.length) {
+						if (rack[i] == null) {
+								rack[i] = newTile;
+								found = true;
+						}
+						i++;
+				}
 		}
 		
 		protected String displayRack() {
@@ -72,7 +92,7 @@ class Rack {
 				String result = "";
 				for (int i = 0; i < 7; i++) {
 						result += rack[i];
-						result += (i < 6) ? "__" : "";
+						result += (i < 6) ? "=" : "";
 				}
 				return result;
 		}

@@ -328,7 +328,7 @@ public class GameRAM {
 				rack.removeChildren("tile");
 				if (!args.equals("")) cPlay.updateBlankTile(args);
 				for (int l = 0; l < 7; l++) {
-						rack.addContent(new Element("tile").setText(cPlay.getRack().getTile(l).toString()));
+						//rack.addContent(new Element("tile").setText(cPlay.getRack().getTile(l).toString()));
 				}
 				if (play.getChild("rack") == null) play.addContent(rack);
 		}

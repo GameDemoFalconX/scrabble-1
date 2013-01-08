@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import model.event.InitMenuToPlayEvent;
+import model.event.UpdateScoreEvent;
 import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
@@ -286,14 +287,19 @@ public class Menu extends MenuView {
 						this.score.setText(String.valueOf(score));
 				}
 		}
+		
+		@Override
+		public void updateScore(UpdateScoreEvent event) {
+				score.setText(""+event.getScore());
+		}
   
-  public void setIcons(boolean dark) {
-    if (dark) {
-      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
-      score.setForeground(Color.WHITE);
-    } else {
-      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/dark_settings_icon.png", null));
-      score.setForeground(Color.BLACK);
-    }
-  }
+		public void setIcons(boolean dark) {
+				if (dark) {
+						settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
+						score.setForeground(Color.WHITE);
+				} else {
+						settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/dark_settings_icon.png", null));
+						score.setForeground(Color.BLACK);
+				}
+		}
 }

@@ -90,6 +90,7 @@ public class HAL extends Game {
 						// Initialization of the Play on the server side and add it to the GameRAM dict.
 						Play newPlay = new Play(pl_id);
 						plays.addNewPlay(pl_id, newPlay);
+						System.out.println("Rack : "+newPlay.getFormatRack());
 						return new Message(Message.NEW_GAME_ANONYM_SUCCESS, newPlay.getPlayID()+"##"+newPlay.getFormatRack()); // Only return the rack to the client.
 				}
 				// The current anonymous player is already logged.
@@ -160,10 +161,10 @@ public class HAL extends Game {
 						String [] gameArgs = ga_infos.split("@@");
 						
 						// Step 1 - Get orientation of the main word
-						char orientation = (char) gameArgs[0].charAt(0);
+						int orientation = Integer.parseInt(gameArgs[0]);
 						
 						// Step 2.1 - Place tiles on the grid and get the list of coordinates.
-						//// Important! The list of tiles from client must be formated like the following canvas : x:y:[index of tile in the rack]##... x:y:[index of tile in the rack]:[letter for blank tile] ...
+						//// Important! The list of tiles from client must be formated like the following canvas : L:x:y or ?L:x:y
 						ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
 										
 						// Step 3 - Check tiles on the grid and get a list of words and a new score.
@@ -180,7 +181,7 @@ public class HAL extends Game {
 								if (first) {
 										first = false; // Flag for the first loop (First tile in the main orientation).
 										tileList.get(i).downStatus(); // Down the status of this first tile.
-										orientation = (orientation == 'H') ? 'V' : 'H'; // Set the new orientation
+										orientation = (orientation == 2) ? 1 : 2; // Set the new orientation
 								} else {
 										i++;
 								}
@@ -195,8 +196,9 @@ public class HAL extends Game {
 						// Step 4 - Dictionary validation and return args
 						if (dico.checkValidity(wordsList)) {
 								cPlay.setScore(score); // Update score
-								String newTiles = cPlay.getNewTiles(tileList); // Get a formated list of tile with their index in the rack
+								String newTiles = cPlay.getNewTiles(tileList.size()); // Get a formated list of tile with their index in the rack
 								cPlay.testWithSuccess(); // Increase the number of tests with success
+								System.out.println("New tiles : "+newTiles);
 								return new Message(Message.PLACE_WORD_SUCCESS, pl_id+"_"+ga_id+"_"+cPlay.getScore()+"@@"+newTiles);
 						} else {
 								cPlay.setScore((bestWord/2)*(-1)); // Update score

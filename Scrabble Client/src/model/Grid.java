@@ -43,7 +43,7 @@ public class Grid {
 				int i = 0;
 				while (neighbors == 0 && i < x_neighbors.length) {
 						if (x+x_neighbors[i] >= 0 && x+x_neighbors[i] < 15 && y+y_neighbors[i] >= 0 && y+y_neighbors[i] < 15) {
-								neighbors += (grid[x+x_neighbors[i]][y+y_neighbors[i]] != null) ? 1 : 0;
+								neighbors += (grid[y+y_neighbors[i]][x+x_neighbors[i]] != null) ? 1 : 0;
 						}
 						i++;
 				}

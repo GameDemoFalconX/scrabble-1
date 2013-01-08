@@ -16,8 +16,8 @@ public class InitRackEvent extends EventObject {
 		}
 		
 		public String [][] getTiles() {
-				String [][] tiles = new String[7][2];				
-				String [] tileList = rack.split("__");
+				String [] tileList = rack.split("=");
+				String [][] tiles = new String[tileList.length][2];				
 				for (int i = 0; i < tileList.length; i++) {
 						String [] tileArgs = tileList[i].split(":");
 						tiles[i][0] = tileArgs[0];

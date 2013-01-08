@@ -89,11 +89,23 @@ public class Rack extends JPanel {
 		
 		/*** Method used to load tiles on rack ***/
 		public void loadTilesOnRack(String [][] newTiles, Game scrabble, JLayeredPane jlp) {
-				for (int i = 0; i < RACK_LENGTH; i++) {
+				System.out.println("Newtile length : "+newTiles.length);
+				for (int i = 0; i < newTiles.length; i++) {
+						System.out.println("Tile in GUI : "+newTiles[i][0]+" - "+newTiles[i][1]);
+						putTile(new DTPicture(getTileImage(newTiles[i][0], newTiles[i][1]), scrabble, jlp));
+				}
+		}
+		
+		private void putTile(DTPicture dtp) {
+				boolean found = false;
+				int i = 0;
+				while(!found && i < RACK_LENGTH) {
 						panelRack parent = (panelRack) innerRack.getComponent(i);
 						if (parent.getComponentCount() == 0) {
-								parent.addDTElement(new DTPicture(getTileImage(newTiles[i][0], newTiles[i][1]), scrabble, jlp));
+								parent.addDTElement(dtp);
+								found = true;
 						}
+						i++;
 				}
 		}
 		

@@ -125,10 +125,14 @@ public class Play {
 				
 				for (int i = 0; i < tilesList.length; i++) {
 						String [] tileAttrs = tilesList[i].split(":");
-						int x = Integer.parseInt(tileAttrs[0]);
-						int y = Integer.parseInt(tileAttrs[1]);
-						if (tileAttrs.length > 3) rack.setLetter(Integer.parseInt(tileAttrs[2]), tileAttrs[3]); // Set the letter of this tile before referencing.
-						Tile cTile = rack.getTile(Integer.parseInt(tileAttrs[2]));
+						String letter = tileAttrs[0];
+						int x = Integer.parseInt(tileAttrs[1]);
+						int y = Integer.parseInt(tileAttrs[2]);
+						
+						Tile cTile = rack.getTile(letter.charAt(0));
+						if (letter.length() > 1) {
+								cTile.setLetter(letter.charAt(1));
+						}
 						result.add(cTile); 
 						
 						// Tile treatment
@@ -155,7 +159,7 @@ public class Play {
 			* @param cTile 
 			* @param orientation 
 			*/
-		protected void wordTreatment(Tile cTile, char orientation) {
+		protected void wordTreatment(Tile cTile, int orientation) {
 				// Initialize values
 				lastWordScore = 0;
 				lastWord = "";
@@ -230,13 +234,15 @@ public class Play {
 			* @param tilesList
 			* @return Formated list of tile with the following canvas : L:V__[index of tile in rack]##L:V__ ...
 			*/
-		protected String getNewTiles(ArrayList<Tile> tilesList) {
+		protected String getNewTiles(int numberTile) {
 				String result = "";
-				for (int i = 0; i < tilesList.size(); i++) {
-						int index = tilesList.get(i).getRackPosition();
-						rack.setTile(index, bag.getTile());
-						result += rack.getTile(index).toString()+":"+index;
-						if (i < tilesList.size() - 1) result += "##";
+				for (int i = 0; i < numberTile; i++) {
+						Tile nTile = bag.getTile();
+						rack.putTile(nTile);
+						result += nTile.toString();
+						if (i < numberTile - 1) {
+								result += "=";
+						}
 				}
 				return result;
 		}
@@ -269,11 +275,11 @@ public class Play {
 						Tile tile = this.bag.getTile();
 						newTiles += tile.getLetter() + ":" + tile.getValue();
 						if (i < positions.length-1) {
-								newTiles += "__";
+								newTiles += "=";
 						}
 				}
 				for (int i = 0; i < positions.length; i++) {
-						bag.putBackTile(rack.getTile(i));
+						//bag.putBackTile(rack.getTile(i));
 				}
 				rack = new Rack(newTiles);
 				return newTiles;

@@ -177,20 +177,25 @@ public class GameService {
 			* @return String with new score and new rack if the word is correctly placed otherwise only new score.
 			* @throws GameException 
 			*/
-		public String passWord(String playerID, String playID, String formatedWord) throws GameException {
+		public String [] passWord(String playerID, String playID, String formatedWord) throws GameException {
+				String [] result = null;
 				// Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
 				Message serverResponse = servProtocol.sendRequest(Message.PASS_WORD, playerID+"_"+playID+"_"+formatedWord);
 				if (serverResponse != null) {
 						switch (serverResponse.getHeader()) {
 								case Message.PASS_WORD_SUCCESS:
-										return "OK"+(new String(serverResponse.getBody()));
+										String response = (new String(serverResponse.getBody())).split("_")[2];
+										result = response.split("@@");
+										break;
 								case Message.PASS_WORD_ERROR:
-										return "KO"+(new String(serverResponse.getBody()).split("_")[2]); // Update score if the Play is over.
+										System.out.println("Error");
+										//return "KO"+(new String(serverResponse.getBody()).split("_")[2]); // Update score if the Play is over.
+										break;
 						}
 				} else {
 						throw new GameException(GameException.typeErr.CONN_KO);
 				}
-				return "";
+				return result;
 		}
 		
 		/**

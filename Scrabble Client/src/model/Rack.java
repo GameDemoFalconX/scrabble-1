@@ -19,9 +19,12 @@ class Rack {
 			* @param formatedRack 
 			*/
 		private void loadRack(String formatedRack) {
-				String [] tileList = formatedRack.split("__");
+				System.out.println("New rack : "+formatedRack);
+				String [] tileList = formatedRack.split("=");
+				System.out.println("tileList : "+tileList[0]);
 				for (int i = 0; i < rack.length; i++) {
 						String [] tileArgs = tileList[i].split(":");
+						System.out.println("tile : "+tileArgs[0]);
 						rack[i] = new Tile(tileArgs[0].charAt(0), Integer.parseInt(tileArgs[1]));
 				}
 		}
@@ -38,6 +41,27 @@ class Rack {
 				Tile result = rack[position];
 				rack[position] = null;
 				return result;
+		}
+		
+		protected void putTile(Tile newTile) {
+				boolean found = false;
+				int i = 0;
+				while(!found && i < rack.length) {
+						if (rack[i] == null) {
+								rack[i] = newTile;
+								found = true;
+						}
+						i++;
+				}
+		}
+		
+		public void reLoadRack(String formatedRack) {
+				System.out.println(formatedRack);
+				String [] tileList = formatedRack.split("=");
+				for (int i = 0; i < tileList.length; i++) {
+						String [] tileArgs = tileList[i].split(":");
+						putTile(new Tile(tileArgs[0].charAt(0), Integer.parseInt(tileArgs[1])));
+				}
 		}
 		
 		/**

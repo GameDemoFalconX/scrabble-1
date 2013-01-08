@@ -20,18 +20,18 @@ class Grid {
 				}
 		}
 		
-		protected Tile previousTile(Tile t, char orientation) {
+		protected Tile previousTile(Tile t, int orientation) {
 				if (t.getX()-1 < 0 || t.getY()-1 < 0) {
 						return null;
 				}
-				return (orientation == 'H') ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
+				return (orientation == 2) ? grid[t.getX()-1][t.getY()] : grid[t.getX()][t.getY()-1];
 		}
 		
-		protected Tile nextTile(Tile t, char orientation) {
+		protected Tile nextTile(Tile t, int orientation) {
 				if (t.getX()+1 > 14 || t.getY()+1 > 14) {
 						return null;
 				}
-				return (orientation == 'H') ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
+				return (orientation == 2) ? grid[t.getX()+1][t.getY()] : grid[t.getX()][t.getY()+1];
 		}
 		
 		protected void putInGrid(int x, int y, Tile tile) {
