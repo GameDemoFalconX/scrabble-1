@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import model.event.ErrorMessageEvent;
 import model.event.InitRackEvent;
 import model.event.RackReArrangeEvent;
 import model.event.TileFromGridToGridEvent;
@@ -316,5 +317,11 @@ public class Game extends GameView  {
 				rack.reArrangeTiles(event.getNewPositions());
 				contentPane.add(rack.getInnerRack(), 0);
 				contentPane.validate();
+		}
+		
+		@Override
+		public void displayError(ErrorMessageEvent event) {
+				ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, event.getMessage());
+				errorPopup.showErrorMessage();
 		}
 }

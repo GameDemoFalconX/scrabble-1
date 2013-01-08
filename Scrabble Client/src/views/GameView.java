@@ -1,6 +1,7 @@
 package views;
 
 import controller.GameController;
+import model.event.ErrorListener;
 import model.event.RackListener;
 import model.event.TileListener;
 
@@ -8,7 +9,7 @@ import model.event.TileListener;
  * 
  * @author Romain <ro.foncier@gmail.com>
  */
-public abstract class GameView implements TileListener, RackListener {
+public abstract class GameView implements TileListener, RackListener, ErrorListener {
 
 		private GameController controller = null;
 

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.swing.event.EventListenerList;
+import model.event.ErrorListener;
+import model.event.ErrorMessageEvent;
 import model.event.InitMenuToPlayEvent;
 import model.event.InitRackEvent;
 import model.event.MenuListener;
@@ -38,6 +40,7 @@ public class Play {
 		private EventListenerList tileListeners;
 		private EventListenerList rackListeners;
 		private EventListenerList menuListeners;
+		private EventListenerList errorListeners;
 		
 		/**
 			* Constructor for the launcher.
@@ -47,6 +50,7 @@ public class Play {
 				tileListeners = new EventListenerList();
 				rackListeners = new EventListenerList();
 				menuListeners = new EventListenerList();
+				errorListeners = new EventListenerList();
 		}
 		
 		public void initPlay(String playID, String formatedGrid, String formatedRack, int score) {
@@ -84,6 +88,10 @@ public class Play {
 		public void addMenuListener(MenuListener listener){
 				menuListeners.add(MenuListener.class, listener);
 		}
+		
+		public void addErrorListener(ErrorListener listener){
+				errorListeners.add(ErrorListener.class, listener);
+		}
 
 		public void removeTileListener(TileListener listener){
 				tileListeners.remove(TileListener.class, listener);
@@ -95,6 +103,10 @@ public class Play {
 		
 		public void removeMenuListener(MenuListener listener){
 				menuListeners.remove(MenuListener.class, listener);
+		}
+		
+		public void removeErrorListener(ErrorListener listener){
+				errorListeners.remove(ErrorListener.class, listener);
 		}
 		
 		/*** Methods used to notify changes to all listeners ***/
@@ -167,6 +179,14 @@ public class Play {
 
 				for(MenuListener l : listeners){
 						l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, score));
+				}
+		}
+		
+		public void fireErrorMessage(String error){
+				ErrorListener[] listeners = (ErrorListener[]) errorListeners.getListeners(ErrorListener.class);
+
+				for(ErrorListener l : listeners){
+						l.displayError(new ErrorMessageEvent(this, error));
 				}
 		}
 		
@@ -318,6 +338,14 @@ public class Play {
 						data += (i.hasNext()) ? "##" : "";
 				}
 				return data;
+		}
+		
+		private void validFirstWord() {
+				if (newWord.size() > 1) {
+						
+				} else {
+						
+				}
 		}
 		
 		/**
