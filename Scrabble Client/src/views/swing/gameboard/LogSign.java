@@ -1,6 +1,5 @@
 package views.swing.gameboard;
 
-
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,12 +23,12 @@ public class LogSign extends JDialog {
 		private EmailValidator emailValidator;
 		
 		private LogSign(JFrame frame, String title, int deepThought) {
-    super(frame, title, true);
-    this.setSize(300, 160);
-    this.setLocationRelativeTo(null);
-    this.setResizable(false);
+				super(frame, title, true);
+				this.setSize(300, 160);
+				this.setLocationRelativeTo(null);
+				this.setResizable(false);
 				this.setBackground(Color.WHITE);
-    this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				this.setLayout(new BorderLayout());
 				initComponents();
 				if (deepThought == 42) {
@@ -74,14 +73,14 @@ public class LogSign extends JDialog {
 						@Override
 						public void focusGained(FocusEvent e) {
 								if (emailField.getText().equals("Email address")) {
-            emailField.setText("");
-        }
+										emailField.setText("");
+								}
 						}
 						@Override
 						public void focusLost(FocusEvent e) {
 								if (emailField.getText().equals("")) {
-            emailField.setText("Email address");
-        }
+										emailField.setText("Email address");
+								}
 						}
 				});
 				emailFieldPanel.add(textPanel, BorderLayout.NORTH);
@@ -96,14 +95,14 @@ public class LogSign extends JDialog {
 						@Override
 						public void focusGained(FocusEvent e) {
 								if ("Password".equals(new String(passwordField.getPassword()))) {
-            passwordField.setText("");
-        }
+										passwordField.setText("");
+								}
 						}
 						@Override
 						public void focusLost(FocusEvent e) {
 								if ("".equals(new String(passwordField.getPassword()))) {
-            passwordField.setText("Password");
-        }
+										passwordField.setText("Password");
+								}
 						}
 				});
 				passwordFieldPanel.add(emailField, BorderLayout.CENTER);

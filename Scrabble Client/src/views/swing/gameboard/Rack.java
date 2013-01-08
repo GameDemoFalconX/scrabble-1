@@ -34,7 +34,6 @@ public class Rack extends JPanel {
 		private JPanel innerRack;
 		private boolean debug = false;
 		private static int tileNumber = RACK_LENGTH;
-		//private String[][] testRack = {{"A","1"},{"B","3"},{"C","3"},{"R","1"},{"O","1"},{"I","1"},{"T","1"},};
 
 		/**
 			* At term, this constructor must be receive in parameters a table of Tile from the model.
@@ -76,11 +75,11 @@ public class Rack extends JPanel {
 				return this.innerRack;
 		}
 		
-		public static void upTileNumber() {
+		protected void upTileNumber() {
 				tileNumber += 1;
 		}
 		
-		public static void downTileNumber() {
+		protected void downTileNumber() {
 				tileNumber -= 1;
 		}
 		

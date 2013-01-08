@@ -16,31 +16,30 @@ import views.swing.menu.Menu;
 public class Settings extends JDialog {
 		
 		private Game game;
-  private Menu menu;
+		private Menu menu;
 		private JPanel backgroundPanel, gameboardPanel;
 		private JRadioButton lightRadioButton, darkRadioButton, darkerRadioButton, 
 										darkerstRadioButton, blackRadioButton, vintageRadioButton, 
 										modernRadioButton;
-		
-		
+				
 		private Settings(JFrame frame, int number) {
-    super(frame, "Settings", true);
-    this.setSize(450, 120);
-    this.setLocationRelativeTo(null);
-    this.setResizable(false);
-				this.setBackground(Color.WHITE);
-    this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				this.setLayout(new BorderLayout());
-    if (number == 6) {
-      System.out.println("I'm not a number, I'm a free man !");
-    }
+		super(frame, "Settings", true);
+		this.setSize(450, 120);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+		this.setBackground(Color.WHITE);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setLayout(new BorderLayout());
+		if (number == 6) {
+				System.out.println("I'm not a number, I'm a free man !");
+		}
 				initComponents();
 		}
 		
 		public Settings(Game game, Menu menu) {
 				this(null, 6);
 				this.game = game;
-    this.menu = menu;
+				this.menu = menu;
 		}
 
 		private void initComponents() {
@@ -62,7 +61,7 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_LIGHT);
-        menu.setIcons(false);
+								menu.setIcons(false);
 						}
 				});
 				backgroundPanel.add(lightRadioButton);
@@ -74,7 +73,7 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_DARK);
-        menu.setIcons(false);
+								menu.setIcons(false);
 						}
 				});
 				backgroundPanel.add(darkRadioButton);
@@ -86,7 +85,7 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_DARKER);
-        menu.setIcons(false);
+								menu.setIcons(false);
 						}
 				});
 				backgroundPanel.add(darkerRadioButton);
@@ -98,7 +97,7 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_DARKEST);
-        menu.setIcons(true);
+								menu.setIcons(true);
 						}
 				});
 				backgroundPanel.add(darkerstRadioButton);
@@ -109,7 +108,7 @@ public class Settings extends JDialog {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 								game.changeBackground(Game.TYPE_BLACK);
-        menu.setIcons(true);
+								menu.setIcons(true);
 						}
 				});
 				backgroundPanel.add(blackRadioButton);
@@ -145,6 +144,5 @@ public class Settings extends JDialog {
 		
 		public void showSettings() {
 				this.setVisible(true);
-		}
-		
+		}		
 }

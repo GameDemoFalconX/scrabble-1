@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
-import views.swing.gameboard.Rack;
 
 /**
 	* @see  DataFlavor
@@ -76,10 +75,7 @@ public class TileTransferHandler extends TransferHandler {
 				} else {
 						targetP = (JPanel) support.getComponent();
 				}
-				
-				if (sourceParent instanceof panelRack && targetP instanceof panelGrid) Rack.downTileNumber();
-				if (sourceParent instanceof panelGrid && targetP instanceof panelRack) Rack.upTileNumber();
-				
+								
 				// Fetch the Transferable and its data (in our case this is an image)
 				Transferable t = support.getTransferable();
 				Image data = null;

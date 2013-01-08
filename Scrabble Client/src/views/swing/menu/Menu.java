@@ -46,6 +46,10 @@ public class Menu extends MenuView {
 				this.game = game;
 		}
 		
+		private Menu getMenu() {
+				return this;
+		}
+		
 		private void buildMenu() {
 				panel = new JPanel();
 				panel.setLayout(null);
@@ -219,8 +223,8 @@ public class Menu extends MenuView {
 				settingsButton.setBounds(panel.getWidth()-77,panel.getHeight()-173, 60, 60);
 				settingsButton.setOpaque(false);
 				settingsButton.setBorder(null);
-    settingsButton.setBackground(Color.WHITE);
-    settingsButton.setRolloverEnabled(false);
+				settingsButton.setBackground(Color.WHITE);
+				settingsButton.setRolloverEnabled(false);
 				settingsButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -230,10 +234,6 @@ public class Menu extends MenuView {
 						}
 				});
 		}
-  
-  private Menu getMenu() {
-    return this;
-  }
 		
 		private void	initNewGameButton() {
 				newGameButton = new JButton("New game");

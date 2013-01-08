@@ -28,6 +28,7 @@ import views.swing.common.GlassPane;
 import views.swing.common.ImageIconTools;
 import views.swing.common.panelGrid;
 import views.swing.common.panelRack;
+import views.swing.popup.ErrorMessagePopup;
 
 /**
 	* Main class for Scrabble game
@@ -138,7 +139,7 @@ public class Game extends GameView  {
 				shuffleButton.setVisible(true);
 				shuffleButton.setOpaque(false);
 				shuffleButton.setBorder(null);
-    shuffleButton.setBackground(Color.WHITE);
+				shuffleButton.setBackground(Color.WHITE);
 				shuffleButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -154,7 +155,7 @@ public class Game extends GameView  {
 				exchangeButton.setVisible(true);
 				exchangeButton.setOpaque(false);
 				exchangeButton.setBorder(null);
-    exchangeButton.setBackground(Color.WHITE);
+				exchangeButton.setBackground(Color.WHITE);
 				exchangeButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -170,17 +171,23 @@ public class Game extends GameView  {
 				validWordButton.setVisible(true);
 				validWordButton.setOpaque(false);
 				validWordButton.setBorder(null);
-    validWordButton.setBackground(Color.WHITE);
-				//validWordButton.setEnabled(false);
+				validWordButton.setBackground(Color.WHITE);
 				validWordButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								getController().notifyValidWord();
+								if (rack.rackIsFull()) {
+										ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");
+										errorPopup.showErrorMessage();
+								} else {
+										getController().notifyValidWord();
+								}
 						}
 				});
 		}
 		
+		
+		/*** Methods used to set or update the background, game board and buttons of the frame ***/
 		private ImageIcon setImageBackground(String type) {
 				ImageIcon newIcon;
 				switch (type){
@@ -227,6 +234,18 @@ public class Game extends GameView  {
 				gameboard.changeGameBoard(type);
 		}
 		
+		public void setButtonsBackground(boolean dark) {
+				if (dark) {
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
+				} else {
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(DARK_SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(DARK_VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(DARK_EXCHANGE_PATH, null));
+				}
+		}
+		
 		/*** Methods used to modify the view from model notifications ***/
 		@Override
 		public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
@@ -234,6 +253,7 @@ public class Game extends GameView  {
 				panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
 				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.x*15)+tP.y);
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
+				rack.downTileNumber();
 		}
 		
 		@Override
@@ -268,6 +288,7 @@ public class Game extends GameView  {
 				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.x*15)+sP.y);
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
+				rack.upTileNumber();
 		}
 		
 		@Override
@@ -277,6 +298,7 @@ public class Game extends GameView  {
 				panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.x*15)+sP.y);
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
+				rack.upTileNumber();
 		}
 		
 		@Override
@@ -294,18 +316,5 @@ public class Game extends GameView  {
 				rack.reArrangeTiles(event.getNewPositions());
 				contentPane.add(rack.getInnerRack(), 0);
 				contentPane.validate();
-		}
-		
-		
-		public void setButtonsBackground(boolean dark) {
-				if (dark) {
-						shuffleButton.setIcon(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
-						validWordButton.setIcon(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
-						exchangeButton.setIcon(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
-				} else {
-						shuffleButton.setIcon(ImageIconTools.createImageIcon(DARK_SHUFFLE_PATH, null));
-						validWordButton.setIcon(ImageIconTools.createImageIcon(DARK_VALID_WORD_PATH, null));
-						exchangeButton.setIcon(ImageIconTools.createImageIcon(DARK_EXCHANGE_PATH, null));
-				}
 		}
 }
