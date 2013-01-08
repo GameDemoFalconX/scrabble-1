@@ -148,7 +148,7 @@ public class Menu extends MenuView {
 		}
 		
 		private void initScrabbleButton() {
-				scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png","Scrabble"));
+				scrabbleButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/Scrabble.png","Scrabble"));
 				scrabbleButton.setPreferredSize(new Dimension(190,102));
 				scrabbleButton.setBounds(panel.getWidth()/2-80, panel.getHeight()-103, 190, 102);
 				scrabbleButton.setBackground(Color.WHITE);
@@ -205,8 +205,7 @@ public class Menu extends MenuView {
 				score.setBounds(panel.getWidth()-170, 14, 80, 80);
 				Font font = null;
 				try {
-						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource(
-														"/views/swing/media/DS-DIGI.ttf").toURI()));
+						font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("/views/swing/media/DS-DIGI.ttf").toURI()));
 				} catch (FontFormatException | IOException | URISyntaxException ex) {
 						Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -225,6 +224,7 @@ public class Menu extends MenuView {
 				settingsButton.setOpaque(true);
 				settingsButton.setBorder(null);
 				settingsButton.setBackground(new Color(255, 255, 255, 1));
+    settingsButton.setRolloverEnabled(false);
 				settingsButton.addActionListener(new AbstractAction() {
 
 						@Override
