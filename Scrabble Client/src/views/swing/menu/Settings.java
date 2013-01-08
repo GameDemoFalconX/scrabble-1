@@ -1,4 +1,4 @@
-package views.swing.gameboard;
+package views.swing.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import views.swing.common.ImageIconTools;
+import views.swing.gameboard.Game;
+import views.swing.gameboard.GameBoard;
 import views.swing.menu.Menu;
 
 /**

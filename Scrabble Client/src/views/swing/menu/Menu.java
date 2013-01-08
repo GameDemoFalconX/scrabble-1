@@ -16,7 +16,6 @@ import views.MenuView;
 import views.swing.common.ImageIconTools;
 import views.swing.gameboard.Blah;
 import views.swing.gameboard.Game;
-import views.swing.gameboard.Settings;
 
 /**
  *

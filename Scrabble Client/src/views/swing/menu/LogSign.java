@@ -1,4 +1,4 @@
-package views.swing.gameboard;
+package views.swing.menu;
 
 
 import java.awt.AWTException;
