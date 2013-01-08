@@ -139,8 +139,9 @@ public class BlankDialog extends JDialog {
 				return result;
 		}
 		
-		public void showBlank() {
+		public String showBlank() {
 				this.setVisible(true);
+				return lettersList.get(index);
 		}
 
 }

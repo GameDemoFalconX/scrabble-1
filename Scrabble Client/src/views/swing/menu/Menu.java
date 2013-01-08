@@ -59,7 +59,8 @@ public class Menu extends MenuView {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 								BlankDialog bd = new BlankDialog(null);
-								bd.showBlank();
+								String res = bd.showBlank();
+								JOptionPane.showMessageDialog(panel, res, res, JOptionPane.DEFAULT_OPTION);
 						}
 				});
 				panel.add(test);
