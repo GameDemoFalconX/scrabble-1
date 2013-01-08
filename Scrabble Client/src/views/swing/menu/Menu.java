@@ -1,12 +1,10 @@
 package views.swing.menu;
 
 import controller.MenuController;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Image;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -222,8 +220,11 @@ public class Menu extends MenuView {
 		}
 		
 		private void initSettingsButton() {
-				settingsButton = new JButton("Settings");
-				settingsButton.setBounds(panel.getWidth()/2-50, 365, 110, 30);
+				settingsButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
+				settingsButton.setBounds(panel.getWidth()-77, 71, 60, 60);
+				settingsButton.setOpaque(true);
+				settingsButton.setBorder(null);
+				settingsButton.setBackground(new Color(255, 255, 255, 0));
 				settingsButton.addActionListener(new AbstractAction() {
 
 						@Override
