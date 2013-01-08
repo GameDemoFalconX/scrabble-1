@@ -104,17 +104,17 @@ public class Menu extends MenuView {
 				panel.validate();
 		}
 		
-		private void reset() {
+		private void logOut() {
 				playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-				playerButton.setVisible(false);
-				playerButton.setVisible(false);
-				settingsButton.setVisible(false);
-				score.setVisible(false);
+				panel.remove(playerPanel);
+				panel.remove(settingsButton);
 				panel.add(playAsGuestButton);
 				panel.add(loginButton);
 				panel.add(signupButton);
+				panel.validate();
+				panel.repaint();
 		}
-		
+				
 		/*** Methods used to load the menu components ***/
 		private void initPlayAsGuestButton() {
 				playAsGuestButton = new JButton("Play as guest");
@@ -194,7 +194,7 @@ public class Menu extends MenuView {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								reset();
+								logOut();
 						}
 				});
 				logOff.setSize(200, 20);
