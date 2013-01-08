@@ -29,12 +29,12 @@ public class Grid {
 		}
 		
 		protected final void addTile(int x, int y, Tile tile) {
-				grid[x][y] = tile;
+				grid[y][x] = tile;
 		}
 		
 		protected Tile removeTile(int x, int y) {
-				Tile result = grid[x][y];
-				grid[x][y] = null;
+				Tile result = grid[y][x];
+				grid[y][x] = null;
 				return result;
 		}
 		
@@ -42,8 +42,20 @@ public class Grid {
 				int neighbors = 0;
 				int i = 0;
 				while (neighbors == 0 && i < x_neighbors.length) {
-						neighbors += (grid[x+x_neighbors[i]][y+y_neighbors[i]] != null) ? 1 : 0;
+						if (x+x_neighbors[i] >= 0 && x+x_neighbors[i] < 15 && y+y_neighbors[i] >= 0 && y+y_neighbors[i] < 15) {
+								neighbors += (grid[x+x_neighbors[i]][y+y_neighbors[i]] != null) ? 1 : 0;
+						}
+						i++;
 				}
 				return neighbors > 0;
+		}
+		
+		public void printGrid() {
+				for (int x = 0; x <= 14; x++) {
+						for (int y= 0; y <= 14; y++) {
+								System.out.print("| "+((grid[x][y] != null) ? grid[x][y] : "-")+" | ");
+						}
+						System.out.println();
+				}
 		}
 }

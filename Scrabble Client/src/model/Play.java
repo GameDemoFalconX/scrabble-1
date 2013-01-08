@@ -246,7 +246,7 @@ public class Play {
 		
 		public void modifiedWord(int sX, int sY, int tX, int tY) {
 				newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
-				newWord.remove(new Point(tX, tY));
+				newWord.remove(new Point(sX, sY));
 				deplaceTileFromGridToGrid(sX, sY, tX, tY);
 				fireTileMovedFromGridToGrid(sX, sY, tX, tY);
 		}
@@ -365,6 +365,19 @@ public class Play {
 		
 		private boolean firstWordPosition(int x, int y) {
 				return (x == 7) ? true : (y == 7) ? true : false;
+		}
+		
+		private void displayNewWord() {
+				Set set = this.newWord.entrySet(); 
+				Iterator i = set.iterator();
+
+				System.out.println("New word content : ");
+				while (i.hasNext()) {
+						Map.Entry firstTile = (Map.Entry)i.next();
+						Point p = (Point) firstTile.getKey();
+						Tile t = (Tile) firstTile.getValue();
+						System.out.println(p+" - "+t.getLetter());
+				}
 		}
 		
 		/**
