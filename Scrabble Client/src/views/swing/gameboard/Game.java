@@ -46,9 +46,12 @@ public class Game extends GameView  {
 		public static final String TYPE_DARKER = "darker" ;
 		public static final String TYPE_DARKEST = "darkest" ;
 		public static final String TYPE_BLACK = "black" ;
-		private static final String SHUFFLE_PATH = "/views/swing/media/shuffle_rack_icon.png";
-		private static final String VALID_WORD_PATH = "/views/swing/media/add_word_icon.png";
-		private static final String EXCHANGE_PATH = "/views/swing/media/exchange_tile_icon.png";
+		private static final String SHUFFLE_PATH = "/views/swing/media/light_shuffle_rack_icon.png";
+		private static final String VALID_WORD_PATH = "/views/swing/media/light_add_word_icon.png";
+		private static final String EXCHANGE_PATH = "/views/swing/media/light_exchange_tile_icon.png";
+		private static final String DARK_SHUFFLE_PATH = "/views/swing/media/shuffle_rack_icon.png";
+		private static final String DARK_VALID_WORD_PATH = "/views/swing/media/add_word_icon.png";
+		private static final String DARK_EXCHANGE_PATH = "/views/swing/media/exchange_tile_icon.png";
 		
     
 		private JFrame frame;
@@ -134,7 +137,7 @@ public class Game extends GameView  {
 				shuffleButton.setVisible(true);
 				shuffleButton.setOpaque(true);
 				shuffleButton.setBorder(null);
-				shuffleButton.setBackground(new Color(255, 255, 255, 100));
+				shuffleButton.setBackground(new Color(255, 255, 255, 0));
 				shuffleButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -148,9 +151,9 @@ public class Game extends GameView  {
 				exchangeButton = new JButton(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
 				exchangeButton.setBounds(100, 737, 60, 60);
 				exchangeButton.setVisible(true);
-				exchangeButton.setOpaque(true);
+				exchangeButton.setOpaque(false);
 				exchangeButton.setBorder(null);
-				exchangeButton.setBackground(new Color(255, 255, 255, 100));
+				exchangeButton.setBackground(new Color(255, 255, 255, 0));
 				exchangeButton.addActionListener(new AbstractAction() {
 
 						@Override
@@ -164,9 +167,9 @@ public class Game extends GameView  {
 				validWordButton = new JButton(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
 				validWordButton.setBounds(560, 737, 60, 60);
 				validWordButton.setVisible(true);
-				validWordButton.setOpaque(true);
+				validWordButton.setOpaque(false);
 				validWordButton.setBorder(null);
-				validWordButton.setBackground(new Color(255, 255, 255, 200));
+				validWordButton.setBackground(new Color(255, 255, 255, 0));
 				//validWordButton.setEnabled(false);
 				validWordButton.addActionListener(new AbstractAction() {
 
@@ -293,13 +296,13 @@ public class Game extends GameView  {
 		
 		public void setButtonsBackground(boolean dark) {
 				if (dark) {
-						shuffleButton.setOpaque(true);
-						validWordButton.setOpaque(true);
-						exchangeButton.setOpaque(true);
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(EXCHANGE_PATH, null));
 				} else {
-						shuffleButton.setOpaque(false);
-						validWordButton.setOpaque(false);
-						exchangeButton.setOpaque(false);
+						shuffleButton.setIcon(ImageIconTools.createImageIcon(DARK_SHUFFLE_PATH, null));
+						validWordButton.setIcon(ImageIconTools.createImageIcon(DARK_VALID_WORD_PATH, null));
+						exchangeButton.setIcon(ImageIconTools.createImageIcon(DARK_EXCHANGE_PATH, null));
 				}
 		}
 }
