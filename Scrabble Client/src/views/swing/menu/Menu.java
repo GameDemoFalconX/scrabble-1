@@ -221,19 +221,23 @@ public class Menu extends MenuView {
 		
 		private void initSettingsButton() {
 				settingsButton = new JButton(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
-				settingsButton.setBounds(panel.getWidth()-77, 71, 60, 60);
+				settingsButton.setBounds(panel.getWidth()-77,panel.getHeight()-173, 60, 60);
 				settingsButton.setOpaque(true);
 				settingsButton.setBorder(null);
-				settingsButton.setBackground(new Color(255, 255, 255, 0));
+				settingsButton.setBackground(new Color(255, 255, 255, 1));
 				settingsButton.addActionListener(new AbstractAction() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-								Settings settings = new Settings(game);
+								Settings settings = new Settings(game, getMenu());
 								settings.showSettings();
 						}
 				});
 		}
+  
+  private Menu getMenu() {
+    return this;
+  }
 		
 		private void	initNewGameButton() {
 				newGameButton = new JButton("New game");
@@ -286,4 +290,14 @@ public class Menu extends MenuView {
 						this.score.setText(String.valueOf(score));
 				}
 		}
+  
+  public void setIcons(boolean dark) {
+    if (dark) {
+      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/light_settings_icon.png", null));
+      score.setForeground(Color.WHITE);
+    } else {
+      settingsButton.setIcon(ImageIconTools.createImageIcon("/views/swing/media/dark_settings_icon.png", null));
+      score.setForeground(Color.BLACK);
+    }
+  }
 }
