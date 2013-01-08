@@ -6,7 +6,7 @@ package views.swing.gameboard;
  */
 public class Blah {
 
-		public static final String HELP_OFF = "To place a word"
+		public static final String HELP = "To place a word"
 										+ " simply drag and drop the letters you want on the gameboard then click"
 										+ " the \"Add word\" button.\n\nIf the word is correct, you will see your"
 										+ " score incrementing and new letters will appear on your rack.\n\nIf"
