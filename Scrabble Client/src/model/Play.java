@@ -358,6 +358,7 @@ public class Play {
 										setScore(Integer.parseInt(response[0]));
 										rack.reLoadRack(response[1]);
 										this.firstWord = false;
+										newWord = new HashMap<>();
 										
 										// Dispatch the model modifications to all listeners
 										fireUpdateScore(Integer.parseInt(response[0]));

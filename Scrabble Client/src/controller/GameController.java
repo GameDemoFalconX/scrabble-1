@@ -69,7 +69,7 @@ public class GameController {
 		}
 		
 		public void notifySetTileBlank(Point source, String letter) {
-				play.setTileBlank(source.x, source.y, letter.charAt(0));
+				play.setTileBlank(source.x, source.y, (letter.toUpperCase()).charAt(0));
 		}
 		
 		public void notifyBackTileBlank(int source) {
