@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import views.swing.common.ImageIconTools;
+import views.swing.gameboard.Game;
 import views.swing.gameboard.Rack;
 
 /**
@@ -31,14 +32,15 @@ public class BlankDialog extends JDialog {
 		private JButton leftArrowButton, rightArrowButton, tileButton;
 		private JPanel leftArrowPanel, rightArrowPanel, tilePanel;
 		private int index = 0;
+		private String choice;
 		
 		public BlankDialog(JFrame frame) {
 				super(frame, "Blank", true);
-    this.setSize(250, 100);
-    this.setLocationRelativeTo(null);
-    this.setResizable(false);
+				this.setSize(250, 100);
+				this.setLocationRelativeTo(null);
+				this.setResizable(false);
 				this.setBackground(Color.WHITE);
-    this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				this.setLayout(new BorderLayout());
 				initComponents();
 				this.add(rightArrowPanel, BorderLayout.EAST);
@@ -72,6 +74,7 @@ public class BlankDialog extends JDialog {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
+								Game.tileBlank = lettersList.get(index);
 								dispose();
 						}
 				});
@@ -144,5 +147,4 @@ public class BlankDialog extends JDialog {
 				this.setVisible(true);
 				return lettersList.get(index);
 		}
-
 }

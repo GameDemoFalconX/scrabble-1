@@ -116,11 +116,11 @@ public class Play {
 		}
 		
 		/*** Methods used to notify changes to all listeners ***/
-		public void fireTileMovedFromRackToGrid(int sourcePos, int x, int y){
+		public void fireTileMovedFromRackToGrid(int sourcePos, int x, int y, boolean isBlank){
 				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
 
 				for(TileListener l : listeners){
-						l.tileMovedFromRackToGrid(new TileFromRackToGridEvent(this, sourcePos, x, y));
+						l.tileMovedFromRackToGrid(new TileFromRackToGridEvent(this, sourcePos, x, y, isBlank));
 				}
 		}
 		
@@ -148,19 +148,19 @@ public class Play {
 				}
 		}
 		
-		public void fireTileMovedFromGridToRack(int x, int y, int targetPos){
+		public void fireTileMovedFromGridToRack(int x, int y, int targetPos, boolean isBlank){
 				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
 
 				for(TileListener l : listeners){
-						l.tileMovedFromGridToRack(new TileFromGridToRackEvent(this, x, y, targetPos));
+						l.tileMovedFromGridToRack(new TileFromGridToRackEvent(this, x, y, targetPos, isBlank));
 				}
 		}
 		
-		public void fireTileMovedFromGridToRackWithShift(int x, int y, int targetPos){
+		public void fireTileMovedFromGridToRackWithShift(int x, int y, int targetPos, boolean isBlank){
 				TileListener[] listeners = (TileListener[]) tileListeners.getListeners(TileListener.class);
 
 				for(TileListener l : listeners){
-						l.tileMovedFromGridToRackWithShift(new TileFromGridToRackWithShiftEvent(this, x, y, targetPos));
+						l.tileMovedFromGridToRackWithShift(new TileFromGridToRackWithShiftEvent(this, x, y, targetPos, isBlank));
 				}
 		}
 		
@@ -250,7 +250,7 @@ public class Play {
 		public void createWord(int sourcePos, int x, int y) {
 				newWord.put(new Point(x, y), rack.getTile(sourcePos));
 				deplaceTileFromRackToGrid(sourcePos, x, y);
-				fireTileMovedFromRackToGrid(sourcePos, x, y);
+				fireTileMovedFromRackToGrid(sourcePos, x, y, grid.getTile(x, y).isBlank());
 				grid.printGrid();
 				displayNewWord();
 		}
@@ -268,10 +268,10 @@ public class Play {
 				newWord.remove(new Point(x, y));
 				if (rack.getTile(targetPos) != null) {
 						deplaceTileFromGridToRackWithShift(x, y, targetPos);
-						fireTileMovedFromGridToRackWithShift(x, y, targetPos);
+						fireTileMovedFromGridToRackWithShift(x, y, targetPos, rack.getTile(targetPos).isBlank());
 				} else {
 						deplaceTileFromGridToRack(x, y, targetPos);
-						fireTileMovedFromGridToRack(x, y, targetPos);
+						fireTileMovedFromGridToRack(x, y, targetPos, rack.getTile(targetPos).isBlank());
 				}
 				grid.printGrid();
 				displayNewWord();
@@ -333,6 +333,9 @@ public class Play {
 												while(done < 1 && i.hasNext()) { 
 														Map.Entry otherTile = (Map.Entry)i.next(); 
 														Point po = (Point) otherTile.getKey();
+														System.out.println("PO : "+po);
+														System.out.println("PO N : "+(grid.hasNeighbors(po.x, po.y)));
+														System.out.println("PO O : "+(orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y)));
 														done = ((grid.hasNeighbors(po.x, po.y)) && (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y))) ? 0 : FLOATING_TILES;
 														if (done < 1) {
 																// Format the other letter(s)
@@ -354,6 +357,7 @@ public class Play {
 										// Update model
 										setScore(Integer.parseInt(response[0]));
 										rack.reLoadRack(response[1]);
+										this.firstWord = false;
 										
 										// Dispatch the model modifications to all listeners
 										fireUpdateScore(Integer.parseInt(response[0]));
@@ -401,6 +405,15 @@ public class Play {
 				}
 		}
 		
+		public void setTileBlank(int x, int y, char letter) {
+				grid.getTile(x, y).setLetter(letter);
+		}
+		
+		public void backTileBlank(int source) {
+				rack.getTile(source).setLetter('?');
+		}
+		
+		/*** Use these methods later ***/
 		/**
 			* Update the rack from the new tiles send by the server.
 			* @param positions array of index

@@ -12,12 +12,14 @@ public class TileFromGridToRackEvent extends EventObject {
 		private final int targetPosition;
 		private final int sourceX;
 		private final int sourceY;
+		private final boolean isBlank;
 		
-		public TileFromGridToRackEvent(Object source, int x, int y, int targetPos) {
+		public TileFromGridToRackEvent(Object source, int x, int y, int targetPos, boolean isBlank) {
 				super(source);
 				sourceX = x;
 				sourceY = y;
 				targetPosition = targetPos;
+				this.isBlank = isBlank;
 		}
 		
 		public Point getSourcePosition() {
@@ -26,5 +28,9 @@ public class TileFromGridToRackEvent extends EventObject {
 		
 		public int getTargetPosition() {
 				return targetPosition;
+		}
+		
+		public boolean isBlank() {
+				return this.isBlank;
 		}
 }

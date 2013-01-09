@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Point;
 import model.Play;
 import views.GameView;
 import views.swing.gameboard.Game;
@@ -65,5 +66,13 @@ public class GameController {
 		
 		public void notifyValidWord(){
 				play.validateWord();
+		}
+		
+		public void notifySetTileBlank(Point source, String letter) {
+				play.setTileBlank(source.x, source.y, letter.charAt(0));
+		}
+		
+		public void notifyBackTileBlank(int source) {
+				play.backTileBlank(source);
 		}
 }

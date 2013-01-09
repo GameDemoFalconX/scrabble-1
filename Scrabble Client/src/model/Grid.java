@@ -38,6 +38,10 @@ public class Grid {
 				return result;
 		}
 		
+		protected Tile getTile(int x, int y) {
+				return grid[y][x];
+		}
+		
 		protected boolean hasNeighbors(int x, int y) {
 				int neighbors = 0;
 				int i = 0;

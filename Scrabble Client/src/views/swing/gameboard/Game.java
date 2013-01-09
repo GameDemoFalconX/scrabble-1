@@ -29,6 +29,7 @@ import views.swing.common.GlassPane;
 import views.swing.common.ImageIconTools;
 import views.swing.common.panelGrid;
 import views.swing.common.panelRack;
+import views.swing.menu.BlankDialog;
 import views.swing.popup.ErrorMessagePopup;
 
 /**
@@ -38,7 +39,7 @@ import views.swing.popup.ErrorMessagePopup;
 	*/
 public class Game extends GameView  {
 		
-  private static final String PATH_MEDIA = "/views/swing/media/";
+		private static final String PATH_MEDIA = "/views/swing/media/";
 		private static final String LIGHT_PATH = PATH_MEDIA + "background.png" ;
 		private static final String DARK_PATH = PATH_MEDIA + "dark_background.png" ;
 		private static final String DARKER_PATH = PATH_MEDIA + "darker_background.png" ;
@@ -55,8 +56,8 @@ public class Game extends GameView  {
 		private static final String DARK_SHUFFLE_PATH = PATH_MEDIA + "shuffle_rack_icon.png";
 		private static final String DARK_VALID_WORD_PATH = PATH_MEDIA + "add_word_icon.png";
 		private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
+		public static String tileBlank;
 		
-    
 		private JFrame frame;
 		private JLayeredPane JLPaneOfFrame;
 		private Container contentPane;
@@ -253,6 +254,11 @@ public class Game extends GameView  {
 				}
 		}
 		
+		private void updateDTPictureBlank(DTPicture dtp, String letter) {
+				dtp.setImage(Rack.getTileImage(letter, "1"));
+				dtp.repaint();
+		}
+		
 		/*** Methods used to modify the view from model notifications ***/
 		@Override
 		public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
@@ -261,6 +267,12 @@ public class Game extends GameView  {
 				panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y*15)+tP.x);
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.downTileNumber();
+				if (event.isBlank()) {
+						BlankDialog blankPopup = new BlankDialog(frame);
+						blankPopup.showBlank();
+						updateDTPictureBlank((DTPicture) targetParent.getComponent(0), tileBlank);
+						getController().notifySetTileBlank(event.getTargetPosition(), tileBlank);
+				}
 		}
 		
 		@Override
@@ -296,6 +308,10 @@ public class Game extends GameView  {
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.upTileNumber();
+				if (event.isBlank()) {
+						updateDTPictureBlank((DTPicture) targetParent.getComponent(0), "?");
+						getController().notifyBackTileBlank(event.getTargetPosition());
+				}
 		}
 		
 		@Override
@@ -306,6 +322,10 @@ public class Game extends GameView  {
 				panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
 				targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
 				rack.upTileNumber();
+				if (event.isBlank()) {
+						updateDTPictureBlank((DTPicture) targetParent.getComponent(0), "?");
+						getController().notifyBackTileBlank(event.getTargetPosition());
+				}
 		}
 		
 		@Override
