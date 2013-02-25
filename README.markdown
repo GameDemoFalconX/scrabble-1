@@ -5,70 +5,25 @@
 
 Scrabble is a word game in which two to four players score points by forming words from individual lettered tiles on a gameboard marked with a 15-by-15 grid. The words are formed across and down in crossword fashion and must appear in a standard dictionary.
 
-### Details of implementation :
-*Message structure*
+#### MAVEN CONFIGURATION ####
 
-	|----------| |----------------|
-	   header           body
-	           "#"
-	             |---------| |------------|
-	                token         args
-	                       "@"
-	                        |---------| |---------| | ...
-	                           args1       args2
-	                                  "_"
+From now the projects are managed by [Maven](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html) a very great *Project Management Tools* which allows to directly load dependencies, compile & build, launch the unittest, ...
 
-### XML Files structure
-** Warning! Before use XML File, you must load the JDOM library manually.**
+All new modules, packages or plugins must be added in the `POM.xml` in each project folder. If you search a module, looking [here](http://search.maven.org/)
 
-+ Click right on the Scrabble server folder > Properties.
-+ Select Category "Library" and click on "Add .jar Files" after download JDOM binaries [here][0] (You'll find binaries and the bin/ folder in the Scrabble repository).
-+ Please select the 2.0.4 version
+To add this module, just issue the following lines in the POM.xml file :
 
-[0]: http://jdom.org/downloads/index.html
+	// Example with Jackson :
+	<dependency>
+    <groupId>org.codehaus.jackson</groupId>
+    <artifactId>jackson-mapper-asl</artifactId>
+    <version>1.8.5</version>
+  </dependency>
 
-*Players*
+For more informations about Maven, here is few documentation :
 
-	<?xml version="1.0" encoding="UTF-8"?>
-	<players>
-  		<player uuid="[player-uuid]">
-    		<uuid>[Player-uuid]</uuid>
-    		<name>[player-name]</name>
-    		<password>[player-password]</password>
-   		</player>
-  	</players>
-
-*Games*
-
-	<?xml version="1.0" encoding="UTF-8"?>
-	<plays>
-		<player id="[player-uuid]">
-			<play id="[ind]">
-				<uuid>[play-uuid]</uuid>
-				<created>[play-created-date]</created>
-				<modified>[play-last-modified-date]</modified>
-				<score>[play-score]</score>
-				<grid>
-					<tile>
-						[x:y:L:V]
-						...
-					</tile>
-				</grid>
-				<rack>
-					<tile>
-						[x:y:L:V]
-						...
-					</tile>
-				</rack>
-			</play>
-		</player>
-	</plays>
-
-### Colors in view
-** Warning! Before playing, you must load the Jansi library manually.**
-
-+ Click right on the Scrabble Client folder > Properties.
-+ Select Category "Library" and click on "Add .jar Files" after download Jansi binaries [here][1] (You'll find binaries and the bin/ folder in the Scrabble repository).
-+ Please select the 1.9 version
-
-[1]: http://jansi.fusesource.org/download.html
++ [Maven comprehension](http://www.mkyong.com/tutorials/maven-tutorials/)
++ [Maven build cycle](http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)
++ [Maven dependencies](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html)
++ [Maven and Netbeans](http://wiki.netbeans.org/MavenBestPractices)
++ [Naming conventions](http://maven.apache.org/guides/mini/guide-naming-conventions.html)
