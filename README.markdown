@@ -15,10 +15,10 @@ To add this module, just issue the following lines in the POM.xml file :
 
 	// Example with Jackson :
 	<dependency>
-    <groupId>org.codehaus.jackson</groupId>
-    <artifactId>jackson-mapper-asl</artifactId>
-    <version>1.8.5</version>
-  </dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.8.5</version>
+	</dependency>
 
 For more informations about Maven, here is few documentation :
 
