@@ -447,7 +447,7 @@ public class Play {
         return rack.isTileBlank(pos);
     }
 
-    public String checkBlankTile() {
+    /*public String checkBlankTile() {
         return rack.getBlankTile();
-    }
+    }*/
 }
