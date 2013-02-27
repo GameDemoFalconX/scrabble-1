@@ -113,7 +113,6 @@ public class Rack extends JPanel {
             
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
                 JsonNode cTile = it.next();
-                System.out.println(cTile.get("letter").asText()+" - "+cTile.get("value").asInt());
                 putTile(new DTPicture(getTileImage(cTile.get("letter").asText(), cTile.get("value").asText()), scrabble, jlp));
             }
         } catch (IOException ioe) {}

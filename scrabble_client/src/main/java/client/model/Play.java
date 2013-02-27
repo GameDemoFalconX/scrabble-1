@@ -467,16 +467,4 @@ public class Play {
     /*public String checkBlankTile() {
         return rack.getBlankTile();
     }*/
-    
-    public static void main(String[] args) {
-        String JSON = "{\"play_id\": \"ze1g3zr8g161z6r81zr8g1rz81gv6z3\", \"rack\": [{\"letter\": \"A\", \"value\": 2}, "
-                                 +"{\"letter\": \"A\", \"value\": 2}, {\"letter\": \"A\", \"value\": 2}, {\"letter\": \"A\", \"value\": 2}, "
-                                 +"{\"letter\": \"A\", \"value\": 2}, {\"letter\": \"A\", \"value\": 2}, {\"letter\": \"A\", \"value\": 2}]}}";
-        ObjectMapper om = new ObjectMapper();
-        try {
-            JsonNode root = om.readTree(JSON);
-            System.out.println(root.get("play_id").asText());
-            System.out.println(root.get("rack").toString());
-        } catch (IOException ioe) {}
-    }
 }

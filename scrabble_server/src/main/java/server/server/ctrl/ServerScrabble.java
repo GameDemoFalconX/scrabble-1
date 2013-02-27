@@ -148,7 +148,6 @@ public class ServerScrabble {
         try {
             // Try to create a new game for the current anonymous player
             response = game.createNewAnonymPlay(pl_id);
-
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }

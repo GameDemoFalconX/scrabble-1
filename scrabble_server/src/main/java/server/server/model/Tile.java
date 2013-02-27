@@ -1,5 +1,9 @@
 package server.server.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Model that contains the letter and the value of a Tile.
  *
@@ -8,7 +12,9 @@ package server.server.model;
  */
 public class Tile {
 
+    @JsonProperty("letter")
     private char letter;
+    @JsonProperty("value")
     private final int value;
     private final boolean isBlank;
     private int x;
@@ -23,7 +29,8 @@ public class Tile {
      * @param letter a char
      * @param value a integer
      */
-    public Tile(char letter, int value) {
+    @JsonCreator
+    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value) {
         this.letter = letter;
         this.value = value;
         this.isBlank = (letter == '?');
@@ -58,6 +65,7 @@ public class Tile {
         return value;
     }
 
+    @JsonIgnore
     public boolean isBlank() {
         return this.isBlank;
     }
@@ -69,6 +77,7 @@ public class Tile {
         loaded = true;
     }
 
+    @JsonIgnore
     protected boolean getLoadedState() {
         return loaded;
     }
@@ -96,9 +105,9 @@ public class Tile {
 
     /**
      * Gets the status of this tile
-     *
      * @return True if the tile has just been placed on the game board.
      */
+    @JsonIgnore
     public boolean getStatus() {
         return status;
     }
@@ -119,12 +128,11 @@ public class Tile {
 
     /**
      * Format the tile in a printable String
-     *
-     * @return a String
+     * @return a JSON format : {"letter":"A","value":2}
      */
     @Override
     public String toString() {
-        return letter + ":" + value;
+        return "{\"letter\":\""+this.letter+"\",\"value\":"+this.value+"}";
     }
 
     public String displayTile() {

@@ -9,6 +9,7 @@ public class Message {
     private Integer header;
     private Integer size;
     private byte[] body;
+    
     // Server answers
     public static final int SYSOK = 1; // All is OK
     public static final int SYSKO = 2; // Err sys KO

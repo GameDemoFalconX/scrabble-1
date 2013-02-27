@@ -9,13 +9,13 @@ import server.server.connection.ServerProtocol;
  */
 public class ThreadCtrl extends Thread {
 
-    private ServerScrabble HAL;
+    private ServerScrabble sScrabble;
     private ServerProtocol sProto;
     private Message request;
 
     public ThreadCtrl(ServerProtocol sp, ServerScrabble hal) {
         sProto = sp;
-        HAL = hal;
+        sScrabble = hal;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to create a new player acount
-        response = HAL.newAccount(argsTab[0], argsTab[1]);
+        response = sScrabble.newAccount(argsTab[0], argsTab[1]);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -106,7 +106,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to log the current player
-        response = HAL.login(argsTab[0], argsTab[1]);
+        response = sScrabble.login(argsTab[0], argsTab[1]);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -117,19 +117,18 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to log the current player
-        response = HAL.logout(new String(request.getBody()));
+        response = sScrabble.logout(new String(request.getBody()));
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void newGame() {
-        String playerID = new String(request.getBody());
         outputPrint("Current player is trying to create a new game");
         Message response;
 
         // Try to create a new game for the current player
-        response = HAL.createNewPlay(playerID);
+        response = sScrabble.createNewPlay(new String(request.getBody()));
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -140,7 +139,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to create a new play for the current anonymous player
-        response = HAL.newAnonymGame(new String(request.getBody()));
+        response = sScrabble.newAnonymGame(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -152,7 +151,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load the plays list for the current player
-        response = HAL.loadPlayList(playerID);
+        response = sScrabble.loadPlayList(playerID);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -164,7 +163,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load an existed play for the current player
-        response = HAL.loadGame(argsTab[0], argsTab[1]);
+        response = sScrabble.loadGame(argsTab[0], argsTab[1]);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -177,7 +176,7 @@ public class ThreadCtrl extends Thread {
 
         // Try to load an existed play for the current player
         String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
-        response = HAL.saveGame(type, argsTab[0], argsTab[1], blankTiles);
+        response = sScrabble.saveGame(type, argsTab[0], argsTab[1], blankTiles);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -189,7 +188,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load an existed play for the current player
-        response = HAL.deleteAnonym(playerID);
+        response = sScrabble.deleteAnonym(playerID);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -203,7 +202,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Check if the player's game is correct.
-        response = HAL.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
+        response = sScrabble.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -215,7 +214,7 @@ public class ThreadCtrl extends Thread {
         Message response;
         String playerID = argsTab[0];
         String position = argsTab[1];
-        response = HAL.exchangeTile(playerID, position);
+        response = sScrabble.exchangeTile(playerID, position);
 
         outputPrint("Send Response");
         sProto.sendResponse(response);
@@ -228,7 +227,7 @@ public class ThreadCtrl extends Thread {
         Message response;
         String playerID = argsTab[0];
         String position = argsTab[1];
-        response = HAL.switchTile(playerID, position);
+        response = sScrabble.switchTile(playerID, position);
 
         outputPrint("Send Response");
         sProto.sendResponse(response);

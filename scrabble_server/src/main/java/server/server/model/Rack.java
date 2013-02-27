@@ -1,5 +1,10 @@
 package server.server.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
 /**
  * Model that contains the seven Tiles that the player use to make words
  *
@@ -7,6 +12,8 @@ package server.server.model;
  */
 class Rack {
 
+    private ObjectMapper om = new ObjectMapper();
+    @JsonProperty("rack")
     private Tile[] rack = new Tile[7];
 
     public Rack() {
@@ -17,7 +24,6 @@ class Rack {
 
     /**
      * Constructs a new Rack during the new Play process.
-     *
      * @param bag
      */
     public Rack(TileBag bag) {
@@ -28,19 +34,16 @@ class Rack {
 
     /**
      * Allows to initialize a rack from a String (Tile sequence)
-     *
-     * @param bag
+     * @param bag format in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     public Rack(String bag) {
-        String[] tBag = bag.split("__");
-        for (int i = 0; i < rack.length; i++) {
-            rack[i] = new Tile(tBag[i].split(":")[0].charAt(0), Integer.parseInt(tBag[i].split(":")[1]));
-        }
+        try {
+            rack = om.readValue(bag, Tile[].class);
+        } catch (IOException ioe) {}
     }
 
     /**
      * Get the first Tile with the letter given in parameter.
-     *
      * @param char
      * @return Tile
      */
@@ -58,7 +61,6 @@ class Rack {
 
     /**
      * Set a new Tile in the specific index in the rack.
-     *
      * @param i
      * @param newTile
      */
@@ -90,41 +92,23 @@ class Rack {
 
     /**
      * Format the rack in a printable String
-     *
-     * @return a String
+     * @return a String format in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     @Override
     public String toString() {
-        String result = "";
-        for (int i = 0; i < 7; i++) {
-            result += rack[i];
-            result += (i < 6) ? "=" : "";
-        }
-        return result;
+        String formatedTiles = "";
+        try {
+            formatedTiles = om.writeValueAsString(rack);
+        } catch (JsonProcessingException e) {}
+        return formatedTiles;
     }
 
     /**
      * A rack getter
-     *
      * @return the whole rack
      */
     public Rack getRack() {
         return this;
-    }
-
-    /**
-     * Used only for debugging purpose
-     *
-     * @param gameBoardID
-     */
-    public void loadTestRack() {
-        rack[0] = new Tile('A', 1);
-        rack[1] = new Tile('B', 4);
-        rack[2] = new Tile('C', 4);
-        rack[3] = new Tile('D', 3);
-        rack[4] = new Tile('E', 1);
-        rack[5] = new Tile('F', 4);
-        rack[6] = new Tile('G', 8);
     }
 
     public void setLetter(Integer pos, String letter) {

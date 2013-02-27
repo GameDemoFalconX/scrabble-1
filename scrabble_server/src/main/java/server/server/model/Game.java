@@ -180,27 +180,17 @@ public abstract class Game implements IGame {
 
     // Abstract methods
     protected abstract Message createAccount(String pl_name, String pl_pwd);
-
     protected abstract Message loginProcess(String pl_name, String pl_pwd);
-
     protected abstract Message logoutProcess(String pl_id);
-
     protected abstract Message createNewGame(String pl_id);
-
     protected abstract Message createNewAnonymGame(String pl_id);
-
     protected abstract Message loadPlayLister(String pl_id);
-
     protected abstract Message loadPlay(String pl_id, String ga_id);
-
     protected abstract Message savePlay(int type, String pl_id, String ga_id, String ga_infos);
 
     // Game
     protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
-
     protected abstract Message destroyAnonym(String pl_id);
-
     protected abstract Message tileExchange(String pl_id, String position);
-
     protected abstract Message tileSwitch(String pl_id, String position);
 }

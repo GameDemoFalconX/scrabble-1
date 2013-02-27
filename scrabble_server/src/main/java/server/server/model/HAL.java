@@ -1,5 +1,6 @@
 package server.server.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,9 @@ public class HAL extends Game {
     private PlayerRAM players = new PlayerRAM();
     private GameRAM plays = new GameRAM();
     private Dictionary dico;
+    
+    // JSON Treatment
+    ObjectMapper om = new ObjectMapper();
 
     HAL() {
         try {
@@ -81,22 +85,27 @@ public class HAL extends Game {
     /**
      * Allows to log an anonymous user
      *
-     * @param pl_id
-     * @return
+     * @param pl_id is format in JSON : {"player_id": "x000x0x00xxxx0x0x0x000x"}
+     * @return Message with body format in JSON : {"play_id": "xxxx0x0000x00x0x00", "rack": [{"letter":"A","value":2},{"letter":"A","value":2}, ...]}
      */
     @Override
     protected Message createNewAnonymGame(String pl_id) {
-        if (!plays.playerIsLogged(pl_id)) {
-            // Add this anonymous player to the server players list.
-            plays.addPlayer(pl_id);
-            // Initialization of the Play on the server side and add it to the GameRAM dict.
-            Play newPlay = new Play(pl_id);
-            plays.addNewPlay(pl_id, newPlay);
-            System.out.println("Rack : " + newPlay.getFormatRack());
-            return new Message(Message.NEW_GAME_ANONYM_SUCCESS, newPlay.getPlayID() + "##" + newPlay.getFormatRack()); // Only return the rack to the client.
-        }
-        // The current anonymous player is already logged.
-        return new Message(Message.NEW_GAME_ANONYM_ERROR, "");
+        try {
+            String player_id = om.readTree(pl_id).get("player_id").asText();
+            
+            if (!plays.playerIsLogged(player_id)) {
+                // Add this anonymous player to the server players list.
+                plays.addPlayer(player_id);
+                // Initialization of the Play on the server side and add it to the GameRAM dict.
+                Play newPlay = new Play(player_id);
+                plays.addNewPlay(player_id, newPlay);
+                System.out.println("Rack : " + newPlay.getFormatRack());
+                return new Message(Message.NEW_GAME_ANONYM_SUCCESS, "{\"play_id\": \""+newPlay.getPlayID()+"\", \"rack\": "+ newPlay.getFormatRack()+"}");
+            }
+            // The current anonymous player is already logged.
+            return new Message(Message.NEW_GAME_ANONYM_ERROR, "");
+        } catch (IOException ioe) {}
+        return null;
     }
 
     @Override
