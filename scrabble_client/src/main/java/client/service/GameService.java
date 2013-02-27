@@ -107,17 +107,17 @@ public class GameService {
      * @return Play instance otherwise null
      * @throws GameException
      */
-    public String[] createNewPlay(String playerID, boolean anonymous) throws GameException {
-        String[] args = null;
-        Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM, playerID) : servProtocol.sendRequest(Message.NEW_GAME, playerID);
+    public String createNewPlay(String playerID, boolean anonymous) throws GameException {
+        String args = null;
+        Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM, "{\"player_id\": "+playerID+"}") : servProtocol.sendRequest(Message.NEW_GAME, "{\"player_id\": "+playerID+"}");
 
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.NEW_GAME_SUCCESS:
-                    args = new String(serverResponse.getBody()).split("##");
+                    args = serverResponse.getBodyJSON();
                     return args;
                 case Message.NEW_GAME_ANONYM_SUCCESS:
-                    args = new String(serverResponse.getBody()).split("##");
+                    args = serverResponse.getBodyJSON();
                     return args;
                 default:
                     exceptionTriggered(serverResponse.getHeader());

@@ -1,5 +1,7 @@
 package client.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 /**
@@ -8,12 +10,17 @@ import java.util.UUID;
  */
 public class Player {
 
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("password")
     private String password;
+    @JsonProperty("uuid")
     private UUID id;
+    @JsonProperty("is_anonymous")
     private boolean isAnonymous = false;
 
-    public Player(String email, String pwd, String uuid) {
+    @JsonCreator
+    public Player(@JsonProperty("email") String email, @JsonProperty("password") String pwd, @JsonProperty("uuid") String uuid) {
         this.email = email;
         password = pwd;
         id = UUID.fromString(uuid);

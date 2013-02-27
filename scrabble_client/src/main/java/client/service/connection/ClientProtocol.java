@@ -94,7 +94,7 @@ public class ClientProtocol extends Protocol {
                 downloadedCount += in.read(body, downloadedCount, length - downloadedCount);
             }
             Message serverResponse = new Message(header, length, body);
-            writeInt(ACK);
+            out.writeInt(ACK);
             return serverResponse;
         } catch (IOException e) {
             return null;

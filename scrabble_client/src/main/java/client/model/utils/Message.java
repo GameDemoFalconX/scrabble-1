@@ -85,14 +85,6 @@ public class Message {
         this.body = body;
     }
 
-    public Message(String args) {
-        String[] argsTab = new String[2];
-        argsTab = args.split("#");
-        this.header = Integer.parseInt(argsTab[0]);
-        this.body = argsTab[1].getBytes();
-        this.size = this.body.length;
-    }
-
     public int getHeader() {
         return header;
     }
@@ -104,9 +96,13 @@ public class Message {
     public byte[] getBody() {
         return body;
     }
+    
+    public String getBodyJSON() {
+        return new String(body);
+    }
 
     @Override
     public String toString() {
-        return header.toString() + "&" + size.toString() + "&" + body;
+        return "{\"header\": "+header.toString()+", \"size\": "+size.toString()+", \"body\": "+new String(body)+"}";
     }
 }
