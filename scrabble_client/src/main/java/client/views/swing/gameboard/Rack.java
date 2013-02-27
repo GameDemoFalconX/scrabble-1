@@ -3,12 +3,15 @@ package client.views.swing.gameboard;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.common.panelRack;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -97,10 +100,23 @@ public class Rack extends JPanel {
     /**
      * * Method used to load tiles on rack **
      */
-    public void loadTilesOnRack(String[][] newTiles, Game scrabble, JLayeredPane jlp) {
-        for (int i = 0; i < newTiles.length; i++) {
-            putTile(new DTPicture(getTileImage(newTiles[i][0], newTiles[i][1]), scrabble, jlp));
-        }
+    /**
+     * Load new tiles on rack
+     * @param newTiles - JSON Format [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
+     * @param scrabble
+     * @param jlp 
+     */
+    public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp) {
+        ObjectMapper om = new ObjectMapper();
+        try {
+            JsonNode root = om.readTree(newTiles);
+            
+            for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
+                JsonNode cTile = it.next();
+                System.out.println(cTile.get("letter").asText()+" - "+cTile.get("value").asInt());
+                putTile(new DTPicture(getTileImage(cTile.get("letter").asText(), cTile.get("value").asText()), scrabble, jlp));
+            }
+        } catch (IOException ioe) {}
     }
 
     private void putTile(DTPicture dtp) {
