@@ -195,14 +195,12 @@ public class ThreadCtrl extends Thread {
     }
 
     private void gameTreatment() {
-        // Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
-        System.out.println(new String(request.getBody()));
-        String[] argsTab = new String(request.getBody()).split("_");
+        System.out.println(request.getBodyJSON());
         outputPrint("Start game treatment for the current player");
         Message response;
 
         // Check if the player's game is correct.
-        response = sScrabble.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
+        response = sScrabble.gameTreatment(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

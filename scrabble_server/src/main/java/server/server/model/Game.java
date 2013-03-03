@@ -124,8 +124,9 @@ public abstract class Game implements IGame {
 
     // *** GAME *** //
     @Override
-    public Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException {
-        Message response = scrabbleValidator(pl_id, ga_id, ga_infos);
+    public Message checkGame(String pl_id, String ga_id, int orientation, String ga_infos) throws GameException {
+        Message response = scrabbleValidator(pl_id, ga_id, orientation, ga_infos);
+        System.out.println(response.getHeader());
         switch (response.getHeader()) {
             case Message.PLACE_WORD_SUCCESS:
                 return response;
@@ -189,7 +190,7 @@ public abstract class Game implements IGame {
     protected abstract Message savePlay(int type, String pl_id, String ga_id, String ga_infos);
 
     // Game
-    protected abstract Message scrabbleValidator(String pl_id, String ga_id, String ga_infos);
+    protected abstract Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos);
     protected abstract Message destroyAnonym(String pl_id);
     protected abstract Message tileExchange(String pl_id, String position);
     protected abstract Message tileSwitch(String pl_id, String position);

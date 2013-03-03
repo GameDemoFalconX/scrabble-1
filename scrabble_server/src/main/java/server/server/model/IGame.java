@@ -22,7 +22,7 @@ public interface IGame {
     Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException;
 
     // Game
-    Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException;
+    Message checkGame(String pl_id, String ga_id, int orientation, String ga_infos) throws GameException;
     
     // Deconnection
     void deconnection(String clientName) throws GameException;

@@ -1,5 +1,8 @@
 package server.server.ctrl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,6 +20,7 @@ public class ServerScrabble {
 
     private IGame game;
     private int port = 8189;
+    private ObjectMapper om = new ObjectMapper();
 
     public static void main(String[] args) {
         ServerScrabble serverScrabble = new ServerScrabble();
@@ -159,7 +163,6 @@ public class ServerScrabble {
 
     /**
      * Allows to load the list of plays for the current player.
-     *
      * @param playerID
      * @return a formated list of plays for this player.
      */
@@ -180,7 +183,6 @@ public class ServerScrabble {
 
     /**
      * Allows to load a specific play for the current player.
-     *
      * @param playerID
      * @param playID
      * @return a formated list of word in JSON and a formatedRack.
@@ -218,7 +220,6 @@ public class ServerScrabble {
     /**
      * Try to delete all informations which belong to the current anonymous
      * user.
-     *
      * @param playerID
      * @return status
      */
@@ -237,15 +238,18 @@ public class ServerScrabble {
         return response;
     }
 
-    public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
+    public synchronized Message gameTreatment(String data) {
         Message response = null;
+        System.out.println(data);
         try {
             // Check if the player's game is correct.
-            response = game.checkGame(playerID, playID, gameInfos);
-
+            JsonNode root = om.readTree(data);
+            String test = root.get("tiles").toString();
+            response = game.checkGame(root.get("player_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ex) {
         } catch (GameException e) {
             response = processError(e);
         }

@@ -164,20 +164,15 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message scrabbleValidator(String pl_id, String ga_id, String ga_infos) {
+    protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {
         Play cPlay = plays.playIdentification(pl_id, ga_id);
         if (cPlay != null) {
             System.out.println("Server : start scrabbleValidator with data = " + ga_infos);
             cPlay.newTest(); // Increase the number of tests for this player.
-            String[] gameArgs = ga_infos.split("@@");
 
-            // Step 1 - Get orientation of the main word
-            int orientation = Integer.parseInt(gameArgs[0]);
-
-            // Step 2.1 - Place tiles on the grid and get the list of coordinates.
-            //// Important! The list of tiles from client must be formated like the following canvas : L:x:y or ?L:x:y
-            ArrayList<Tile> tileList = cPlay.tilesSetUp(gameArgs[1]);
-
+            // Step 1 - Place tiles on the grid and get the list of coordinates.
+            ArrayList<Tile> tileList = cPlay.tilesSetUp(ga_infos);
+            /*
             // Step 3 - Check tiles on the grid and get a list of words and a new score.
             int score = 0;
             int bestWord = 0;
@@ -218,7 +213,7 @@ public class HAL extends Game {
                 cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
                 cPlay.testWithError(); // Increase the number of tests with error
                 return new Message(Message.PLACE_WORD_ERROR, pl_id + "_" + ga_id + "_" + cPlay.getScore()); //TODO update don't send  and ga IDs
-            }
+            }*/
         }
         return new Message(Message.GAME_IDENT_ERROR, "");
     }

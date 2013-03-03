@@ -1,10 +1,18 @@
 package server.server.model;
 
+import client.model.utils.Point;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +36,9 @@ public class Play {
     private int nbTests = 0;
     private int testsWithSuccess = 0;
     private int testsWithError = 0;
+    
+    // JSON treatment
+    private ObjectMapper om = new ObjectMapper();
 
     /**
      * Constructor for Play instance from simply playerID.
@@ -117,16 +128,26 @@ public class Play {
 
     /**
      * Put the player's tiles on the game board.
-     *
      * @param args
      * @return a List which contains the tiles coordinates and their index in
      * the rack.
      */
     protected ArrayList<Tile> tilesSetUp(String args) {
-        String[] tilesList = args.split("##");
+        System.out.println(args);
         ArrayList result = new ArrayList();
-
-        for (int i = 0; i < tilesList.length; i++) {
+        try {
+            JsonNode root = om.readTree(args);
+            for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
+                JsonNode tile = it.next();
+                JsonNode coord = tile.get("coordinates");
+                JsonNode attrs = tile.get("attributes");
+                Point p = om.readValue(coord.asText(), Point.class);
+                Tile t = om.readValue(attrs.asText(), Tile.class);
+                System.out.println(p+" - "+t);
+            }
+        } catch (IOException ex) {}
+        
+        /*for (int i = 0; i < tilesList.length; i++) {
             String[] tileAttrs = tilesList[i].split(":");
             String letter = tileAttrs[0];
             int x = Integer.parseInt(tileAttrs[1]);
@@ -142,7 +163,7 @@ public class Play {
             cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
             cTile.upStatus(); // Set this tile like a new add in the grid.
             grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
-        }
+        }*/
         return result;
     }
 
