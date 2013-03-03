@@ -110,7 +110,6 @@ public class Rack extends JPanel {
         ObjectMapper om = new ObjectMapper();
         try {
             JsonNode root = om.readTree(newTiles);
-            
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
                 JsonNode cTile = it.next();
                 putTile(new DTPicture(getTileImage(cTile.get("letter").asText(), cTile.get("value").asText()), scrabble, jlp));

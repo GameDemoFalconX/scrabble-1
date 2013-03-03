@@ -177,22 +177,38 @@ public class GameService {
 
      /**
      * Ask the server to check the passed word
-     * @param formatedWord as a String formated as :orientation@@[tile 1]##[ tile 2 ]##...
-     * where [tile] = L:X:Y and [tile blank] = ?L:x:y
+     * @param JSON format containing coordinates and tiles informations
+     * JSON format dataToSend : 
+     * {
+     *      "player_id": "x00000x00x0xx0000xxx",
+     *      "play_id": "00x000xxxxxx000x00x",
+     *      "orientation": 1,
+     *      "tiles": [
+     *              {
+     *                  "coordinates": {
+     *                      "x": 7,
+     *                      "y": 7
+     *                  },
+     *                  "attributes": {
+     *                      "letter": "A",
+     *                      "value": 2
+     *                  }
+     *              },
+     *              ...
+     *      ]
+     *  }
      * @return String with new score and new rack if the word is correctly placed otherwise only new score.
      * @throws GameException 
      */
-    public String[] passWord(String playerID, String playID, String formatedWord) throws GameException {
-        String[] result = null;
-        // Structure of args to send : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...[blank tile 1]##[blank tile 2]
-        Message serverResponse = servProtocol.sendRequest(Message.PASS_WORD, playerID + "_" + playID + "_" + formatedWord);
+    public String passWord(String playerID, String playID, int orientation, String data) throws GameException {
+        String result = null;
+        Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"player_id\": "+playerID+", \"play_id\": "+playID+", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
-                case Message.PASS_WORD_SUCCESS:
-                    String response = (new String(serverResponse.getBody())).split("_")[2];
-                    result = response.split("@@");
+                case Message.PLACE_WORD_SUCCESS:
+                    String response = (new String(serverResponse.getBody()));
                     break;
-                case Message.PASS_WORD_ERROR:
+                case Message.PLACE_WORD_ERROR:
                     System.out.println("Error");
                     //return "KO"+(new String(serverResponse.getBody()).split("_")[2]); // Update score if the Play is over.
                     break;

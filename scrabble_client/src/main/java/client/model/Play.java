@@ -368,8 +368,7 @@ public class Play {
             }
         }
 
-        if (done) {
-                
+        if (done) {       
         } else {
             /*if (!check) {
                 fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
