@@ -16,10 +16,11 @@ import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
 import client.model.utils.GameException;
+import client.model.utils.Point;
 import client.service.GameService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.Point;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -278,8 +279,7 @@ public class Play {
         newWord.put(new Point(x, y), rack.getTile(sourcePos));
         deplaceTileFromRackToGrid(sourcePos, x, y);
         fireTileMovedFromRackToGrid(sourcePos, x, y, grid.getTile(x, y).isBlank());
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void modifiedWord(int sX, int sY, int tX, int tY) {
@@ -287,8 +287,7 @@ public class Play {
         newWord.remove(new Point(sX, sY));
         deplaceTileFromGridToGrid(sX, sY, tX, tY);
         fireTileMovedFromGridToGrid(sX, sY, tX, tY);
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void removeLetterFromWord(int x, int y, int targetPos) {
@@ -300,8 +299,7 @@ public class Play {
             deplaceTileFromGridToRack(x, y, targetPos);
             fireTileMovedFromGridToRack(x, y, targetPos, rack.getTile(targetPos).isBlank());
         }
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void organizeRack(int sourcePos, int targetPos) {
@@ -320,67 +318,42 @@ public class Play {
     }
 
     public void validateWord() {
-        String formatedWord = "";
-        int orientation = 1;
-        int done = 0; // indicator of integrity
-
-        // Step 0 - First check about the first word
-        done = (this.firstWord && newWord.size() < 1) ? FIRST_WORD_NUMBER : 0;
-
-        if (done < 1) {
-            Set set = this.newWord.entrySet();
-            Iterator i = set.iterator();
-
-            // Step 1 - Check the first tile
-            System.out.println("Valid word - start step 1 - done : " + done);
-            Map.Entry firstTile = (Map.Entry) i.next();
-            Point p1 = (Point) firstTile.getKey();
-            System.out.println("P1 : " + p1);
-            done = (this.firstWord && !(firstWordPosition(p1.x, p1.y))) ? FIRST_WORD_POSITION : (grid.hasNeighbors(p1.x, p1.y)) ? 0 : FLOATING_TILES;
-
-            if (done < 1) {
-                // Format the first letter
-                formatedWord += formatData(p1, (Tile) firstTile.getValue());
-
-                if (newWord.size() > 1) {
-                    // Step 2 - Second tile
-                    System.out.println("Valid word - start step 2 - done : " + done);
-                    Map.Entry secondTile = (Map.Entry) i.next();
-                    Point p2 = (Point) secondTile.getKey();
-                    System.out.println("P2 : " + p2);
-                    orientation = defineWordOrientation(p1.x, p1.y, p2.x, p2.y);
-                    done = (orientation > 0) ? 0 : FLOATING_TILES;
-
-                    if (done < 1) {
-                        // Format the second letter
-                        formatedWord += "##" + formatData(p2, (Tile) secondTile.getValue());
-
-                        // Step 3 - Other tile(s)
-                        System.out.println("Valid word - start step 3 - done : " + done);
-                        while (done < 1 && i.hasNext()) {
-                            Map.Entry otherTile = (Map.Entry) i.next();
-                            Point po = (Point) otherTile.getKey();
-                            System.out.println("PO : " + po);
-                            System.out.println("PO N : " + (grid.hasNeighbors(po.x, po.y)));
-                            System.out.println("PO O : " + (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y)));
-                            done = ((grid.hasNeighbors(po.x, po.y)) && (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y))) ? 0 : FLOATING_TILES;
-                            if (done < 1) {
-                                // Format the other letter(s)
-                                formatedWord += "##" + formatData(po, (Tile) otherTile.getValue());
-                            }
-                        }
-                    }
+        Boolean done = (this.firstWord && newWord.size() < 1) ? false : true, check = false;
+        int x=-1, y=-1, orientation=-1, inspector = this.newWord.size();
+        Set set = this.newWord.entrySet();
+        Iterator i = set.iterator();
+        String dataToSend = "[";
+        while (done && i.hasNext()) {
+            Map.Entry t = (Map.Entry) i.next();
+            Point p = (Point) t.getKey();
+            
+            // Verification:
+             if (inspector == this.newWord.size()) {
+                x = p.x;
+                y = p.y;
+                done = grid.hasNeighbors(p.x, p.y);
+            } else {
+                int checkO = (x == p.x) ? 1 : (y == p.y) ? 2 : 0;
+                if (inspector == this.newWord.size()-1) {
+                    orientation = checkO;
+                } else {
+                    orientation = (orientation == checkO) ? orientation : 0;
                 }
+                done = (grid.hasNeighbors(p.x, p.y) && orientation != 0);
             }
+            if (this.firstWord && !check) {
+                check = (p.x == 7 && p.y == 7);
+            }
+            dataToSend += "{"+formatData(p, (Tile) t.getValue())+"}"+((inspector != 1) ? ", " : "]");
+            inspector--;
         }
-
-        System.out.println("Valid word - check done : " + done);
-
-        switch (done) {
-            case 0:
-                try {
-                    String[] response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation + "@@" + formatedWord);
-
+        
+        if (done && ((!this.firstWord) || (this.firstWord && check))) {
+            System.out.println("dataToSend : "+dataToSend);
+            String response = null;
+            try {
+                response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
+/*
                     // Update model
                     setScore(Integer.parseInt(response[0]));
                     rack.reLoadRack(response[1]);
@@ -389,12 +362,16 @@ public class Play {
 
                     // Dispatch the model modifications to all listeners
                     fireUpdateScore(Integer.parseInt(response[0]));
-                    fireInitRackToPlay(response[1]);
-                } catch (GameException ge) {
-                    // Fire errors
-                }
-                break;
-            case FIRST_WORD_NUMBER:
+                    fireInitRackToPlay(response[1]);*/
+            } catch (GameException ge) {
+                // Fire errors
+            }
+        }
+
+        if (done) {
+                
+        } else {
+            /*if (!check) {
                 fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
                 break;
             case FIRST_WORD_POSITION:
@@ -402,22 +379,16 @@ public class Play {
                 break;
             case FLOATING_TILES:
                 fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
-                break;
+                break;*/
         }
     }
 
-    private int defineWordOrientation(int x1, int y1, int x2, int y2) {
-        return (x1 == x2) ? 1 : (y1 == y2) ? 2 : 0;
-    }
-
     private String formatData(Point p, Tile tile) {
-        String data = tile.getLetter() + ":" + p.x + ":" + p.y;
-        return (tile.isBlank()) ? "?" + data : data;
-    }
-
-    private boolean firstWordPosition(int x, int y) {
-        System.out.println("First position : " + ((x == 7) ? true : (y == 7) ? true : false));
-        return (x == 7) ? true : (y == 7) ? true : false;
+        String result = "";
+        try {
+            result += "\"coordinates\": "+om.writeValueAsString(p)+", \"attributes\": "+tile.toString();
+        } catch (JsonProcessingException e) {}
+        return result;
     }
 
     private void displayNewWord() {
@@ -467,4 +438,9 @@ public class Play {
     /*public String checkBlankTile() {
         return rack.getBlankTile();
     }*/
+    
+    private void printDebug() {
+        grid.printGrid();
+        displayNewWord();
+    }
 }
