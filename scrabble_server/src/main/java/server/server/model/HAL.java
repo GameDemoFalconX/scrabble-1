@@ -201,18 +201,18 @@ public class HAL extends Game {
                 }
             } while (i < tileList.size());
 
-            // Step 4 - Dictionary validation and return args
+            // Step 3 - Dictionary validation and return args
             if (dico.checkValidity(wordsList)) {
                 cPlay.setScore(score); // Update score
                 String newTiles = cPlay.getNewTiles(tileList.size()); // Get a formated list of tile with their index in the rack
                 cPlay.testWithSuccess(); // Increase the number of tests with success
                 System.out.println("New tiles : " + newTiles);
-                return new Message(Message.PLACE_WORD_SUCCESS, pl_id + "_" + ga_id + "_" + cPlay.getScore() + "@@" + newTiles);
+                return new Message(Message.PLACE_WORD_SUCCESS, "{\"score\": "+cPlay.getScore()+", \"tiles\": "+newTiles+"}");
             } else {
                 cPlay.setScore((bestWord / 2) * (-1)); // Update score
-                cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
+                cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid and add them into rack
                 cPlay.testWithError(); // Increase the number of tests with error
-                return new Message(Message.PLACE_WORD_ERROR, pl_id + "_" + ga_id + "_" + cPlay.getScore()); //TODO update don't send  and ga IDs
+                return new Message(Message.PLACE_WORD_ERROR, "{\"score\": "+cPlay.getScore()+"}");
             }
         }
         return new Message(Message.GAME_IDENT_ERROR, "");

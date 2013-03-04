@@ -240,9 +240,7 @@ public class ServerScrabble {
 
     public synchronized Message gameTreatment(String data) {
         Message response = null;
-        System.out.println(data);
         try {
-            // Check if the player's game is correct.
             JsonNode root = om.readTree(data);
             response = game.checkGame(root.get("player_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {

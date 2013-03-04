@@ -140,13 +140,15 @@ public class Play {
                 JsonNode attrs = tile.get("attributes");
                 Tile t = om.readValue(attrs.toString(), Tile.class);
                 Point p = om.readValue(coord.toString(), Point.class);
-                System.out.println("Tile : "+p+" - "+t);
-                
-                result.add(t);
 
                 // Tile treatment
-                //t.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
+                result.add(t);
                 t.upStatus(); // Set this tile like a new add in the grid.
+                if (!rack.removeTileFromRack(t)) {
+                    // Improve this with Exception handler
+                    System.out.println("Tile not found in rack :"+t);
+                    break;
+                }
                 grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
             }
         } catch (IOException ex) {
@@ -156,13 +158,13 @@ public class Play {
     }
 
     /**
-     * Remove the tiles added if the test contains some errors.
-     *
+     * Remove the tiles added if the test contains some errors and take them back in Rack
      * @param tilesList
      */
     protected void removeBadTiles(ArrayList<Tile> tilesList) {
         for (int i = 0; i < tilesList.size(); i++) {
             grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY()); // remove pointer
+            rack.putTile(tilesList.get(i));
         }
     }
 
@@ -178,8 +180,7 @@ public class Play {
         // Initialize values
         lastWordScore = 0;
         lastWord = "";
-        String p = "";
-        String n = "";
+        String p = "", n = "";
 
         // Display Grid and Rack
         System.out.println(grid.toString());
@@ -249,22 +250,20 @@ public class Play {
     /**
      * Update the rack on the server side by adding new tiles from the bag and
      * format them to send on the client.
-     *
      * @param tilesList
-     * @return Formated list of tile with the following canvas : L:V__[index of
-     * tile in rack]##L:V__ ...
+     * @return Formated list of tile in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     protected String getNewTiles(int numberTile) {
-        String result = "";
+        String result = "[";
         for (int i = 0; i < numberTile; i++) {
             Tile nTile = bag.getTile();
             rack.putTile(nTile);
-            result += nTile.toString();
+            result += nTile;
             if (i < numberTile - 1) {
-                result += "=";
+                result += ", ";
             }
         }
-        return result;
+        return result+"]";
     }
 
     /**
