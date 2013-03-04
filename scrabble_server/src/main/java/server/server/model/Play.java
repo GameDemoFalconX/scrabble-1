@@ -130,7 +130,6 @@ public class Play {
      * the rack.
      */
     protected ArrayList<Tile> tilesSetUp(String args) {
-        System.out.println(args);
         ArrayList result = new ArrayList();
         try {
             JsonNode root = om.readTree(args);
@@ -151,8 +150,9 @@ public class Play {
                 }
                 grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
             }
-        } catch (IOException ex) {
+        } catch (IOException ioe) {
             System.out.println("Error with JSON");
+            ioe.printStackTrace();
         }
         return result;
     }

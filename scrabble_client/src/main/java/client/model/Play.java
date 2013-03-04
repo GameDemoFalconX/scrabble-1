@@ -353,22 +353,28 @@ public class Play {
             String response = null;
             try {
                 response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
-/*
+                JsonNode root = om.readTree(response);
+                if (root.get("valid").asBoolean()) {
                     // Update model
-                    setScore(Integer.parseInt(response[0]));
-                    rack.reLoadRack(response[1]);
+                    setScore(root.get("score").asInt());
+                    rack.reLoadRack(root.get("tiles").toString());
                     this.firstWord = false;
                     newWord = new HashMap<>();
 
                     // Dispatch the model modifications to all listeners
-                    fireUpdateScore(Integer.parseInt(response[0]));
-                    fireInitRackToPlay(response[1]);*/
-            } catch (GameException ge) {
+                    fireUpdateScore(root.get("score").asInt());
+                    fireInitRackToPlay(root.get("tiles").toString());
+                } else {
+                    // Update model
+                    setScore(root.get("score").asInt());
+
+                    // Dispatch the model modifications to all listeners
+                    fireUpdateScore(root.get("score").asInt());
+                    //fireInitRackToPlay(root.get("tiles").toString());
+                }
+            } catch (GameException | IOException ge) {
                 // Fire errors
             }
-        }
-
-        if (done) {       
         } else {
             /*if (!check) {
                 fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
