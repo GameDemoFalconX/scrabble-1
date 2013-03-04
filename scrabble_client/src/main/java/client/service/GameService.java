@@ -202,7 +202,7 @@ public class GameService {
      */
     public String passWord(String playerID, String playID, int orientation, String data) throws GameException {
         String result = null;
-        Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"player_id\": "+playerID+", \"play_id\": "+playID+", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
+        Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"player_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.PLACE_WORD_SUCCESS:

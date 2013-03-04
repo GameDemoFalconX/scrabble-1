@@ -250,9 +250,11 @@ public class ServerScrabble {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (IOException ex) {
+            System.out.println("Error with JSON");
         } catch (GameException e) {
             response = processError(e);
         }
+        System.out.println(response);
         return response;
     }
 
