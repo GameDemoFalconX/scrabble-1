@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Tile class on the Client side
- * JSON Format : {"letter":"A","value":2}
+ * Tile class on the Client side JSON Format : {"letter":"A","value":2}
+ *
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Tile {
-    
+
     @JsonProperty("letter")
     private char letter;
     @JsonProperty("value")
@@ -18,10 +18,10 @@ public class Tile {
     private final boolean isBlank;
 
     @JsonCreator
-    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value) {
+    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value, @JsonProperty("blank") Boolean isBlank) {
         this.letter = letter;
         this.value = value;
-        this.isBlank = (letter == '?');
+        this.isBlank = isBlank;
     }
 
     public char getLetter() {
@@ -42,6 +42,6 @@ public class Tile {
 
     @Override
     public String toString() {
-        return "{\"letter\":\""+this.letter+"\",\"value\":"+this.value+"}";
+        return "{\"letter\":\"" + this.letter + "\",\"value\":" + this.value + ", \"blank\": "+isBlank+"}";
     }
 }

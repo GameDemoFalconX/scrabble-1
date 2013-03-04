@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Model that contains the letter and the value of a Tile.
- *
- * @author Bernard <bernard.debecker@gmail.com>, R. FONCIER
- * <ro.foncier@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
  */
 public class Tile {
 
@@ -29,13 +27,6 @@ public class Tile {
      * @param letter a char
      * @param value a integer
      */
-    @JsonCreator
-    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value) {
-        this.letter = letter;
-        this.value = value;
-        this.isBlank = (letter == '?');
-    }
-    
     @JsonCreator
     public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value, @JsonProperty("blank") Boolean isBlank) {
         this.letter = letter;
@@ -141,7 +132,7 @@ public class Tile {
      */
     @Override
     public String toString() {
-        return "{\"letter\":\""+this.letter+"\",\"value\":"+this.value+"}";
+        return "{\"letter\":\""+this.letter+"\",\"value\":"+this.value+", \"blank\": "+this.isBlank+"}";
     }
 
     public String displayTile() {

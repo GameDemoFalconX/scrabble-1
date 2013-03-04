@@ -391,7 +391,7 @@ public class Play {
     private String formatData(Point p, Tile tile) {
         String result = "";
         try {
-            result += "\"coordinates\": "+om.writeValueAsString(p)+", \"attributes\": "+tile.toString();
+            result += "\"coordinates\": "+om.writeValueAsString(p)+", \"attributes\": "+tile;
         } catch (JsonProcessingException e) {}
         return result;
     }

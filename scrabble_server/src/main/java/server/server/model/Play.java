@@ -319,7 +319,7 @@ public class Play {
     public void updateBlankTile(String args) {
         String[] tileList = args.split(":");
         for (int i = 0; i < tileList.length; i++) {
-            rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
+            //rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
         }
     }
 
