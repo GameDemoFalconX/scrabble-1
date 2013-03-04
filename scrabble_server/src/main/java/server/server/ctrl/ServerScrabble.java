@@ -244,7 +244,6 @@ public class ServerScrabble {
         try {
             // Check if the player's game is correct.
             JsonNode root = om.readTree(data);
-            String test = root.get("tiles").toString();
             response = game.checkGame(root.get("player_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);

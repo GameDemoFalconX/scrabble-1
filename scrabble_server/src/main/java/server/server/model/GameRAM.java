@@ -401,7 +401,8 @@ public class GameRAM {
         while (i.hasNext()) {
             Map.Entry me = (Map.Entry) i.next();
             System.out.print(me.getKey() + ": ");
-            System.out.println(me.getValue()); // Return the code of this instance. Use it only for debug.
+            Play play = (Play) me.getValue();
+            System.out.println(play.getPlayID()); // Return the code of this instance. Use it only for debug.
         }
     }
 }

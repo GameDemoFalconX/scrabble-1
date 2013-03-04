@@ -172,14 +172,14 @@ public class HAL extends Game {
 
             // Step 1 - Place tiles on the grid and get the list of coordinates.
             ArrayList<Tile> tileList = cPlay.tilesSetUp(ga_infos);
-            /*
-            // Step 3 - Check tiles on the grid and get a list of words and a new score.
+            
+            // Step 2 - Check tiles on the grid and get a list of words and a new score.
             int score = 0;
             int bestWord = 0;
             List wordsList = new ArrayList(); // List of words to check in dico.
 
-            //// Step 3.1 - Check the first tile on the main orientation.
-            //// Step 3.2 - Check all tiles (include the first) on the opposite orientation.
+            //// Step 2.1 - Check the first tile on the main orientation.
+            //// Step 2.2 - Check all tiles (include the first) on the opposite orientation.
             int i = 0;
             boolean first = true;
             do {
@@ -213,7 +213,7 @@ public class HAL extends Game {
                 cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
                 cPlay.testWithError(); // Increase the number of tests with error
                 return new Message(Message.PLACE_WORD_ERROR, pl_id + "_" + ga_id + "_" + cPlay.getScore()); //TODO update don't send  and ga IDs
-            }*/
+            }
         }
         return new Message(Message.GAME_IDENT_ERROR, "");
     }

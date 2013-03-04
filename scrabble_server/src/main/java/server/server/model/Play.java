@@ -1,7 +1,6 @@
 package server.server.model;
 
 import client.model.utils.Point;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -141,29 +138,20 @@ public class Play {
                 JsonNode tile = it.next();
                 JsonNode coord = tile.get("coordinates");
                 JsonNode attrs = tile.get("attributes");
-                Point p = om.readValue(coord.asText(), Point.class);
-                Tile t = om.readValue(attrs.asText(), Tile.class);
-                System.out.println(p+" - "+t);
-            }
-        } catch (IOException ex) {}
-        
-        /*for (int i = 0; i < tilesList.length; i++) {
-            String[] tileAttrs = tilesList[i].split(":");
-            String letter = tileAttrs[0];
-            int x = Integer.parseInt(tileAttrs[1]);
-            int y = Integer.parseInt(tileAttrs[2]);
+                Tile t = om.readValue(attrs.toString(), Tile.class);
+                Point p = om.readValue(coord.toString(), Point.class);
+                System.out.println("Tile : "+p+" - "+t);
+                
+                result.add(t);
 
-            Tile cTile = rack.getTile(letter.charAt(0));
-            if (letter.length() > 1) {
-                cTile.setLetter(letter.charAt(1));
+                // Tile treatment
+                //t.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
+                t.upStatus(); // Set this tile like a new add in the grid.
+                grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
             }
-            result.add(cTile);
-
-            // Tile treatment
-            cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
-            cTile.upStatus(); // Set this tile like a new add in the grid.
-            grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
-        }*/
+        } catch (IOException ex) {
+            System.out.println("Error with JSON");
+        }
         return result;
     }
 
