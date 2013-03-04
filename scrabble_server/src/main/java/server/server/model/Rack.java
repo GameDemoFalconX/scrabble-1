@@ -73,6 +73,9 @@ class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
+                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                    newTile.setBlank();
+                }
                 rack[i] = newTile;
                 found = true;
             }
@@ -89,7 +92,7 @@ class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             char c = (rack[i] != null) ? rack[i].getLetter() : '0';
-            if (c == t.getLetter()) {
+            if (c == t.getLetter() || (c == '?' && t.isBlank())) {
                 rack[i] = null;
                 found = true;
             }

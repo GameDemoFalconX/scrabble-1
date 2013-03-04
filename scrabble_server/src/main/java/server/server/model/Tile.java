@@ -16,6 +16,7 @@ public class Tile {
     private char letter;
     @JsonProperty("value")
     private final int value;
+    @JsonProperty("blank")
     private final boolean isBlank;
     private int x;
     private int y;
@@ -25,7 +26,6 @@ public class Tile {
 
     /**
      * Creates a Tile base on a char letter and a integer value
-     *
      * @param letter a char
      * @param value a integer
      */
@@ -34,6 +34,13 @@ public class Tile {
         this.letter = letter;
         this.value = value;
         this.isBlank = (letter == '?');
+    }
+    
+    @JsonCreator
+    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value, @JsonProperty("blank") Boolean isBlank) {
+        this.letter = letter;
+        this.value = value;
+        this.isBlank = isBlank;
     }
 
     public Tile(char letter, int value, boolean status) {
@@ -58,16 +65,18 @@ public class Tile {
 
     /**
      * Gets the value from the Tile
-     *
      * @return the value as an integer
      */
     public int getValue() {
         return value;
     }
 
-    @JsonIgnore
     public boolean isBlank() {
         return this.isBlank;
+    }
+    
+    public void setBlank() {
+        this.letter = '?';
     }
 
     /**

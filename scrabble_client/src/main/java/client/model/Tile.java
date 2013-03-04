@@ -1,7 +1,6 @@
 package client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,6 +14,7 @@ public class Tile {
     private char letter;
     @JsonProperty("value")
     private final int value;
+    @JsonProperty("blank")
     private final boolean isBlank;
 
     @JsonCreator
@@ -36,7 +36,6 @@ public class Tile {
         return value;
     }
 
-    @JsonIgnore
     public boolean isBlank() {
         return this.isBlank;
     }
