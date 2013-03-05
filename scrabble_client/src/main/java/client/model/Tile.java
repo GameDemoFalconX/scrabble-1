@@ -39,6 +39,10 @@ public class Tile {
     public boolean isBlank() {
         return this.isBlank;
     }
+    
+    public void setBlank() {
+        this.setLetter('?');
+    }
 
     @Override
     public String toString() {

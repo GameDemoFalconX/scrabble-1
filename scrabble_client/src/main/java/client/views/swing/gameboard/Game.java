@@ -10,6 +10,7 @@ import client.model.event.TileFromGridToRackWithShiftEvent;
 import client.model.event.TileFromRackToGridEvent;
 import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
+import client.model.event.removeBadTilesEvent;
 import client.views.GameView;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.GlassPane;
@@ -345,6 +346,11 @@ public class Game extends GameView {
         rack.reArrangeTiles(event.getNewPositions());
         contentPane.add(rack.getInnerRack(), 0);
         contentPane.validate();
+    }
+    
+    @Override
+    public void removeBadTiles(removeBadTilesEvent event) {
+        gameboard.removeBadTiles(event.getTilesToRemove());
     }
 
     @Override

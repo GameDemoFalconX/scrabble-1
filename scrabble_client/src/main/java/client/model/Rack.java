@@ -56,6 +56,9 @@ class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
+                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                    newTile.setBlank();
+                }
                 rack[i] = newTile;
                 found = true;
             }
