@@ -89,12 +89,11 @@ public class ThreadCtrl extends Thread {
      }
      */
     private void newAccount() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to create a new account");
         Message response;
 
         // Try to create a new player acount
-        response = sScrabble.newAccount(argsTab[0], argsTab[1]);
+        response = sScrabble.newAccount(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

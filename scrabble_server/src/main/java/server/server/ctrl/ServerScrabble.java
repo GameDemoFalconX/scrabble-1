@@ -63,14 +63,16 @@ public class ServerScrabble {
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message newAccount(String pl_name, String pl_pwd) {
+    public synchronized Message newAccount(String data) {
         Message response = null;
         try {
-            // Try to create a new player acount
-            response = game.newAccount(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.newAccount(node.get("email").asText(), node.get("pwd").asText());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON in class : "+ServerScrabble.class);
         } catch (GameException e) {
             response = processError(e);
         }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.common.GameException;
 import server.common.Message;
+import server.server.db.Connector;
 
 /**
  *
@@ -15,6 +16,8 @@ public class HAL extends Game {
 
     private PlayerRAM players = new PlayerRAM();
     private GameRAM plays = new GameRAM();
+    
+    private Connector Co = new Connector();
     private Dictionary dico;
     
     // JSON Treatment
@@ -30,22 +33,21 @@ public class HAL extends Game {
 
     /**
      * Create a new account for the current player.
-     *
-     * @param pl_name
-     * @param pl_pwd
+     * @param pl_name, pl_pwd
      * @return Return True if a new account has been created. If the player name
      * already exists, return False and do nothing.
      */
     @Override
-    protected Message createAccount(String pl_name, String pl_pwd) {
-        if (players.playerExists(pl_name)) {
-            return new Message(Message.NEW_ACCOUNT_ERROR, "");
+    protected Message createAccount(String pl_email, String pl_pwd) {
+        Player newPlayer = null;
+        try {
+            newPlayer = om.readValue(Co.createPlayer(pl_email, pl_pwd), Player.class);
+        } catch (IOException ioe) {}
+        if (newPlayer != null) {
+            plays.addPlayer(newPlayer.getPlayerID());
+            return new Message(Message.NEW_ACCOUNT_SUCCESS, "{\"player_id\": \""+newPlayer.getPlayerID()+"\"}");
         }
-        Player newPlayer = new Player(pl_name, pl_pwd);
-        players.addPlayer(newPlayer);
-        plays.addPlayer(newPlayer.getPlayerID());
-        // Return the new player ID
-        return new Message(Message.NEW_ACCOUNT_SUCCESS, newPlayer.getPlayerID());
+        return new Message(Message.NEW_ACCOUNT_ERROR, "");
     }
 
     @Override
