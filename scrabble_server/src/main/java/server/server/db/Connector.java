@@ -1,11 +1,18 @@
 package server.server.db;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+import server.common.PasswordHasher;
 
 /**
  * @author Romain <ro.foncier@gmail.com>
@@ -19,6 +26,9 @@ public class Connector {
     private String Jdbc = "jdbc:sqlite";
     private String DbUrl = Jdbc + ":" + TempDb;
     private int Timeout = 30;
+    
+    // Date formatting
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     public Connector() {
         try {
@@ -127,8 +137,16 @@ public class Connector {
     }
 
     // Methods used to get value on the DB
+    /**
+     * Get all users in the DB and return the result in JSON
+     * @return if no values found return null otherwise return a JSON string
+     */
     public String getAllUsers() {
-        return "{\"users\" : "+execGetQuery("SELECT * from scrabble_user", null)+"}";
+        String response = execGetQuery("SELECT * from scrabble_user", null);
+        if (response != null) {
+            return "{\"users\" : ["+response+"]}";
+        }
+        return response;
     }
     
     public String getUserById(String user_id) {
@@ -141,13 +159,32 @@ public class Connector {
     
     public String createPlayer(String pl_email, String pl_pwd) {
         String response = null;
-        
+        if (getUserByEmail(pl_email) == null) {
+            System.out.println("Create a new user");
+            //// STEP 1 : Create a new UUID
+            UUID user_id = UUID.randomUUID();
+            //// STEP 2 : Create a new username from email address
+            String username = pl_email.split("@")[0];
+            //// STEP 3 : Create a salt & Crypt the password
+            byte[] salt = null;
+            try {
+                SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+                salt = new byte[8]; // Salt generation 64 bits long
+                random.nextBytes(salt);
+            } catch (NoSuchAlgorithmException e) {}
+            String new_pwd = new PasswordHasher().MakePassword(pl_pwd, salt);
+            //// STEP 4 : Create a date of creation
+            Date date = new Date();
+            //// STEP 5 : send query to the DB
+            execPostQuery("INSERT INTO scrabble_user ('user_id', 'username', 'email', 'password', 'salt', 'created') VALUES (?, ?, ?, ?, ?, ?)", new String[]{user_id.toString(), username, pl_email, new_pwd, salt.toString(), dateFormat.format(date)});
+            response = getUserById(user_id.toString());
+        }
         return response;
     }
 
     // Methods used to format the results of DB requests in JSON
     private String formatInJSON(ResultSet res) {
-        String result = "[";
+        String result = null;
         try {
             ResultSetMetaData struc = res.getMetaData();
             while (res.next()) {
@@ -157,7 +194,7 @@ public class Connector {
                     String columnName = struc.getColumnName(i);
                     if (!type.equals("null")) {
                         //System.out.println("Name : "+columnName+" - Type : "+type);
-                        result += "\""+struc.getColumnName(i)+"\" : ";
+                        result += "\""+struc.getColumnName(i)+"\": ";
                         switch(type) {
                             case "text":
                                 result += "\""+res.getString(columnName) +"\"";
@@ -177,7 +214,6 @@ public class Connector {
         } catch (SQLException se) {
             se.printStackTrace();
         }
-        result += "]";
         return result;
     }
     
@@ -188,6 +224,8 @@ public class Connector {
         //c.execPostQuery(null, args);
         //System.out.println(c.getAllUsers());
         //System.out.println(c.getUserById("d1293462-a0c5-4f7d-a330-d051042bab9f"));
-        System.out.println(c.getUserByEmail("romain@example.comm"));
+        //System.out.println(c.getUserByEmail("romain@example.comm"));
+        c.createPlayer("rphonika@gmail.com", "test_password");
+        System.out.println(c.getUserByEmail("rphonika@gmail.com"));
     }
 }

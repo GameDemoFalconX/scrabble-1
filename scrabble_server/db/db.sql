@@ -3,6 +3,7 @@ CREATE TABLE scrabble_user (
     username VARCHAR(30) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password TEXT NOT NULL,
+    salt TEXT NOT NULL,
     created VARCHAR(25) NOT NULL,
     games_played INTEGER,
     games_won INTEGER,
