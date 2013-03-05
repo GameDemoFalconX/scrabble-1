@@ -73,17 +73,38 @@ class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
+                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                    newTile.setBlank();
+                }
                 rack[i] = newTile;
                 found = true;
             }
             i++;
         }
     }
+    
+    /**
+     * @param t (Tile)
+     * @return True if the tile given in parameter has been found otherwise return False
+     */
+    protected Boolean removeTileFromRack(Tile t) {
+        boolean found = false;
+        int i = 0;
+        while (!found && i < rack.length) {
+            char c = (rack[i] != null) ? rack[i].getLetter() : '0';
+            if (c == t.getLetter() || (c == '?' && t.isBlank())) {
+                rack[i] = null;
+                found = true;
+            }
+            i++;
+        }
+        return found;
+    }
 
     protected String displayRack() {
         String result = "";
         for (int i = 0; i < 7; i++) {
-            result += rack[i].toString() + " ";
+            result += (rack[i] != null) ? rack[i].getLetter()+" " : "";
         }
         result += "\n_____ _____ _____ _____ _____ _____ _____\n"
                 + "  1     2     3     4     5     6     7\n";

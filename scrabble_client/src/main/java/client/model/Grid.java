@@ -24,7 +24,7 @@ public class Grid {
             String[] tileAttrs = tileList[i].split(":");
 
             // Create new tile and add it inside the grid
-            addTile(Integer.parseInt(tileAttrs[0]), Integer.parseInt(tileAttrs[1]), new Tile(tileAttrs[2].charAt(0), Integer.parseInt(tileAttrs[3])));
+            //addTile(Integer.parseInt(tileAttrs[0]), Integer.parseInt(tileAttrs[1]), new Tile(tileAttrs[2].charAt(0), Integer.parseInt(tileAttrs[3])));
         }
     }
 

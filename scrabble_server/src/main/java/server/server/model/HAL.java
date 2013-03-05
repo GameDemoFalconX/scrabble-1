@@ -172,14 +172,14 @@ public class HAL extends Game {
 
             // Step 1 - Place tiles on the grid and get the list of coordinates.
             ArrayList<Tile> tileList = cPlay.tilesSetUp(ga_infos);
-            /*
-            // Step 3 - Check tiles on the grid and get a list of words and a new score.
+            
+            // Step 2 - Check tiles on the grid and get a list of words and a new score.
             int score = 0;
             int bestWord = 0;
             List wordsList = new ArrayList(); // List of words to check in dico.
 
-            //// Step 3.1 - Check the first tile on the main orientation.
-            //// Step 3.2 - Check all tiles (include the first) on the opposite orientation.
+            //// Step 2.1 - Check the first tile on the main orientation.
+            //// Step 2.2 - Check all tiles (include the first) on the opposite orientation.
             int i = 0;
             boolean first = true;
             do {
@@ -201,19 +201,19 @@ public class HAL extends Game {
                 }
             } while (i < tileList.size());
 
-            // Step 4 - Dictionary validation and return args
+            // Step 3 - Dictionary validation and return args
             if (dico.checkValidity(wordsList)) {
                 cPlay.setScore(score); // Update score
                 String newTiles = cPlay.getNewTiles(tileList.size()); // Get a formated list of tile with their index in the rack
                 cPlay.testWithSuccess(); // Increase the number of tests with success
                 System.out.println("New tiles : " + newTiles);
-                return new Message(Message.PLACE_WORD_SUCCESS, pl_id + "_" + ga_id + "_" + cPlay.getScore() + "@@" + newTiles);
+                return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": "+cPlay.getScore()+", \"tiles\": "+newTiles+"}");
             } else {
                 cPlay.setScore((bestWord / 2) * (-1)); // Update score
-                cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid
+                cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid and add them into rack
                 cPlay.testWithError(); // Increase the number of tests with error
-                return new Message(Message.PLACE_WORD_ERROR, pl_id + "_" + ga_id + "_" + cPlay.getScore()); //TODO update don't send  and ga IDs
-            }*/
+                return new Message(Message.PLACE_WORD_ERROR, "{\"valid\": false, \"score\": "+cPlay.getScore()+"}");
+            }
         }
         return new Message(Message.GAME_IDENT_ERROR, "");
     }

@@ -24,6 +24,7 @@ public class GameController {
     private void addListenersToModel() {
         play.addTileListener(MainView);
         play.addRackListener(MainView);
+        play.addGridListener(MainView);
         play.addErrorListener(MainView);
     }
 

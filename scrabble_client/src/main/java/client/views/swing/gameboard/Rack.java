@@ -36,7 +36,10 @@ public class Rack extends JPanel {
     private ImageIcon icon;
     private JPanel innerRack;
     private boolean debug = false;
-    private static int tileNumber = RACK_LENGTH;
+    private static int tileNumber = 0;
+    
+    // JSON Treatment
+    ObjectMapper om = new ObjectMapper();
 
     /**
      * At term, this constructor must be receive in parameters a table of Tile
@@ -107,12 +110,13 @@ public class Rack extends JPanel {
      * @param jlp 
      */
     public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp) {
-        ObjectMapper om = new ObjectMapper();
         try {
             JsonNode root = om.readTree(newTiles);
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
                 JsonNode cTile = it.next();
-                putTile(new DTPicture(getTileImage(cTile.get("letter").asText(), cTile.get("value").asText()), scrabble, jlp));
+                String letter = (cTile.get("blank").asBoolean()) ? "?" : cTile.get("letter").asText();
+                putTile(new DTPicture(getTileImage(letter, cTile.get("value").asText()), scrabble, jlp));
+                upTileNumber();
             }
         } catch (IOException ioe) {}
     }

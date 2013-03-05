@@ -201,22 +201,21 @@ public class GameService {
      * @throws GameException 
      */
     public String passWord(String playerID, String playID, int orientation, String data) throws GameException {
-        String result = null;
+        String response = null;
         Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"player_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.PLACE_WORD_SUCCESS:
-                    String response = (new String(serverResponse.getBody()));
+                    response = serverResponse.getBodyJSON();
                     break;
                 case Message.PLACE_WORD_ERROR:
-                    System.out.println("Error");
-                    //return "KO"+(new String(serverResponse.getBody()).split("_")[2]); // Update score if the Play is over.
+                    response = serverResponse.getBodyJSON();
                     break;
             }
         } else {
             throw new GameException(GameException.typeErr.CONN_KO);
         }
-        return result;
+        return response;
     }
 
     /**

@@ -72,13 +72,13 @@ public class TileBag {
         int rand = random.nextInt(tileBag[value].size());					// get a pseudo random number to select the letter from the row
         letter = (char) tileBag[value].get(rand);												// get the letter from the LinkedList
         tileBag[value].remove(rand);																			// delete that letter from the LinkedList
-        Tile tile = new Tile(letter, value);																	// call the Tile constructor
+        Tile tile = new Tile(letter, value, letter == '?');																	// call the Tile constructor
         return tile;																																	// return that tile (to go to the rack)
     }
 
     public Tile popTile(char letter, int value) {
         tileBag[value].removeFirstOccurrence(letter);
-        return new Tile(letter, value);
+        return new Tile(letter, value, letter == '?');
     }
 
     /**

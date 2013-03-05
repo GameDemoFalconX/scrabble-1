@@ -1,11 +1,16 @@
 package client.views.swing.gameboard;
 
+import client.views.swing.common.DTPicture;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.common.panelGrid;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.IOException;
+import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -32,6 +37,9 @@ public class GameBoard extends JPanel {
     private JLabel background;
     private boolean debug = false;
     private JPanel innerGrid;
+    
+    // JSON treatment
+    ObjectMapper om = new ObjectMapper();
 
     public GameBoard() {
         /**
@@ -84,6 +92,23 @@ public class GameBoard extends JPanel {
 
     public JPanel getInnerGrid() {
         return this.innerGrid;
+    }
+    
+    public void removeBadTiles(String tilesToRemove) {
+        System.out.println("tilesToRemove : "+tilesToRemove);
+        try {
+            JsonNode root = om.readTree(tilesToRemove);
+            for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
+                JsonNode cPoint = it.next();
+                Point cP = om.readValue(cPoint.toString(), Point.class);
+                panelGrid pg = (panelGrid) innerGrid.getComponent((cP.y * 15) + cP.x);
+                pg.remove(0);
+                pg.validate();
+                pg.repaint();
+            }
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON inclass : "+GameBoard.class);
+        }
     }
 
     /**

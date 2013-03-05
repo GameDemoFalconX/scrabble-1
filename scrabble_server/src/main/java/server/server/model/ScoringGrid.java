@@ -5,7 +5,7 @@ package server.server.model;
  * value of that bonus. The bonuses are Regular (no bonus), Double letter,
  * Triple letter, Double word and triple word.
  *
- * @author Bernard <bernard.debecker@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, Romain<ro.foncier@gmail.com>
  */
 public class ScoringGrid {
 
@@ -48,7 +48,6 @@ public class ScoringGrid {
     /**
      * Return the value of count word. 1 by default, 2 for double count and 3
      * for triple count.
-     *
      * @param t
      * @param cPlay
      * @return

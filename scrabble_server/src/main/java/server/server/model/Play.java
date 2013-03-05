@@ -1,7 +1,6 @@
 package server.server.model;
 
 import client.model.utils.Point;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -133,7 +130,6 @@ public class Play {
      * the rack.
      */
     protected ArrayList<Tile> tilesSetUp(String args) {
-        System.out.println(args);
         ArrayList result = new ArrayList();
         try {
             JsonNode root = om.readTree(args);
@@ -141,40 +137,34 @@ public class Play {
                 JsonNode tile = it.next();
                 JsonNode coord = tile.get("coordinates");
                 JsonNode attrs = tile.get("attributes");
-                Point p = om.readValue(coord.asText(), Point.class);
-                Tile t = om.readValue(attrs.asText(), Tile.class);
-                System.out.println(p+" - "+t);
-            }
-        } catch (IOException ex) {}
-        
-        /*for (int i = 0; i < tilesList.length; i++) {
-            String[] tileAttrs = tilesList[i].split(":");
-            String letter = tileAttrs[0];
-            int x = Integer.parseInt(tileAttrs[1]);
-            int y = Integer.parseInt(tileAttrs[2]);
+                Tile t = om.readValue(attrs.toString(), Tile.class);
+                Point p = om.readValue(coord.toString(), Point.class);
 
-            Tile cTile = rack.getTile(letter.charAt(0));
-            if (letter.length() > 1) {
-                cTile.setLetter(letter.charAt(1));
+                // Tile treatment
+                result.add(t);
+                t.upStatus(); // Set this tile like a new add in the grid.
+                if (!rack.removeTileFromRack(t)) {
+                    // Improve this with Exception handler
+                    System.out.println("Tile not found in rack :"+t);
+                    break;
+                }
+                grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
             }
-            result.add(cTile);
-
-            // Tile treatment
-            cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
-            cTile.upStatus(); // Set this tile like a new add in the grid.
-            grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
-        }*/
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON");
+            ioe.printStackTrace();
+        }
         return result;
     }
 
     /**
-     * Remove the tiles added if the test contains some errors.
-     *
+     * Remove the tiles added if the test contains some errors and take them back in Rack
      * @param tilesList
      */
     protected void removeBadTiles(ArrayList<Tile> tilesList) {
         for (int i = 0; i < tilesList.size(); i++) {
             grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY()); // remove pointer
+            rack.putTile(tilesList.get(i));
         }
     }
 
@@ -190,8 +180,7 @@ public class Play {
         // Initialize values
         lastWordScore = 0;
         lastWord = "";
-        String p = "";
-        String n = "";
+        String p = "", n = "";
 
         // Display Grid and Rack
         System.out.println(grid.toString());
@@ -261,22 +250,20 @@ public class Play {
     /**
      * Update the rack on the server side by adding new tiles from the bag and
      * format them to send on the client.
-     *
      * @param tilesList
-     * @return Formated list of tile with the following canvas : L:V__[index of
-     * tile in rack]##L:V__ ...
+     * @return Formated list of tile in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     protected String getNewTiles(int numberTile) {
-        String result = "";
+        String result = "[";
         for (int i = 0; i < numberTile; i++) {
             Tile nTile = bag.getTile();
             rack.putTile(nTile);
-            result += nTile.toString();
+            result += nTile;
             if (i < numberTile - 1) {
-                result += "=";
+                result += ", ";
             }
         }
-        return result;
+        return result+"]";
     }
 
     /**
@@ -332,7 +319,7 @@ public class Play {
     public void updateBlankTile(String args) {
         String[] tileList = args.split(":");
         for (int i = 0; i < tileList.length; i++) {
-            rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
+            //rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
         }
     }
 

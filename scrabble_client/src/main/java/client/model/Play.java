@@ -2,6 +2,7 @@ package client.model;
 
 import client.model.event.ErrorListener;
 import client.model.event.ErrorMessageEvent;
+import client.model.event.GridListener;
 import client.model.event.InitMenuToPlayEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.MenuListener;
@@ -15,6 +16,7 @@ import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
+import client.model.event.removeBadTilesEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
@@ -45,13 +47,13 @@ public class Play {
     private boolean firstWord = true;
     private EventListenerList tileListeners;
     private EventListenerList rackListeners;
+    private EventListenerList gridListeners;
     private EventListenerList menuListeners;
     private EventListenerList errorListeners;
     // Integrity error
     private final static int FIRST_WORD_NUMBER = 1;
     private final static int FIRST_WORD_POSITION = 2;
     private final static int FLOATING_TILES = 3;
-    
     // JSON treatment
     private ObjectMapper om = new ObjectMapper();
 
@@ -62,6 +64,7 @@ public class Play {
         service = new GameService(args);
         tileListeners = new EventListenerList();
         rackListeners = new EventListenerList();
+        gridListeners = new EventListenerList();
         menuListeners = new EventListenerList();
         errorListeners = new EventListenerList();
     }
@@ -100,6 +103,10 @@ public class Play {
         rackListeners.add(RackListener.class, listener);
     }
 
+    public void addGridListener(GridListener listener) {
+        gridListeners.add(GridListener.class, listener);
+    }
+
     public void addMenuListener(MenuListener listener) {
         menuListeners.add(MenuListener.class, listener);
     }
@@ -114,6 +121,10 @@ public class Play {
 
     public void removeRackListener(RackListener listener) {
         rackListeners.remove(RackListener.class, listener);
+    }
+
+    public void removeGridListener(GridListener listener) {
+        gridListeners.remove(GridListener.class, listener);
     }
 
     public void removeMenuListener(MenuListener listener) {
@@ -191,6 +202,14 @@ public class Play {
         }
     }
 
+    public void fireRemoveBadTilesToGrid(String tilesToRemove) {
+        GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
+
+        for (GridListener l : listeners) {
+            l.removeBadTiles(new removeBadTilesEvent(this, tilesToRemove));
+        }
+    }
+
     public void fireInitMenuToPlay(boolean anonymous, String email, int score) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
@@ -216,12 +235,9 @@ public class Play {
     }
 
     /**
-     * * Methods used for create new player and play **
-     *   Responses are received format in JSON :
-     *   {"play_id": "x0x000x0000x0000x00x0",
-     *    "rack": [{"letter":"A","value":2},{"letter":"A","value":2}, ...],
-     *    "grid": ...,
-     *    }
+     * * Methods used for create new player and play ** Responses are received
+     * format in JSON : {"play_id": "x0x000x0000x0000x00x0", "rack":
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...], "grid": ..., }
      */
     public void playAsGuest() {
         String response = null;
@@ -231,11 +247,11 @@ public class Play {
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
-        
+
         try {
             JsonNode root = om.readTree(response);
             initPlay(root.get("play_id").asText(), "", root.get("rack").toString(), 0);
-            
+
             // Dispatch the model modifications to all listeners
             fireInitRackToPlay(root.get("rack").toString());
             fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
@@ -319,74 +335,92 @@ public class Play {
 
     public void validateWord() {
         Boolean done = (this.firstWord && newWord.size() < 1) ? false : true, check = false;
-        int x=-1, y=-1, orientation=-1, inspector = this.newWord.size();
-        Set set = this.newWord.entrySet();
-        Iterator i = set.iterator();
-        String dataToSend = "[";
-        while (done && i.hasNext()) {
-            Map.Entry t = (Map.Entry) i.next();
-            Point p = (Point) t.getKey();
-            
-            // Verification:
-             if (inspector == this.newWord.size()) {
-                x = p.x;
-                y = p.y;
-                done = grid.hasNeighbors(p.x, p.y);
-            } else {
-                int checkO = (x == p.x) ? 1 : (y == p.y) ? 2 : 0;
-                if (inspector == this.newWord.size()-1) {
-                    orientation = checkO;
+        if (done) {
+            int x = -1, y = -1, orientation = -1, inspector = this.newWord.size();
+            Set set = this.newWord.entrySet();
+            Iterator i = set.iterator();
+            String dataToSend = "[";
+            while (done && i.hasNext()) {
+                Map.Entry t = (Map.Entry) i.next();
+                Point p = (Point) t.getKey();
+
+                // Verification:
+                if (inspector == this.newWord.size()) {
+                    x = p.x;
+                    y = p.y;
+                    done = grid.hasNeighbors(p.x, p.y);
                 } else {
-                    orientation = (orientation == checkO) ? orientation : 0;
+                    int checkO = (x == p.x) ? 1 : (y == p.y) ? 2 : 0;
+                    if (inspector == this.newWord.size() - 1) {
+                        orientation = checkO;
+                    } else {
+                        orientation = (orientation == checkO) ? orientation : 0;
+                    }
+                    done = (grid.hasNeighbors(p.x, p.y) && orientation != 0);
                 }
-                done = (grid.hasNeighbors(p.x, p.y) && orientation != 0);
+                if (this.firstWord && !check) {
+                    check = (p.x == 7 && p.y == 7);
+                }
+                dataToSend += "{" + formatData(p, (Tile) t.getValue()) + "}" + ((inspector != 1) ? ", " : "]");
+                inspector--;
             }
-            if (this.firstWord && !check) {
-                check = (p.x == 7 && p.y == 7);
-            }
-            dataToSend += "{"+formatData(p, (Tile) t.getValue())+"}"+((inspector != 1) ? ", " : "]");
-            inspector--;
-        }
-        
-        if (done && ((!this.firstWord) || (this.firstWord && check))) {
-            System.out.println("dataToSend : "+dataToSend);
-            String response = null;
-            try {
-                response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
-/*
-                    // Update model
-                    setScore(Integer.parseInt(response[0]));
-                    rack.reLoadRack(response[1]);
-                    this.firstWord = false;
-                    newWord = new HashMap<>();
 
-                    // Dispatch the model modifications to all listeners
-                    fireUpdateScore(Integer.parseInt(response[0]));
-                    fireInitRackToPlay(response[1]);*/
-            } catch (GameException ge) {
-                // Fire errors
-            }
-        }
+            if (done && ((!this.firstWord) || (this.firstWord && check))) {
+                System.out.println("dataToSend : " + dataToSend);
+                String response = null;
+                try {
+                    response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
+                    JsonNode root = om.readTree(response);
+                    if (root.get("valid").asBoolean()) {
+                        // Update model
+                        setScore(root.get("score").asInt());
+                        rack.reLoadRack(root.get("tiles").toString());
+                        this.firstWord = false;
+                        newWord = new HashMap<>();
 
-        if (done) {       
+                        // Dispatch the model modifications to all listeners
+                        fireUpdateScore(root.get("score").asInt());
+                        fireInitRackToPlay(root.get("tiles").toString());
+                    } else {
+                        // Update model
+                        setScore(root.get("score").asInt());
+                        String newTiles = "[";
+                        String tileToRemove = "[";
+                        Iterator it = set.iterator();
+                        while (it.hasNext()) {
+                            Map.Entry t = (Map.Entry) it.next();
+                            Point p = (Point) t.getKey();
+                            Tile tile = (Tile) t.getValue();
+                            removeBadTiles(p, tile);
+                            newTiles += (it.hasNext()) ? tile + ", " : tile + "]";
+                            tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+                        }
+                        // Dispatch the model modifications to all listeners
+                        fireUpdateScore(root.get("score").asInt());
+                        fireInitRackToPlay(newTiles);
+                        fireRemoveBadTilesToGrid(tileToRemove);
+                    }
+                } catch (GameException | IOException ge) {
+                    // Fire errors
+                }
+            } else {
+                if (!check) {
+                    fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
+                } else {
+                    fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
+                }
+            }
         } else {
-            /*if (!check) {
-                fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
-                break;
-            case FIRST_WORD_POSITION:
-                fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
-                break;
-            case FLOATING_TILES:
-                fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
-                break;*/
+            fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
         }
     }
 
     private String formatData(Point p, Tile tile) {
         String result = "";
         try {
-            result += "\"coordinates\": "+om.writeValueAsString(p)+", \"attributes\": "+tile.toString();
-        } catch (JsonProcessingException e) {}
+            result += "\"coordinates\": " + om.writeValueAsString(p) + ", \"attributes\": " + tile;
+        } catch (JsonProcessingException e) {
+        }
         return result;
     }
 
@@ -409,6 +443,12 @@ public class Play {
 
     public void backTileBlank(int source) {
         rack.getTile(source).setLetter('?');
+    }
+
+    private void removeBadTiles(Point p, Tile tile) {
+        // Add in rack and remove from Grid
+        rack.putTile(tile);
+        grid.removeTile(p.x, p.y);
     }
 
     /**
@@ -435,9 +475,8 @@ public class Play {
     }
 
     /*public String checkBlankTile() {
-        return rack.getBlankTile();
-    }*/
-    
+     return rack.getBlankTile();
+     }*/
     private void printDebug() {
         grid.printGrid();
         displayNewWord();
