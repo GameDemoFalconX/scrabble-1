@@ -31,20 +31,19 @@ public class GameService {
     //*** List of services ***//
     /**
      * Ask the server to create a new Player.
-     *
      * @param email the player email as a String
      * @param password the player password as a String
      * @return a new Player if it's created, otherwise null.
      * @throws GameException that inform
      */
-    public Player newPlayer(String email, String password) throws GameException {
-        Message serverResponse = servProtocol.sendRequest(Message.NEW_ACCOUNT, email + "_" + password);
+    public String newPlayer(String email, String password) throws GameException {
+        Message serverResponse = servProtocol.sendRequest(Message.NEW_ACCOUNT, "{\"email\": \""+email+"\", \"pwd\": \""+password+"\"}");
 
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.NEW_ACCOUNT_SUCCESS:
                     // Return the new instance of the current player
-                    return new Player(email, password, new String(serverResponse.getBody()));
+                    return serverResponse.getBodyJSON();
                 default:
                     exceptionTriggered(serverResponse.getHeader());
             }

@@ -219,13 +219,6 @@ public class Connector {
     
     public static void main(String[] args) {
         Connector c = new Connector();
-        //String query = "INSERT INTO scrabble_user ('user_id', 'username', 'email', 'password', 'created') VALUES ('d1293462-a0c5-4f7d-a330-d051042bab9e', 'romain1', 'romain@example.com', 'passwd', '2013/03/05')";
-        //String[][] cargs = new String[5][5];
-        //c.execPostQuery(null, args);
-        //System.out.println(c.getAllUsers());
-        //System.out.println(c.getUserById("d1293462-a0c5-4f7d-a330-d051042bab9f"));
-        //System.out.println(c.getUserByEmail("romain@example.comm"));
-        //c.createPlayer("rphonika@gmail.com", "test_password");
-        System.out.println(c.getUserByEmail("rphonika@gmail.com"));
+        System.out.println(c.createPlayer("johndoe@gmail.com", "test_password_1"));
     }
 }

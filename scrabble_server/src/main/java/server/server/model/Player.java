@@ -2,60 +2,52 @@ package server.server.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.UUID;
 
 /**
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class Player {
 
-    @JsonProperty("email")
-    private String playerEmailString;
-    @JsonProperty("pwd")
-    private String playerPassword;
     @JsonProperty("player_id")
-    private UUID playerID;
-
-   /*
-    public Player(String email, String pwd) {
-        playerEmailString = email;
-        playerPassword = pwd;
-        playerID = UUID.randomUUID();
-    }*/
-
+    private String playerID;
+    @JsonProperty("username")
+    private String playerUsername;
+    @JsonProperty("email")
+    private String playerEmail;
+    
     /**
      * Create a new instance of player.
-     * @param name, pwd, uuid.
+     * @param user_id, username, email.
      */
     @JsonCreator
-    public Player(@JsonProperty("email") String email, @JsonProperty("pwd") String pwd, @JsonProperty("player_id") String uuid) {
-        playerEmailString = email;
-        playerPassword = pwd;
-        playerID = UUID.fromString(uuid);
+    public Player(@JsonProperty("player_id") String user_id, @JsonProperty("username") String username, @JsonProperty("email") String email) {
+        this.playerID = user_id;
+        this.playerUsername = username;
+        this.playerEmail = email;
     }
 
     public String getPlayerEmail() {
-        return playerEmailString;
+        return this.playerEmail;
     }
 
     public void setPlayerEmail(String email) {
-        this.playerEmailString = email;
+        this.playerEmail = email;
     }
 
-    public String getPlayerPassword() {
-        return playerPassword;
+    public String getPlayerUsername() {
+        return this.playerUsername;
     }
 
-    public void setPlayerPassword(String pwd) {
-        this.playerPassword = pwd;
+    public void setPlayerUsername(String username) {
+        this.playerUsername = username;
     }
 
     public String getPlayerID() {
-        return playerID.toString();
+        return this.playerID;
     }
     
     @Override
     public String toString() {
-        return "{\"player_id\": \""+this.playerID+"\", \"email\": \""+this.playerEmailString+"\"}";
+        return "{\"player_id\": \""+this.playerID+"\", \"username\": \""+this.playerUsername+"\", \"email\": \""+this.playerEmail+"\"}";
     }
 }

@@ -39,13 +39,14 @@ public class HAL extends Game {
      */
     @Override
     protected Message createAccount(String pl_email, String pl_pwd) {
-        Player newPlayer = null;
-        try {
-            newPlayer = om.readValue(Co.createPlayer(pl_email, pl_pwd), Player.class);
-        } catch (IOException ioe) {}
-        if (newPlayer != null) {
+        String playerJSONInfo = Co.createPlayer(pl_email, pl_pwd);
+        if (playerJSONInfo != null) {
+            Player newPlayer = null;
+            try {
+                newPlayer = om.readValue(playerJSONInfo, Player.class);
+            } catch (IOException ioe) {}
             plays.addPlayer(newPlayer.getPlayerID());
-            return new Message(Message.NEW_ACCOUNT_SUCCESS, "{\"player_id\": \""+newPlayer.getPlayerID()+"\"}");
+            return new Message(Message.NEW_ACCOUNT_SUCCESS, playerJSONInfo);
         }
         return new Message(Message.NEW_ACCOUNT_ERROR, "");
     }
