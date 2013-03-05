@@ -142,7 +142,7 @@ public class Connector {
      * @return if no values found return null otherwise return a JSON string
      */
     public String getAllUsers() {
-        String response = execGetQuery("SELECT * from scrabble_user", null);
+        String response = execGetQuery("SELECT user_id, username, email from scrabble_user", null);
         if (response != null) {
             return "{\"users\" : ["+response+"]}";
         }
@@ -150,11 +150,11 @@ public class Connector {
     }
     
     public String getUserById(String user_id) {
-        return execGetQuery("SELECT * from scrabble_user WHERE user_id = ?", new String[]{user_id});
+        return execGetQuery("SELECT user_id, username, email from scrabble_user WHERE user_id = ?", new String[]{user_id});
     }
     
     public String getUserByEmail(String user_email) {
-        return execGetQuery("SELECT * from scrabble_user WHERE email = ?", new String[]{user_email});
+        return execGetQuery("SELECT user_id, username, email from scrabble_user WHERE email = ?", new String[]{user_email});
     }
     
     public String createPlayer(String pl_email, String pl_pwd) {
@@ -189,7 +189,7 @@ public class Connector {
             ResultSetMetaData struc = res.getMetaData();
             while (res.next()) {
                 result += "{";
-                for (int i = 1; i < struc.getColumnCount(); i++) {
+                for (int i = 1; i <= struc.getColumnCount(); i++) {
                     String type = struc.getColumnTypeName(i);
                     String columnName = struc.getColumnName(i);
                     if (!type.equals("null")) {
@@ -225,7 +225,7 @@ public class Connector {
         //System.out.println(c.getAllUsers());
         //System.out.println(c.getUserById("d1293462-a0c5-4f7d-a330-d051042bab9f"));
         //System.out.println(c.getUserByEmail("romain@example.comm"));
-        c.createPlayer("rphonika@gmail.com", "test_password");
+        //c.createPlayer("rphonika@gmail.com", "test_password");
         System.out.println(c.getUserByEmail("rphonika@gmail.com"));
     }
 }
