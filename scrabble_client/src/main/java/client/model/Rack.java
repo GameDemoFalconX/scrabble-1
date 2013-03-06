@@ -9,11 +9,13 @@ import java.util.Random;
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Rack {
+public class Rack {
 
     ObjectMapper om = new ObjectMapper();
     @JsonProperty("rack")
     private Tile[] rack = new Tile[7];
+    
+    public Rack() {}
 
     public Rack(String formatedRack) {
         try {
@@ -190,6 +192,17 @@ class Rack {
 
     public boolean isTileBlank(Integer position) {
         return rack[position].getValue() == 0;
+    }
+    
+    @Override
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < 7; i++) {
+            result += (rack[i] != null) ? rack[i].getLetter()+" " : "";
+        }
+        result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+                + "  1     2     3     4     5     6     7\n";
+        return result;
     }
 
     /**
