@@ -12,33 +12,33 @@ import java.awt.Point;
  */
 public class GameController {
 
-    public GameView MainView = null;
+    public GameView mainView = null;
     private Play play = null; // Model in MVC Architecture
 
     public GameController(Play play) {
         this.play = play;
-        MainView = new Game(this);
+        mainView = new Game(this);
         addListenersToModel();
     }
 
     private void addListenersToModel() {
-        play.addTileListener(MainView);
-        play.addRackListener(MainView);
-        play.addGridListener(MainView);
-        play.addErrorListener(MainView);
+        play.addTileListener(mainView);
+        play.addRackListener(mainView);
+        play.addGridListener(mainView);
+        play.addErrorListener(mainView);
     }
 
     public void addMenuToView(Menu menu) {
-        ((Game) MainView).setMenu(menu.getPanel());
-        menu.setGame((Game) MainView);
+        ((Game) mainView).setMenu(menu.getPanel());
+        menu.setGame((Game) mainView);
     }
 
     public void displayViews() {
-        MainView.display();
+        mainView.display();
     }
 
     public void closeViews() {
-        MainView.close();
+        mainView.close();
     }
 
     public void notifyCreateWord(int sourcePos, int x, int y) {

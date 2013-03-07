@@ -64,8 +64,8 @@ public class Grid {
         }
     }
     
-    @Override
-    public String toString() {
+    
+    public String toDisplay() {
         String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
         prtGrid += "     ___________________________________________________________________________ \n";
         for (int x = 0; x <= 14; x++) {
@@ -77,7 +77,7 @@ public class Grid {
             for (int y = 0; y <= 14; y++) {
                 Tile tile = grid[y][x];
                 if (tile != null) {
-                    prtGrid += grid[y][x] + "";
+                    prtGrid += tile.toDisplay() + "";
                 } else {
                     switch (scoringGrid.getBonus(x, y)) {
                         case ScoringGrid.TRIPLE_WORD:

@@ -194,8 +194,7 @@ public class Rack {
         return rack[position].getValue() == 0;
     }
     
-    @Override
-    public String toString() {
+    public String toDisplay() {
         String result = "";
         for (int i = 0; i < 7; i++) {
             result += (rack[i] != null) ? rack[i].getLetter()+" " : "";
