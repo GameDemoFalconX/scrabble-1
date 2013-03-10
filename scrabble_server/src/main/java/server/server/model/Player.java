@@ -2,13 +2,15 @@ package server.server.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 /**
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class Player {
 
-    @JsonProperty("player_id")
+    @JsonProperty("user_id")
     private String playerID;
     @JsonProperty("username")
     private String playerUsername;
@@ -20,7 +22,7 @@ public class Player {
      * @param user_id, username, email.
      */
     @JsonCreator
-    public Player(@JsonProperty("player_id") String user_id, @JsonProperty("username") String username, @JsonProperty("email") String email) {
+    public Player(@JsonProperty("user_id") String user_id, @JsonProperty("username") String username, @JsonProperty("email") String email) {
         this.playerID = user_id;
         this.playerUsername = username;
         this.playerEmail = email;
@@ -48,6 +50,6 @@ public class Player {
     
     @Override
     public String toString() {
-        return "{\"player_id\": \""+this.playerID+"\", \"username\": \""+this.playerUsername+"\", \"email\": \""+this.playerEmail+"\"}";
+        return "{\"user_id\": \""+this.playerID+"\", \"username\": \""+this.playerUsername+"\", \"email\": \""+this.playerEmail+"\"}";
     }
 }

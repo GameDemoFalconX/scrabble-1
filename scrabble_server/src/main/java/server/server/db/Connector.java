@@ -188,7 +188,7 @@ public class Connector {
         try {
             ResultSetMetaData struc = res.getMetaData();
             while (res.next()) {
-                result += "{";
+                result = "{";
                 for (int i = 1; i <= struc.getColumnCount(); i++) {
                     String type = struc.getColumnTypeName(i);
                     String columnName = struc.getColumnName(i);
@@ -206,7 +206,7 @@ public class Connector {
                                 result += "\""+res.getBlob(columnName) +"\"";
                                 break;
                         }
-                        result += (i < struc.getColumnCount()-1) ? ", " : "";
+                        result += (i < struc.getColumnCount()) ? ", " : "";
                     }
                 }
                 result += (res.next()) ? "}, " : "}";

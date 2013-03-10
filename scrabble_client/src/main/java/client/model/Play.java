@@ -264,13 +264,21 @@ public class Play {
      * Methods used to signup, login and logout a player
      */
     public void signup(String email, String pwd) {
-        System.out.println(email+" - "+pwd);
         String response = null;
-        /*try {
+        try {
             response = service.newPlayer(email, pwd);
+            System.out.println(response);
         } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
+        
+        try {
+            Player newPlayer = om.readValue(response, Player.class);
             
-        }*/
+            // Dispatch the model notifications to Menu listener
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
     
     public void login(String email, String pwd) {

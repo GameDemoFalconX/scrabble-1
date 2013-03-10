@@ -2,9 +2,6 @@ package server.server.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import server.common.GameException;
 import server.common.Message;
 import server.server.db.Connector;
 
@@ -14,9 +11,7 @@ import server.server.db.Connector;
  */
 public class HAL extends Game {
 
-    private PlayerRAM players = new PlayerRAM();
-    private GameRAM plays = new GameRAM();
-    
+    private PlayerCollector pCol = new PlayerCollector();
     private Connector Co = new Connector();
     private Dictionary dico;
     
@@ -40,19 +35,22 @@ public class HAL extends Game {
     @Override
     protected Message createAccount(String pl_email, String pl_pwd) {
         String playerJSONInfo = Co.createPlayer(pl_email, pl_pwd);
+        System.out.println(playerJSONInfo);
         if (playerJSONInfo != null) {
             Player newPlayer = null;
             try {
                 newPlayer = om.readValue(playerJSONInfo, Player.class);
-            } catch (IOException ioe) {}
-            plays.addPlayer(newPlayer.getPlayerID());
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            pCol.addPlayer(newPlayer.getPlayerID());
             return new Message(Message.NEW_ACCOUNT_SUCCESS, playerJSONInfo);
         }
         return new Message(Message.NEW_ACCOUNT_ERROR, "");
     }
 
     @Override
-    protected Message loginProcess(String pl_name, String pl_pwd) {
+    protected Message loginProcess(String pl_name, String pl_pwd) {/*
         if (players.playerExists(pl_name)) {
             Player pl = players.checkPassword(pl_name, pl_pwd);
             if (pl != null) {
@@ -61,27 +59,27 @@ public class HAL extends Game {
             } else {
                 return new Message(Message.LOGIN_ERROR, "");
             }
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_EXISTS, "");
     }
 
     @Override
-    protected Message logoutProcess(String pl_id) {
+    protected Message logoutProcess(String pl_id) {/*
         if (plays.playerIsLogged(pl_id)) {
             plays.removePlayer(pl_id);
             return new Message(Message.LOGOUT_SUCCESS, "");
-        }
+        }*/
         return new Message(Message.LOGOUT_ERROR, "");
     }
 
     @Override
-    protected Message createNewGame(String pl_id) {
+    protected Message createNewGame(String pl_id) { /*
         if (plays.playerIsLogged(pl_id)) {
             // Initialization of the Play on the server side and add it to the GameRAM dict.
             Play newPlay = new Play(pl_id);
             plays.addNewPlay(pl_id, newPlay);
             return new Message(Message.NEW_GAME_SUCCESS, newPlay.getPlayID() + "##" + newPlay.getFormatRack()); // Only return the rack to the client.
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 
@@ -92,7 +90,7 @@ public class HAL extends Game {
      * @return Message with body format in JSON : {"play_id": "xxxx0x0000x00x0x00", "rack": [{"letter":"A","value":2},{"letter":"A","value":2}, ...]}
      */
     @Override
-    protected Message createNewAnonymGame(String pl_id) {
+    protected Message createNewAnonymGame(String pl_id) {/*
         try {
             String player_id = om.readTree(pl_id).get("player_id").asText();
             
@@ -107,12 +105,12 @@ public class HAL extends Game {
             }
             // The current anonymous player is already logged.
             return new Message(Message.NEW_GAME_ANONYM_ERROR, "");
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {}*/
         return null;
     }
 
     @Override
-    protected Message loadPlayLister(String pl_id) {
+    protected Message loadPlayLister(String pl_id) {/*
         if (plays.playerIsLogged(pl_id)) {
             String list = "";
             try {
@@ -124,12 +122,12 @@ public class HAL extends Game {
                 return new Message(Message.LOAD_GAME_LIST_SUCCESS, list);
             }
             return new Message(Message.LOAD_GAME_LIST_ERROR, "");
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 
     @Override
-    protected Message loadPlay(String pl_id, String ga_id) {
+    protected Message loadPlay(String pl_id, String ga_id) {/*
         if (plays.playerIsLogged(pl_id)) {
             try {
                 Play lPlay = plays.LoadGame(pl_id, ga_id);
@@ -144,12 +142,12 @@ public class HAL extends Game {
             } catch (GameException ge) {
                 return new Message(Message.XML_FILE_NOT_EXISTS, "");
             }
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 
     @Override
-    protected Message savePlay(int type, String pl_id, String ga_id, String ga_infos) {
+    protected Message savePlay(int type, String pl_id, String ga_id, String ga_infos) {/*
         Play cPlay = plays.playIdentification(pl_id, ga_id);
         if (cPlay != null) {
             plays.saveGameOnFile(pl_id, cPlay, ga_infos);  // TODO : Handle error (rom)
@@ -162,12 +160,12 @@ public class HAL extends Game {
                     break;
             }
             return new Message(Message.SAVE_GAME_SUCCESS, "");
-        }
+        }*/
         return new Message(Message.GAME_IDENT_ERROR, "");
     }
 
     @Override
-    protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {
+    protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {/*
         Play cPlay = plays.playIdentification(pl_id, ga_id);
         if (cPlay != null) {
             System.out.println("Server : start scrabbleValidator with data = " + ga_infos);
@@ -217,38 +215,38 @@ public class HAL extends Game {
                 cPlay.testWithError(); // Increase the number of tests with error
                 return new Message(Message.PLACE_WORD_ERROR, "{\"valid\": false, \"score\": "+cPlay.getScore()+"}");
             }
-        }
+        }*/
         return new Message(Message.GAME_IDENT_ERROR, "");
     }
 
     @Override
-    protected Message destroyAnonym(String pl_id) {
+    protected Message destroyAnonym(String pl_id) {/*
         if (plays.playerIsLogged(pl_id)) {
             plays.removePlayer(pl_id);
             return new Message(Message.DELETE_ANONYM_SUCCESS, "");
-        }
+        }*/
         return new Message(Message.DELETE_ANONYM_ERROR, "");
     }
 
     @Override
-    protected Message tileExchange(String pl_id, String position) {
+    protected Message tileExchange(String pl_id, String position) {/*
         Message response = null;
         if (plays.playerIsLogged(pl_id)) {
             Play play = plays.getPlay(pl_id);
             String newTiles = play.tileExchange(position);
             return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 
     @Override
-    protected Message tileSwitch(String pl_id, String position) {
+    protected Message tileSwitch(String pl_id, String position) {/*
         Message response = null;
         if (plays.playerIsLogged(pl_id)) {
             Play play = plays.getPlay(pl_id);
             play.tileSwitch(position);
             return new Message(Message.TILE_SWITCH_SUCCES, "");
-        }
+        }*/
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 }
