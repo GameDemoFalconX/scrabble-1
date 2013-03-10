@@ -272,6 +272,10 @@ public class Play {
             
         }*/
     }
+    
+    public void login(String email, String pwd) {
+        
+    }
 
     /**
      * * Methods used for the movement of tiles **

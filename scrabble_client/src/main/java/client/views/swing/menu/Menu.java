@@ -146,7 +146,6 @@ public class Menu extends MenuView {
             public void actionPerformed(ActionEvent e) {
                 AppPopup logPopup = new AppPopup(getMenu(), "signup");
                 logPopup.showLogSign();
-                //getController().notifySignup();
             }
         });
         signupButton.setVisible(true);

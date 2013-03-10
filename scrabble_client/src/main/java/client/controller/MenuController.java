@@ -33,4 +33,8 @@ public class MenuController {
     public void notifySignup(String email, String pwd) {
         play.signup(email, pwd);
     }
+    
+    public void notifyLogin(String email, String pwd) {
+        play.login(email, pwd);
+    }
 }
