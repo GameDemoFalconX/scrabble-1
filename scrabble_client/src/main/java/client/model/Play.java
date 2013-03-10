@@ -210,11 +210,11 @@ public class Play {
         }
     }
 
-    public void fireInitMenuToPlay(boolean anonymous, String email, int score) {
+    public void fireInitMenuToPlay(boolean anonymous, String email, String username, int score) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
         for (MenuListener l : listeners) {
-            l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, score));
+            l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, username, score));
         }
     }
 
@@ -254,7 +254,7 @@ public class Play {
 
             // Dispatch the model modifications to all listeners
             fireInitRackToPlay(root.get("rack").toString());
-            fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
+            //fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -267,7 +267,6 @@ public class Play {
         String response = null;
         try {
             response = service.newPlayer(email, pwd);
-            System.out.println(response);
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
@@ -276,6 +275,7 @@ public class Play {
             Player newPlayer = om.readValue(response, Player.class);
             
             // Dispatch the model notifications to Menu listener
+            fireInitMenuToPlay(false, newPlayer.getPlayerEmail(), newPlayer.getPlayerUsername(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

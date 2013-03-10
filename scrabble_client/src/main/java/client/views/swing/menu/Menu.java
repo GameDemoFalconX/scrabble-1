@@ -1,6 +1,5 @@
 package client.views.swing.menu;
 
-import client.views.swing.popup.AppPopup;
 import client.controller.MenuController;
 import client.model.event.InitMenuToPlayEvent;
 import client.model.event.UpdateScoreEvent;
@@ -8,6 +7,7 @@ import client.views.MenuView;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.gameboard.Blah;
 import client.views.swing.gameboard.Game;
+import client.views.swing.popup.AppPopup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -33,7 +33,7 @@ public class Menu extends MenuView {
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
     private boolean dark = true;
-    private JLabel score;
+    private JLabel score, userLab;
 
     public Menu(MenuController controller) {
         super(controller);
@@ -76,11 +76,12 @@ public class Menu extends MenuView {
         //panel.repaint();
     }
 
-    private void loadPlay(boolean anonymous, String email, int score) {
+    private void loadPlay(boolean anonymous, String email, String username, int score) {
         // Remove unused elements
         panel.remove(playAsGuestButton);
         panel.remove(loginButton);
         panel.remove(signupButton);
+        panel.validate();
 
         // Init new components
         initPlayerButton(anonymous, email);
@@ -97,7 +98,14 @@ public class Menu extends MenuView {
             panel.add(newGameButton);
             panel.add(loadButton);
         }
+        
+        // Add username label
+        userLab = new JLabel("<html><body><p style='color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab.setBounds(panel.getWidth() / 2 -40, 100, 200, 20);
+        panel.add(userLab);
+        
         panel.validate();
+        panel.repaint();
     }
 
     private void logOut() {
@@ -132,7 +140,8 @@ public class Menu extends MenuView {
         loginButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call controller
+                AppPopup logPopup = new AppPopup(getMenu(), "login");
+                logPopup.showLogSign();
             }
         });
         loginButton.setVisible(true);
@@ -242,14 +251,17 @@ public class Menu extends MenuView {
         playerPanel = new JPanel();
         playerPanel.setBorder(null);
         playerPanel.setBounds(30, 10, panel.getWidth() - 30, 70);
+        playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
         playerPanel.add(score);
         playerPanel.add(playerButton);
+        playerPanel.validate();
+        playerPanel.repaint();
     }
 
     private void initNewGameButton() {
         newGameButton = new JButton("New game");
-        newGameButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 330, 110, 30);
+        newGameButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 530, 110, 30);
         newGameButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -260,7 +272,7 @@ public class Menu extends MenuView {
 
     private void initLoadButton() {
         loadButton = new JButton("Load game");
-        loadButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 260, 110, 30);
+        loadButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 495, 110, 30);
         loadButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -279,15 +291,7 @@ public class Menu extends MenuView {
             }
         });
     }
-
-    /**
-     * * Methods used to update the Menu view from the model notifications **
-     */
-    @Override
-    public void initMenuToPlay(InitMenuToPlayEvent event) {
-        loadPlay(event.isAnonym(), event.getPlayerEmail(), event.getScore());
-    }
-
+    
     public void setScore(int score) {
         if (score < 10) {
             this.score.setText("00" + String.valueOf(score));
@@ -297,12 +301,7 @@ public class Menu extends MenuView {
             this.score.setText(String.valueOf(score));
         }
     }
-
-    @Override
-    public void updateScore(UpdateScoreEvent event) {
-        score.setText("" + event.getScore());
-    }
-
+    
     public void setIcons(boolean dark) {
         if (dark) {
             settingsButton.setIcon(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
@@ -311,5 +310,18 @@ public class Menu extends MenuView {
             settingsButton.setIcon(ImageIconTools.createImageIcon("../media/dark_settings_icon.png", null));
             score.setForeground(Color.BLACK);
         }
+    }
+
+    /**
+     * * Methods used to update the Menu view from the model notifications **
+     */
+    @Override
+    public void initMenuToPlay(InitMenuToPlayEvent event) {
+        loadPlay(event.isAnonym(), event.getEmail(), event.getUsername(), event.getScore());
+    }
+
+    @Override
+    public void updateScore(UpdateScoreEvent event) {
+        score.setText("" + event.getScore());
     }
 }

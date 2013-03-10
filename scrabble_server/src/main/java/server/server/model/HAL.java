@@ -35,7 +35,6 @@ public class HAL extends Game {
     @Override
     protected Message createAccount(String pl_email, String pl_pwd) {
         String playerJSONInfo = Co.createPlayer(pl_email, pl_pwd);
-        System.out.println(playerJSONInfo);
         if (playerJSONInfo != null) {
             Player newPlayer = null;
             try {
