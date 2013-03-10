@@ -26,7 +26,7 @@ public class AppPopup extends JDialog {
     private AppPopup(JFrame frame, Menu menu, String action) {
         super(frame, null, true);
         this.menu = menu;
-        this.setSize(360, 300);
+        this.setSize(360, 310);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -75,7 +75,6 @@ public class AppPopup extends JDialog {
         textPanel.setBackground(Color.GRAY);
         textPanel.setSize(360, 70);
         textPanel.add(text);
-        textPanel.add(error);
 
         SpringLayout layout = new SpringLayout();
         fieldsPanel = new JPanel(layout);
@@ -107,21 +106,25 @@ public class AppPopup extends JDialog {
         pwdLab.setLabelFor(pwdField);
         pwdField.setPreferredSize(new Dimension(180, 25));
    
+        fieldsPanel.add(error);
         fieldsPanel.add(emailLab);
         fieldsPanel.add(emailField);
         fieldsPanel.add(pwdLab);
         fieldsPanel.add(pwdField);
         
         // Add constraints to the layout
+        layout.putConstraint(SpringLayout.WEST, error, 40, SpringLayout.WEST, fieldsPanel);
+        layout.putConstraint(SpringLayout.NORTH, error, 8, SpringLayout.NORTH, fieldsPanel);
+        
         layout.putConstraint(SpringLayout.WEST, emailLab, 68, SpringLayout.WEST, fieldsPanel);
-        layout.putConstraint(SpringLayout.NORTH, emailLab, 22, SpringLayout.NORTH, fieldsPanel);
+        layout.putConstraint(SpringLayout.NORTH, emailLab, 32, SpringLayout.NORTH, fieldsPanel);
         layout.putConstraint(SpringLayout.WEST, emailField, 20, SpringLayout.EAST, emailLab);
-        layout.putConstraint(SpringLayout.NORTH, emailField, 20, SpringLayout.NORTH, fieldsPanel);
+        layout.putConstraint(SpringLayout.NORTH, emailField, 30, SpringLayout.NORTH, fieldsPanel);
         
         layout.putConstraint(SpringLayout.WEST, pwdLab, 40, SpringLayout.WEST, fieldsPanel);
-        layout.putConstraint(SpringLayout.NORTH, pwdLab, 62, SpringLayout.NORTH, fieldsPanel);
+        layout.putConstraint(SpringLayout.NORTH, pwdLab, 72, SpringLayout.NORTH, fieldsPanel);
         layout.putConstraint(SpringLayout.WEST, pwdField, 20, SpringLayout.EAST, pwdLab);
-        layout.putConstraint(SpringLayout.NORTH, pwdField, 60, SpringLayout.NORTH, fieldsPanel);
+        layout.putConstraint(SpringLayout.NORTH, pwdField, 70, SpringLayout.NORTH, fieldsPanel);
     }
 
     private void initButtonsPanel() {
@@ -148,11 +151,10 @@ public class AppPopup extends JDialog {
                                 dispose();
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "\"" + emailField.getText() + "\" is not a valid "
-                                + "email address", "Incorrect email", JOptionPane.ERROR_MESSAGE);
+                        error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email is not valid<p</body></html>");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Both your email address and password must be filled", "Missing information", JOptionPane.ERROR_MESSAGE);
+                    error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email and password  must be filled<p></body></html>");
                 }
             }
         });
