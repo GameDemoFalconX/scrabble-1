@@ -33,7 +33,7 @@ public class GameService {
      * Ask the server to create a new Player.
      * @param email the player email as a String
      * @param password the player password as a String
-     * @return a new Player if it's created, otherwise null.
+     * @return new player informations in JSON : {"user_id": "000x0x000x0x", "username": "johndoe", "email": "johndoe@example.com"}
      * @throws GameException that inform
      */
     public String newPlayer(String email, String password) throws GameException {

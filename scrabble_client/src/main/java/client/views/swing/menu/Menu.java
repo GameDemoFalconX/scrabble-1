@@ -1,5 +1,6 @@
 package client.views.swing.menu;
 
+import client.views.swing.popup.AppPopup;
 import client.controller.MenuController;
 import client.model.event.InitMenuToPlayEvent;
 import client.model.event.UpdateScoreEvent;
@@ -143,7 +144,9 @@ public class Menu extends MenuView {
         signupButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call controller
+                AppPopup logPopup = new AppPopup(getMenu(), "signup");
+                logPopup.showLogSign();
+                //getController().notifySignup();
             }
         });
         signupButton.setVisible(true);

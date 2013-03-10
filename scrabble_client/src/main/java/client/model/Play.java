@@ -259,6 +259,19 @@ public class Play {
             ioe.printStackTrace();
         }
     }
+    
+    /**
+     * Methods used to signup, login and logout a player
+     */
+    public void signup(String email, String pwd) {
+        System.out.println(email+" - "+pwd);
+        String response = null;
+        /*try {
+            response = service.newPlayer(email, pwd);
+        } catch (GameException ge) {
+            
+        }*/
+    }
 
     /**
      * * Methods used for the movement of tiles **

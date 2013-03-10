@@ -4,7 +4,6 @@ import client.controller.MenuController;
 import client.model.event.MenuListener;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>
  */
 public abstract class MenuView implements MenuListener {
