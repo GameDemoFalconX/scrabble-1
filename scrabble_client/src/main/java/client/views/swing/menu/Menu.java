@@ -265,7 +265,7 @@ public class Menu extends MenuView {
         newGameButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								newGame();
+                getController().notifyNewGame();
             }
         });
     }

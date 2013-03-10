@@ -108,7 +108,7 @@ public class GameService {
      */
     public String createNewPlay(String playerID, boolean anonymous) throws GameException {
         String args = null;
-        Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM, "{\"player_id\": \""+playerID+"\"}") : servProtocol.sendRequest(Message.NEW_GAME, "{\"player_id\": \""+playerID+"\"}");
+        Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM, "{\"user_id\": \""+playerID+"\"}") : servProtocol.sendRequest(Message.NEW_GAME, "{\"user_id\": \""+playerID+"\"}");
 
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {

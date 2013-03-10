@@ -124,15 +124,14 @@ public class ServerScrabble {
 
     /**
      * Allows to create a new Play instance.
-     *
-     * @param playerID
+     * @param pl_id
      * @return the new playID and the formatedRack.
      */
-    public synchronized Message createNewPlay(String playerID) {
+    public synchronized Message createNewPlay(String pl_id) {
         Message response = null;
         try {
             // Try to create a new game for the current player
-            response = game.createNewPlay(playerID);
+            response = game.createNewPlay(pl_id);
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
@@ -144,8 +143,7 @@ public class ServerScrabble {
     }
 
     /**
-     * Allows to log an anonymous player/
-     *
+     * Allows to log an anonymous player
      * @param pl_id
      * @return status
      */

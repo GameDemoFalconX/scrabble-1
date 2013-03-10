@@ -235,7 +235,11 @@ public class Play {
     }
 
     /**
-     * * Methods used for create new player and play ** Responses are received
+     * Methods used for initGame (as guest or logged)
+     */
+    
+    /**
+     * Init a new play for an anonymous player.
      * format in JSON : {"play_id": "x0x000x0000x0000x00x0", "rack":
      * [{"letter":"A","value":2},{"letter":"A","value":2}, ...], "grid": ..., }
      */
@@ -244,6 +248,26 @@ public class Play {
         player = new Player();
         try {
             response = service.createNewPlay(player.getPlayerID(), true);
+        } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
+
+        try {
+            JsonNode root = om.readTree(response);
+            initPlay(root.get("play_id").asText(), "", root.get("rack").toString(), 0);
+
+            // Dispatch the model modifications to all listeners
+            fireInitRackToPlay(root.get("rack").toString());
+            fireInitMenuToPlay(true, player.getPlayerEmail(), player.getPlayerUsername(), 0);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    
+    public void newGame() {
+        String response = null;
+        try {
+            response = service.createNewPlay(player.getPlayerID(), false);
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
@@ -272,10 +296,10 @@ public class Play {
         }
         
         try {
-            Player newPlayer = om.readValue(response, Player.class);
+            player = om.readValue(response, Player.class);
             
             // Dispatch the model notifications to Menu listener
-            fireInitMenuToPlay(false, newPlayer.getPlayerEmail(), newPlayer.getPlayerUsername(), 0);
+            fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

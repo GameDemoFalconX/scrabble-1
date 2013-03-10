@@ -39,10 +39,10 @@ public class HAL extends Game {
             Player newPlayer = null;
             try {
                 newPlayer = om.readValue(playerJSONInfo, Player.class);
+                pCol.addPlayer(newPlayer.getPlayerID());
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-            pCol.addPlayer(newPlayer.getPlayerID());
             return new Message(Message.NEW_ACCOUNT_SUCCESS, playerJSONInfo);
         }
         return new Message(Message.NEW_ACCOUNT_ERROR, "");
@@ -71,40 +71,45 @@ public class HAL extends Game {
         return new Message(Message.LOGOUT_ERROR, "");
     }
 
+    /**
+     * Create a new Play instance for this user
+     * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
+     * @return Message with body format in JSON : {"play_id": "xxxx0x0000x00x0x00", "rack": [{"letter":"A","value":2},{"letter":"A","value":2}, ...]}
+     */
     @Override
-    protected Message createNewGame(String pl_id) { /*
-        if (plays.playerIsLogged(pl_id)) {
-            // Initialization of the Play on the server side and add it to the GameRAM dict.
-            Play newPlay = new Play(pl_id);
-            plays.addNewPlay(pl_id, newPlay);
-            return new Message(Message.NEW_GAME_SUCCESS, newPlay.getPlayID() + "##" + newPlay.getFormatRack()); // Only return the rack to the client.
-        }*/
-        return new Message(Message.PLAYER_NOT_LOGGED, "");
+    protected Message createNewGame(String pl_id) {
+        try {
+            String user_id = om.readTree(pl_id).get("user_id").asText();
+            if (pCol.playerIsLogged(pl_id)) {
+                // Initialization of the Play on the server side and add it to the GameRAM dict.
+                Play newPlay = new Play(pl_id);
+                pCol.addPlay(pl_id, newPlay);
+                return new Message(Message.NEW_GAME_SUCCESS, "{\"play_id\": \""+newPlay.getPlayID()+"\", \"rack\": "+ newPlay.getFormatRack()+"}");
+            }
+            return new Message(Message.PLAYER_NOT_LOGGED, "");
+        } catch (IOException ioe) {}
+        return null;
     }
 
     /**
      * Allows to log an anonymous user
-     *
-     * @param pl_id is format in JSON : {"player_id": "x000x0x00xxxx0x0x0x000x"}
+     * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
      * @return Message with body format in JSON : {"play_id": "xxxx0x0000x00x0x00", "rack": [{"letter":"A","value":2},{"letter":"A","value":2}, ...]}
      */
     @Override
-    protected Message createNewAnonymGame(String pl_id) {/*
+    protected Message createNewAnonymGame(String pl_id) {
         try {
-            String player_id = om.readTree(pl_id).get("player_id").asText();
-            
-            if (!plays.playerIsLogged(player_id)) {
-                // Add this anonymous player to the server players list.
-                plays.addPlayer(player_id);
+            String user_id = om.readTree(pl_id).get("user_id").asText();
+            if (!pCol.playerIsLogged(user_id)) {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
-                Play newPlay = new Play(player_id);
-                plays.addNewPlay(player_id, newPlay);
+                Play newPlay = new Play(user_id);
+                pCol.addNewPlay(user_id, newPlay);
                 System.out.println("Rack : " + newPlay.getFormatRack());
                 return new Message(Message.NEW_GAME_ANONYM_SUCCESS, "{\"play_id\": \""+newPlay.getPlayID()+"\", \"rack\": "+ newPlay.getFormatRack()+"}");
             }
             // The current anonymous player is already logged.
             return new Message(Message.NEW_GAME_ANONYM_ERROR, "");
-        } catch (IOException ioe) {}*/
+        } catch (IOException ioe) {}
         return null;
     }
 

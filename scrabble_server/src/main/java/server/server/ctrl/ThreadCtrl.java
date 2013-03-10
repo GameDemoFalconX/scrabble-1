@@ -127,7 +127,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to create a new game for the current player
-        response = sScrabble.createNewPlay(new String(request.getBody()));
+        response = sScrabble.createNewPlay(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

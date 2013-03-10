@@ -2,6 +2,7 @@ package client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 
 /**
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
@@ -33,9 +34,9 @@ public class Player {
      * @return 
      */
     public Player() {
-        this.playerID = "";
-        this.playerUsername = "";
-        this.playerEmail = "";
+        this.playerID = UUID.randomUUID().toString();
+        this.playerUsername = "Anonym";
+        this.playerEmail = "anonym@anonymous.org";
         this.isAnonymous = true;
     }
 
