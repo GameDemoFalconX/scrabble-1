@@ -1,6 +1,5 @@
 package client.service;
 
-import client.model.Player;
 import client.model.utils.GameException;
 import client.model.utils.Message;
 import client.service.connection.ClientProtocol;
@@ -38,7 +37,6 @@ public class GameService {
      */
     public String newPlayer(String email, String password) throws GameException {
         Message serverResponse = servProtocol.sendRequest(Message.NEW_ACCOUNT, "{\"email\": \""+email+"\", \"pwd\": \""+password+"\"}");
-
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.NEW_ACCOUNT_SUCCESS:
@@ -62,7 +60,6 @@ public class GameService {
      */
     public String loginPlayer(String email, String password) throws GameException {
         Message serverResponse = servProtocol.sendRequest(Message.LOGIN, "{\"email\": \""+email+"\", \"pwd\": \""+password+"\"}");
-
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.LOGIN_SUCCESS:
@@ -78,13 +75,12 @@ public class GameService {
 
     /**
      * Ask the server to logout the current player.
-     *
      * @param playerID
      * @return True if the logout with success otherwise return false.
      * @throws GameException
      */
     public boolean logoutPlayer(String playerID) throws GameException {
-        Message serverResponse = servProtocol.sendRequest(Message.LOGOUT, playerID);
+        Message serverResponse = servProtocol.sendRequest(Message.LOGOUT, "{\"user_id\": \""+playerID+"\"}");
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.LOGOUT_SUCCESS:
@@ -108,7 +104,6 @@ public class GameService {
     public String createNewPlay(String playerID, boolean anonymous) throws GameException {
         String args = null;
         Message serverResponse = (anonymous) ? servProtocol.sendRequest(Message.NEW_GAME_ANONYM, "{\"user_id\": \""+playerID+"\"}") : servProtocol.sendRequest(Message.NEW_GAME, "{\"user_id\": \""+playerID+"\"}");
-
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.NEW_GAME_SUCCESS:
@@ -200,7 +195,7 @@ public class GameService {
      */
     public String passWord(String playerID, String playID, int orientation, String data) throws GameException {
         String response = null;
-        Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"player_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
+        Message serverResponse = servProtocol.sendRequest(Message.PLACE_WORD, "{\"user_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"orientation\": "+orientation+", \"tiles\": "+data+"}");
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.PLACE_WORD_SUCCESS:

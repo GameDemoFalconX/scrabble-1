@@ -104,19 +104,20 @@ public class ServerScrabble {
 
     /**
      * Allows to logout the current user.
-     *
      * @param pl_id
      * @return
      */
-    public synchronized Message logout(String pl_id) {
+    public synchronized Message logout(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.logout(pl_id);
+            JsonNode root = om.readTree(data);
+            response = game.logout(root.get("user_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }

@@ -16,7 +16,7 @@ import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
-import client.model.event.removeBadTilesEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
@@ -206,7 +206,7 @@ public class Play {
         GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
 
         for (GridListener l : listeners) {
-            l.removeBadTiles(new removeBadTilesEvent(this, tilesToRemove));
+            l.removeBadTiles(new RemoveBadTilesEvent(this, tilesToRemove));
         }
     }
 
@@ -223,6 +223,22 @@ public class Play {
 
         for (MenuListener l : listeners) {
             l.updateScore(new UpdateScoreEvent(this, score));
+        }
+    }
+    
+    public void fireResetGrid() {
+        GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
+
+        for (GridListener l : listeners) {
+            l.resetGrid();
+        }
+    }
+    
+    public void fireResetRack() {
+        RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+        for (RackListener l : listeners) {
+            l.resetRack();
         }
     }
 
@@ -320,6 +336,22 @@ public class Play {
             fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        }
+    }
+    
+    public void logout() {
+        boolean response = false;
+        try {
+            response = service.logoutPlayer(player.getPlayerID());
+        } catch (GameException ge) {
+            // Catch exception
+        }
+        
+        if (response) {
+            fireResetGrid();
+            fireResetRack();
+        } else {
+            fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
         }
     }
 

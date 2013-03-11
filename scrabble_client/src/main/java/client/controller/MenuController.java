@@ -38,6 +38,10 @@ public class MenuController {
         play.login(email, pwd);
     }
     
+    public void notifyLogout() {
+        play.logout();
+    }
+    
     public void notifyNewGame() {
         play.newGame();
     }

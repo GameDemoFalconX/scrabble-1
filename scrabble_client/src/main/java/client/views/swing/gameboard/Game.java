@@ -4,13 +4,13 @@ import client.controller.GameController;
 import client.model.event.ErrorMessageEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.RackReArrangeEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.event.TileFromGridToGridEvent;
 import client.model.event.TileFromGridToRackEvent;
 import client.model.event.TileFromGridToRackWithShiftEvent;
 import client.model.event.TileFromRackToGridEvent;
 import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
-import client.model.event.removeBadTilesEvent;
 import client.views.GameView;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.GlassPane;
@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -114,6 +113,14 @@ public class Game extends GameView {
         contentPane.add(shuffleButton, 0);
         contentPane.add(exchangeButton, 0);
         contentPane.add(validWordButton, 0);
+        contentPane.validate();
+        contentPane.repaint();
+    }
+    
+    private void resetGameButtons() {
+        contentPane.remove(shuffleButton);
+        contentPane.remove(exchangeButton);
+        contentPane.remove(validWordButton);
         contentPane.validate();
         contentPane.repaint();
     }
@@ -349,7 +356,7 @@ public class Game extends GameView {
     }
     
     @Override
-    public void removeBadTiles(removeBadTilesEvent event) {
+    public void removeBadTiles(RemoveBadTilesEvent event) {
         gameboard.removeBadTiles(event.getTilesToRemove());
     }
 
@@ -357,5 +364,20 @@ public class Game extends GameView {
     public void displayError(ErrorMessageEvent event) {
         ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, event.getMessage());
         errorPopup.showErrorMessage();
+    }
+    
+    @Override
+    public void resetGrid() {
+        contentPane.remove(gameboard.getInnerGrid());
+        contentPane.validate();
+        gameboard.reset();
+    }
+    
+    @Override
+    public void resetRack() {
+        contentPane.remove(rack.getInnerRack());
+        contentPane.validate();
+        rack.reset();
+        resetGameButtons();
     }
 }

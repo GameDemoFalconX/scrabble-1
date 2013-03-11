@@ -77,4 +77,22 @@ public class PlayerCollector {
         }
         return null;
     }
+    
+    /**
+     * Remove the current player to the player collection and destroy this Play
+     * instance (Garbage collector) if it exists.
+     * @param playerID
+     */
+    public void removePlayer(String playerID) {
+        collection.remove(playerID);
+    }
+    
+    /**
+     * Return the Play instance if it exists for the player given in parameter.
+     * @param playerID
+     * @return 
+     */
+    public Play isPlaying(String playerID) {
+        return collection.get(playerID);
+    }
 }

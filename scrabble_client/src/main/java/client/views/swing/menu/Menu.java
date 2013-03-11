@@ -12,11 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -73,7 +68,6 @@ public class Menu extends MenuView {
         panel.add(signupButton);
         panel.add(scrabbleButton);
         panel.validate();
-        //panel.repaint();
     }
 
     private void loadPlay(boolean anonymous, String email, String username, int score) {
@@ -100,18 +94,20 @@ public class Menu extends MenuView {
         }
         
         // Add username label
-        userLab = new JLabel("<html><body><p style='color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
-        userLab.setBounds(panel.getWidth() / 2 -40, 100, 200, 20);
-        panel.add(userLab);
+        userLab = new JLabel("<html><body><p style='margin: auto; color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab.setBounds(0, 100, panel.getWidth(), 20);
+        panel.add(userLab, BorderLayout.CENTER);
         
         panel.validate();
         panel.repaint();
     }
 
-    private void logOut() {
-        playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-        panel.remove(playerPanel);
-        panel.remove(settingsButton);
+    private void logoutProcess() {
+        //playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
+        // Remove unused elements
+        panel.removeAll();
+        panel.validate();
+        
         panel.add(playAsGuestButton);
         panel.add(loginButton);
         panel.add(signupButton);
@@ -197,7 +193,8 @@ public class Menu extends MenuView {
         logOff = new JMenuItem(new AbstractAction("Log off") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logOut();
+                getController().notifyLogout();
+                logoutProcess();
             }
         });
         logOff.setSize(200, 20);

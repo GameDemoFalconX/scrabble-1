@@ -30,10 +30,9 @@ public class HAL extends Game {
 
     /**
      * Create a new account for the current player.
-     *
      * @param pl_name, pl_pwd
-     * @return Return True if a new account has been created. If the player name
-     * already exists, return False and do nothing.
+     * @return Return new player infos in JSON if a new account has been created. If the player name
+     * already exists, return throw a GameException and do nothing.
      */
     @Override
     protected Message createAccount(String pl_email, String pl_pwd) {
@@ -51,6 +50,12 @@ public class HAL extends Game {
         return new Message(Message.NEW_ACCOUNT_ERROR, "");
     }
 
+    /**
+     * Login a registered user.
+     * @param pl_email, pl_pwd
+     * @return Return player infos in JSON if player exists, otherwise throw GameExceptions
+     * and do nothing.
+     */
     @Override
     protected Message loginProcess(String pl_email, String pl_pwd) {
         try {
@@ -72,18 +77,29 @@ public class HAL extends Game {
         }
     }
 
+    /**
+     * Allow to logout a user currently logged. 
+     * Automatically save its current play if it exists.
+     * @param pl_id
+     * @return Message with the right header : LOGOUT_SUCCESS or _ERROR.
+     */
     @Override
-    protected Message logoutProcess(String pl_id) {/*
-         if (plays.playerIsLogged(pl_id)) {
-         plays.removePlayer(pl_id);
-         return new Message(Message.LOGOUT_SUCCESS, "");
-         }*/
+    protected Message logoutProcess(String pl_id) {
+         if (pCol.playerIsLogged(pl_id)) {
+            // Check if a play is processing and save it, otherwise do nothing.
+             Play cPlay = pCol.isPlaying(pl_id);
+             if (cPlay != null) {
+                 // Save Play in the DB.
+             }
+             
+             pCol.removePlayer(pl_id);
+            return new Message(Message.LOGOUT_SUCCESS, "");
+         }
         return new Message(Message.LOGOUT_ERROR, "");
     }
 
     /**
      * Create a new Play instance for this user
-     *
      * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
      * @return Message with body format in JSON : {"play_id":
      * "xxxx0x0000x00x0x00", "rack":
@@ -107,7 +123,6 @@ public class HAL extends Game {
 
     /**
      * Allows to log an anonymous user
-     *
      * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
      * @return Message with body format in JSON : {"play_id":
      * "xxxx0x0000x00x0x00", "rack":

@@ -9,4 +9,5 @@ public interface RackListener extends EventListener {
 
     public void initRack(InitRackEvent event);
     public void rackReArrange(RackReArrangeEvent event);
+    public void resetRack();
 }
