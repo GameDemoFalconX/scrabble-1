@@ -306,7 +306,21 @@ public class Play {
     }
     
     public void login(String email, String pwd) {
+        String response = null;
+        try {
+            response = service.newPlayer(email, pwd);
+        } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
         
+        try {
+            player = om.readValue(response, Player.class);
+            
+            // Dispatch the model notifications to Menu listener
+            fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     /**

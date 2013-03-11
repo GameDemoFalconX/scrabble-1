@@ -2,6 +2,8 @@ package server.server.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import server.common.Message;
 import server.server.db.Connector;
 
@@ -49,16 +51,22 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message loginProcess(String pl_name, String pl_pwd) {/*
-        if (players.playerExists(pl_name)) {
-            Player pl = players.checkPassword(pl_name, pl_pwd);
-            if (pl != null) {
-                plays.addPlayer(pl.getPlayerID());
-                return new Message(Message.LOGIN_SUCCESS, pl.getPlayerID());
+    protected Message loginProcess(String pl_email, String pl_pwd) {
+        if (Co.getUserByEmail(pl_email) != null) {
+            String playerJSONInfo = Co.checkPassword(pl_email, pl_pwd);
+            if (playerJSONInfo != null) {
+                 Player newPlayer = null;
+                try {
+                    newPlayer = om.readValue(playerJSONInfo, Player.class);
+                    pCol.addPlayer(newPlayer.getPlayerID());
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+                return new Message(Message.LOGIN_SUCCESS, playerJSONInfo);
             } else {
                 return new Message(Message.LOGIN_ERROR, "");
             }
-        }*/
+        }
         return new Message(Message.PLAYER_NOT_EXISTS, "");
     }
 
@@ -169,8 +177,8 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {/*
-        Play cPlay = plays.playIdentification(pl_id, ga_id);
+    protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {
+        Play cPlay = pCol.playIdentification(pl_id, ga_id);
         if (cPlay != null) {
             System.out.println("Server : start scrabbleValidator with data = " + ga_infos);
             cPlay.newTest(); // Increase the number of tests for this player.
@@ -219,7 +227,7 @@ public class HAL extends Game {
                 cPlay.testWithError(); // Increase the number of tests with error
                 return new Message(Message.PLACE_WORD_ERROR, "{\"valid\": false, \"score\": "+cPlay.getScore()+"}");
             }
-        }*/
+        }
         return new Message(Message.GAME_IDENT_ERROR, "");
     }
 

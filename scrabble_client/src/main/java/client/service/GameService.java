@@ -55,19 +55,18 @@ public class GameService {
 
     /**
      * Ask the server to log a Player.
-     *
      * @param name the player email as a String
      * @param password the player password as a String
      * @return a new Player if the login is successful, otherwise null.
      * @throws GameException
      */
-    public Player loginPlayer(String email, String password) throws GameException {
-        Message serverResponse = servProtocol.sendRequest(Message.LOGIN, email + "_" + password);
+    public String loginPlayer(String email, String password) throws GameException {
+        Message serverResponse = servProtocol.sendRequest(Message.LOGIN, "{\"email\": \""+email+"\", \"pwd\": \""+password+"\"}");
 
         if (serverResponse != null) {
             switch (serverResponse.getHeader()) {
                 case Message.LOGIN_SUCCESS:
-                    return new Player(email, password, new String(serverResponse.getBody()));
+                    return serverResponse.getBodyJSON();
                 default:
                     exceptionTriggered(serverResponse.getHeader());
             }

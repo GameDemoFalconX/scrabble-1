@@ -100,12 +100,11 @@ public class ThreadCtrl extends Thread {
     }
 
     private void login() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to login");
         Message response;
 
         // Try to log the current player
-        response = sScrabble.login(argsTab[0], argsTab[1]);
+        response = sScrabble.login(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

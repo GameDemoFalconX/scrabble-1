@@ -81,20 +81,21 @@ public class ServerScrabble {
 
     /**
      * Allows to log the current player.
-     *
      * @param pl_name
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message login(String pl_name, String pl_pwd) {
+    public synchronized Message login(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.login(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.login(node.get("email").asText(), node.get("pwd").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }

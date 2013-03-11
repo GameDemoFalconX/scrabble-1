@@ -216,14 +216,14 @@ public class Menu extends MenuView {
     private void initScoreLabel() {
         score = new JLabel("000");
         score.setBounds(panel.getWidth() - 170, 14, 80, 80);
-        Font font = null;
+        /*Font font = null;
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("../media/DS-DIGI.ttf").toURI()));
         } catch (FontFormatException | IOException | URISyntaxException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
         font = font.deriveFont(Font.PLAIN, 48);
-        score.setFont(font);
+        score.setFont(font);*/
         if (dark) {
             score.setForeground(Color.WHITE);
         } else {

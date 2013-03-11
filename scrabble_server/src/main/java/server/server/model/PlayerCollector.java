@@ -65,4 +65,16 @@ public class PlayerCollector {
         }
         return done;
     }
+    
+     /**
+     * Check if the current player is logged to play this specific game.
+     * @param pl_id, ga_id
+     * @return Play instance if player can play this game and null otherwise.
+     */
+    public Play playIdentification(String pl_id, String ga_id) {
+        if (playerIsLogged(pl_id) && collection.get(pl_id).getPlayID().equals(ga_id)) {
+            return collection.get(pl_id);
+        }
+        return null;
+    }
 }

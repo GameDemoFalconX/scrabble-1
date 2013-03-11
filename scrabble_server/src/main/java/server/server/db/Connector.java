@@ -142,7 +142,7 @@ public class Connector {
      * @return if no values found return null otherwise return a JSON string
      */
     public String getAllUsers() {
-        String response = execGetQuery("SELECT user_id, username, email from scrabble_user", null);
+        String response = execGetQuery("SELECT user_id, username, email FROM scrabble_user", null);
         if (response != null) {
             return "{\"users\" : ["+response+"]}";
         }
@@ -150,11 +150,11 @@ public class Connector {
     }
     
     public String getUserById(String user_id) {
-        return execGetQuery("SELECT user_id, username, email from scrabble_user WHERE user_id = ?", new String[]{user_id});
+        return execGetQuery("SELECT user_id, username, email FROM scrabble_user WHERE user_id = ?", new String[]{user_id});
     }
     
     public String getUserByEmail(String user_email) {
-        return execGetQuery("SELECT user_id, username, email from scrabble_user WHERE email = ?", new String[]{user_email});
+        return execGetQuery("SELECT user_id, username, email FROM scrabble_user WHERE email = ?", new String[]{user_email});
     }
     
     public String createPlayer(String pl_email, String pl_pwd) {
@@ -179,6 +179,12 @@ public class Connector {
             execPostQuery("INSERT INTO scrabble_user ('user_id', 'username', 'email', 'password', 'salt', 'created') VALUES (?, ?, ?, ?, ?, ?)", new String[]{user_id.toString(), username, pl_email, new_pwd, salt.toString(), dateFormat.format(date)});
             response = getUserById(user_id.toString());
         }
+        return response;
+    }
+    
+    public String checkPassword(String pl_email, String pl_pwd) {
+        String response = null;
+        response = execGetQuery("SELECT user_id, username, email FROM scrabble_user WHERE email = ? AND password = ?", new String[]{pl_email, pl_pwd});
         return response;
     }
 
