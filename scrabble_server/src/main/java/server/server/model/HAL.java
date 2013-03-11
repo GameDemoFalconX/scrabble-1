@@ -80,9 +80,9 @@ public class HAL extends Game {
     protected Message createNewGame(String pl_id) {
         try {
             String user_id = om.readTree(pl_id).get("user_id").asText();
-            if (pCol.playerIsLogged(pl_id)) {
+            if (pCol.playerIsLogged(user_id)) {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
-                Play newPlay = new Play(pl_id);
+                Play newPlay = new Play(user_id);
                 pCol.addPlay(pl_id, newPlay);
                 return new Message(Message.NEW_GAME_SUCCESS, "{\"play_id\": \""+newPlay.getPlayID()+"\", \"rack\": "+ newPlay.getFormatRack()+"}");
             }
