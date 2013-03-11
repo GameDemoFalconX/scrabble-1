@@ -21,7 +21,7 @@ import javax.swing.*;
  */
 public class Menu extends MenuView {
 
-    private static JPanel panel, playerPanel;
+    private static JPanel panel, playerPanel, usernamePanel;
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
             playerButton, settingsButton, newGameButton, saveButton, loadButton;
@@ -50,7 +50,7 @@ public class Menu extends MenuView {
     private void buildMenu() {
         panel = new JPanel();
         panel.setLayout(null);
-        panel.setBounds(700, 0, 250, 800);
+        panel.setBounds(720, 0, 240, 800);
         panel.setOpaque(false);
         initComponent();
     }
@@ -83,7 +83,9 @@ public class Menu extends MenuView {
         initScoreLabel();
         initSettingsButton();
         initPlayerPanel();
+        initUsernamePanel();
         panel.add(playerPanel);
+        panel.add(usernamePanel);
         panel.add(settingsButton);
 
         if (!anonymous) {
@@ -94,16 +96,14 @@ public class Menu extends MenuView {
         }
         
         // Add username label
-        userLab = new JLabel("<html><body><p style='margin: auto; color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
-        userLab.setBounds(0, 100, panel.getWidth(), 20);
-        panel.add(userLab, BorderLayout.CENTER);
+        userLab = new JLabel("<html><body><p style='color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        usernamePanel.add(userLab, BorderLayout.CENTER);
         
         panel.validate();
         panel.repaint();
     }
 
     private void logoutProcess() {
-        //playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
         // Remove unused elements
         panel.removeAll();
         panel.validate();
@@ -247,13 +247,20 @@ public class Menu extends MenuView {
     private void initPlayerPanel() {
         playerPanel = new JPanel();
         playerPanel.setBorder(null);
-        playerPanel.setBounds(30, 10, panel.getWidth() - 30, 70);
+        playerPanel.setBounds(20, 10, panel.getWidth()-40, 70);
         playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
         playerPanel.add(score);
         playerPanel.add(playerButton);
         playerPanel.validate();
         playerPanel.repaint();
+    }
+    
+    private void initUsernamePanel() {
+        usernamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        usernamePanel.setBorder(null);
+        usernamePanel.setBounds(0, 100, panel.getWidth(), 30);
+        usernamePanel.setOpaque(false);
     }
 
     private void initNewGameButton() {
