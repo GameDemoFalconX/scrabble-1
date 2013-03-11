@@ -13,11 +13,13 @@ import java.awt.Point;
 public class GameController {
 
     public GameView mainView = null;
+    public GameView secondView = null;
     private Play play = null; // Model in MVC Architecture
 
     public GameController(Play play) {
         this.play = play;
         mainView = new Game(this);
+        secondView = new client.views.console.Game(this);
         addListenersToModel();
     }
 
@@ -26,6 +28,10 @@ public class GameController {
         play.addRackListener(mainView);
         play.addGridListener(mainView);
         play.addErrorListener(mainView);
+        play.addTileListener(secondView);
+        play.addRackListener(secondView);
+        play.addGridListener(secondView);
+        play.addErrorListener(secondView);
     }
 
     public void addMenuToView(Menu menu) {
@@ -35,12 +41,14 @@ public class GameController {
 
     public void displayViews() {
         mainView.display();
+        secondView.display();
     }
 
     public void closeViews() {
         mainView.close();
+        secondView.close();
     }
-
+    
     public void notifyCreateWord(int sourcePos, int x, int y) {
         play.createWord(sourcePos, x, y);
     }

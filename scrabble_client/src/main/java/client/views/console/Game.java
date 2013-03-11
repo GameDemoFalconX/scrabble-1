@@ -35,8 +35,12 @@ public class Game extends GameView{
     }
     
     private void displayGame() {
-        System.out.println(grid.toDisplay());
-        System.out.println(rack.toDisplay());
+        if (grid != null) {
+            System.out.println(grid.toDisplay());
+        }
+        if (rack != null) {
+            System.out.println(rack.toDisplay());
+        }
     }
 
     @Override

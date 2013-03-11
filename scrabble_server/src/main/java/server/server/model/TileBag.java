@@ -99,17 +99,17 @@ public class TileBag {
      */
     private int getValue() {
         double rand = random.nextDouble();
-        if (rand < 0.03) {								// 3% 2 letters
+        if (rand < 0.02) {				// 2% 2 letters
             return 0;
-        } else if (rand < 0.50) {			// 47% for 71 letters
+        } else if (rand < 0.74) {			// 72% for 73 letters
             return 1;
-        } else if (rand < 0.64) {			// 14% for 8 letters
+        } else if (rand < 0.82) {			// 8% for 8 letters
             return 2;
-        } else if (rand < 0.75) {			// 11% for 6 letters
+        } else if (rand < 0.88) {			// 6% for 6 letters
             return 3;
-        } else if (rand < 0.86) {			// 11% for 6 letters
+        } else if (rand < 0.94) {			// 6% for 6 letters
             return 4;
-        } else if (rand < 0.91) {			// 5% for 2 letters
+        } else if (rand < 0.96) {			// 2% for 2 letters
             return 8;
         } else {														// 9% for 5 letters
             return 10;

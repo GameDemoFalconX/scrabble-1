@@ -58,6 +58,7 @@ public class Game extends GameView {
     private static final String DARK_SHUFFLE_PATH = PATH_MEDIA + "shuffle_rack_icon.png";
     private static final String DARK_VALID_WORD_PATH = PATH_MEDIA + "add_word_icon.png";
     private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
+    private static final String ICON = PATH_MEDIA + "icon.png";
     public static String tileBlank;
     private JFrame frame;
     private JLayeredPane JLPaneOfFrame;
@@ -96,9 +97,9 @@ public class Game extends GameView {
 
     private void initFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("../media/icon.png"));
+        Image icon = ImageIconTools.createImageIcon(ICON, "icon").getImage();
         icon = icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        frame.setIconImage(icon);*/
+        frame.setIconImage(icon);
         frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
         frame.setContentPane(contentPane);
         frame.setGlassPane(GlassPane.getInstance());
