@@ -2,8 +2,6 @@ package server.server.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 
 /**
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>

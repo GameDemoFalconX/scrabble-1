@@ -308,7 +308,7 @@ public class Play {
     public void login(String email, String pwd) {
         String response = null;
         try {
-            response = service.newPlayer(email, pwd);
+            response = service.loginPlayer(email, pwd);
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }

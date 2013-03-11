@@ -21,7 +21,6 @@ public class PasswordHasher {
             // Digest computation
             byte[] bDigest = getHash(ITERATION_NUMBER, password, salt);
             String sDigest = byteToBase64(bDigest);
-            //String sSalt = byteToBase64(salt);
             return sDigest;
         } catch (NoSuchAlgorithmException e) {}
         return null;
@@ -59,7 +58,7 @@ public class PasswordHasher {
      * @return byte[]
      * @throws IOException
      */
-    public static byte[] base64ToByte(String data) throws IOException {
+    public byte[] base64ToByte(String data) throws IOException {
         BASE64Decoder decoder = new BASE64Decoder();
         return decoder.decodeBuffer(data);
     }
@@ -70,7 +69,7 @@ public class PasswordHasher {
      * @return String
      * @throws IOException
      */
-    public static String byteToBase64(byte[] data) {
+    public String byteToBase64(byte[] data) {
         BASE64Encoder endecoder = new BASE64Encoder();
         return endecoder.encode(data);
     }

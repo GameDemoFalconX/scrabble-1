@@ -1,5 +1,8 @@
 package server.server.db;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.Connection;
@@ -10,8 +13,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server.common.GameException;
 import server.common.PasswordHasher;
 
 /**
@@ -29,6 +36,12 @@ public class Connector {
     
     // Date formatting
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    
+    // JSON treatment
+    ObjectMapper om = new ObjectMapper();
+    
+    // Password Hasher Instance
+    PasswordHasher hasher = new PasswordHasher();
 
     public Connector() {
         try {
@@ -172,19 +185,40 @@ public class Connector {
                 salt = new byte[8]; // Salt generation 64 bits long
                 random.nextBytes(salt);
             } catch (NoSuchAlgorithmException e) {}
-            String new_pwd = new PasswordHasher().MakePassword(pl_pwd, salt);
+            String new_pwd = hasher.MakePassword(pl_pwd, salt);
+            String bsalt = hasher.byteToBase64(salt);
             //// STEP 4 : Create a date of creation
             Date date = new Date();
             //// STEP 5 : send query to the DB
-            execPostQuery("INSERT INTO scrabble_user ('user_id', 'username', 'email', 'password', 'salt', 'created') VALUES (?, ?, ?, ?, ?, ?)", new String[]{user_id.toString(), username, pl_email, new_pwd, salt.toString(), dateFormat.format(date)});
+            execPostQuery("INSERT INTO scrabble_user ('user_id', 'username', 'email', 'password', 'salt', 'created') VALUES (?, ?, ?, ?, ?, ?)", new String[]{user_id.toString(), username, pl_email, new_pwd, bsalt, dateFormat.format(date)});
             response = getUserById(user_id.toString());
         }
         return response;
     }
     
-    public String checkPassword(String pl_email, String pl_pwd) {
+    public String checkPassword(String pl_email, String pl_pwd) throws GameException {
         String response = null;
-        response = execGetQuery("SELECT user_id, username, email FROM scrabble_user WHERE email = ? AND password = ?", new String[]{pl_email, pl_pwd});
+        String secure = execGetQuery("SELECT salt, user_id, username, email, password FROM scrabble_user WHERE email = ?", new String[]{pl_email});
+        if (secure != null) {
+            try {
+                JsonNode root = om.readTree(secure);
+                byte[] salt = hasher.base64ToByte(root.get("salt").asText());
+                byte[] digest = hasher.base64ToByte(root.get("password").asText());
+                byte[] proposed_pwd = null;
+                try {
+                    proposed_pwd = hasher.getHash(1000, pl_pwd, salt);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                if (Arrays.equals(proposed_pwd, digest)) {
+                    return JSONSelector(secure, new String[]{"user_id", "username", "email"});
+                } else {
+                    throw new GameException(GameException.typeErr.LOGIN_ERROR);
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
         return response;
     }
 
@@ -223,8 +257,37 @@ public class Connector {
         return result;
     }
     
+    private String JSONSelector(String data, String[] selectors) {
+        String result = null;
+        try {
+            JsonNode root = om.readTree(data);
+            result = "{";
+            for (int i = 0; i < selectors.length; i++) {
+                result += "\""+selectors[i]+"\": ";
+                if (root.get(selectors[i]).isBoolean()) {
+                    result += root.get(selectors[i]).asBoolean();
+                } else if (root.get(selectors[i]).isInt()) {
+                    result += root.get(selectors[i]).asInt();
+                } else {
+                    result += "\""+root.get(selectors[i]).asText()+"\"";
+                }
+                result += (i < selectors.length-1) ? ", " : "";
+            }
+            result += "}";
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return result;
+    }
+    
     public static void main(String[] args) {
         Connector c = new Connector();
-        System.out.println(c.createPlayer("johndoe@gmail.com", "test_password_1"));
+        //System.out.println(c.createPlayer("johndoe@gmail.com", "test_password_1"));
+        try {
+            //System.out.println(c.getUserByEmail("romain@example.com"));
+            System.out.println(c.checkPassword("johndoe@gmail.com", "test_password_1"));
+        } catch (GameException ge) {
+            ge.printStackTrace();
+        }
     }
 }
