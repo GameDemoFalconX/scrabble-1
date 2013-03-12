@@ -113,22 +113,22 @@ public class TileBag {
             if (rand < ((float) TILE_0_NUMBER / TILE_NUMBER)) {
                 result = 0;
                 found = true;
-            } else if (rand < ((float) TILE_1_NUMBER / TILE_NUMBER)) {
+            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER) / TILE_NUMBER)) {
                 result = 1;
                 found = true;
-            } else if (rand < ((float) TILE_2_NUMBER / TILE_NUMBER)) {
+            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER) / TILE_NUMBER)) {
                 result = 2;
                 found = true;
-            } else if (rand < ((float) TILE_3_NUMBER / TILE_NUMBER)) {
+            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER) / TILE_NUMBER)) {
                 result = 3;
                 found = true;
-            } else if (rand < ((float) TILE_4_NUMBER / TILE_NUMBER)) {
+            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER) / TILE_NUMBER)) {
                 result = 4;
                 found = true;
-            } else if (rand < ((float) TILE_8_NUMBER / TILE_NUMBER)) {
+            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER + TILE_8_NUMBER) / TILE_NUMBER)) {
                 result = 8;
                 found = true;
-            } else if (rand < ((float) TILE_10_NUMBER / TILE_NUMBER)) {
+            } else {
                 result = 10;
                 found = true;
             }

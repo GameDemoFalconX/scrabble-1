@@ -29,7 +29,7 @@ class Rack {
      * @param formatedRack
      */
     private void loadRack(String formatedRack) throws IOException {
-        System.out.println("New rack : " + formatedRack);
+        //System.out.println("New rack : " + formatedRack);
         rack = om.readValue(formatedRack, Tile[].class);
     }
 

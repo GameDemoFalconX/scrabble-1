@@ -183,8 +183,8 @@ public class Play {
         String p = "", n = "";
 
         // Display Grid and Rack
-        System.out.println(grid.toString());
-        System.out.println(rack.displayRack());
+        //System.out.println(grid.toString());
+        //System.out.println(rack.displayRack());
 
         // Initialization from current tile.
         int wordCounter = grid.scoringGrid.checkBonus(cTile, this);

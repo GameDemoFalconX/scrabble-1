@@ -136,7 +136,6 @@ public class HAL extends Game {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
                 Play newPlay = new Play(user_id);
                 pCol.addNewPlay(user_id, newPlay);
-                System.out.println("Rack : " + newPlay.getFormatRack());
                 return new Message(Message.NEW_GAME_ANONYM_SUCCESS, "{\"play_id\": \"" + newPlay.getPlayID() + "\", \"rack\": " + newPlay.getFormatRack() + "}");
             }
             // The current anonymous player is already logged.
@@ -205,7 +204,7 @@ public class HAL extends Game {
     protected Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos) {
         Play cPlay = pCol.playIdentification(pl_id, ga_id);
         if (cPlay != null) {
-            System.out.println("Server : start scrabbleValidator with data = " + ga_infos);
+            System.out.println("Server : start scrabbleValidator");
             cPlay.newTest(); // Increase the number of tests for this player.
 
             // Step 1 - Place tiles on the grid and get the list of coordinates.

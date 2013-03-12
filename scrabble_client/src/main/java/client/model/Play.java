@@ -21,6 +21,7 @@ import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -461,9 +462,9 @@ public class Play {
             }
 
             if (done && ((!this.firstWord) || (this.firstWord && check))) {
-                System.out.println("dataToSend : " + dataToSend);
                 String response = null;
                 try {
+                    System.out.println("dataToSend : "+dataToSend);
                     response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
                     JsonNode root = om.readTree(response);
                     if (root.get("valid").asBoolean()) {

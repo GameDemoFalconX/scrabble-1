@@ -243,8 +243,9 @@ public class ServerScrabble {
     public synchronized Message gameTreatment(String data) {
         Message response = null;
         try {
+            System.out.println(data);
             JsonNode root = om.readTree(data);
-            response = game.checkGame(root.get("player_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
+            response = game.checkGame(root.get("user_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }

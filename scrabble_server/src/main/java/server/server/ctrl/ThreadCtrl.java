@@ -193,7 +193,6 @@ public class ThreadCtrl extends Thread {
     }
 
     private void gameTreatment() {
-        System.out.println(request.getBodyJSON());
         outputPrint("Start game treatment for the current player");
         Message response;
 
