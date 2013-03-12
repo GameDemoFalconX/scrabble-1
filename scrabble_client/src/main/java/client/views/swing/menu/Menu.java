@@ -3,6 +3,7 @@ package client.views.swing.menu;
 import client.controller.MenuController;
 import client.model.event.InitMenuToPlayEvent;
 import client.model.event.UpdateScoreEvent;
+import client.model.event.UpdateStatsEvent;
 import client.views.MenuView;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.gameboard.Blah;
@@ -21,14 +22,15 @@ import javax.swing.*;
  */
 public class Menu extends MenuView {
 
-    private static JPanel panel, playerPanel, usernamePanel;
+    private static JPanel panel, playerPanel, usernamePanel, statsPanel;
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
             playerButton, settingsButton, newGameButton, saveButton, loadButton;
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
+    private JList wList;
     private boolean dark = true;
-    private JLabel score, userLab;
+    private JLabel score, userLab, testPlayed, testWon, testLost, testPlayedLab, testWonLab, testLostLab;
 
     public Menu(MenuController controller) {
         super(controller);
@@ -84,8 +86,12 @@ public class Menu extends MenuView {
         initSettingsButton();
         initPlayerPanel();
         initUsernamePanel();
+        initStatsPanel();
+        initWordList();
         panel.add(playerPanel);
         panel.add(usernamePanel);
+        panel.add(statsPanel);
+        panel.add(wList);
         panel.add(settingsButton);
 
         if (!anonymous) {
@@ -95,10 +101,11 @@ public class Menu extends MenuView {
             panel.add(loadButton);
         }
         
-        // Add username label
+        // Add username and stats labels
         userLab = new JLabel("<html><body><p style='color: white;'>Welcome <strong>"+username+"</strong></p></body></html>");
         userLab.setFont(new Font("Arial", Font.PLAIN, 16));
         usernamePanel.add(userLab, BorderLayout.CENTER);
+        initStatsLab();
         
         panel.validate();
         panel.repaint();
@@ -257,6 +264,53 @@ public class Menu extends MenuView {
         usernamePanel.setOpaque(true);
         usernamePanel.setBackground(new Color(154, 154, 154, 70));
     }
+    
+    private void initStatsPanel() {
+        statsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        statsPanel.setBorder(null);
+        statsPanel.setBounds(10, 130, panel.getWidth()-20, 70);
+        statsPanel.setOpaque(true);
+        statsPanel.setBackground(new Color(154, 154, 154, 70));
+    }
+    
+    private void initStatsLab() {
+        testPlayedLab = new JLabel("<html><body><p style='color: white;'><strong>Coups joués :</strong></p></body></html>");
+        testPlayedLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testPlayedLab.setLabelFor(testPlayed);
+        testPlayed = new JLabel("0");
+        testPlayed.setFont(new Font("Arial", Font.PLAIN, 14));
+        testPlayed.setForeground(Color.red);
+        
+        testWonLab = new JLabel("<html><body><p style='color: white;'><strong>Coups gagnés :</strong></p></body></html>");
+        testWonLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testWonLab.setLabelFor(testWon);
+        testWon = new JLabel("0");
+        testWon.setFont(new Font("Arial", Font.PLAIN, 14));
+        testWon.setForeground(Color.red);
+        
+        testLostLab = new JLabel("<html><body><p style='color: white;'><strong>Coups perdus :</strong></p></body></html>");
+        testLostLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testLostLab.setLabelFor(testLost);
+        testLost = new JLabel("0");
+        testLost.setFont(new Font("Arial", Font.PLAIN, 14));
+        testLost.setForeground(Color.red);
+        
+        statsPanel.add(testPlayedLab);
+        statsPanel.add(testPlayed, BorderLayout.CENTER);
+        statsPanel.add(testWonLab);
+        statsPanel.add(testWon, BorderLayout.CENTER);
+        statsPanel.add(testLostLab);
+        statsPanel.add(testLost, BorderLayout.CENTER);
+    }
+    
+    private void initWordList() {
+        wList = new JList(new String[]{"mot1", "mot2"});
+        wList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        wList.setLayoutOrientation(JList.VERTICAL);
+        wList.setBounds(10, 210, panel.getWidth()-20, 200);
+        wList.setOpaque(true);
+        wList.setBackground(new Color(154, 154, 154, 70));
+    }
 
     private void initNewGameButton() {
         newGameButton = new JButton("New game");
@@ -310,6 +364,24 @@ public class Menu extends MenuView {
             score.setForeground(Color.BLACK);
         }
     }
+    
+    private void increaseTestPlayed() {
+        int old = Integer.parseInt(testPlayed.getText());
+        old++;
+        testPlayed.setText(""+old);
+    }
+    
+    private void increaseTestWon() {
+        int old = Integer.parseInt(testWon.getText());
+        old++;
+        testWon.setText(""+old);
+    }
+    
+    private void increaseTestLost() {
+        int old = Integer.parseInt(testLost.getText());
+        old++;
+        testLost.setText(""+old);
+    }
 
     /**
      * * Methods used to update the Menu view from the model notifications **
@@ -322,5 +394,15 @@ public class Menu extends MenuView {
     @Override
     public void updateScore(UpdateScoreEvent event) {
         score.setText("" + event.getScore());
+    }
+    
+    @Override
+    public void updateStats(UpdateStatsEvent event) {
+        increaseTestPlayed();
+        if (event.isValid()) {
+            increaseTestWon();
+        } else {
+            increaseTestLost();
+        }
     }
 }

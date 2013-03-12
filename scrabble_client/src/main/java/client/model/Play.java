@@ -17,6 +17,7 @@ import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.RemoveBadTilesEvent;
+import client.model.event.UpdateStatsEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
@@ -250,6 +251,14 @@ public class Play {
             l.displayError(new ErrorMessageEvent(this, error));
         }
     }
+    
+    public void fireMenuUpdateStats(boolean validate) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateStats(new UpdateStatsEvent(this, validate));
+        }
+    }
 
     /**
      * Methods used for initGame (as guest or logged)
@@ -477,6 +486,7 @@ public class Play {
                         // Dispatch the model modifications to all listeners
                         fireUpdateScore(root.get("score").asInt());
                         fireInitRackToPlay(root.get("tiles").toString());
+                        fireMenuUpdateStats(root.get("valid").asBoolean());
                     } else {
                         // Update model
                         setScore(root.get("score").asInt());
@@ -495,6 +505,7 @@ public class Play {
                         fireUpdateScore(root.get("score").asInt());
                         fireInitRackToPlay(newTiles);
                         fireRemoveBadTilesToGrid(tileToRemove);
+                        fireMenuUpdateStats(root.get("valid").asBoolean());
                     }
                 } catch (GameException | IOException ge) {
                     // Fire errors
