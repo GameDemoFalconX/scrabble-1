@@ -8,6 +8,7 @@ import client.model.event.InitRackEvent;
 import client.model.event.MenuListener;
 import client.model.event.RackListener;
 import client.model.event.RackReArrangeEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.event.TileFromGridToGridEvent;
 import client.model.event.TileFromGridToRackEvent;
 import client.model.event.TileFromGridToRackWithShiftEvent;
@@ -16,14 +17,12 @@ import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
-import client.model.event.RemoveBadTilesEvent;
 import client.model.event.UpdateStatsEvent;
 import client.model.event.UpdateWordsListEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class Play {
     private Integer score;
     private Grid grid;
     private Rack rack;
-    private Map<Point, Tile> newWord = new HashMap<>();
+    private Map<String, Tile> newWord = new HashMap<>();
     private boolean firstWord = true;
     private EventListenerList tileListeners;
     private EventListenerList rackListeners;
@@ -406,22 +405,22 @@ public class Play {
      * * Methods used for the creation of words **
      */
     public void createWord(int sourcePos, int x, int y) {
-        newWord.put(new Point(x, y), rack.getTile(sourcePos));
+        newWord.put(x+"#"+y, rack.getTile(sourcePos));
         deplaceTileFromRackToGrid(sourcePos, x, y);
         fireTileMovedFromRackToGrid(sourcePos, x, y, grid.getTile(x, y).isBlank());
         //printDebug();
     }
 
     public void modifiedWord(int sX, int sY, int tX, int tY) {
-        newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
-        newWord.remove(new Point(sX, sY));
+        newWord.put(tX+"#"+tY, newWord.get(sX+"#"+sY));
+        newWord.remove(sX+"#"+sY);
         deplaceTileFromGridToGrid(sX, sY, tX, tY);
         fireTileMovedFromGridToGrid(sX, sY, tX, tY);
         //printDebug();
     }
 
     public void removeLetterFromWord(int x, int y, int targetPos) {
-        newWord.remove(new Point(x, y));
+        newWord.remove(x+"#"+y);
         if (rack.getTile(targetPos) != null) {
             deplaceTileFromGridToRackWithShift(x, y, targetPos);
             fireTileMovedFromGridToRackWithShift(x, y, targetPos, rack.getTile(targetPos).isBlank());
@@ -456,7 +455,8 @@ public class Play {
             String dataToSend = "[";
             while (done && i.hasNext()) {
                 Map.Entry t = (Map.Entry) i.next();
-                Point p = (Point) t.getKey();
+                String[] coord = ((String) t.getKey()).split("#");
+                Point p =  new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
 
                 // Verification:
                 if (inspector == this.newWord.size()) {
@@ -499,17 +499,20 @@ public class Play {
                         fireMenuUpdateWordsList(om.readValue(root.get("words").toString(), String[].class));
                     } else {
                         // Update model
+                        Set rSet = this.newWord.entrySet();
                         setScore(root.get("score").asInt());
                         String newTiles = "[";
                         String tileToRemove = "[";
-                        Iterator it = set.iterator();
+                        Iterator it = rSet.iterator();
                         while (it.hasNext()) {
                             Map.Entry t = (Map.Entry) it.next();
-                            Point p = (Point) t.getKey();
+                            String[] coord = ((String) t.getKey()).split("#");
+                            Point p =  new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
                             Tile tile = (Tile) t.getValue();
                             removeBadTiles(p, tile);
                             newTiles += (it.hasNext()) ? tile + ", " : tile + "]";
                             tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+                            it.remove();
                         }
                         // Dispatch the model modifications to all listeners
                         fireUpdateScore(root.get("score").asInt());
@@ -543,15 +546,9 @@ public class Play {
     }
 
     private void displayNewWord() {
-        Set set = this.newWord.entrySet();
-        Iterator i = set.iterator();
-
         System.out.println("New word content : ");
-        while (i.hasNext()) {
-            Map.Entry firstTile = (Map.Entry) i.next();
-            Point p = (Point) firstTile.getKey();
-            Tile t = (Tile) firstTile.getValue();
-            System.out.println(p + " - " + t.getLetter());
+        for (String key : newWord.keySet()) {                
+            System.out.println(key.toString());
         }
     }
 
@@ -596,7 +593,7 @@ public class Play {
      return rack.getBlankTile();
      }*/
     private void printDebug() {
-        grid.printGrid();
+        //grid.printGrid();
         displayNewWord();
     }
 }
