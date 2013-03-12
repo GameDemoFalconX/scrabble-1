@@ -4,7 +4,9 @@ import client.controller.MenuController;
 import client.model.event.InitMenuToPlayEvent;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.UpdateStatsEvent;
+import client.model.event.UpdateWordsListEvent;
 import client.views.MenuView;
+import client.views.swing.common.CustomCellRenderer;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.gameboard.Blah;
 import client.views.swing.gameboard.Game;
@@ -28,7 +30,8 @@ public class Menu extends MenuView {
             playerButton, settingsButton, newGameButton, saveButton, loadButton;
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
-    private JList wList;
+    private DefaultListModel wListModel = new DefaultListModel();
+    private JList wList = new JList(wListModel);
     private boolean dark = true;
     private JLabel score, userLab, testPlayed, testWon, testLost, testPlayedLab, testWonLab, testLostLab;
 
@@ -304,12 +307,15 @@ public class Menu extends MenuView {
     }
     
     private void initWordList() {
-        wList = new JList(new String[]{"mot1", "mot2"});
         wList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         wList.setLayoutOrientation(JList.VERTICAL);
         wList.setBounds(10, 210, panel.getWidth()-20, 200);
         wList.setOpaque(true);
         wList.setBackground(new Color(154, 154, 154, 70));
+        wList.setLayout(new FlowLayout(FlowLayout.CENTER));
+        wList.setFont(new Font("Arial", Font.BOLD, 15));
+        wList.setForeground(Color.red);
+        wList.setCellRenderer(new CustomCellRenderer());
     }
 
     private void initNewGameButton() {
@@ -329,7 +335,7 @@ public class Menu extends MenuView {
         loadButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								loadGame();
+                // loadGame();
             }
         });
     }
@@ -382,6 +388,12 @@ public class Menu extends MenuView {
         old++;
         testLost.setText(""+old);
     }
+    
+    private void updateWords(String[] data) {
+        for (String word : data) {
+            wListModel.addElement(word);
+        }
+    }
 
     /**
      * * Methods used to update the Menu view from the model notifications **
@@ -404,5 +416,10 @@ public class Menu extends MenuView {
         } else {
             increaseTestLost();
         }
+    }
+    
+    @Override
+    public void updateWordsList(UpdateWordsListEvent event) {
+        updateWords(event.getWordsList());
     }
 }

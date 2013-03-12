@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.common.GameException;
 import server.common.Message;
+import server.common.Utils;
 import server.server.db.Connector;
 
 /**
@@ -244,7 +245,7 @@ public class HAL extends Game {
                 String newTiles = cPlay.getNewTiles(tileList.size()); // Get a formated list of tile with their index in the rack
                 cPlay.testWithSuccess(); // Increase the number of tests with success
                 System.out.println("New tiles : " + newTiles);
-                return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": " + cPlay.getScore() + ", \"tiles\": " + newTiles + "}");
+                return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": " + cPlay.getScore() + ", \"tiles\": " + newTiles + ", \"words\": " +Utils.arrayToJSON(wordsList)+ "}");
             } else {
                 cPlay.setScore((bestWord / 2) * (-1)); // Update score
                 cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid and add them into rack

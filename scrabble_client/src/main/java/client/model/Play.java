@@ -18,6 +18,7 @@ import client.model.event.TileListener;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.RemoveBadTilesEvent;
 import client.model.event.UpdateStatsEvent;
+import client.model.event.UpdateWordsListEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
@@ -259,6 +260,14 @@ public class Play {
             l.updateStats(new UpdateStatsEvent(this, validate));
         }
     }
+    
+    public void fireMenuUpdateWordsList(String[] data) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateWordsList(new UpdateWordsListEvent(this, data));
+        }
+    }
 
     /**
      * Methods used for initGame (as guest or logged)
@@ -487,6 +496,7 @@ public class Play {
                         fireUpdateScore(root.get("score").asInt());
                         fireInitRackToPlay(root.get("tiles").toString());
                         fireMenuUpdateStats(root.get("valid").asBoolean());
+                        fireMenuUpdateWordsList(om.readValue(root.get("words").toString(), String[].class));
                     } else {
                         // Update model
                         setScore(root.get("score").asInt());
@@ -509,6 +519,7 @@ public class Play {
                     }
                 } catch (GameException | IOException ge) {
                     // Fire errors
+                    ge.printStackTrace();
                 }
             } else {
                 if (!check) {
