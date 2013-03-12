@@ -8,7 +8,6 @@ import java.util.Random;
  * LinkedList. Each LinkedList contains Chars There's as many of element in the
  * TileBag as there is Tile in the game. The index of the array is the value of
  * the letters that it contains.
- *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class TileBag {
@@ -28,6 +27,17 @@ public class TileBag {
         {'K', 'W', 'X', 'Y', 'Z'}
     };
     private LinkedList[] tileBag = new LinkedList[source.length];
+    
+    // Private attributes used to calculate a good approximation 
+    // of the probability that a tile has from being pulled.
+    private static int TILE_NUMBER = 102;
+    private static int TILE_0_NUMBER = 2;
+    private static int TILE_1_NUMBER = 73;
+    private static int TILE_2_NUMBER = 8;
+    private static int TILE_3_NUMBER = 6;
+    private static int TILE_4_NUMBER = 6;
+    private static int TILE_8_NUMBER = 2;
+    private static int TILE_10_NUMBER = 5;
 
     /**
      * Create a new TileBag from the source
@@ -44,7 +54,6 @@ public class TileBag {
     /**
      * Allows to initialize a TileBag from a String (Tile Sequence) (if we keep
      * that format)
-     *
      * @param bag
      */
     public TileBag(String bag) {
@@ -60,20 +69,20 @@ public class TileBag {
 
     /**
      * Get a Tile object from the TileBag
-     *
      * @return a Tile created from the TileBag
      */
     public Tile getTile() {
-        int value = getValue();																								// get a random value
-        while (tileBag[value].isEmpty()) {																	// while that row is empty
-            value = getValue();																									// get a new random value
+        int value = getValue();
+        while (tileBag[value].isEmpty()) {
+            value = getValue();
         }
+        updateProb(value);
         char letter;
-        int rand = random.nextInt(tileBag[value].size());					// get a pseudo random number to select the letter from the row
-        letter = (char) tileBag[value].get(rand);												// get the letter from the LinkedList
-        tileBag[value].remove(rand);																			// delete that letter from the LinkedList
-        Tile tile = new Tile(letter, value, letter == '?');																	// call the Tile constructor
-        return tile;																																	// return that tile (to go to the rack)
+        int rand = random.nextInt(tileBag[value].size());					
+        letter = (char) tileBag[value].get(rand);
+        tileBag[value].remove(rand);
+        Tile tile = new Tile(letter, value, letter == '?');
+        return tile;
     }
 
     public Tile popTile(char letter, int value) {
@@ -83,7 +92,6 @@ public class TileBag {
 
     /**
      * Put a tile back into the bag
-     *
      * @param tile a Tile
      */
     public void putBackTile(Tile tile) {
@@ -93,32 +101,71 @@ public class TileBag {
     }
 
     /**
-     * Give a random value with a modifiable probability for each value.
-     *
+     * Give a random value from a real time probability for each tile.
      * @return an integer
      */
     private int getValue() {
-        double rand = random.nextDouble();
-        if (rand < 0.03) {								// 3% 2 letters
-            return 0;
-        } else if (rand < 0.50) {			// 47% for 71 letters
-            return 1;
-        } else if (rand < 0.64) {			// 14% for 8 letters
-            return 2;
-        } else if (rand < 0.75) {			// 11% for 6 letters
-            return 3;
-        } else if (rand < 0.86) {			// 11% for 6 letters
-            return 4;
-        } else if (rand < 0.91) {			// 5% for 2 letters
-            return 8;
-        } else {														// 9% for 5 letters
-            return 10;
+        int result = -1;
+        boolean found = false;
+        double rand = 0.0;
+        while (!found) {
+            rand = random.nextDouble();
+            if (rand < ((float) TILE_0_NUMBER / TILE_NUMBER)) {
+                result = 0;
+                found = true;
+            } else if (rand < ((float) TILE_1_NUMBER / TILE_NUMBER)) {
+                result = 1;
+                found = true;
+            } else if (rand < ((float) TILE_2_NUMBER / TILE_NUMBER)) {
+                result = 2;
+                found = true;
+            } else if (rand < ((float) TILE_3_NUMBER / TILE_NUMBER)) {
+                result = 3;
+                found = true;
+            } else if (rand < ((float) TILE_4_NUMBER / TILE_NUMBER)) {
+                result = 4;
+                found = true;
+            } else if (rand < ((float) TILE_8_NUMBER / TILE_NUMBER)) {
+                result = 8;
+                found = true;
+            } else if (rand < ((float) TILE_10_NUMBER / TILE_NUMBER)) {
+                result = 10;
+                found = true;
+            }
         }
+        return result;
+    }
+    
+    private void updateProb(int value) {
+         // Switch statement to update in live the probability
+        switch(value) {
+            case 0:
+                TILE_0_NUMBER = (TILE_0_NUMBER > 0) ? TILE_0_NUMBER - 1 : 0;
+                break;
+            case 1:
+                TILE_1_NUMBER = (TILE_1_NUMBER > 0) ? TILE_1_NUMBER - 1 : 0;
+                break;
+            case 2:
+                TILE_2_NUMBER = (TILE_2_NUMBER > 0) ? TILE_2_NUMBER - 1 : 0;
+                break;
+            case 3:
+                TILE_3_NUMBER = (TILE_3_NUMBER > 0) ? TILE_3_NUMBER - 1 : 0;
+                break;
+            case 4:
+                TILE_4_NUMBER = (TILE_4_NUMBER > 0) ? TILE_4_NUMBER - 1 : 0;
+                break;
+            case 8:
+                TILE_8_NUMBER = (TILE_8_NUMBER > 0) ? TILE_8_NUMBER - 1 : 0;
+                break;
+            case 10:
+                TILE_10_NUMBER = (TILE_10_NUMBER > 0) ? TILE_10_NUMBER - 1 : 0;
+                break;
+        }
+        TILE_NUMBER--;
     }
 
     /**
      * Test if the TileBag is Empty
-     *
      * @return true if empty, false if not
      */
     public boolean isEmpty() {
