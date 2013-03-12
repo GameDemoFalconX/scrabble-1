@@ -39,3 +39,13 @@ CREATE TABLE scrabble_test (
     UNIQUE (id),
     FOREIGN KEY (parent_play) REFERENCES scrabble_play (play_id)
 );
+
+CREATE TABLE scrabble_play_state (
+    id INTEGER NOT NULL,
+    parent_play VARCHAR(36) NOT NULL,
+    rack BLOB NOT NULL,
+    grid BLOB NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (id),
+    FOREIGN KEY (parent_play) REFERENCES scrabble_play (play_id)
+);
