@@ -16,21 +16,25 @@ public class AppPopup extends JDialog {
 
     private Menu menu;
     private JPanel textPanel, fieldsPanel, buttonsPanel;
-    private JButton validateButton, cancelButton;
+    private JButton validateButton, cancelButton, secondButton;
     private JTextField emailField;
     private JPasswordField pwdField;
     private JLabel text, error;
     private EmailValidator emailValidator;
-    private String buttonTitle, message, action;
+    private String buttonTitle, message, action, secondTitleButton;
 
     private AppPopup(JFrame frame, Menu menu, String action) {
         super(frame, null, true);
         this.menu = menu;
-        this.setSize(360, 310);
+        this.action = action;
+        if (this.action.equals("signup") || this.action.equals("login")) {
+            this.setSize(360, 310);
+        } else {
+            this.setSize(360, 160);
+        }
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.action = action;
         setUpPopup(action);
         initComponents();
     }
@@ -54,27 +58,42 @@ public class AppPopup extends JDialog {
                 this.message = "<html><body style='width: 240px; height: 55px; padding: 10px 20px; color: white;'><h3>Welcome on our Scrabble platform</h3><p style='text-align: justify;'>Enter your <strong>email address</strong> "
                         + "and <strong>password</strong>. Then just click on the <strong>Login</strong> button and let's go to play !</p></body></html>";
                 break;
+            case "home":
+                title = "Home - Save the current game";
+                this.buttonTitle = "Save";
+                this.secondTitleButton = "Not Save";
+                this.message = "<html><body style='width: 240px; height: 55px; padding: 10px 20px; color: white;'><h3>Save the current game</h3><p style='text-align: justify;'>Would you want to save "
+                        + "your current game ?</p></body></html>";
+                break;
         }
         this.setTitle(title);
     }
 
     private void initComponents() {
-        emailValidator = new EmailValidator();
-        initButtonsPanel();
-        initFieldsPanel();
+        if (this.action.equals("signup") || this.action.equals("login")) {
+            emailValidator = new EmailValidator();
+            initButtonsPanel(false);
+            initFieldsPanel();
+            add(fieldsPanel, BorderLayout.CENTER);
+        } else {
+            initButtonsPanel(true);
+        }
+        initTextPanel();
         add(buttonsPanel, BorderLayout.SOUTH);
-        add(fieldsPanel, BorderLayout.CENTER);
         add(textPanel, BorderLayout.NORTH);
     }
-
-    private void initFieldsPanel() {
+    
+    private void initTextPanel() {
         text = new JLabel(this.message);
-        error = new JLabel("");
         textPanel = new JPanel();
         textPanel.setOpaque(true);
         textPanel.setBackground(Color.GRAY);
         textPanel.setSize(360, 70);
         textPanel.add(text);
+    }
+
+    private void initFieldsPanel() {
+        error = new JLabel("");
 
         SpringLayout layout = new SpringLayout();
         fieldsPanel = new JPanel(layout);
@@ -127,7 +146,7 @@ public class AppPopup extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, pwdField, 70, SpringLayout.NORTH, fieldsPanel);
     }
 
-    private void initButtonsPanel() {
+    private void initButtonsPanel(boolean twoBtn) {
         buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(true);
         buttonsPanel.setBackground(Color.LIGHT_GRAY);
@@ -159,6 +178,19 @@ public class AppPopup extends JDialog {
             }
         });
         buttonsPanel.add(validateButton, BorderLayout.EAST);
+        if (twoBtn) {
+            secondButton = new JButton(this.secondTitleButton);
+            secondButton.setSize(110, 30);
+            secondButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    menu.getController().notifyLogout();
+                    menu.callLogoutProcess();
+                    dispose();
+                }
+            });
+            buttonsPanel.add(secondButton, BorderLayout.CENTER);
+        }
         cancelButton = new JButton("Cancel");
         cancelButton.setSize(110, 30);
         cancelButton.addActionListener(new AbstractAction() {

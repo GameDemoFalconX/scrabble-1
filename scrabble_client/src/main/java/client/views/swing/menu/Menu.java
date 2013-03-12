@@ -27,7 +27,7 @@ public class Menu extends MenuView {
     private static JPanel panel, playerPanel, usernamePanel, statsPanel;
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
-            playerButton, settingsButton, newGameButton, saveButton, loadButton;
+            playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton;
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
     private DefaultListModel wListModel = new DefaultListModel();
@@ -181,6 +181,22 @@ public class Menu extends MenuView {
             }
         });
     }
+    
+    private void initHomeButton() {
+        homeButton = new JButton(ImageIconTools.createImageIcon("../media/home.png", "Home"));
+        homeButton.setPreferredSize(new Dimension(30, 30));
+        homeButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
+        homeButton.setBackground(Color.WHITE);
+        homeButton.setOpaque(false);
+        homeButton.setBorder(null);
+        homeButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AppPopup logPopup = new AppPopup(getMenu(), "home");
+                logPopup.showLogSign();
+            }
+        });
+    }
 
     private void initPlayerButton(boolean anonymous, String email) {
         Icon icon = (anonymous) ? new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo")
@@ -254,8 +270,10 @@ public class Menu extends MenuView {
         playerPanel.setBounds(10, 10, panel.getWidth()-20, 70);
         playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
+        initHomeButton();
         playerPanel.add(score);
         playerPanel.add(playerButton);
+        playerPanel.add(homeButton);
         playerPanel.validate();
         playerPanel.repaint();
     }
@@ -393,6 +411,10 @@ public class Menu extends MenuView {
         for (String word : data) {
             wListModel.addElement(word);
         }
+    }
+    
+    public void callLogoutProcess() {
+        logoutProcess();
     }
 
     /**
