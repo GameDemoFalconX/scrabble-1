@@ -105,35 +105,22 @@ public class TileBag {
      * @return an integer
      */
     private int getValue() {
-        int result = -1;
-        boolean found = false;
-        double rand = 0.0;
-        while (!found) {
-            rand = random.nextDouble();
-            if (rand < ((float) TILE_0_NUMBER / TILE_NUMBER)) {
-                result = 0;
-                found = true;
-            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER) / TILE_NUMBER)) {
-                result = 1;
-                found = true;
-            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER) / TILE_NUMBER)) {
-                result = 2;
-                found = true;
-            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER) / TILE_NUMBER)) {
-                result = 3;
-                found = true;
-            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER) / TILE_NUMBER)) {
-                result = 4;
-                found = true;
-            } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER + TILE_8_NUMBER) / TILE_NUMBER)) {
-                result = 8;
-                found = true;
-            } else {
-                result = 10;
-                found = true;
-            }
+        double rand = random.nextDouble();
+        if (rand < ((float) TILE_0_NUMBER / TILE_NUMBER)) {
+            return 0;
+        } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER) / TILE_NUMBER)) {
+            return 1;
+        } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER) / TILE_NUMBER)) {
+            return 2;
+        } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER) / TILE_NUMBER)) {
+            return 3;
+        } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER) / TILE_NUMBER)) {
+            return 4;
+        } else if (rand < ((float) (TILE_0_NUMBER + TILE_1_NUMBER + TILE_2_NUMBER + TILE_3_NUMBER + TILE_4_NUMBER + TILE_8_NUMBER) / TILE_NUMBER)) {
+            return 8;
+        } else {
+            return 10;
         }
-        return result;
     }
     
     private void updateProb(int value) {
