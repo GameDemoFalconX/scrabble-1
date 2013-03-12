@@ -96,7 +96,8 @@ public class Menu extends MenuView {
         }
         
         // Add username label
-        userLab = new JLabel("<html><body><p style='color: red;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab = new JLabel("<html><body><p style='color: white;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab.setFont(new Font("Arial", Font.PLAIN, 16));
         usernamePanel.add(userLab, BorderLayout.CENTER);
         
         panel.validate();
@@ -213,14 +214,7 @@ public class Menu extends MenuView {
     private void initScoreLabel() {
         score = new JLabel("000");
         score.setBounds(panel.getWidth() - 170, 14, 80, 80);
-        /*Font font = null;
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("../media/DS-DIGI.ttf").toURI()));
-        } catch (FontFormatException | IOException | URISyntaxException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        font = font.deriveFont(Font.PLAIN, 48);
-        score.setFont(font);*/
+        score.setFont(new Font("Arial", Font.BOLD, 36));
         if (dark) {
             score.setForeground(Color.WHITE);
         } else {
@@ -247,7 +241,7 @@ public class Menu extends MenuView {
     private void initPlayerPanel() {
         playerPanel = new JPanel();
         playerPanel.setBorder(null);
-        playerPanel.setBounds(20, 10, panel.getWidth()-40, 70);
+        playerPanel.setBounds(10, 10, panel.getWidth()-20, 70);
         playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
         playerPanel.add(score);
@@ -259,8 +253,9 @@ public class Menu extends MenuView {
     private void initUsernamePanel() {
         usernamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         usernamePanel.setBorder(null);
-        usernamePanel.setBounds(0, 100, panel.getWidth(), 30);
-        usernamePanel.setOpaque(false);
+        usernamePanel.setBounds(10, 90, panel.getWidth()-20, 30);
+        usernamePanel.setOpaque(true);
+        usernamePanel.setBackground(new Color(154, 154, 154, 70));
     }
 
     private void initNewGameButton() {
