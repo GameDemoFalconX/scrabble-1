@@ -16,6 +16,7 @@ import client.model.event.TileFromRackToGridEvent;
 import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
+import client.model.event.UpdateAllStatsEvent;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.UpdateStatsEvent;
 import client.model.event.UpdateWordsListEvent;
@@ -234,7 +235,7 @@ public class Play {
             l.updateScore(new UpdateScoreEvent(this, score));
         }
     }
-    
+
     public void fireResetGrid() {
         GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
 
@@ -242,7 +243,7 @@ public class Play {
             l.resetGrid();
         }
     }
-    
+
     public void fireResetRack() {
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
@@ -258,7 +259,7 @@ public class Play {
             l.displayError(new ErrorMessageEvent(this, error));
         }
     }
-    
+
     public void fireMenuUpdateStats(boolean validate) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
@@ -267,6 +268,14 @@ public class Play {
         }
     }
     
+    public void fireMenuUpdateAllStats(int tp, int tw, int tl) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateAllStats(new UpdateAllStatsEvent(this, tp, tw, tl));
+        }
+    }
+
     public void fireMenuUpdateWordsList(String[] data) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
@@ -274,7 +283,7 @@ public class Play {
             l.updateWordsList(new UpdateWordsListEvent(this, data));
         }
     }
-    
+
     public void fireMenuShowUndoButton() {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
@@ -286,10 +295,9 @@ public class Play {
     /**
      * Methods used for initGame (as guest or logged)
      */
-    
     /**
-     * Init a new play for an anonymous player.
-     * format in JSON : {"play_id": "x0x000x0000x0000x00x0", "rack":
+     * Init a new play for an anonymous player. format in JSON : {"play_id":
+     * "x0x000x0000x0000x00x0", "rack":
      * [{"letter":"A","value":2},{"letter":"A","value":2}, ...], "grid": ..., }
      */
     public void playAsGuest() {
@@ -312,7 +320,7 @@ public class Play {
             ioe.printStackTrace();
         }
     }
-    
+
     public void newGame() {
         String response = null;
         try {
@@ -332,7 +340,7 @@ public class Play {
             ioe.printStackTrace();
         }
     }
-    
+
     /**
      * Methods used to signup, login and logout a player
      */
@@ -343,17 +351,17 @@ public class Play {
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
-        
+
         try {
             player = om.readValue(response, Player.class);
-            
+
             // Dispatch the model notifications to Menu listener
             fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
-    
+
     public void login(String email, String pwd) {
         String response = null;
         try {
@@ -361,17 +369,17 @@ public class Play {
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
-        
+
         try {
             player = om.readValue(response, Player.class);
-            
+
             // Dispatch the model notifications to Menu listener
             fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
-    
+
     public void logout() {
         boolean response = false;
         try {
@@ -379,7 +387,7 @@ public class Play {
         } catch (GameException ge) {
             // Catch exception
         }
-        
+
         if (response) {
             fireResetGrid();
             fireResetRack();
@@ -420,22 +428,22 @@ public class Play {
      * * Methods used for the creation of words **
      */
     public void createWord(int sourcePos, int x, int y) {
-        newWord.put(x+"#"+y, rack.getTile(sourcePos));
+        newWord.put(x + "#" + y, rack.getTile(sourcePos));
         deplaceTileFromRackToGrid(sourcePos, x, y);
         fireTileMovedFromRackToGrid(sourcePos, x, y, grid.getTile(x, y).isBlank());
         //printDebug();
     }
 
     public void modifiedWord(int sX, int sY, int tX, int tY) {
-        newWord.put(tX+"#"+tY, newWord.get(sX+"#"+sY));
-        newWord.remove(sX+"#"+sY);
+        newWord.put(tX + "#" + tY, newWord.get(sX + "#" + sY));
+        newWord.remove(sX + "#" + sY);
         deplaceTileFromGridToGrid(sX, sY, tX, tY);
         fireTileMovedFromGridToGrid(sX, sY, tX, tY);
         //printDebug();
     }
 
     public void removeLetterFromWord(int x, int y, int targetPos) {
-        newWord.remove(x+"#"+y);
+        newWord.remove(x + "#" + y);
         if (rack.getTile(targetPos) != null) {
             deplaceTileFromGridToRackWithShift(x, y, targetPos);
             fireTileMovedFromGridToRackWithShift(x, y, targetPos, rack.getTile(targetPos).isBlank());
@@ -462,7 +470,7 @@ public class Play {
     }
 
     public void validateWord() {
-        undo = new Memento(score, storedRack, newWord, TESTS_PLAYED, TESTS_WON, TESTS_LOST);
+        undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
         TESTS_PLAYED++;
         Boolean done = (this.firstWord && newWord.size() < 1) ? false : true, check = false;
         if (done) {
@@ -473,7 +481,7 @@ public class Play {
             while (done && i.hasNext()) {
                 Map.Entry t = (Map.Entry) i.next();
                 String[] coord = ((String) t.getKey()).split("#");
-                Point p =  new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
 
                 // Verification:
                 if (inspector == this.newWord.size()) {
@@ -499,7 +507,7 @@ public class Play {
             if (done && ((!this.firstWord) || (this.firstWord && check))) {
                 String response = null;
                 try {
-                    System.out.println("dataToSend : "+dataToSend);
+                    System.out.println("dataToSend : " + dataToSend);
                     response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
                     JsonNode root = om.readTree(response);
                     if (root.get("valid").asBoolean()) {
@@ -527,7 +535,7 @@ public class Play {
                         while (it.hasNext()) {
                             Map.Entry t = (Map.Entry) it.next();
                             String[] coord = ((String) t.getKey()).split("#");
-                            Point p =  new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                            Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
                             Tile tile = (Tile) t.getValue();
                             removeBadTiles(p, tile);
                             newTiles += (it.hasNext()) ? tile + ", " : tile + "]";
@@ -566,9 +574,33 @@ public class Play {
         return result;
     }
 
+    private String resetPlay(Map<String, Tile> word, String newRack, int score, int tp, int tw, int tl) {
+        // Update model score and stats
+        setScore(score);
+        TESTS_PLAYED = tp;
+        TESTS_WON = tw;
+        TESTS_LOST = tl;
+        
+        // Update model rack
+        rack = new Rack(newRack);
+        
+        // Update model grid
+        Set set = word.entrySet();
+        String tileToRemove = "[";
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            Map.Entry t = (Map.Entry) it.next();
+            String[] coord = ((String) t.getKey()).split("#");
+            Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+            grid.removeTile(p.x, p.y);
+            tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+        }
+        return tileToRemove;
+    }
+
     private void displayNewWord() {
         System.out.println("New word content : ");
-        for (String key : newWord.keySet()) {                
+        for (String key : newWord.keySet()) {
             System.out.println(key.toString());
         }
     }
@@ -617,23 +649,39 @@ public class Play {
         //grid.printGrid();
         displayNewWord();
     }
-    
+
     // These methods and class are used to offer the Undo feature.
     public void undo() {
+        // Reset play
+        String resetGrid = resetPlay(undo.getSavedWord(), undo.getSavedRack(), undo.getSavedScore(), undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
         
+        // Fire event to views
+        fireUpdateScore(undo.getSavedScore());
+        fireInitRackToPlay(undo.getSavedRack());
+        fireRemoveBadTilesToGrid(resetGrid);
+        fireMenuUpdateAllStats(undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
+        fireMenuUpdateWordsList(null);
+        
+        // Request the server
+        /*try {
+            service.undo(player.getPlayerID(), this.getPlayID());
+        } catch (GameException ge) {
+            System.out.println("Error during undo");
+        }*/
     }
-    
+
     /**
      * Inner class Memento which allows to offer the undo feature.
      */
     public static class Memento {
+
         private final int score;
         private final String rack;
         private final Map<String, Tile> word;
         private final int t_played;
         private final int t_won;
         private final int t_lost;
- 
+
         public Memento(int score, String rack, Map<String, Tile> newWord, int tp, int tw, int tl) {
             this.score = score;
             this.rack = rack;
@@ -642,27 +690,27 @@ public class Play {
             this.t_won = tw;
             this.t_lost = tl;
         }
- 
+
         public int getSavedScore() {
             return this.score;
         }
-        
+
         public String getSavedRack() {
             return this.rack;
         }
-        
+
         public Map<String, Tile> getSavedWord() {
             return this.word;
         }
-        
+
         public int getSavedTP() {
             return this.t_played;
         }
-        
+
         public int getSavedTW() {
             return this.t_won;
         }
-        
+
         public int getSavedTL() {
             return this.t_lost;
         }

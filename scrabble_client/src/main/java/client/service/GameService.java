@@ -210,6 +210,22 @@ public class GameService {
         }
         return response;
     }
+    
+    public boolean undo(String playerID, String playID) throws GameException {
+        boolean response = false;
+        Message serverResponse = servProtocol.sendRequest(Message.UNDO, "{\"user_id\": \""+playerID+"\", \"play_id\": \""+playID+"\"}");
+        if (serverResponse != null) {
+            switch (serverResponse.getHeader()) {
+                case Message.UNDO_SUCCESS:
+                    return true;
+                case Message.UNDO_ERROR:
+                    return false;
+            }
+        } else {
+            throw new GameException(GameException.typeErr.CONN_KO);
+        }
+        return response;
+    }
 
     /**
      * Ask the Play to switch two tiles based on their positions in the rack.

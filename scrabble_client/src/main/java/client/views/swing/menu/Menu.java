@@ -2,6 +2,7 @@ package client.views.swing.menu;
 
 import client.controller.MenuController;
 import client.model.event.InitMenuToPlayEvent;
+import client.model.event.UpdateAllStatsEvent;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.UpdateStatsEvent;
 import client.model.event.UpdateWordsListEvent;
@@ -423,8 +424,12 @@ public class Menu extends MenuView {
     }
     
     private void updateWords(String[] data) {
-        for (String word : data) {
-            wListModel.addElement(word);
+        if (data != null) {
+            for (String word : data) {
+                wListModel.addElement(word);
+            }
+        } else {
+            wListModel.removeElementAt(wListModel.getSize()-1);
         }
     }
     
@@ -453,6 +458,13 @@ public class Menu extends MenuView {
         } else {
             increaseTestLost();
         }
+    }
+    
+    @Override
+    public void updateAllStats(UpdateAllStatsEvent event) {
+        testPlayed.setText(""+event.getTestPlayed());
+        testWon.setText(""+event.getTestWon());
+        testLost.setText(""+event.getTestLost());
     }
     
     @Override
