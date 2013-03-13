@@ -87,7 +87,10 @@ public class Rack extends JPanel {
      * @param scrabble
      * @param jlp 
      */
-    public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp) {
+    public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp, boolean reset) {
+        if (reset) {
+            reset();
+        }
         try {
             JsonNode root = om.readTree(newTiles);
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {

@@ -341,10 +341,23 @@ public class Game extends GameView {
     @Override
     public void initRack(InitRackEvent event) {
         // Init Rack
-        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame);
-
+        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame, false);
         // Init buttons inside the GameView
         initGameButtons();
+    }
+    
+    @Override
+    public void updateRack(InitRackEvent event) {
+        if (event.getReset()) {
+            contentPane.remove(rack.getInnerRack());
+            contentPane.validate();
+        }
+        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame, event.getReset());
+        if (event.getReset()) {
+            contentPane.add(rack.getInnerRack(), 0);
+            contentPane.validate();
+        }
+        contentPane.repaint();
     }
 
     @Override

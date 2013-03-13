@@ -170,6 +170,15 @@ class Rack {
         }
         return formatedTiles;
     }
+    
+    public String getFormatJSON() {
+        String formatedTiles = "[";
+        for (int i = 0; i < rack.length; i++) {
+            formatedTiles += rack[i].toString();
+            formatedTiles += (i < rack.length - 1) ? "," : "]";
+        }
+        return formatedTiles;
+    }
 
     /**
      * Update the rack from the new tiles send by the server.

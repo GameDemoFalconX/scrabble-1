@@ -208,7 +208,15 @@ public class Play {
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
         for (RackListener l : listeners) {
-            l.initRack(new InitRackEvent(this, newRack));
+            l.initRack(new InitRackEvent(this, newRack, false));
+        }
+    }
+    
+    public void fireUpdateRackToPlay(String newRack, boolean reset) {
+        RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+        for (RackListener l : listeners) {
+            l.updateRack(new InitRackEvent(this, newRack, reset));
         }
     }
 
@@ -517,10 +525,12 @@ public class Play {
                         rack.reLoadRack(root.get("tiles").toString());
                         this.firstWord = false;
                         newWord = new HashMap<>();
+                        System.out.println("Rack JSON : "+rack.getFormatJSON());
+                        storedRack = rack.getFormatJSON();
 
                         // Dispatch the model modifications to all listeners
                         fireUpdateScore(root.get("score").asInt());
-                        fireInitRackToPlay(root.get("tiles").toString());
+                        fireUpdateRackToPlay(root.get("tiles").toString(), false);
                         fireMenuUpdateStats(root.get("valid").asBoolean());
                         fireMenuUpdateWordsList(om.readValue(root.get("words").toString(), String[].class));
                         fireMenuShowUndoButton();
@@ -544,7 +554,7 @@ public class Play {
                         }
                         // Dispatch the model modifications to all listeners
                         fireUpdateScore(root.get("score").asInt());
-                        fireInitRackToPlay(newTiles);
+                        fireUpdateRackToPlay(newTiles, false);
                         fireRemoveBadTilesToGrid(tileToRemove);
                         fireMenuUpdateStats(root.get("valid").asBoolean());
                         fireMenuShowUndoButton();
@@ -563,6 +573,13 @@ public class Play {
         } else {
             fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
         }
+        
+        // Display states
+        System.out.println();
+        System.out.println("Play state");
+        System.out.println("Score : "+score+" - "+storedRack+" - "+TESTS_PLAYED+" - "+TESTS_WON+" - "+TESTS_LOST);
+        System.out.println("Memento state");
+        System.out.println("Score : "+undo.getSavedScore()+" - "+undo.getSavedRack()+" - "+undo.getSavedWord()+" - "+undo.getSavedTP()+" - "+undo.getSavedTW()+" - "+undo.getSavedTL());
     }
 
     private String formatData(Point p, Tile tile) {
@@ -575,26 +592,29 @@ public class Play {
     }
 
     private String resetPlay(Map<String, Tile> word, String newRack, int score, int tp, int tw, int tl) {
+        String tileToRemove = null;
+        if (TESTS_WON > tw) {
+            // Update model rack
+            rack = new Rack(newRack);
+
+            // Update model grid
+            Set set = word.entrySet();
+            tileToRemove = "[";
+            Iterator it = set.iterator();
+            while (it.hasNext()) {
+                Map.Entry t = (Map.Entry) it.next();
+                String[] coord = ((String) t.getKey()).split("#");
+                Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                grid.removeTile(p.x, p.y);
+                tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+            }
+        }
         // Update model score and stats
         setScore(score);
         TESTS_PLAYED = tp;
         TESTS_WON = tw;
         TESTS_LOST = tl;
         
-        // Update model rack
-        rack = new Rack(newRack);
-        
-        // Update model grid
-        Set set = word.entrySet();
-        String tileToRemove = "[";
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            Map.Entry t = (Map.Entry) it.next();
-            String[] coord = ((String) t.getKey()).split("#");
-            Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
-            grid.removeTile(p.x, p.y);
-            tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
-        }
         return tileToRemove;
     }
 
@@ -654,14 +674,15 @@ public class Play {
     public void undo() {
         // Reset play
         String resetGrid = resetPlay(undo.getSavedWord(), undo.getSavedRack(), undo.getSavedScore(), undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
-        
         // Fire event to views
         fireUpdateScore(undo.getSavedScore());
-        fireInitRackToPlay(undo.getSavedRack());
-        fireRemoveBadTilesToGrid(resetGrid);
         fireMenuUpdateAllStats(undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
-        fireMenuUpdateWordsList(null);
-        
+        if (resetGrid != null) {
+            fireUpdateRackToPlay(undo.getSavedRack(), true);
+            fireRemoveBadTilesToGrid(resetGrid);
+            fireMenuUpdateWordsList(null);
+        }
+
         // Request the server
         /*try {
             service.undo(player.getPlayerID(), this.getPlayID());

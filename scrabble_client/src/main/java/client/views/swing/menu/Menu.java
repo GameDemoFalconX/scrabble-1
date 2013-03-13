@@ -429,7 +429,9 @@ public class Menu extends MenuView {
                 wListModel.addElement(word);
             }
         } else {
-            wListModel.removeElementAt(wListModel.getSize()-1);
+            if (!wListModel.isEmpty()) {
+                wListModel.remove(wListModel.getSize() - 1);
+            }
         }
     }
     
