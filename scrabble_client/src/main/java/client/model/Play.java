@@ -47,11 +47,17 @@ public class Play {
     private Rack rack;
     private Map<String, Tile> newWord = new HashMap<>();
     private boolean firstWord = true;
+    private String storedRack;
+    private Memento undo;
     private EventListenerList tileListeners;
     private EventListenerList rackListeners;
     private EventListenerList gridListeners;
     private EventListenerList menuListeners;
     private EventListenerList errorListeners;
+    // Stats data
+    private int TESTS_PLAYED = 0;
+    private int TESTS_WON = 0;
+    private int TESTS_LOST = 0;
     // Integrity error
     private final static int FIRST_WORD_NUMBER = 1;
     private final static int FIRST_WORD_POSITION = 2;
@@ -76,6 +82,7 @@ public class Play {
         this.score = score;
         grid = (formatedGrid.equals("")) ? new Grid() : new Grid(formatedGrid);
         rack = new Rack(formatedRack);
+        storedRack = formatedRack;
     }
 
     public String getPlayID() {
@@ -267,6 +274,14 @@ public class Play {
             l.updateWordsList(new UpdateWordsListEvent(this, data));
         }
     }
+    
+    public void fireMenuShowUndoButton() {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.showUndoButton();
+        }
+    }
 
     /**
      * Methods used for initGame (as guest or logged)
@@ -447,6 +462,8 @@ public class Play {
     }
 
     public void validateWord() {
+        undo = new Memento(score, storedRack, newWord, TESTS_PLAYED, TESTS_WON, TESTS_LOST);
+        TESTS_PLAYED++;
         Boolean done = (this.firstWord && newWord.size() < 1) ? false : true, check = false;
         if (done) {
             int x = -1, y = -1, orientation = -1, inspector = this.newWord.size();
@@ -487,6 +504,7 @@ public class Play {
                     JsonNode root = om.readTree(response);
                     if (root.get("valid").asBoolean()) {
                         // Update model
+                        TESTS_WON++;
                         setScore(root.get("score").asInt());
                         rack.reLoadRack(root.get("tiles").toString());
                         this.firstWord = false;
@@ -497,8 +515,10 @@ public class Play {
                         fireInitRackToPlay(root.get("tiles").toString());
                         fireMenuUpdateStats(root.get("valid").asBoolean());
                         fireMenuUpdateWordsList(om.readValue(root.get("words").toString(), String[].class));
+                        fireMenuShowUndoButton();
                     } else {
                         // Update model
+                        TESTS_LOST++;
                         Set rSet = this.newWord.entrySet();
                         setScore(root.get("score").asInt());
                         String newTiles = "[";
@@ -519,6 +539,7 @@ public class Play {
                         fireInitRackToPlay(newTiles);
                         fireRemoveBadTilesToGrid(tileToRemove);
                         fireMenuUpdateStats(root.get("valid").asBoolean());
+                        fireMenuShowUndoButton();
                     }
                 } catch (GameException | IOException ge) {
                     // Fire errors
@@ -595,5 +616,55 @@ public class Play {
     private void printDebug() {
         //grid.printGrid();
         displayNewWord();
+    }
+    
+    // These methods and class are used to offer the Undo feature.
+    public void undo() {
+        
+    }
+    
+    /**
+     * Inner class Memento which allows to offer the undo feature.
+     */
+    public static class Memento {
+        private final int score;
+        private final String rack;
+        private final Map<String, Tile> word;
+        private final int t_played;
+        private final int t_won;
+        private final int t_lost;
+ 
+        public Memento(int score, String rack, Map<String, Tile> newWord, int tp, int tw, int tl) {
+            this.score = score;
+            this.rack = rack;
+            this.word = newWord;
+            this.t_played = tp;
+            this.t_won = tw;
+            this.t_lost = tl;
+        }
+ 
+        public int getSavedScore() {
+            return this.score;
+        }
+        
+        public String getSavedRack() {
+            return this.rack;
+        }
+        
+        public Map<String, Tile> getSavedWord() {
+            return this.word;
+        }
+        
+        public int getSavedTP() {
+            return this.t_played;
+        }
+        
+        public int getSavedTW() {
+            return this.t_won;
+        }
+        
+        public int getSavedTL() {
+            return this.t_lost;
+        }
     }
 }

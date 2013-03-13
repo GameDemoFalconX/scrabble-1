@@ -45,4 +45,8 @@ public class MenuController {
     public void notifyNewGame() {
         play.newGame();
     }
+    
+    public void notifyUndo() {
+        play.undo();
+    }
 }

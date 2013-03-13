@@ -11,4 +11,5 @@ public interface MenuListener extends EventListener {
     public void updateScore(UpdateScoreEvent event);
     public void updateStats(UpdateStatsEvent event);
     public void updateWordsList(UpdateWordsListEvent event);
+    public void showUndoButton();
 }

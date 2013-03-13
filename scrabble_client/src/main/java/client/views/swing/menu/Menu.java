@@ -27,7 +27,7 @@ public class Menu extends MenuView {
     private static JPanel panel, playerPanel, usernamePanel, statsPanel;
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
-            playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton;
+            playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton, undoButton;
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
     private DefaultListModel wListModel = new DefaultListModel();
@@ -364,9 +364,24 @@ public class Menu extends MenuView {
         saveButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								saveGame();
+                // saveGame();
             }
         });
+    }
+    
+    private void initUndoButton() {
+        undoButton = new JButton("Undo");
+        undoButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 340, 110, 30);
+        undoButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().notifyUndo();
+                panel.remove(undoButton);
+                panel.validate();
+                panel.repaint();
+            }
+        });
+        panel.add(undoButton);
     }
     
     public void setScore(int score) {
@@ -443,5 +458,10 @@ public class Menu extends MenuView {
     @Override
     public void updateWordsList(UpdateWordsListEvent event) {
         updateWords(event.getWordsList());
+    }
+    
+    @Override
+    public void showUndoButton() {
+        initUndoButton();
     }
 }
