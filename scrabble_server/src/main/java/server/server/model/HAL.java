@@ -112,8 +112,14 @@ public class HAL extends Game {
             String user_id = om.readTree(pl_id).get("user_id").asText();
             if (pCol.playerIsLogged(user_id)) {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
-                Play newPlay = new Play(user_id);
-                pCol.addPlay(pl_id, newPlay);
+                Play newPlay = new Play(user_id, false);
+                pCol.addPlay(user_id, newPlay);
+                
+                // Save data in the DB
+                newPlay.increaseIndice();
+                Co.createPlay(user_id, newPlay.getPlayID());
+                Co.saveTest(newPlay.getInnerIndice(), newPlay.getPlayID(), newPlay.getFormatRack(), "-", -1);
+                
                 return new Message(Message.NEW_GAME_SUCCESS, "{\"play_id\": \"" + newPlay.getPlayID() + "\", \"rack\": " + newPlay.getFormatRack() + "}");
             }
             return new Message(Message.PLAYER_NOT_LOGGED, "");
@@ -135,7 +141,7 @@ public class HAL extends Game {
             String user_id = om.readTree(pl_id).get("user_id").asText();
             if (!pCol.playerIsLogged(user_id)) {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
-                Play newPlay = new Play(user_id);
+                Play newPlay = new Play(user_id, true);
                 pCol.addNewPlay(user_id, newPlay);
                 return new Message(Message.NEW_GAME_ANONYM_SUCCESS, "{\"play_id\": \"" + newPlay.getPlayID() + "\", \"rack\": " + newPlay.getFormatRack() + "}");
             }
@@ -207,6 +213,7 @@ public class HAL extends Game {
         if (cPlay != null) {
             System.out.println("Server : start scrabbleValidator");
             cPlay.newTest(); // Increase the number of tests for this player.
+            cPlay.increaseIndice();
 
             // Step 1 - Place tiles on the grid and get the list of coordinates.
             ArrayList<Tile> tileList = cPlay.tilesSetUp(ga_infos);
@@ -242,14 +249,30 @@ public class HAL extends Game {
             // Step 3 - Dictionary validation and return args
             if (dico.checkValidity(wordsList)) {
                 cPlay.setScore(score); // Update score
+                if (!cPlay.isAnonym()) {
+                    Co.saveTest(cPlay.getInnerIndice(), cPlay.getPlayID(), cPlay.getFormatRack(), ga_infos, score);
+                }
                 String newTiles = cPlay.getNewTiles(tileList.size()); // Get a formated list of tile with their index in the rack
-                cPlay.testWithSuccess(); // Increase the number of tests with success
+                if (!cPlay.isAnonym()) {
+                    cPlay.testWithSuccess(); // Increase the number of tests with success
+                    cPlay.increaseIndice();
+                    Co.saveTest(cPlay.getInnerIndice(), cPlay.getPlayID(), cPlay.getFormatRack(), "-", -1); // The score set to '-1' is a symbolic way to indicate that no score is calculate for this step.
+                    Co.updatePlayStats(cPlay.getPlayID(), true, cPlay.getTestsPlayed(), cPlay.getTestsWon());
+                }
                 System.out.println("New tiles : " + newTiles);
                 return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": " + cPlay.getScore() + ", \"tiles\": " + newTiles + ", \"words\": " +Utils.arrayToJSON(wordsList)+ "}");
             } else {
                 cPlay.setScore((bestWord / 2) * (-1)); // Update score
+                if (!cPlay.isAnonym()) {
+                    Co.saveTest(cPlay.getInnerIndice(), cPlay.getPlayID(), cPlay.getFormatRack(), ga_infos, (bestWord / 2) * (-1));
+                }
                 cPlay.removeBadTiles(tileList); // Remove bad tiles form the grid and add them into rack
-                cPlay.testWithError(); // Increase the number of tests with error
+                if (!cPlay.isAnonym()) {
+                    cPlay.testWithError(); // Increase the number of tests with error
+                    cPlay.increaseIndice();
+                    Co.saveTest(cPlay.getInnerIndice(), cPlay.getPlayID(), cPlay.getFormatRack(), "-", -1);
+                    Co.updatePlayStats(cPlay.getPlayID(), true, cPlay.getTestsPlayed(), cPlay.getTestsLost());
+                }
                 return new Message(Message.PLACE_WORD_ERROR, "{\"valid\": false, \"score\": " + cPlay.getScore() + "}");
             }
         }

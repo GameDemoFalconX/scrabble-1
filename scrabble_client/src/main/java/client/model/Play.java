@@ -3,7 +3,7 @@ package client.model;
 import client.model.event.ErrorListener;
 import client.model.event.ErrorMessageEvent;
 import client.model.event.GridListener;
-import client.model.event.InitMenuToPlayEvent;
+import client.model.event.InitMenuInterfaceEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.MenuListener;
 import client.model.event.RackListener;
@@ -228,11 +228,19 @@ public class Play {
         }
     }
 
-    public void fireInitMenuToPlay(boolean anonymous, String email, String username, int score) {
+    public void fireInitMenuInterface(boolean anonymous, String email, String username) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
         for (MenuListener l : listeners) {
-            l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, username, score));
+            l.initMenuInterface(new InitMenuInterfaceEvent(this, anonymous, email, username));
+        }
+    }
+    
+    public void fireInitMenuLoadPlay(boolean anonymous) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.initMenuLoadPlay(anonymous);
         }
     }
 
@@ -323,7 +331,8 @@ public class Play {
 
             // Dispatch the model modifications to all listeners
             fireInitRackToPlay(root.get("rack").toString());
-            fireInitMenuToPlay(true, player.getPlayerEmail(), player.getPlayerUsername(), 0);
+            fireInitMenuInterface(true, player.getPlayerEmail(), player.getPlayerUsername());
+            fireInitMenuLoadPlay(true);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -343,7 +352,7 @@ public class Play {
 
             // Dispatch the model modifications to all listeners
             fireInitRackToPlay(root.get("rack").toString());
-            //fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
+            fireInitMenuLoadPlay(false);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -364,7 +373,7 @@ public class Play {
             player = om.readValue(response, Player.class);
 
             // Dispatch the model notifications to Menu listener
-            fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
+            fireInitMenuInterface(false, player.getPlayerEmail(), player.getPlayerUsername());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -382,7 +391,7 @@ public class Play {
             player = om.readValue(response, Player.class);
 
             // Dispatch the model notifications to Menu listener
-            fireInitMenuToPlay(false, player.getPlayerEmail(), player.getPlayerUsername(), 0);
+            fireInitMenuInterface(false, player.getPlayerEmail(), player.getPlayerUsername());
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

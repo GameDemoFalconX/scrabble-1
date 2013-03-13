@@ -16,8 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import server.common.GameException;
 import server.common.PasswordHasher;
 
@@ -75,7 +73,7 @@ public class Connector {
      * @param query
      * @return JSON format of SQL query result.
      */
-    private String execGetQuery(String query, String[] args) {
+    private String execGetQuery(String query, Object[] args) {
         String response = null;
         PreparedStatement stmt = null;
         ResultSet res = null;
@@ -85,10 +83,10 @@ public class Connector {
                 if (args != null) {
                     for (int i = 0; i < args.length; i++) {
                         if (args[i] instanceof String) {
-                            stmt.setString(i+1, args[i]);
+                            stmt.setString(i+1, (String) args[i]);
                         } else {
                             try { 
-                                int value = Integer.parseInt(args[i]);
+                                int value = (int) args[i];
                                 stmt.setInt(i+1, value);
                             } catch (NumberFormatException e) {
                                 System.out.println("Error during prepared statement : type not found");
@@ -118,7 +116,7 @@ public class Connector {
      * PreparedStatement for insure protection against SQL Injection ! ;-)
      * @param query, args 
      */
-    private void execPostQuery(String query, String[] args) {
+    private void execPostQuery(String query, Object[] args) {
         PreparedStatement stmt = null;
         int res;
         if (setUpConnection()) {
@@ -126,10 +124,10 @@ public class Connector {
                 stmt = conn.prepareStatement(query);
                 for (int i = 0; i < args.length; i++) {
                     if (args[i] instanceof String) {
-                        stmt.setString(i+1, args[i]);
+                        stmt.setString(i+1, (String) args[i]);
                     } else {
                         try { 
-                            int value = Integer.parseInt(args[i]);
+                            int value = (int) args[i];
                             stmt.setInt(i+1, value);
                         } catch (NumberFormatException e) {
                             System.out.println("Error during prepared statement : type not found");
@@ -170,6 +168,13 @@ public class Connector {
         return execGetQuery("SELECT user_id, username, email FROM scrabble_user WHERE email = ?", new String[]{user_email});
     }
     
+    // Methods used to add data in the DB
+    
+    /**
+     * Create a new user.
+     * @param pl_email, pl_pwd
+     * @return JSON representation of this new user.
+     */
     public String createPlayer(String pl_email, String pl_pwd) {
         String response = null;
         if (getUserByEmail(pl_email) == null) {
@@ -196,6 +201,22 @@ public class Connector {
         return response;
     }
     
+    /**
+     * Create a new play.
+     * @param user_id, play_id 
+     */
+    public void createPlay(String user_id, String play_id) {
+        Date date = new Date();
+        Object[] params = new Object[]{play_id, user_id, dateFormat.format(date), dateFormat.format(date), 0, 0, 0, 0, 0};
+        execPostQuery("INSERT INTO scrabble_play ('play_id', 'player', 'created', 'modified', 'state', 'score', 'tests_played', 'tests_won', 'tests_lost') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", params);
+    }
+    
+    /**
+     * Check if password is correct for this user or not.
+     * @param pl_email, pl_pwd
+     * @return JSON representation of this user otherwise null (password failed).
+     * @throws GameException 
+     */
     public String checkPassword(String pl_email, String pl_pwd) throws GameException {
         String response = null;
         String secure = execGetQuery("SELECT salt, user_id, username, email, password FROM scrabble_user WHERE email = ?", new String[]{pl_email});
@@ -220,6 +241,29 @@ public class Connector {
             }
         }
         return response;
+    }
+    
+    /**
+     * Save the current test in the DB for a specific Play/User association.
+     * @param ind, play_id, rack, grid, score 
+     */
+    public void saveTest(int ind, String play_id, String rack, String grid, int score) {
+        Object[] params = new Object[]{ind, play_id, rack, grid, score};
+        execPostQuery("INSERT INTO scrabble_test ('indice', 'parent_play', 'rack', 'grid', 'score') VALUES (?, ?, ?, ?, ?)", params);
+    }
+    
+    /**
+     * Update the latest stats information about the Play given in parameter.
+     * @param play_id, won, test_played, test_to_increase 
+     */
+    public void updatePlayStats(String play_id, boolean won, int test_played, int test_to_increase) {
+        Date date = new Date();
+        Object[] params = new Object[]{test_played, test_to_increase, dateFormat.format(date), play_id};
+        if (won) {
+            execPostQuery("UPDATE scrabble_play SET tests_played = ?, tests_won = ?, modified = ? WHERE play_id = ?", params);
+        } else {
+            execPostQuery("UPDATE scrabble_play SET tests_played = ?, tests_lost = ?, modified = ? WHERE play_id = ?", params);
+        }
     }
 
     // Methods used to format the results of DB requests in JSON

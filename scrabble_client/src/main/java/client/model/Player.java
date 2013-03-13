@@ -15,8 +15,6 @@ public class Player {
     private String playerUsername;
     @JsonProperty("email")
     private String playerEmail;
-    @JsonProperty("is_anonymous")
-    private boolean isAnonymous = false;
 
     /**
      * Create a new instance of player.
@@ -37,7 +35,6 @@ public class Player {
         this.playerID = UUID.randomUUID().toString();
         this.playerUsername = "Anonym";
         this.playerEmail = "anonym@anonymous.org";
-        this.isAnonymous = true;
     }
 
     public String getPlayerEmail() {
@@ -60,10 +57,6 @@ public class Player {
         return this.playerID;
     }
 
-    public boolean isAnonym() {
-        return isAnonymous;
-    }
-    
     @Override
     public String toString() {
         return "{\"player_id\": \""+this.playerID+"\", \"username\": \""+this.playerUsername+"\", \"email\": \""+this.playerEmail+"\"}";
