@@ -1,7 +1,7 @@
 package client.views.swing.menu;
 
 import client.controller.MenuController;
-import client.model.event.InitMenuToPlayEvent;
+import client.model.event.InitMenuInterfaceEvent;
 import client.model.event.UpdateAllStatsEvent;
 import client.model.event.UpdateScoreEvent;
 import client.model.event.UpdateStatsEvent;
@@ -76,28 +76,27 @@ public class Menu extends MenuView {
         panel.validate();
     }
 
-    private void loadPlay(boolean anonymous, String email, String username, int score) {
+    private void loadInterface(boolean anonymous, String email, String username) {
         // Remove unused elements
         panel.remove(playAsGuestButton);
         panel.remove(loginButton);
         panel.remove(signupButton);
         panel.validate();
-
-        // Init new components
+        
         initPlayerButton(anonymous, email);
         initPopupMenu();
-        initScoreLabel();
         initSettingsButton();
         initPlayerPanel();
         initUsernamePanel();
-        initStatsPanel();
-        initWordList();
         panel.add(playerPanel);
         panel.add(usernamePanel);
-        panel.add(statsPanel);
-        panel.add(wList);
         panel.add(settingsButton);
-
+        
+        // Add username and stats labels
+        userLab = new JLabel("<html><body><p style='color: white;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab.setFont(new Font("Arial", Font.PLAIN, 16));
+        usernamePanel.add(userLab, BorderLayout.CENTER);
+        
         if (!anonymous) {
             initNewGameButton();
             initLoadButton();
@@ -105,10 +104,24 @@ public class Menu extends MenuView {
             panel.add(loadButton);
         }
         
-        // Add username and stats labels
-        userLab = new JLabel("<html><body><p style='color: white;'>Welcome <strong>"+username+"</strong></p></body></html>");
-        userLab.setFont(new Font("Arial", Font.PLAIN, 16));
-        usernamePanel.add(userLab, BorderLayout.CENTER);
+        panel.validate();
+        panel.repaint();
+    }
+    
+    private void loadPlay(boolean anonymous) {
+        if (!anonymous) {
+            panel.remove(newGameButton);
+            panel.remove(loadButton);
+            panel.validate();
+        }
+        
+        // Init new components
+        initScoreLabel();
+        initStatsPanel();
+        initWordList();
+        playerPanel.add(score);
+        panel.add(statsPanel);
+        panel.add(wList);
         initStatsLab();
         
         panel.validate();
@@ -125,6 +138,9 @@ public class Menu extends MenuView {
         panel.add(signupButton);
         panel.validate();
         panel.repaint();
+        
+        // Update words list
+        wListModel.removeAllElements();
     }
 
     /**
@@ -272,7 +288,6 @@ public class Menu extends MenuView {
         playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
         initHomeButton();
-        playerPanel.add(score);
         playerPanel.add(playerButton);
         playerPanel.add(homeButton);
         playerPanel.validate();
@@ -443,8 +458,13 @@ public class Menu extends MenuView {
      * * Methods used to update the Menu view from the model notifications **
      */
     @Override
-    public void initMenuToPlay(InitMenuToPlayEvent event) {
-        loadPlay(event.isAnonym(), event.getEmail(), event.getUsername(), event.getScore());
+    public void initMenuInterface(InitMenuInterfaceEvent event) {
+        loadInterface(event.isAnonym(), event.getEmail(), event.getUsername());
+    }
+    
+    @Override
+    public void initMenuLoadPlay(boolean anonymous) {
+        loadPlay(anonymous);
     }
 
     @Override

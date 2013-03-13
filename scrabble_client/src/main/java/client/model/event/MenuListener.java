@@ -7,7 +7,8 @@ import java.util.EventListener;
  */
 public interface MenuListener extends EventListener {
 
-    public void initMenuToPlay(InitMenuToPlayEvent event);
+    public void initMenuInterface(InitMenuInterfaceEvent event);
+    public void initMenuLoadPlay(boolean anonymous);
     public void updateScore(UpdateScoreEvent event);
     public void updateStats(UpdateStatsEvent event);
     public void updateAllStats(UpdateAllStatsEvent event);

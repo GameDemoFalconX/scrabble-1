@@ -19,6 +19,7 @@ public class Play {
     private Grid grid;
     private Rack rack;
     private TileBag bag;
+    private final boolean isAnonym;
     // Game variables
     protected String lastWord;
     protected int lastWordScore;
@@ -34,13 +35,14 @@ public class Play {
      * Constructor for Play instance from simply playerID.
      * @param playerID
      */
-    public Play(String playerID) {
+    public Play(String playerID, boolean anonym) {
         playID = UUID.randomUUID().toString();
         owner = playerID;
         score = 0;
         grid = new Grid();
         bag = new TileBag();
         rack = new Rack(bag);
+        this.isAnonym = anonym;
     }
 
     /**
@@ -52,6 +54,10 @@ public class Play {
 
     public String getOwner() {
         return owner;
+    }
+    
+    public boolean isAnonym() {
+        return this.isAnonym;
     }
 
     /**
@@ -241,13 +247,25 @@ public class Play {
     protected void newTest() {
         this.nbTests += 1;
     }
+    
+    protected int getTestsPlayed() {
+        return this.nbTests;
+    }
 
     protected void testWithSuccess() {
         this.testsWithSuccess += 1;
     }
+    
+    protected int getTestsWon() {
+        return this.testsWithSuccess;
+    }
 
     protected void testWithError() {
         this.testsWithError += 1;
+    }
+    
+    protected int getTestsLost() {
+        return this.testsWithError;
     }
     
     protected void increaseIndice() {
