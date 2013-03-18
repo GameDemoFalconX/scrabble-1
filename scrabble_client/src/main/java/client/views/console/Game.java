@@ -6,13 +6,13 @@ import client.model.Rack;
 import client.model.event.ErrorMessageEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.RackReArrangeEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.event.TileFromGridToGridEvent;
 import client.model.event.TileFromGridToRackEvent;
 import client.model.event.TileFromGridToRackWithShiftEvent;
 import client.model.event.TileFromRackToGridEvent;
 import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
-import client.model.event.removeBadTilesEvent;
 import client.views.GameView;
 
 /**
@@ -94,14 +94,29 @@ public class Game extends GameView{
     }
 
     @Override
-    public void removeBadTiles(removeBadTilesEvent event) {
-        displayGame();
-    }
-
-    @Override
     public void displayError(ErrorMessageEvent event) {
         displayGame();
         System.out.println("ERROR : " + event.getMessage());
+    }
+
+    @Override
+    public void updateRack(InitRackEvent event) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resetRack() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeBadTiles(RemoveBadTilesEvent event) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resetGrid() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
