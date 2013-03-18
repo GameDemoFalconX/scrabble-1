@@ -10,8 +10,8 @@ import server.common.Message;
 public abstract class Game implements IGame {
 
     @Override
-    public Message newAccount(String pl_name, String pl_pwd) throws GameException {
-        Message response = createAccount(pl_name, pl_pwd);
+    public Message newAccount(String pl_email, String pl_pwd) throws GameException {
+        Message response = createAccount(pl_email, pl_pwd);
         switch (response.getHeader()) {
             case Message.NEW_ACCOUNT_SUCCESS:
                 return response;
@@ -179,7 +179,7 @@ public abstract class Game implements IGame {
     }
 
     // Abstract methods
-    protected abstract Message createAccount(String pl_name, String pl_pwd);
+    protected abstract Message createAccount(String pl_email, String pl_pwd);
     protected abstract Message loginProcess(String pl_name, String pl_pwd);
     protected abstract Message logoutProcess(String pl_id);
     protected abstract Message createNewGame(String pl_id);

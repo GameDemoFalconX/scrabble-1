@@ -31,7 +31,7 @@ public class Rack {
      * @param formatedRack
      */
     private void loadRack(String formatedRack) throws IOException {
-        System.out.println("New rack : " + formatedRack);
+        //System.out.println("New rack : " + formatedRack);
         rack = om.readValue(formatedRack, Tile[].class);
     }
 
@@ -169,6 +169,15 @@ public class Rack {
         for (int i = 0; i < positions.length; i++) {
             formatedTiles += rack[positions[i]].toString();
             formatedTiles += (i < positions.length - 1) ? "," : "]";
+        }
+        return formatedTiles;
+    }
+    
+    public String getFormatJSON() {
+        String formatedTiles = "[";
+        for (int i = 0; i < rack.length; i++) {
+            formatedTiles += rack[i].toString();
+            formatedTiles += (i < rack.length - 1) ? "," : "]";
         }
         return formatedTiles;
     }

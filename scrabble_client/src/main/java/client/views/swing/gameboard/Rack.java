@@ -59,29 +59,7 @@ public class Rack extends JPanel {
         if (debug) {
             setBorder(BorderFactory.createLineBorder(Color.RED)); // Used for DEBUG
         }
-
-        /**
-         * Construction of rack elements *
-         */
-        /**
-         * * Rack inner container **
-         */
-        innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
-        if (debug) {
-            innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
-        }
-        innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
-        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
-        innerRack.setOpaque(false);
-
-        for (int i = 0; i < RACK_LENGTH; i++) {
-            // Construct panelRack Element in the background of the rack and add it a DTPicture instance.
-            panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
-            if (debug) {
-                panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
-            }
-            innerRack.add(panelRackElement, i);
-        }
+        reset();
     }
 
     public JPanel getInnerRack() {
@@ -109,7 +87,10 @@ public class Rack extends JPanel {
      * @param scrabble
      * @param jlp 
      */
-    public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp) {
+    public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp, boolean reset) {
+        if (reset) {
+            reset();
+        }
         try {
             JsonNode root = om.readTree(newTiles);
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
@@ -132,6 +113,29 @@ public class Rack extends JPanel {
             }
             i++;
         }
+    }
+    
+    public void reset() {
+        // Construction of rack elements
+         // Rack inner container
+        innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
+        if (debug) {
+            innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
+        }
+        innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
+        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
+        innerRack.setOpaque(false);
+
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            // Construct panelRack Element in the background of the rack and add it a DTPicture instance.
+            panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+            if (debug) {
+                panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
+            }
+            innerRack.add(panelRackElement, i);
+        }
+        innerRack.validate();
+        innerRack.repaint();
     }
 
     /**

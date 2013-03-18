@@ -3,6 +3,7 @@ CREATE TABLE scrabble_user (
     username VARCHAR(30) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password TEXT NOT NULL,
+    salt TEXT NOT NULL,
     created VARCHAR(25) NOT NULL,
     games_played INTEGER,
     games_won INTEGER,
@@ -34,6 +35,16 @@ CREATE TABLE scrabble_test (
     rack BLOB NOT NULL,
     grid BLOB NOT NULL,
     score INTEGER NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (id),
+    FOREIGN KEY (parent_play) REFERENCES scrabble_play (play_id)
+);
+
+CREATE TABLE scrabble_play_state (
+    id INTEGER NOT NULL,
+    parent_play VARCHAR(36) NOT NULL,
+    rack BLOB NOT NULL,
+    grid BLOB NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (id),
     FOREIGN KEY (parent_play) REFERENCES scrabble_play (play_id)

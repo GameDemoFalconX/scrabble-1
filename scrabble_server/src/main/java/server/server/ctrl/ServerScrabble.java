@@ -63,14 +63,16 @@ public class ServerScrabble {
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message newAccount(String pl_name, String pl_pwd) {
+    public synchronized Message newAccount(String data) {
         Message response = null;
         try {
-            // Try to create a new player acount
-            response = game.newAccount(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.newAccount(node.get("email").asText(), node.get("pwd").asText());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON in class : "+ServerScrabble.class);
         } catch (GameException e) {
             response = processError(e);
         }
@@ -79,20 +81,21 @@ public class ServerScrabble {
 
     /**
      * Allows to log the current player.
-     *
      * @param pl_name
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message login(String pl_name, String pl_pwd) {
+    public synchronized Message login(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.login(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.login(node.get("email").asText(), node.get("pwd").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }
@@ -101,19 +104,20 @@ public class ServerScrabble {
 
     /**
      * Allows to logout the current user.
-     *
      * @param pl_id
      * @return
      */
-    public synchronized Message logout(String pl_id) {
+    public synchronized Message logout(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.logout(pl_id);
+            JsonNode root = om.readTree(data);
+            response = game.logout(root.get("user_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }
@@ -122,15 +126,14 @@ public class ServerScrabble {
 
     /**
      * Allows to create a new Play instance.
-     *
-     * @param playerID
+     * @param pl_id
      * @return the new playID and the formatedRack.
      */
-    public synchronized Message createNewPlay(String playerID) {
+    public synchronized Message createNewPlay(String pl_id) {
         Message response = null;
         try {
             // Try to create a new game for the current player
-            response = game.createNewPlay(playerID);
+            response = game.createNewPlay(pl_id);
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
@@ -142,8 +145,7 @@ public class ServerScrabble {
     }
 
     /**
-     * Allows to log an anonymous player/
-     *
+     * Allows to log an anonymous player
      * @param pl_id
      * @return status
      */
@@ -241,8 +243,9 @@ public class ServerScrabble {
     public synchronized Message gameTreatment(String data) {
         Message response = null;
         try {
+            System.out.println(data);
             JsonNode root = om.readTree(data);
-            response = game.checkGame(root.get("player_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
+            response = game.checkGame(root.get("user_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }

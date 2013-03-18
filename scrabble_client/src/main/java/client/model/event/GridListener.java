@@ -7,5 +7,6 @@ import java.util.EventListener;
  */
 public interface GridListener extends EventListener {
     
-    public void removeBadTiles(removeBadTilesEvent event);
+    public void removeBadTiles(RemoveBadTilesEvent event);
+    public void resetGrid();
 }

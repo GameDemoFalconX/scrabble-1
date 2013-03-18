@@ -1,21 +1,21 @@
 package client.views.swing.menu;
 
 import client.controller.MenuController;
-import client.model.event.InitMenuToPlayEvent;
+import client.model.event.InitMenuInterfaceEvent;
+import client.model.event.UpdateAllStatsEvent;
 import client.model.event.UpdateScoreEvent;
+import client.model.event.UpdateStatsEvent;
+import client.model.event.UpdateWordsListEvent;
 import client.views.MenuView;
+import client.views.swing.common.CustomCellRenderer;
 import client.views.swing.common.ImageIconTools;
 import client.views.swing.gameboard.Blah;
 import client.views.swing.gameboard.Game;
+import client.views.swing.popup.AppPopup;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -25,14 +25,16 @@ import javax.swing.*;
  */
 public class Menu extends MenuView {
 
-    private static JPanel panel, playerPanel;
+    private static JPanel panel, playerPanel, usernamePanel, statsPanel;
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
-            playerButton, settingsButton, newGameButton, saveButton, loadButton;
+            playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton, undoButton;
     private JPopupMenu popUpMenu;
     private JMenuItem logOff, helpOff;
+    private DefaultListModel wListModel = new DefaultListModel();
+    private JList wList = new JList(wListModel);
     private boolean dark = true;
-    private JLabel score;
+    private JLabel score, userLab, testPlayed, testWon, testLost, testPlayedLab, testWonLab, testLostLab;
 
     public Menu(MenuController controller) {
         super(controller);
@@ -54,7 +56,7 @@ public class Menu extends MenuView {
     private void buildMenu() {
         panel = new JPanel();
         panel.setLayout(null);
-        panel.setBounds(700, 0, 250, 800);
+        panel.setBounds(720, 0, 240, 800);
         panel.setOpaque(false);
         initComponent();
     }
@@ -72,42 +74,73 @@ public class Menu extends MenuView {
         panel.add(signupButton);
         panel.add(scrabbleButton);
         panel.validate();
-        //panel.repaint();
     }
 
-    private void loadPlay(boolean anonymous, String email, int score) {
+    private void loadInterface(boolean anonymous, String email, String username) {
         // Remove unused elements
         panel.remove(playAsGuestButton);
         panel.remove(loginButton);
         panel.remove(signupButton);
-
-        // Init new components
+        panel.validate();
+        
         initPlayerButton(anonymous, email);
         initPopupMenu();
-        initScoreLabel();
         initSettingsButton();
         initPlayerPanel();
+        initUsernamePanel();
         panel.add(playerPanel);
+        panel.add(usernamePanel);
         panel.add(settingsButton);
-
+        
+        // Add username and stats labels
+        userLab = new JLabel("<html><body><p style='color: white;'>Welcome <strong>"+username+"</strong></p></body></html>");
+        userLab.setFont(new Font("Arial", Font.PLAIN, 16));
+        usernamePanel.add(userLab, BorderLayout.CENTER);
+        
         if (!anonymous) {
             initNewGameButton();
             initLoadButton();
             panel.add(newGameButton);
             panel.add(loadButton);
         }
+        
         panel.validate();
+        panel.repaint();
+    }
+    
+    private void loadPlay(boolean anonymous) {
+        if (!anonymous) {
+            panel.remove(newGameButton);
+            panel.remove(loadButton);
+            panel.validate();
+        }
+        
+        // Init new components
+        initScoreLabel();
+        initStatsPanel();
+        initWordList();
+        playerPanel.add(score);
+        panel.add(statsPanel);
+        panel.add(wList);
+        initStatsLab();
+        
+        panel.validate();
+        panel.repaint();
     }
 
-    private void logOut() {
-        playerButton.setIcon(new ImageIcon(ImageIconTools.getGravatar("default@gravatar.logo").getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH)));
-        panel.remove(playerPanel);
-        panel.remove(settingsButton);
+    private void logoutProcess() {
+        // Remove unused elements
+        panel.removeAll();
+        panel.validate();
+        
         panel.add(playAsGuestButton);
         panel.add(loginButton);
         panel.add(signupButton);
         panel.validate();
         panel.repaint();
+        
+        // Update words list
+        wListModel.removeAllElements();
     }
 
     /**
@@ -131,7 +164,8 @@ public class Menu extends MenuView {
         loginButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call controller
+                AppPopup logPopup = new AppPopup(getMenu(), "login");
+                logPopup.showLogSign();
             }
         });
         loginButton.setVisible(true);
@@ -143,7 +177,8 @@ public class Menu extends MenuView {
         signupButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call controller
+                AppPopup logPopup = new AppPopup(getMenu(), "signup");
+                logPopup.showLogSign();
             }
         });
         signupButton.setVisible(true);
@@ -160,6 +195,22 @@ public class Menu extends MenuView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, Blah.ABOUT, "About", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+    
+    private void initHomeButton() {
+        homeButton = new JButton(ImageIconTools.createImageIcon("../media/home.png", "Home"));
+        homeButton.setPreferredSize(new Dimension(30, 30));
+        homeButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
+        homeButton.setBackground(Color.WHITE);
+        homeButton.setOpaque(false);
+        homeButton.setBorder(null);
+        homeButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AppPopup logPopup = new AppPopup(getMenu(), "home");
+                logPopup.showLogSign();
             }
         });
     }
@@ -186,7 +237,8 @@ public class Menu extends MenuView {
         logOff = new JMenuItem(new AbstractAction("Log off") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logOut();
+                getController().notifyLogout();
+                logoutProcess();
             }
         });
         logOff.setSize(200, 20);
@@ -205,14 +257,7 @@ public class Menu extends MenuView {
     private void initScoreLabel() {
         score = new JLabel("000");
         score.setBounds(panel.getWidth() - 170, 14, 80, 80);
-        Font font = null;
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, new File(Menu.class.getResource("../media/DS-DIGI.ttf").toURI()));
-        } catch (FontFormatException | IOException | URISyntaxException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        font = font.deriveFont(Font.PLAIN, 48);
-        score.setFont(font);
+        score.setFont(new Font("Arial", Font.BOLD, 36));
         if (dark) {
             score.setForeground(Color.WHITE);
         } else {
@@ -239,30 +284,92 @@ public class Menu extends MenuView {
     private void initPlayerPanel() {
         playerPanel = new JPanel();
         playerPanel.setBorder(null);
-        playerPanel.setBounds(30, 10, panel.getWidth() - 30, 70);
+        playerPanel.setBounds(10, 10, panel.getWidth()-20, 70);
+        playerPanel.setOpaque(true);
         playerPanel.setBackground(new Color(154, 154, 154, 70));
-        playerPanel.add(score);
+        initHomeButton();
         playerPanel.add(playerButton);
+        playerPanel.add(homeButton);
+        playerPanel.validate();
+        playerPanel.repaint();
+    }
+    
+    private void initUsernamePanel() {
+        usernamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        usernamePanel.setBorder(null);
+        usernamePanel.setBounds(10, 90, panel.getWidth()-20, 30);
+        usernamePanel.setOpaque(true);
+        usernamePanel.setBackground(new Color(154, 154, 154, 70));
+    }
+    
+    private void initStatsPanel() {
+        statsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        statsPanel.setBorder(null);
+        statsPanel.setBounds(10, 130, panel.getWidth()-20, 70);
+        statsPanel.setOpaque(true);
+        statsPanel.setBackground(new Color(154, 154, 154, 70));
+    }
+    
+    private void initStatsLab() {
+        testPlayedLab = new JLabel("<html><body><p style='color: white;'><strong>Coups joués :</strong></p></body></html>");
+        testPlayedLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testPlayedLab.setLabelFor(testPlayed);
+        testPlayed = new JLabel("0");
+        testPlayed.setFont(new Font("Arial", Font.PLAIN, 14));
+        testPlayed.setForeground(Color.red);
+        
+        testWonLab = new JLabel("<html><body><p style='color: white;'><strong>Coups gagnés :</strong></p></body></html>");
+        testWonLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testWonLab.setLabelFor(testWon);
+        testWon = new JLabel("0");
+        testWon.setFont(new Font("Arial", Font.PLAIN, 14));
+        testWon.setForeground(Color.red);
+        
+        testLostLab = new JLabel("<html><body><p style='color: white;'><strong>Coups perdus :</strong></p></body></html>");
+        testLostLab.setFont(new Font("Arial", Font.PLAIN, 14));
+        testLostLab.setLabelFor(testLost);
+        testLost = new JLabel("0");
+        testLost.setFont(new Font("Arial", Font.PLAIN, 14));
+        testLost.setForeground(Color.red);
+        
+        statsPanel.add(testPlayedLab);
+        statsPanel.add(testPlayed, BorderLayout.CENTER);
+        statsPanel.add(testWonLab);
+        statsPanel.add(testWon, BorderLayout.CENTER);
+        statsPanel.add(testLostLab);
+        statsPanel.add(testLost, BorderLayout.CENTER);
+    }
+    
+    private void initWordList() {
+        wList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        wList.setLayoutOrientation(JList.VERTICAL);
+        wList.setBounds(10, 210, panel.getWidth()-20, 200);
+        wList.setOpaque(true);
+        wList.setBackground(new Color(154, 154, 154, 70));
+        wList.setLayout(new FlowLayout(FlowLayout.CENTER));
+        wList.setFont(new Font("Arial", Font.BOLD, 15));
+        wList.setForeground(Color.red);
+        wList.setCellRenderer(new CustomCellRenderer());
     }
 
     private void initNewGameButton() {
         newGameButton = new JButton("New game");
-        newGameButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 330, 110, 30);
+        newGameButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 530, 110, 30);
         newGameButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								newGame();
+                getController().notifyNewGame();
             }
         });
     }
 
     private void initLoadButton() {
         loadButton = new JButton("Load game");
-        loadButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 260, 110, 30);
+        loadButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 495, 110, 30);
         loadButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								loadGame();
+                // loadGame();
             }
         });
     }
@@ -273,19 +380,26 @@ public class Menu extends MenuView {
         saveButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//								saveGame();
+                // saveGame();
             }
         });
     }
-
-    /**
-     * * Methods used to update the Menu view from the model notifications **
-     */
-    @Override
-    public void initMenuToPlay(InitMenuToPlayEvent event) {
-        loadPlay(event.isAnonym(), event.getPlayerEmail(), event.getScore());
+    
+    private void initUndoButton() {
+        undoButton = new JButton("Undo");
+        undoButton.setBounds(panel.getWidth() / 2 - 50, panel.getHeight() - 340, 110, 30);
+        undoButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getController().notifyUndo();
+                panel.remove(undoButton);
+                panel.validate();
+                panel.repaint();
+            }
+        });
+        panel.add(undoButton);
     }
-
+    
     public void setScore(int score) {
         if (score < 10) {
             this.score.setText("00" + String.valueOf(score));
@@ -295,12 +409,7 @@ public class Menu extends MenuView {
             this.score.setText(String.valueOf(score));
         }
     }
-
-    @Override
-    public void updateScore(UpdateScoreEvent event) {
-        score.setText("" + event.getScore());
-    }
-
+    
     public void setIcons(boolean dark) {
         if (dark) {
             settingsButton.setIcon(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
@@ -309,5 +418,84 @@ public class Menu extends MenuView {
             settingsButton.setIcon(ImageIconTools.createImageIcon("../media/dark_settings_icon.png", null));
             score.setForeground(Color.BLACK);
         }
+    }
+    
+    private void increaseTestPlayed() {
+        int old = Integer.parseInt(testPlayed.getText());
+        old++;
+        testPlayed.setText(""+old);
+    }
+    
+    private void increaseTestWon() {
+        int old = Integer.parseInt(testWon.getText());
+        old++;
+        testWon.setText(""+old);
+    }
+    
+    private void increaseTestLost() {
+        int old = Integer.parseInt(testLost.getText());
+        old++;
+        testLost.setText(""+old);
+    }
+    
+    private void updateWords(String[] data) {
+        if (data != null) {
+            for (String word : data) {
+                wListModel.addElement(word);
+            }
+        } else {
+            if (!wListModel.isEmpty()) {
+                wListModel.remove(wListModel.getSize() - 1);
+            }
+        }
+    }
+    
+    public void callLogoutProcess() {
+        logoutProcess();
+    }
+
+    /**
+     * * Methods used to update the Menu view from the model notifications **
+     */
+    @Override
+    public void initMenuInterface(InitMenuInterfaceEvent event) {
+        loadInterface(event.isAnonym(), event.getEmail(), event.getUsername());
+    }
+    
+    @Override
+    public void initMenuLoadPlay(boolean anonymous) {
+        loadPlay(anonymous);
+    }
+
+    @Override
+    public void updateScore(UpdateScoreEvent event) {
+        score.setText("" + event.getScore());
+    }
+    
+    @Override
+    public void updateStats(UpdateStatsEvent event) {
+        increaseTestPlayed();
+        if (event.isValid()) {
+            increaseTestWon();
+        } else {
+            increaseTestLost();
+        }
+    }
+    
+    @Override
+    public void updateAllStats(UpdateAllStatsEvent event) {
+        testPlayed.setText(""+event.getTestPlayed());
+        testWon.setText(""+event.getTestWon());
+        testLost.setText(""+event.getTestLost());
+    }
+    
+    @Override
+    public void updateWordsList(UpdateWordsListEvent event) {
+        updateWords(event.getWordsList());
+    }
+    
+    @Override
+    public void showUndoButton() {
+        initUndoButton();
     }
 }

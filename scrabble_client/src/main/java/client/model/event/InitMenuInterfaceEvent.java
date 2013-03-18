@@ -3,31 +3,31 @@ package client.model.event;
 import java.util.EventObject;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>
  */
-public class InitMenuToPlayEvent extends EventObject {
+public class InitMenuInterfaceEvent extends EventObject {
 
     private final boolean isAnonymous;
+    // Contains player info in JSON
     private final String email;
-    private final int score;
+    private final String username;
 
-    public InitMenuToPlayEvent(Object source, boolean anonymous, String email, int score) {
+    public InitMenuInterfaceEvent(Object source, boolean anonymous, String email, String username) {
         super(source);
         this.isAnonymous = anonymous;
         this.email = email;
-        this.score = score;
+        this.username = username;
     }
 
     public boolean isAnonym() {
         return this.isAnonymous;
     }
 
-    public String getPlayerEmail() {
+    public String getEmail() {
         return this.email;
     }
-
-    public int getScore() {
-        return this.score;
+    
+    public String getUsername() {
+        return this.username;
     }
 }

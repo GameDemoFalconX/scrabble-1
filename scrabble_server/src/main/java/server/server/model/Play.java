@@ -4,28 +4,22 @@ import client.model.utils.Point;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
 
-    private UUID playID;
-    private UUID owner;
-    private Date created;
-    private Date modified;
+    private String playID;
+    private String owner;
     private Integer score;
     private Grid grid;
-    private String formatedGrid;
     private Rack rack;
     private TileBag bag;
+    private final boolean isAnonym;
     // Game variables
     protected String lastWord;
     protected int lastWordScore;
@@ -33,94 +27,37 @@ public class Play {
     private int nbTests = 0;
     private int testsWithSuccess = 0;
     private int testsWithError = 0;
-    
+    private int innerIndice = 0;
     // JSON treatment
     private ObjectMapper om = new ObjectMapper();
 
     /**
      * Constructor for Play instance from simply playerID.
-     *
      * @param playerID
      */
-    public Play(String playerID) {
-        playID = UUID.randomUUID();
-        owner = UUID.fromString(playerID);
-        created = new Date();
+    public Play(String playerID, boolean anonym) {
+        playID = UUID.randomUUID().toString();
+        owner = playerID;
         score = 0;
         grid = new Grid();
         bag = new TileBag();
         rack = new Rack(bag);
-    }
-
-    /**
-     * Allows to initialize a Play object without grid, rack and bag to save
-     * memory. Thus it become possible to display some attributes of this
-     * without to have load the complete object.
-     */
-    public Play(String playerID, String playID, String created, String modified, Integer score) {
-        this.playID = UUID.fromString(playID);
-        this.owner = UUID.fromString(playerID);
-        String[] cDate = created.split("/");
-        this.created = new Date(Integer.parseInt(cDate[0]), Integer.parseInt(cDate[1]), Integer.parseInt(cDate[2]));
-        String[] mDate = modified.split("/");
-        this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
-        this.score = score;
-
-        // Initialize grid,  tilebag and rack.
-        grid = new Grid();
-        bag = new TileBag();
-        rack = new Rack();
-    }
-
-    public void loadTile(int x, int y, char letter, int value) {
-        Tile newTile = bag.popTile(letter, value);
-        newTile.setLoaded();
-        grid.putInGrid(x, y, newTile);
-    }
-
-    public void loadRackTile(int index, char letter, int value) {
-        Tile newTile = bag.popTile(letter, value);
-        rack.setTile(index, newTile);
+        this.isAnonym = anonym;
     }
 
     /**
      * @return string representation of Play ID.
      */
     public String getPlayID() {
-        return playID.toString();
+        return playID;
     }
 
     public String getOwner() {
-        return owner.toString();
+        return owner;
     }
-
-    private String formatDate(Date d) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        return dateFormat.format(d);
-    }
-
-    protected String getCreated() {
-        return formatDate(created);
-    }
-
-    protected String getModified() {
-        setModified();
-        return formatDate(modified);
-    }
-
-    private void setModified() {
-        modified = new Date();
-    }
-
-    protected ArrayList getNewAddedTiles() {
-        System.out.println("@@@@@@@@@@");
-        System.out.println(this.grid.toString());
-
-        return grid.getNewAdds();
-    }
-
-    protected Rack getRack() {
-        return rack;
+    
+    public boolean isAnonym() {
+        return this.isAnonym;
     }
 
     /**
@@ -172,7 +109,6 @@ public class Play {
      * Check neighbors tiles of the current tile, create a word form their
      * letters and count the score of this new word by considering the
      * orientation given in parameter.
-     *
      * @param cTile
      * @param orientation
      */
@@ -183,8 +119,8 @@ public class Play {
         String p = "", n = "";
 
         // Display Grid and Rack
-        System.out.println(grid.toString());
-        System.out.println(rack.displayRack());
+        //System.out.println(grid.toString());
+        //System.out.println(rack.displayRack());
 
         // Initialization from current tile.
         int wordCounter = grid.scoringGrid.checkBonus(cTile, this);
@@ -225,13 +161,16 @@ public class Play {
         }
     }
 
+    /**
+     * Calculate the score for the currentWord (in treatment)
+     * @param score 
+     */
     protected void setLastWordScore(int score) {
         lastWordScore += score;
     }
 
     /**
      * Set the score of the player game.
-     *
      * @param score
      */
     protected void setScore(int score) {
@@ -240,7 +179,6 @@ public class Play {
 
     /**
      * Get the score for this play.
-     *
      * @return
      */
     protected int getScore() {
@@ -267,29 +205,22 @@ public class Play {
     }
 
     /**
-     * Format the content of the play object
-     *
-     * @return String with this canvas : [play uuid]__[play created
-     * date]__[modified]__[score] Two underscore between play attributes.
-     */
-    public String formatAttr() {
-        return getPlayID() + "__" + formatDate(created) + "__" + formatDate(modified) + "__" + score.toString();
-    }
-
-    /**
-     * Return a String representation of the rack with the following canvas :
-     * [letter] [letter] ...
-     *
-     * @return
+     * Return a String representation of the rack
+     * @return JSON : [{"letter": "A", "value": 1, "blank": false}, ...]
      */
     public String getFormatRack() {
         return this.rack.toString();
     }
 
+    /**
+     * Return a String representation of the grid
+     * @return
+     */
     public String getGrid() {
         return this.grid.toString();
     }
 
+    /*
     public String tileExchange(String position) {
         String newTiles = "";
         String[] positions = position.split(" ");
@@ -310,38 +241,38 @@ public class Play {
     public void tileSwitch(String position) {
         rack.tileSwitch(position);
     }
-
-    /**
-     * Update blank tiles in the rack before saving.
-     *
-     * @param args
-     */
-    public void updateBlankTile(String args) {
-        String[] tileList = args.split(":");
-        for (int i = 0; i < tileList.length; i++) {
-            //rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
-        }
-    }
-
-    // *** Formated data *** //
-    public void setFormatedGrid(String fGrid) {
-        this.formatedGrid = fGrid;
-    }
-
-    public String getFormatedGrid() {
-        return this.formatedGrid;
-    }
+    */
 
     //*** Stats Section ***//
     protected void newTest() {
         this.nbTests += 1;
     }
+    
+    protected int getTestsPlayed() {
+        return this.nbTests;
+    }
 
     protected void testWithSuccess() {
         this.testsWithSuccess += 1;
     }
+    
+    protected int getTestsWon() {
+        return this.testsWithSuccess;
+    }
 
     protected void testWithError() {
         this.testsWithError += 1;
+    }
+    
+    protected int getTestsLost() {
+        return this.testsWithError;
+    }
+    
+    protected void increaseIndice() {
+        this.innerIndice++;
+    }
+    
+    protected int getInnerIndice() {
+        return this.innerIndice;
     }
 }

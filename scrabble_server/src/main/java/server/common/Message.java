@@ -63,6 +63,10 @@ public class Message {
     public static final int PLACE_WORD = 70; // Place word
     public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
     public static final int PLACE_WORD_ERROR = 72; // Place word with error
+    
+    public static final int UNDO = 75; 
+    public static final int UNDO_SUCCESS = 76;
+    public static final int UNDO_ERROR = 77;
     // SAVE_GAME //
     public static final int SAVE_GAME = 80; // Save game
     public static final int SAVE_GAME_WITH_END_GAME = 81; // Save and leave the current game

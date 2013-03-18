@@ -10,7 +10,7 @@ import server.common.Message;
 public interface IGame {
     // Player connection
 
-    Message newAccount(String pl_name, String pl_pwd) throws GameException;
+    Message newAccount(String pl_email, String pl_pwd) throws GameException;
     Message login(String pl_name, String pl_pwd) throws GameException;
     Message logout(String pl_id) throws GameException;
 

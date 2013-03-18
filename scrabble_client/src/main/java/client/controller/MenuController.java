@@ -5,7 +5,6 @@ import client.views.MenuView;
 import client.views.swing.menu.Menu;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>
  */
 public class MenuController {
@@ -29,5 +28,25 @@ public class MenuController {
 
     public void notifyPlayAsGuest() {
         play.playAsGuest();
+    }
+    
+    public void notifySignup(String email, String pwd) {
+        play.signup(email, pwd);
+    }
+    
+    public void notifyLogin(String email, String pwd) {
+        play.login(email, pwd);
+    }
+    
+    public void notifyLogout() {
+        play.logout();
+    }
+    
+    public void notifyNewGame() {
+        play.newGame();
+    }
+    
+    public void notifyUndo() {
+        play.undo();
     }
 }

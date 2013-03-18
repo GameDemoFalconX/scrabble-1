@@ -5,11 +5,11 @@ import java.util.EventObject;
 /** 
  * @author Romain <ro.foncier@gmail.com>
  */
-public class removeBadTilesEvent extends EventObject {
+public class RemoveBadTilesEvent extends EventObject {
 
     private String tilesToRemove;
     
-    public removeBadTilesEvent(Object source, String tilesToRemove) {
+    public RemoveBadTilesEvent(Object source, String tilesToRemove) {
         super(source);
         this.tilesToRemove = tilesToRemove;
     }

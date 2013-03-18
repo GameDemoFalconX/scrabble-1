@@ -89,24 +89,22 @@ public class ThreadCtrl extends Thread {
      }
      */
     private void newAccount() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to create a new account");
         Message response;
 
         // Try to create a new player acount
-        response = sScrabble.newAccount(argsTab[0], argsTab[1]);
+        response = sScrabble.newAccount(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void login() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to login");
         Message response;
 
         // Try to log the current player
-        response = sScrabble.login(argsTab[0], argsTab[1]);
+        response = sScrabble.login(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -117,7 +115,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to log the current player
-        response = sScrabble.logout(new String(request.getBody()));
+        response = sScrabble.logout(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -128,7 +126,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to create a new game for the current player
-        response = sScrabble.createNewPlay(new String(request.getBody()));
+        response = sScrabble.createNewPlay(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -195,7 +193,6 @@ public class ThreadCtrl extends Thread {
     }
 
     private void gameTreatment() {
-        System.out.println(request.getBodyJSON());
         outputPrint("Start game treatment for the current player");
         Message response;
 
