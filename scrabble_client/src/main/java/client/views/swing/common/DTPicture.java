@@ -29,6 +29,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
     private boolean debug = false;
     private JPanel sourceParent;
     private JPanel targetParent;
+    private boolean isSelected = false;
 
     public DTPicture(Image image, Game scrabble, JLayeredPane jlp) {
         super(image);
@@ -67,36 +68,53 @@ public class DTPicture extends Picture implements MouseMotionListener {
     }
 
     /**
+     * Allows to select this DTPicture in this parent container.
+     *
+     * @param state
+     */
+    public void setSelected(boolean state) {
+        this.isSelected = state;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    /**
      * * Methods from interface MouseListener **
      */
     @Override
     public void mousePressed(MouseEvent e) {
         Component comp = e.getComponent(); // Obviously that concerns (a Tile within) a DTPicture instance
         Point location = (Point) e.getPoint().clone();
-        if (this.isLocked) {
-            this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+        if (scrabble.isExchangeMode()) {
+             this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
         } else {
-            comp.setVisible(false); // Hide the DTPicture source during the drag
+            if (this.isLocked) {
+                this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+            } else {
+                comp.setVisible(false); // Hide the DTPicture source during the drag
 
-            // Get the source parent of this DTPicture
-            sourceParent = (JPanel) comp.getParent();
+                // Get the source parent of this DTPicture
+                sourceParent = (JPanel) comp.getParent();
 
-            // Convert a point from a component's coordinate system to screen coordinates.
-            SwingUtilities.convertPointToScreen(location, comp);
-            // Convert a point from a screen coordinates to a component's coordinate system.
-            SwingUtilities.convertPointFromScreen(location, glass);
+                // Convert a point from a component's coordinate system to screen coordinates.
+                SwingUtilities.convertPointToScreen(location, comp);
+                // Convert a point from a screen coordinates to a component's coordinate system.
+                SwingUtilities.convertPointFromScreen(location, glass);
 
-            imageGlass = new BufferedImage(comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            comp.paint(imageGlass.getGraphics());
+                imageGlass = new BufferedImage(comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                comp.paint(imageGlass.getGraphics());
 
-            // Update the GlasPane
-            glass.setLocation(location);
-            glass.setImage(imageGlass);
-            glass.setVisible(true);
+                // Update the GlasPane
+                glass.setLocation(location);
+                glass.setImage(imageGlass);
+                glass.setVisible(true);
 
-            // Once an InputEvent is consumed, the source component will not process the event itself. 
-            // However, the event will still be dispatched to all registered listeners.
-            e.consume();
+                // Once an InputEvent is consumed, the source component will not process the event itself. 
+                // However, the event will still be dispatched to all registered listeners.
+                e.consume();
+            }
         }
     }
 

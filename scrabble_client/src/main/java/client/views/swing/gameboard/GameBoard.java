@@ -135,7 +135,7 @@ public class GameBoard extends JPanel {
     public void changeGameBoard(String type) {
         if ("vintage".equals(type)) {
             vintage = true;
-        } else {
+        } else {    
             vintage = false;
         }
         remove(0);

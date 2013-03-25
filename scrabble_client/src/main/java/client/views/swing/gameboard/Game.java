@@ -59,6 +59,7 @@ public class Game extends GameView {
     private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
     private static final String ICON = PATH_MEDIA + "icon.png";
     public static String tileBlank;
+    private boolean exchangeMode = true;
     private JFrame frame;
     private JLayeredPane JLPaneOfFrame;
     private Container contentPane;
@@ -393,5 +394,13 @@ public class Game extends GameView {
         contentPane.validate();
         rack.reset();
         resetGameButtons();
+    }
+
+    public boolean isExchangeMode() {
+        return exchangeMode;
+    }
+
+    public void setExchangeMode(boolean exchangeMode) {
+        this.exchangeMode = exchangeMode;
     }
 }

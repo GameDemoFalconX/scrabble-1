@@ -216,6 +216,9 @@ public class Rack extends JPanel {
         }
         return vacantPosition;
     }
+      
+    protected void frameTile(int pos) {
+    }
 
     /**
      * * Methods used for create ImageIcon **
