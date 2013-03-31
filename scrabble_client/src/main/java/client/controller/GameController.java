@@ -70,7 +70,7 @@ public class GameController {
     }
 
     public void notifyExchangeTiles() {
-        // Call model
+        play.exchangeTiles();
     }
 
     public void notifyValidWord() {

@@ -59,7 +59,7 @@ public class Game extends GameView {
     private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
     private static final String ICON = PATH_MEDIA + "icon.png";
     public static String tileBlank;
-    private boolean exchangeMode = true;
+    private boolean exchangeMode = false;
     private JFrame frame;
     private JLayeredPane JLPaneOfFrame;
     private Container contentPane;
@@ -171,7 +171,7 @@ public class Game extends GameView {
         exchangeButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().notifyExchangeTiles();
+                exchangeMode = !exchangeMode;
             }
         });
     }
@@ -186,11 +186,15 @@ public class Game extends GameView {
         validWordButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (exchangeMode) {
+                    getController().notifyExchangeTiles();
+                } else {
                 if (rack.rackIsFull()) {
                     ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");
                     errorPopup.showErrorMessage();
                 } else {
                     getController().notifyValidWord();
+                }
                 }
             }
         });

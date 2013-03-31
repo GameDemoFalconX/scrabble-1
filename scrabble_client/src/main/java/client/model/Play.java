@@ -485,6 +485,10 @@ public class Play {
     public void reArrangeRack() {
         fireRackReArrange(rack.reArrangeTiles());
     }
+    
+    public void exchangeTiles() {
+        fireExchangeTiles();
+    }
 
     public void validateWord() {
         undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
@@ -698,6 +702,10 @@ public class Play {
         } catch (GameException ge) {
             System.out.println("Error during undo");
         }*/
+    }
+
+    private void fireExchangeTiles() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**
