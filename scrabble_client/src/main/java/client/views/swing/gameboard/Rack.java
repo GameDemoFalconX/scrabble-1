@@ -282,18 +282,14 @@ public class Rack extends JPanel {
         return tmp.isSelected();
     }
     
-    /**
-     * 
-     * @return JSON Format [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
-     */
-    public List<Integer> getSelectedTiles() {
+    public Integer[] getSelectedTiles() {
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < RACK_LENGTH; i++) {
             if (isTileSelected(i)) {
                 result.add(i);
             }
         }
-        return result;
+        return result.toArray(new Integer[result.size()]);
     }
     
 }

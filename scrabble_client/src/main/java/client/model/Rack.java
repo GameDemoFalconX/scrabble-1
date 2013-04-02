@@ -164,7 +164,7 @@ public class Rack {
      * @return JSON format of the all tiles located at their
      * respective position on the rack : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
-    public String getFormatedTiles(int[] positions) {
+    public String getFormatedTiles(Integer[] positions) {
         String formatedTiles = "[";
         for (int i = 0; i < positions.length; i++) {
             formatedTiles += rack[positions[i]].toString();

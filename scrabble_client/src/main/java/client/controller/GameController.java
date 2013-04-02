@@ -70,7 +70,7 @@ public class GameController {
         play.reArrangeRack();
     }
 
-    public void notifyExchangeTiles(List<Integer> selectedTiles) {
+    public void notifyExchangeTiles(Integer[] selectedTiles) {
         play.exchangeTiles(selectedTiles);
     }
 

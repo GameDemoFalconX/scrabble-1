@@ -493,12 +493,8 @@ public class Play {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void exchangeTiles(List<Integer> selectedTiles) {
-        int[] tmp = new int[selectedTiles.size()];
-        for (int i = 0; i < selectedTiles.size(); i++) {
-            tmp[i] = selectedTiles.get(i);
-        }
-        String data = rack.getFormatedTiles(tmp);
+    public void exchangeTiles(Integer[] selectedTiles) {
+        String data = rack.getFormatedTiles(selectedTiles);
         try {
             String response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
     //        fireExchangeTiles(rack.getFormatedTiles(tmp));
