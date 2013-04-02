@@ -31,9 +31,11 @@ public class HAL extends Game {
 
     /**
      * Create a new account for the current player.
+     *
      * @param pl_name, pl_pwd
-     * @return Return new player infos in JSON if a new account has been created. If the player name
-     * already exists, return throw a GameException and do nothing.
+     * @return Return new player infos in JSON if a new account has been
+     * created. If the player name already exists, return throw a GameException
+     * and do nothing.
      */
     @Override
     protected Message createAccount(String pl_email, String pl_pwd) {
@@ -53,9 +55,10 @@ public class HAL extends Game {
 
     /**
      * Login a registered user.
+     *
      * @param pl_email, pl_pwd
-     * @return Return player infos in JSON if player exists, otherwise throw GameExceptions
-     * and do nothing.
+     * @return Return player infos in JSON if player exists, otherwise throw
+     * GameExceptions and do nothing.
      */
     @Override
     protected Message loginProcess(String pl_email, String pl_pwd) {
@@ -79,28 +82,30 @@ public class HAL extends Game {
     }
 
     /**
-     * Allow to logout a user currently logged. 
-     * Automatically save its current play if it exists.
+     * Allow to logout a user currently logged. Automatically save its current
+     * play if it exists.
+     *
      * @param pl_id
      * @return Message with the right header : LOGOUT_SUCCESS or _ERROR.
      */
     @Override
     protected Message logoutProcess(String pl_id) {
-         if (pCol.playerIsLogged(pl_id)) {
+        if (pCol.playerIsLogged(pl_id)) {
             // Check if a play is processing and save it, otherwise do nothing.
-             Play cPlay = pCol.isPlaying(pl_id);
-             if (cPlay != null) {
-                 // Save Play in the DB.
-             }
-             
-             pCol.removePlayer(pl_id);
+            Play cPlay = pCol.isPlaying(pl_id);
+            if (cPlay != null) {
+                // Save Play in the DB.
+            }
+
+            pCol.removePlayer(pl_id);
             return new Message(Message.LOGOUT_SUCCESS, "");
-         }
+        }
         return new Message(Message.LOGOUT_ERROR, "");
     }
 
     /**
      * Create a new Play instance for this user
+     *
      * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
      * @return Message with body format in JSON : {"play_id":
      * "xxxx0x0000x00x0x00", "rack":
@@ -114,12 +119,12 @@ public class HAL extends Game {
                 // Initialization of the Play on the server side and add it to the GameRAM dict.
                 Play newPlay = new Play(user_id, false);
                 pCol.addPlay(user_id, newPlay);
-                
+
                 // Save data in the DB
                 newPlay.increaseIndice();
                 Co.createPlay(user_id, newPlay.getPlayID());
                 Co.saveTest(newPlay.getInnerIndice(), newPlay.getPlayID(), newPlay.getFormatRack(), "-", -1);
-                
+
                 return new Message(Message.NEW_GAME_SUCCESS, "{\"play_id\": \"" + newPlay.getPlayID() + "\", \"rack\": " + newPlay.getFormatRack() + "}");
             }
             return new Message(Message.PLAYER_NOT_LOGGED, "");
@@ -130,6 +135,7 @@ public class HAL extends Game {
 
     /**
      * Allows to log an anonymous user
+     *
      * @param pl_id is format in JSON : {"user_id": "x000x0x00xxxx0x0x0x000x"}
      * @return Message with body format in JSON : {"play_id":
      * "xxxx0x0000x00x0x00", "rack":
@@ -260,7 +266,7 @@ public class HAL extends Game {
                     Co.updatePlayStats(cPlay.getPlayID(), true, cPlay.getTestsPlayed(), cPlay.getTestsWon());
                 }
                 System.out.println("New tiles : " + newTiles);
-                return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": " + cPlay.getScore() + ", \"tiles\": " + newTiles + ", \"words\": " +Utils.arrayToJSON(wordsList)+ "}");
+                return new Message(Message.PLACE_WORD_SUCCESS, "{\"valid\": true, \"score\": " + cPlay.getScore() + ", \"tiles\": " + newTiles + ", \"words\": " + Utils.arrayToJSON(wordsList) + "}");
             } else {
                 cPlay.setScore((bestWord / 2) * (-1)); // Update score
                 if (!cPlay.isAnonym()) {
@@ -289,13 +295,17 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message tileExchange(String pl_id, String position) {/*
-         Message response = null;
-         if (plays.playerIsLogged(pl_id)) {
-         Play play = plays.getPlay(pl_id);
-         String newTiles = play.tileExchange(position);
-         return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
-         }*/
+    protected Message tileExchange(String pl_id, String ga_id, String tiles) {
+        Play cPlay = pCol.playIdentification(pl_id, ga_id);
+        if (cPlay != null) {
+            System.out.println("Server : start exchange");
+            String newTiles = cPlay.exchangeTiles(tiles);
+            if (!"".equals(newTiles)) {
+                return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
+            } else {
+                return new Message(Message.TILE_EXCHANGE_ERROR, "");
+            }
+        }
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 

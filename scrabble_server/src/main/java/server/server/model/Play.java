@@ -1,12 +1,16 @@
 package server.server.model;
 
 import client.model.utils.Point;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
@@ -33,6 +37,7 @@ public class Play {
 
     /**
      * Constructor for Play instance from simply playerID.
+     *
      * @param playerID
      */
     public Play(String playerID, boolean anonym) {
@@ -55,13 +60,14 @@ public class Play {
     public String getOwner() {
         return owner;
     }
-    
+
     public boolean isAnonym() {
         return this.isAnonym;
     }
 
     /**
      * Put the player's tiles on the game board.
+     *
      * @param args
      * @return a List which contains the tiles coordinates and their index in
      * the rack.
@@ -82,7 +88,7 @@ public class Play {
                 t.upStatus(); // Set this tile like a new add in the grid.
                 if (!rack.removeTileFromRack(t)) {
                     // Improve this with Exception handler
-                    System.out.println("Tile not found in rack :"+t);
+                    System.out.println("Tile not found in rack :" + t);
                     break;
                 }
                 grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
@@ -95,7 +101,9 @@ public class Play {
     }
 
     /**
-     * Remove the tiles added if the test contains some errors and take them back in Rack
+     * Remove the tiles added if the test contains some errors and take them
+     * back in Rack
+     *
      * @param tilesList
      */
     protected void removeBadTiles(ArrayList<Tile> tilesList) {
@@ -109,6 +117,7 @@ public class Play {
      * Check neighbors tiles of the current tile, create a word form their
      * letters and count the score of this new word by considering the
      * orientation given in parameter.
+     *
      * @param cTile
      * @param orientation
      */
@@ -163,7 +172,8 @@ public class Play {
 
     /**
      * Calculate the score for the currentWord (in treatment)
-     * @param score 
+     *
+     * @param score
      */
     protected void setLastWordScore(int score) {
         lastWordScore += score;
@@ -171,6 +181,7 @@ public class Play {
 
     /**
      * Set the score of the player game.
+     *
      * @param score
      */
     protected void setScore(int score) {
@@ -179,6 +190,7 @@ public class Play {
 
     /**
      * Get the score for this play.
+     *
      * @return
      */
     protected int getScore() {
@@ -188,8 +200,10 @@ public class Play {
     /**
      * Update the rack on the server side by adding new tiles from the bag and
      * format them to send on the client.
+     *
      * @param tilesList
-     * @return Formated list of tile in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
+     * @return Formated list of tile in JSON :
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     protected String getNewTiles(int numberTile) {
         String result = "[";
@@ -201,11 +215,12 @@ public class Play {
                 result += ", ";
             }
         }
-        return result+"]";
+        return result + "]";
     }
 
     /**
      * Return a String representation of the rack
+     *
      * @return JSON : [{"letter": "A", "value": 1, "blank": false}, ...]
      */
     public String getFormatRack() {
@@ -214,40 +229,39 @@ public class Play {
 
     /**
      * Return a String representation of the grid
+     *
      * @return
      */
     public String getGrid() {
         return this.grid.toString();
     }
 
-    /*
-    public String tileExchange(String position) {
-        String newTiles = "";
-        String[] positions = position.split(" ");
-        for (int i = 0; i < positions.length; i++) {
-            Tile tile = this.bag.getTile();
-            newTiles += tile.getLetter() + ":" + tile.getValue();
-            if (i < positions.length - 1) {
-                newTiles += "=";
+    public String exchangeTiles(String tiles) {
+        Logger.getLogger(Play.class.getName()).log(Level.INFO, null, tiles);
+        Tile[] tileArray = null;
+        try {
+            tileArray = om.readValue(tiles, Tile[].class);
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (tileArray != null) {
+            String newTiles = this.getNewTiles(tileArray.length);
+            for (int i = 0; i < tileArray.length; i++) {
+                bag.putBackTile(tileArray[i]);
             }
+            return newTiles;
+        } else {
+            return "";
         }
-        for (int i = 0; i < positions.length; i++) {
-            //bag.putBackTile(rack.getTile(i));
-        }
-        rack = new Rack(newTiles);
-        return newTiles;
-    }
 
-    public void tileSwitch(String position) {
-        rack.tileSwitch(position);
+
     }
-    */
 
     //*** Stats Section ***//
     protected void newTest() {
         this.nbTests += 1;
     }
-    
+
     protected int getTestsPlayed() {
         return this.nbTests;
     }
@@ -255,7 +269,7 @@ public class Play {
     protected void testWithSuccess() {
         this.testsWithSuccess += 1;
     }
-    
+
     protected int getTestsWon() {
         return this.testsWithSuccess;
     }
@@ -263,15 +277,15 @@ public class Play {
     protected void testWithError() {
         this.testsWithError += 1;
     }
-    
+
     protected int getTestsLost() {
         return this.testsWithError;
     }
-    
+
     protected void increaseIndice() {
         this.innerIndice++;
     }
-    
+
     protected int getInnerIndice() {
         return this.innerIndice;
     }

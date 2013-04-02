@@ -204,16 +204,24 @@ public class ThreadCtrl extends Thread {
     }
 
     private void exchangeTile() {
-        String[] argsTab = new String(request.getBody()).split("##");
-        outputPrint("Current player is trying to exchange tiles");
+        outputPrint("Start game treatment for the current player");
         Message response;
-        String playerID = argsTab[0];
-        String position = argsTab[1];
-        response = sScrabble.exchangeTile(playerID, position);
 
+        // Check if the player's game is correct.
+        response = sScrabble.exchangeTile(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
+//        String[] argsTab = new String(request.getBody()).split("##");
+//        outputPrint("Current player is trying to exchange tiles");
+//        Message response;
+//        String playerID = argsTab[0];
+//        String position = argsTab[1];
+//        response = sScrabble.exchangeTile(playerID, position);
+//
+//        outputPrint("Send Response");
+//        sProto.sendResponse(response);
+//        Thread.currentThread().interrupt();
     }
 
     private void switchTile() {

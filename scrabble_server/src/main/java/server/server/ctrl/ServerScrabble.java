@@ -1,11 +1,14 @@
 package server.server.ctrl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.common.GameException;
 import server.common.Message;
 import server.server.connection.ServerProtocol;
@@ -258,16 +261,20 @@ public class ServerScrabble {
         return response;
     }
 
-    public synchronized Message exchangeTile(String playerID, String tiles) {
+    public synchronized Message exchangeTile(String data) {
         Message response = null;
         try {
-            response = game.exchangeTile(playerID, tiles);
+            System.out.println(data);
+            JsonNode root = om.readTree(data);
+            response = game.exchangeTile(root.get("user_id").asText(), root.get("play_id").asText(), root.get("tiles").toString());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
+        } catch (IOException ex) {
+            Logger.getLogger(ServerScrabble.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }
