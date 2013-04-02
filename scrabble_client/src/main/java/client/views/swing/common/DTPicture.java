@@ -88,7 +88,13 @@ public class DTPicture extends Picture implements MouseMotionListener {
         Component comp = e.getComponent(); // Obviously that concerns (a Tile within) a DTPicture instance
         Point location = (Point) e.getPoint().clone();
         if (scrabble.isExchangeMode()) {
-             this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+            if (isSelected) {
+                this.setBorder(null);
+                isSelected = false;
+            } else {
+                this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+                isSelected = true;
+            }
         } else {
             if (this.isLocked) {
                 this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
