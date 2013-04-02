@@ -21,5 +21,5 @@ public class Blah {
             + " tiles on a gameboard marked with a 15-by-15 grid.\nThe words are formed"
             + " across and down in crossword fashion and must appear in a standard "
             + "dictionary.\n\nThis Scrabble game is a project made by "
-            + "Romain Foncier, Arnaud Morel et Bernard Debecker";
+            + "Romain Foncier and Bernard Debecker";
 }
