@@ -5,6 +5,7 @@ import client.views.GameView;
 import client.views.swing.gameboard.Game;
 import client.views.swing.menu.Menu;
 import java.awt.Point;
+import java.util.List;
 
 /**
  *
@@ -69,8 +70,8 @@ public class GameController {
         play.reArrangeRack();
     }
 
-    public void notifyExchangeTiles() {
-        play.exchangeTiles();
+    public void notifyExchangeTiles(List<Integer> selectedTiles) {
+        play.exchangeTiles(selectedTiles);
     }
 
     public void notifyValidWord() {
@@ -84,4 +85,5 @@ public class GameController {
     public void notifyBackTileBlank(int source) {
         play.backTileBlank(source);
     }
+
 }

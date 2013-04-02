@@ -29,9 +29,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -486,9 +489,24 @@ public class Play {
         fireRackReArrange(rack.reArrangeTiles());
     }
     
-    public void exchangeTiles() {
-        fireExchangeTiles();
+    private void fireExchangeTiles(String formatedTiles) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public void exchangeTiles(List<Integer> selectedTiles) {
+        int[] tmp = new int[selectedTiles.size()];
+        for (int i = 0; i < selectedTiles.size(); i++) {
+            tmp[i] = selectedTiles.get(i);
+        }
+        String data = rack.getFormatedTiles(tmp);
+        try {
+            String response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
+    //        fireExchangeTiles(rack.getFormatedTiles(tmp));
+        } catch (GameException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 
     public void validateWord() {
         undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
@@ -704,9 +722,6 @@ public class Play {
         }*/
     }
 
-    private void fireExchangeTiles() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     /**
      * Inner class Memento which allows to offer the undo feature.

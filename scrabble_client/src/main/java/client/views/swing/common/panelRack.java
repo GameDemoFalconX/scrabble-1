@@ -39,6 +39,7 @@ public class panelRack extends JPanel {
         dtp.setVisible(true);
         add(dtp);
     }
+    
 
     /**
      * Remove the DTElement to this container (DRAG and DROP with success,

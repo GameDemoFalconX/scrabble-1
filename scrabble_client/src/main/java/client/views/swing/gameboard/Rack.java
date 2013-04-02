@@ -11,7 +11,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -274,4 +276,24 @@ public class Rack extends JPanel {
         Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
         return result;
     }
+    
+    private boolean isTileSelected(int pos) {
+        DTPicture tmp = (DTPicture) this.innerRack.getComponent(pos);
+        return tmp.isSelected();
+    }
+    
+    /**
+     * 
+     * @return JSON Format [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
+     */
+    public List<Integer> getSelectedTiles() {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+    
 }

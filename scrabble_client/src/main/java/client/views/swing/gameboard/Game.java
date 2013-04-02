@@ -187,7 +187,7 @@ public class Game extends GameView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (exchangeMode) {
-                    getController().notifyExchangeTiles();
+                    getController().notifyExchangeTiles(rack.getSelectedTiles());
                 } else {
                 if (rack.rackIsFull()) {
                     ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");
@@ -199,7 +199,7 @@ public class Game extends GameView {
             }
         });
     }
-
+    
     /**
      * * Methods used to set or update the background, game board and buttons of
      * the frame **
