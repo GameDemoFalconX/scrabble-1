@@ -15,8 +15,8 @@ import client.views.GameView;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.GlassPane;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelGrid;
-import client.views.swing.common.panelRack;
+import client.views.swing.common.PanelGrid;
+import client.views.swing.common.PanelRack;
 import client.views.swing.menu.BlankDialog;
 import client.views.swing.popup.ErrorMessagePopup;
 import java.awt.Color;
@@ -279,8 +279,8 @@ public class Game extends GameView {
     @Override
     public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
         Point tP = event.getTargetPosition();
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.downTileNumber();
         if (event.isBlank()) {
@@ -293,18 +293,18 @@ public class Game extends GameView {
 
     @Override
     public void tileMovedFromRackToRack(TileFromRackToRackEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         // Set the targetParent component visible.
     }
 
     @Override
     public void tileMovedFromRackToRackWithShift(TileFromRackToRackWithShiftEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
         DTPicture DTPtmp = (DTPicture) sourceParent.getComponent(0);
         rack.shiftTiles(event.getSourcePosition(), event.getTargetPosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement(DTPtmp);
     }
 
@@ -312,16 +312,16 @@ public class Game extends GameView {
     public void tileMovedFromGridToGrid(TileFromGridToGridEvent event) {
         Point sP = event.getSourcePosition();
         Point tP = event.getTargetPosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
     }
 
     @Override
     public void tileMovedFromGridToRack(TileFromGridToRackEvent event) {
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {
@@ -334,8 +334,8 @@ public class Game extends GameView {
     public void tileMovedFromGridToRackWithShift(TileFromGridToRackWithShiftEvent event) {
         rack.shiftTiles(rack.findEmptyParent(event.getTargetPosition()), event.getTargetPosition());
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {

@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  *
  * @author Romain <ro.foncier@gmail.com>
  */
-public class panelGrid extends JPanel {
+public class PanelGrid extends JPanel {
 
     // Coordiantes of the panel inside the grid
     private Point coord;
@@ -22,7 +22,7 @@ public class panelGrid extends JPanel {
      * @param th (tile height),
      * @param coord (coordinates inside the grid)
      */
-    public panelGrid(int tw, int th, Point coord) {
+    public PanelGrid(int tw, int th, Point coord) {
         setLayout(new GridLayout(1, 1, 0, 0));
         setSize(tw, th);
         setOpaque(false);

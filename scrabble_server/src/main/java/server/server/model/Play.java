@@ -246,10 +246,17 @@ public class Play {
         }
         if (tileArray != null) {
             String newTiles = this.getNewTiles(tileArray.length);
-            for (int i = 0; i < tileArray.length; i++) {
-                bag.putBackTile(tileArray[i]);
+            try {
+                Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
+                for (int i = 0; i < tileArray.length; i++) {
+                    int tmp = rack.getTilePos(tileArray[i].getLetter());
+                    rack.setTile(tmp, newTileArray[i]);
+                    bag.putBackTile(tileArray[i]);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return newTiles;
+            return rack.getRack().toString();
         } else {
             return "";
         }

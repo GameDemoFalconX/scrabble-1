@@ -2,7 +2,7 @@ package client.views.swing.gameboard;
 
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelGrid;
+import client.views.swing.common.PanelGrid;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Color;
@@ -66,7 +66,7 @@ public class GameBoard extends JPanel {
             for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
                 JsonNode cPoint = it.next();
                 Point cP = om.readValue(cPoint.toString(), Point.class);
-                panelGrid pg = (panelGrid) innerGrid.getComponent((cP.y * 15) + cP.x);
+                PanelGrid pg = (PanelGrid) innerGrid.getComponent((cP.y * 15) + cP.x);
                 pg.remove(0);
                 pg.validate();
                 pg.repaint();
@@ -96,7 +96,7 @@ public class GameBoard extends JPanel {
         int ind = 0; // Index for the layout
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(y, x));
+                PanelGrid panelGridElement = new PanelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(y, x));
                 if (debug) {
                     panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
                 }

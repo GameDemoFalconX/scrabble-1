@@ -8,7 +8,7 @@ import javax.swing.JPanel;
  *
  * @author Romain <ro.foncier@gmail.com>
  */
-public class panelRack extends JPanel {
+public class PanelRack extends JPanel {
 
     // Position inside the rack
     private int pos;
@@ -20,7 +20,7 @@ public class panelRack extends JPanel {
      * @param th (tile height),
      * @param pos (position inside the rack)
      */
-    public panelRack(int tw, int th, int pos) {
+    public PanelRack(int tw, int th, int pos) {
         setLayout(new GridLayout(1, 1));
         setSize(tw, th);
         setOpaque(false);

@@ -23,13 +23,14 @@ import client.model.event.UpdateWordsListEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -495,12 +496,19 @@ public class Play {
 
     public void exchangeTiles(Integer[] selectedTiles) {
         String data = rack.getFormatedTiles(selectedTiles);
+        String response = null;
         try {
-            String response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
-    //        fireExchangeTiles(rack.getFormatedTiles(tmp));
+            response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
         } catch (GameException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            JsonNode root = om.readTree(response);
+            rack.reLoadRack(root.get("tiles").toString());
+            fireUpdateRackToPlay(root.get("tiles").toString(), false);
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
 

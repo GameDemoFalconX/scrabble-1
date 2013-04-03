@@ -58,6 +58,21 @@ class Rack {
         }
         return res;
     }
+    
+    /**
+     * Get the position of the first Tile with the letter given in parameter.
+     * @param char
+     * @return Tile
+     */
+    protected int getTilePos(char l) {
+        boolean found = false;
+        int i = 0;
+        while (!found && i < rack.length) {
+            found = (rack[i].getLetter() == l);
+            i++;
+        }
+        return i;
+    }
 
     /**
      * Set a new Tile in the specific index in the rack.

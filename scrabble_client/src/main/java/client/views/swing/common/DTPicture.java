@@ -184,14 +184,14 @@ public class DTPicture extends Picture implements MouseMotionListener {
     }
 
     private void notifyController() {
-        if (sourceParent instanceof panelRack && targetParent instanceof panelGrid) {
-            scrabble.getController().notifyCreateWord(((panelRack) sourceParent).getPosition(), ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
-        } else if (sourceParent instanceof panelGrid && targetParent instanceof panelGrid) {
-            scrabble.getController().notifyModifiedWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
-        } else if (sourceParent instanceof panelGrid && targetParent instanceof panelRack) {
-            scrabble.getController().notifyRemoveLetterFromWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelRack) targetParent).getPosition());
-        } else if (sourceParent instanceof panelRack && targetParent instanceof panelRack) {
-            scrabble.getController().notifyOrganizeRack(((panelRack) sourceParent).getPosition(), ((panelRack) targetParent).getPosition());
+        if (sourceParent instanceof PanelRack && targetParent instanceof PanelGrid) {
+            scrabble.getController().notifyCreateWord(((PanelRack) sourceParent).getPosition(), ((PanelGrid) targetParent).getCoordinates().x, ((PanelGrid) targetParent).getCoordinates().y);
+        } else if (sourceParent instanceof PanelGrid && targetParent instanceof PanelGrid) {
+            scrabble.getController().notifyModifiedWord(((PanelGrid) sourceParent).getCoordinates().x, ((PanelGrid) sourceParent).getCoordinates().y, ((PanelGrid) targetParent).getCoordinates().x, ((PanelGrid) targetParent).getCoordinates().y);
+        } else if (sourceParent instanceof PanelGrid && targetParent instanceof PanelRack) {
+            scrabble.getController().notifyRemoveLetterFromWord(((PanelGrid) sourceParent).getCoordinates().x, ((PanelGrid) sourceParent).getCoordinates().y, ((PanelRack) targetParent).getPosition());
+        } else if (sourceParent instanceof PanelRack && targetParent instanceof PanelRack) {
+            scrabble.getController().notifyOrganizeRack(((PanelRack) sourceParent).getPosition(), ((PanelRack) targetParent).getPosition());
         }
     }
 }
