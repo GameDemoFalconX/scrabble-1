@@ -89,11 +89,9 @@ public class DTPicture extends Picture implements MouseMotionListener {
         Point location = (Point) e.getPoint().clone();
         if (scrabble.isExchangeMode()) {
             if (isSelected) {
-                this.setBorder(null);
-                isSelected = false;
+                unselect();
             } else {
-                this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
-                isSelected = true;
+                select();
             }
         } else {
             if (this.isLocked) {
@@ -193,5 +191,15 @@ public class DTPicture extends Picture implements MouseMotionListener {
         } else if (sourceParent instanceof PanelRack && targetParent instanceof PanelRack) {
             scrabble.getController().notifyOrganizeRack(((PanelRack) sourceParent).getPosition(), ((PanelRack) targetParent).getPosition());
         }
+    }
+
+    public void unselect() {
+        this.setBorder(null);
+        isSelected = false;
+    }
+
+    public void select() {
+        this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.ORANGE));
+        isSelected = true;
     }
 }

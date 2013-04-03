@@ -250,7 +250,7 @@ public class Play {
                 Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
                 for (int i = 0; i < tileArray.length; i++) {
                     int tmp = rack.getTilePos(tileArray[i].getLetter());
-                    rack.setTile(tmp, newTileArray[i]);
+                    rack.setTile(tmp-1, newTileArray[i]);
                     bag.putBackTile(tileArray[i]);
                 }
             } catch (IOException ex) {

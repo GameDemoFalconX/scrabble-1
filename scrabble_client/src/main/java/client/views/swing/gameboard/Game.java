@@ -31,6 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 /**
  * Main class for Scrabble game
@@ -172,6 +173,12 @@ public class Game extends GameView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 exchangeMode = !exchangeMode;
+                if (!exchangeMode) {
+                    exchangeButton.setBorder(null);
+                    rack.unselectAll();
+                } else {
+                    exchangeButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.RED, Color.ORANGE));
+                }
             }
         });
     }
@@ -188,6 +195,8 @@ public class Game extends GameView {
             public void actionPerformed(ActionEvent e) {
                 if (exchangeMode) {
                     getController().notifyExchangeTiles(rack.getSelectedTiles());
+                    setExchangeMode(false);
+                    exchangeButton.setBorder(null);
                 } else {
                 if (rack.rackIsFull()) {
                     ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");

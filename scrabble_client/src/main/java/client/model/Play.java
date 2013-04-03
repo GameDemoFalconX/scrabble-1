@@ -505,13 +505,12 @@ public class Play {
         try {
             JsonNode root = om.readTree(response);
             rack.reLoadRack(root.get("tiles").toString());
-            fireUpdateRackToPlay(root.get("tiles").toString(), false);
+            fireUpdateRackToPlay(root.get("tiles").toString(), true);
         } catch (IOException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
     
-
     public void validateWord() {
         undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
         TESTS_PLAYED++;

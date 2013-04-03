@@ -39,7 +39,6 @@ public class Rack extends JPanel {
     private JPanel innerRack;
     private boolean debug = false;
     private static int tileNumber = 0;
-    
     // JSON Treatment
     ObjectMapper om = new ObjectMapper();
 
@@ -85,9 +84,11 @@ public class Rack extends JPanel {
      */
     /**
      * Load new tiles on rack
-     * @param newTiles - JSON Format [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
+     *
+     * @param newTiles - JSON Format
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      * @param scrabble
-     * @param jlp 
+     * @param jlp
      */
     public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp, boolean reset) {
         if (reset) {
@@ -101,7 +102,8 @@ public class Rack extends JPanel {
                 putTile(new DTPicture(getTileImage(letter, cTile.get("value").asText()), scrabble, jlp));
                 upTileNumber();
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
     }
 
     private void putTile(DTPicture dtp) {
@@ -116,10 +118,10 @@ public class Rack extends JPanel {
             i++;
         }
     }
-    
+
     public void reset() {
         // Construction of rack elements
-         // Rack inner container
+        // Rack inner container
         innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
         if (debug) {
             innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
@@ -218,7 +220,7 @@ public class Rack extends JPanel {
         }
         return vacantPosition;
     }
-      
+
     protected void frameTile(int pos) {
     }
 
@@ -276,14 +278,14 @@ public class Rack extends JPanel {
         Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
         return result;
     }
-    
+
     private boolean isTileSelected(int pos) {
         PanelRack tmp;
         tmp = (PanelRack) this.innerRack.getComponent(pos);
         DTPicture dtp = (DTPicture) tmp.getComponent(0);
         return dtp.isSelected();
     }
-    
+
     public Integer[] getSelectedTiles() {
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < RACK_LENGTH; i++) {
@@ -293,5 +295,17 @@ public class Rack extends JPanel {
         }
         return result.toArray(new Integer[result.size()]);
     }
-    
+
+    private void unselect(int pos) {
+        PanelRack tmp;
+        tmp = (PanelRack) this.innerRack.getComponent(pos);
+        DTPicture dtp = (DTPicture) tmp.getComponent(0);
+        dtp.unselect();
+    }
+
+    public void unselectAll() {
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            unselect(i);
+        }
+    }
 }
