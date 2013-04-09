@@ -301,7 +301,7 @@ public class HAL extends Game {
             System.out.println("Server : start exchange");
             String newTiles = cPlay.exchangeTiles(tiles);
             if (!"".equals(newTiles)) {
-                System.out.println(newTiles);
+                System.out.println("New tiles = " + newTiles);
                 return new Message(Message.TILE_EXCHANGE_SUCCES,  "{\"tiles\": " + newTiles + "}");
             } else {
                 return new Message(Message.TILE_EXCHANGE_ERROR, "");

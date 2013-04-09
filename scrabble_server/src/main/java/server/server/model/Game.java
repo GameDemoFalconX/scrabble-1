@@ -160,7 +160,6 @@ public abstract class Game implements IGame {
     @Override
     public Message exchangeTile(String pl_id, String ga_id, String tiles) throws GameException {
         Message response = tileExchange(pl_id, ga_id, tiles);
-        System.out.println("Game response =" + response);
         switch (response.getHeader()) {
             case Message.TILE_EXCHANGE_SUCCES:
                 return response;
