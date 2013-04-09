@@ -177,7 +177,7 @@ public class Game extends GameView {
                     exchangeButton.setBorder(null);
                     rack.unselectAll();
                 } else {
-                    exchangeButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.RED, Color.ORANGE));
+                    exchangeButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.RED, Color.GRAY));
                 }
             }
         });

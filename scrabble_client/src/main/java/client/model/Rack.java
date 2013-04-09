@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -69,15 +71,10 @@ public class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-        System.out.println(formatedRack);
-        Tile[] tileList = null;
         try {
-            tileList = om.readValue(formatedRack, Tile[].class);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        for (int i = 0; i < tileList.length; i++) {
-            putTile(tileList[i]);
+            loadRack(formatedRack);
+        } catch (IOException ex) {
+            Logger.getLogger(Rack.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

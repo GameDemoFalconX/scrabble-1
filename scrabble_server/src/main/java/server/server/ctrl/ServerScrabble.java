@@ -264,7 +264,7 @@ public class ServerScrabble {
     public synchronized Message exchangeTile(String data) {
         Message response = null;
         try {
-            System.out.println(data);
+            System.out.println("Exchange in = " + data);
             JsonNode root = om.readTree(data);
             response = game.exchangeTile(root.get("user_id").asText(), root.get("play_id").asText(), root.get("tiles").toString());
 
