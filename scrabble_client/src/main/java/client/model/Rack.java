@@ -71,10 +71,15 @@ public class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
+       System.out.println(formatedRack);
+        Tile[] tileList = null;
         try {
-            loadRack(formatedRack);
-        } catch (IOException ex) {
-            Logger.getLogger(Rack.class.getName()).log(Level.SEVERE, null, ex);
+            tileList = om.readValue(formatedRack, Tile[].class);
+            for (int i = 0; i < tileList.length; i++) {
+                putTile(tileList[i]);
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 

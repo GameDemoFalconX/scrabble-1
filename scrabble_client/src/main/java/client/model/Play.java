@@ -505,7 +505,7 @@ public class Play {
         try {
             JsonNode root = om.readTree(response);
             rack.reLoadRack(root.get("tiles").toString());
-            fireUpdateRackToPlay(root.get("tiles").toString(), true);
+            fireUpdateRackToPlay(root.get("tiles").toString(), false);
         } catch (IOException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         } 
@@ -547,7 +547,7 @@ public class Play {
             }
 
             if (done && ((!this.firstWord) || (this.firstWord && check))) {
-                String response = null;
+                String response;
                 try {
                     System.out.println("dataToSend : " + dataToSend);
                     response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
