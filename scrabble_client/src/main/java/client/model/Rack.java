@@ -71,15 +71,15 @@ public class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-       System.out.println(formatedRack);
+        System.out.println("formatedRack = " + formatedRack);
         Tile[] tileList = null;
         try {
             tileList = om.readValue(formatedRack, Tile[].class);
-            for (int i = 0; i < tileList.length; i++) {
-                putTile(tileList[i]);
-            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        }
+        for (int i = 0; i < tileList.length; i++) {
+            putTile(tileList[i]);
         }
     }
 
