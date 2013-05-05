@@ -7,6 +7,7 @@ package client.model;
 public class Grid {
 
     private Tile[][] grid = new Tile[15][15];
+    private ScoringGrid scoringGrid = new ScoringGrid();
     private static final int[] x_neighbors = {-1, 1, 0, 0};
     private static final int[] y_neighbors = {0, 0, -1, 1};
 
@@ -24,7 +25,7 @@ public class Grid {
             String[] tileAttrs = tileList[i].split(":");
 
             // Create new tile and add it inside the grid
-            addTile(Integer.parseInt(tileAttrs[0]), Integer.parseInt(tileAttrs[1]), new Tile(tileAttrs[2].charAt(0), Integer.parseInt(tileAttrs[3])));
+            //addTile(Integer.parseInt(tileAttrs[0]), Integer.parseInt(tileAttrs[1]), new Tile(tileAttrs[2].charAt(0), Integer.parseInt(tileAttrs[3])));
         }
     }
 
@@ -61,5 +62,43 @@ public class Grid {
             }
             System.out.println();
         }
+    }
+    
+    
+    public String toDisplay() {
+        String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
+        prtGrid += "     ___________________________________________________________________________ \n";
+        for (int x = 0; x <= 14; x++) {
+            if (x < 9) {
+                prtGrid += "0" + (x + 1) + " | ";
+            } else {
+                prtGrid += (x + 1) + " | ";
+            }
+            for (int y = 0; y <= 14; y++) {
+                Tile tile = grid[y][x];
+                if (tile != null) {
+                    prtGrid += tile.toDisplay() + "";
+                } else {
+                    switch (scoringGrid.getBonus(x, y)) {
+                        case ScoringGrid.TRIPLE_WORD:
+                            prtGrid += "[T W]";
+                            break;
+                        case ScoringGrid.DOUBLE_WORD:
+                            prtGrid += "[D W]";
+                            break;
+                        case ScoringGrid.TRIPLE_LETTER:
+                            prtGrid += "[T L]";
+                            break;
+                        case ScoringGrid.DOUBLE_LETTER:
+                            prtGrid += "[D L]";
+                            break;
+                        default:
+                            prtGrid += "[   ]";
+                    }
+                }
+            }
+            prtGrid += "\n";
+        }
+        return prtGrid;
     }
 }

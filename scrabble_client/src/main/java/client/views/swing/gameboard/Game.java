@@ -4,6 +4,7 @@ import client.controller.GameController;
 import client.model.event.ErrorMessageEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.RackReArrangeEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.event.TileFromGridToGridEvent;
 import client.model.event.TileFromGridToRackEvent;
 import client.model.event.TileFromGridToRackWithShiftEvent;
@@ -14,15 +15,14 @@ import client.views.GameView;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.GlassPane;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelGrid;
-import client.views.swing.common.panelRack;
+import client.views.swing.common.PanelGrid;
+import client.views.swing.common.PanelRack;
 import client.views.swing.menu.BlankDialog;
 import client.views.swing.popup.ErrorMessagePopup;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -31,6 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 /**
  * Main class for Scrabble game
@@ -57,7 +58,9 @@ public class Game extends GameView {
     private static final String DARK_SHUFFLE_PATH = PATH_MEDIA + "shuffle_rack_icon.png";
     private static final String DARK_VALID_WORD_PATH = PATH_MEDIA + "add_word_icon.png";
     private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
+    private static final String ICON = PATH_MEDIA + "icon.png";
     public static String tileBlank;
+    private boolean exchangeMode = false;
     private JFrame frame;
     private JLayeredPane JLPaneOfFrame;
     private Container contentPane;
@@ -95,9 +98,9 @@ public class Game extends GameView {
 
     private void initFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("../media/icon.png"));
+        Image icon = ImageIconTools.createImageIcon(ICON, "icon").getImage();
         icon = icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        frame.setIconImage(icon);*/
+        frame.setIconImage(icon);
         frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
         frame.setContentPane(contentPane);
         frame.setGlassPane(GlassPane.getInstance());
@@ -113,6 +116,14 @@ public class Game extends GameView {
         contentPane.add(shuffleButton, 0);
         contentPane.add(exchangeButton, 0);
         contentPane.add(validWordButton, 0);
+        contentPane.validate();
+        contentPane.repaint();
+    }
+    
+    private void resetGameButtons() {
+        contentPane.remove(shuffleButton);
+        contentPane.remove(exchangeButton);
+        contentPane.remove(validWordButton);
         contentPane.validate();
         contentPane.repaint();
     }
@@ -161,7 +172,13 @@ public class Game extends GameView {
         exchangeButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().notifyExchangeTiles();
+                exchangeMode = !exchangeMode;
+                if (!exchangeMode) {
+                    exchangeButton.setBorder(null);
+                    rack.unselectAll();
+                } else {
+                    exchangeButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.RED, Color.GRAY));
+                }
             }
         });
     }
@@ -176,16 +193,22 @@ public class Game extends GameView {
         validWordButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (exchangeMode) {
+                    getController().notifyExchangeTiles(rack.getSelectedTiles());
+                    setExchangeMode(false);
+                    exchangeButton.setBorder(null);
+                } else {
                 if (rack.rackIsFull()) {
                     ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");
                     errorPopup.showErrorMessage();
                 } else {
                     getController().notifyValidWord();
                 }
+                }
             }
         });
     }
-
+    
     /**
      * * Methods used to set or update the background, game board and buttons of
      * the frame **
@@ -265,8 +288,8 @@ public class Game extends GameView {
     @Override
     public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
         Point tP = event.getTargetPosition();
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.downTileNumber();
         if (event.isBlank()) {
@@ -279,18 +302,18 @@ public class Game extends GameView {
 
     @Override
     public void tileMovedFromRackToRack(TileFromRackToRackEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         // Set the targetParent component visible.
     }
 
     @Override
     public void tileMovedFromRackToRackWithShift(TileFromRackToRackWithShiftEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
         DTPicture DTPtmp = (DTPicture) sourceParent.getComponent(0);
         rack.shiftTiles(event.getSourcePosition(), event.getTargetPosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement(DTPtmp);
     }
 
@@ -298,16 +321,16 @@ public class Game extends GameView {
     public void tileMovedFromGridToGrid(TileFromGridToGridEvent event) {
         Point sP = event.getSourcePosition();
         Point tP = event.getTargetPosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
     }
 
     @Override
     public void tileMovedFromGridToRack(TileFromGridToRackEvent event) {
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {
@@ -320,8 +343,8 @@ public class Game extends GameView {
     public void tileMovedFromGridToRackWithShift(TileFromGridToRackWithShiftEvent event) {
         rack.shiftTiles(rack.findEmptyParent(event.getTargetPosition()), event.getTargetPosition());
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {
@@ -333,10 +356,23 @@ public class Game extends GameView {
     @Override
     public void initRack(InitRackEvent event) {
         // Init Rack
-        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame);
-
+        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame, false);
         // Init buttons inside the GameView
         initGameButtons();
+    }
+    
+    @Override
+    public void updateRack(InitRackEvent event) {
+        if (event.getReset()) {
+            contentPane.remove(rack.getInnerRack());
+            contentPane.validate();
+        }
+        rack.loadTilesOnRack(event.getTiles(), this, JLPaneOfFrame, event.getReset());
+        if (event.getReset()) {
+            contentPane.add(rack.getInnerRack(), 0);
+            contentPane.validate();
+        }
+        contentPane.repaint();
     }
 
     @Override
@@ -346,10 +382,38 @@ public class Game extends GameView {
         contentPane.add(rack.getInnerRack(), 0);
         contentPane.validate();
     }
+    
+    @Override
+    public void removeBadTiles(RemoveBadTilesEvent event) {
+        gameboard.removeBadTiles(event.getTilesToRemove());
+    }
 
     @Override
     public void displayError(ErrorMessageEvent event) {
         ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, event.getMessage());
         errorPopup.showErrorMessage();
+    }
+    
+    @Override
+    public void resetGrid() {
+        contentPane.remove(gameboard.getInnerGrid());
+        contentPane.validate();
+        gameboard.reset();
+    }
+    
+    @Override
+    public void resetRack() {
+        contentPane.remove(rack.getInnerRack());
+        contentPane.validate();
+        rack.reset();
+        resetGameButtons();
+    }
+
+    public boolean isExchangeMode() {
+        return exchangeMode;
+    }
+
+    public void setExchangeMode(boolean exchangeMode) {
+        this.exchangeMode = exchangeMode;
     }
 }

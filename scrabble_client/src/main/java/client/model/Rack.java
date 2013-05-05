@@ -1,33 +1,40 @@
 package client.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Rack {
+public class Rack {
 
+    ObjectMapper om = new ObjectMapper();
+    @JsonProperty("rack")
     private Tile[] rack = new Tile[7];
+    
+    public Rack() {}
 
     public Rack(String formatedRack) {
-        this.loadRack(formatedRack);
+        try {
+            this.loadRack(formatedRack);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     /**
      * Load tiles on the rack from formated data.
-     *
+     * where formatedRack match something like : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      * @param formatedRack
      */
-    private void loadRack(String formatedRack) {
-        System.out.println("New rack : " + formatedRack);
-        String[] tileList = formatedRack.split("=");
-        System.out.println("tileList : " + tileList[0]);
-        for (int i = 0; i < rack.length; i++) {
-            String[] tileArgs = tileList[i].split(":");
-            System.out.println("tile : " + tileArgs[0]);
-            rack[i] = new Tile(tileArgs[0].charAt(0), Integer.parseInt(tileArgs[1]));
-        }
+    private void loadRack(String formatedRack) throws IOException {
+        //System.out.println("New rack : " + formatedRack);
+        rack = om.readValue(formatedRack, Tile[].class);
     }
 
     public Tile getTile(Integer position) {
@@ -44,11 +51,18 @@ class Rack {
         return result;
     }
 
+    /**
+     * Put a new Tile in rack where is possible to add it
+     * @param newTile 
+     */
     protected void putTile(Tile newTile) {
         boolean found = false;
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
+                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                    newTile.setBlank();
+                }
                 rack[i] = newTile;
                 found = true;
             }
@@ -57,11 +71,15 @@ class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-        System.out.println(formatedRack);
-        String[] tileList = formatedRack.split("=");
+        System.out.println("formatedRack = " + formatedRack);
+        Tile[] tileList = null;
+        try {
+            tileList = om.readValue(formatedRack, Tile[].class);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         for (int i = 0; i < tileList.length; i++) {
-            String[] tileArgs = tileList[i].split(":");
-            putTile(new Tile(tileArgs[0].charAt(0), Integer.parseInt(tileArgs[1])));
+            putTile(tileList[i]);
         }
     }
 
@@ -136,52 +154,73 @@ class Rack {
 
     /**
      * @param position
-     * @return string representation (L:V) of the current tile located at this
-     * position on the rack.
+     * @return JSON format of the current tile located at this
+     * position on the rack : {"letter":"A","value":2}
      */
     public String getFormatedTile(Integer position) {
-        String formatedTile = rack[position].getLetter() + ":" + rack[position].getValue();
-        return formatedTile;
+        return rack[position].toString();
     }
 
     /**
      * @param positions
-     * @return string representation (L:V) of the all tiles located at their
-     * respective position on the rack.
+     * @return JSON format of the all tiles located at their
+     * respective position on the rack : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
-    public String getFormatedTiles(int[] positions) {
-        String formatedTiles = "";
+    public String getFormatedTiles(Integer[] positions) {
+        String formatedTiles = "[";
         for (int i = 0; i < positions.length; i++) {
-            formatedTiles += rack[positions[i]].getLetter() + ":" + rack[positions[i]].getValue();
-            formatedTiles += (i < positions.length - 1) ? "__" : "";
+            formatedTiles += rack[positions[i]].toString();
+            formatedTiles += (i < positions.length - 1) ? "," : "]";
+        }
+        return formatedTiles;
+    }
+    
+    public String getFormatJSON() {
+        String formatedTiles = "[";
+        for (int i = 0; i < rack.length; i++) {
+            formatedTiles += rack[i].toString();
+            formatedTiles += (i < rack.length - 1) ? "," : "]";
         }
         return formatedTiles;
     }
 
     /**
      * Update the rack from the new tiles send by the server.
-     *
      * @param positions array of index
-     * @param tiles string representation of tiles list
+     * @param tiles JSON format of tiles list :  [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     public void setFormatedTiles(int[] positions, String tiles) {
-        String[] tileList = tiles.split("__");
+        Tile[] tileList = null;
+        try {
+            tileList = om.readValue(tiles, Tile[].class);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
         for (int i = 0; i < positions.length; i++) {
-            String[] tileArgs = tileList[i].split(":");
-            rack[positions[i]] = new Tile(tileArgs[0].charAt(0), Integer.parseInt(tileArgs[1]));
+            rack[positions[i]] = tileList[i];
         }
     }
 
     public boolean isTileBlank(Integer position) {
         return rack[position].getValue() == 0;
     }
+    
+    public String toDisplay() {
+        String result = "";
+        for (int i = 0; i < 7; i++) {
+            result += (rack[i] != null) ? rack[i].toDisplay() : "   ";
+        }
+        result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+                + "  1     2     3     4     5     6     7\n";
+        return result;
+    }
 
     /**
      * Check if the rack contains blank tiles.
-     *
      * @return formated list of blank tiles index with the canvas :
      * [index]:[index]: ...
      */
+    /*
     public String getBlankTile() {
         String result = "";
         for (int i = 0; i < rack.length; i++) {
@@ -190,5 +229,5 @@ class Rack {
             }
         }
         return result;
-    }
+    }*/
 }

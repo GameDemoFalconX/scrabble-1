@@ -10,7 +10,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
-
+    
 /**
  *
  * @author Arnaud <a.morel@hotmail.com>, Bernard <bernard.debecker@gmail.com>,
@@ -29,6 +29,7 @@ public class DTPicture extends Picture implements MouseMotionListener {
     private boolean debug = false;
     private JPanel sourceParent;
     private JPanel targetParent;
+    private boolean isSelected = false;
 
     public DTPicture(Image image, Game scrabble, JLayeredPane jlp) {
         super(image);
@@ -67,36 +68,57 @@ public class DTPicture extends Picture implements MouseMotionListener {
     }
 
     /**
+     * Allows to select this DTPicture in this parent container.
+     *
+     * @param state
+     */
+    public void setSelected(boolean state) {
+        this.isSelected = state;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    /**
      * * Methods from interface MouseListener **
      */
     @Override
     public void mousePressed(MouseEvent e) {
         Component comp = e.getComponent(); // Obviously that concerns (a Tile within) a DTPicture instance
         Point location = (Point) e.getPoint().clone();
-        if (this.isLocked) {
-            this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+        if (scrabble.isExchangeMode()) {
+            if (isSelected) {
+                unselect();
+            } else {
+                select();
+            }
         } else {
-            comp.setVisible(false); // Hide the DTPicture source during the drag
+            if (this.isLocked) {
+                this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.DARK_GRAY));
+            } else {
+                comp.setVisible(false); // Hide the DTPicture source during the drag
 
-            // Get the source parent of this DTPicture
-            sourceParent = (JPanel) comp.getParent();
+                // Get the source parent of this DTPicture
+                sourceParent = (JPanel) comp.getParent();
 
-            // Convert a point from a component's coordinate system to screen coordinates.
-            SwingUtilities.convertPointToScreen(location, comp);
-            // Convert a point from a screen coordinates to a component's coordinate system.
-            SwingUtilities.convertPointFromScreen(location, glass);
+                // Convert a point from a component's coordinate system to screen coordinates.
+                SwingUtilities.convertPointToScreen(location, comp);
+                // Convert a point from a screen coordinates to a component's coordinate system.
+                SwingUtilities.convertPointFromScreen(location, glass);
 
-            imageGlass = new BufferedImage(comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            comp.paint(imageGlass.getGraphics());
+                imageGlass = new BufferedImage(comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                comp.paint(imageGlass.getGraphics());
 
-            // Update the GlasPane
-            glass.setLocation(location);
-            glass.setImage(imageGlass);
-            glass.setVisible(true);
+                // Update the GlasPane
+                glass.setLocation(location);
+                glass.setImage(imageGlass);
+                glass.setVisible(true);
 
-            // Once an InputEvent is consumed, the source component will not process the event itself. 
-            // However, the event will still be dispatched to all registered listeners.
-            e.consume();
+                // Once an InputEvent is consumed, the source component will not process the event itself. 
+                // However, the event will still be dispatched to all registered listeners.
+                e.consume();
+            }
         }
     }
 
@@ -160,14 +182,24 @@ public class DTPicture extends Picture implements MouseMotionListener {
     }
 
     private void notifyController() {
-        if (sourceParent instanceof panelRack && targetParent instanceof panelGrid) {
-            scrabble.getController().notifyCreateWord(((panelRack) sourceParent).getPosition(), ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
-        } else if (sourceParent instanceof panelGrid && targetParent instanceof panelGrid) {
-            scrabble.getController().notifyModifiedWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelGrid) targetParent).getCoordinates().x, ((panelGrid) targetParent).getCoordinates().y);
-        } else if (sourceParent instanceof panelGrid && targetParent instanceof panelRack) {
-            scrabble.getController().notifyRemoveLetterFromWord(((panelGrid) sourceParent).getCoordinates().x, ((panelGrid) sourceParent).getCoordinates().y, ((panelRack) targetParent).getPosition());
-        } else if (sourceParent instanceof panelRack && targetParent instanceof panelRack) {
-            scrabble.getController().notifyOrganizeRack(((panelRack) sourceParent).getPosition(), ((panelRack) targetParent).getPosition());
+        if (sourceParent instanceof PanelRack && targetParent instanceof PanelGrid) {
+            scrabble.getController().notifyCreateWord(((PanelRack) sourceParent).getPosition(), ((PanelGrid) targetParent).getCoordinates().x, ((PanelGrid) targetParent).getCoordinates().y);
+        } else if (sourceParent instanceof PanelGrid && targetParent instanceof PanelGrid) {
+            scrabble.getController().notifyModifiedWord(((PanelGrid) sourceParent).getCoordinates().x, ((PanelGrid) sourceParent).getCoordinates().y, ((PanelGrid) targetParent).getCoordinates().x, ((PanelGrid) targetParent).getCoordinates().y);
+        } else if (sourceParent instanceof PanelGrid && targetParent instanceof PanelRack) {
+            scrabble.getController().notifyRemoveLetterFromWord(((PanelGrid) sourceParent).getCoordinates().x, ((PanelGrid) sourceParent).getCoordinates().y, ((PanelRack) targetParent).getPosition());
+        } else if (sourceParent instanceof PanelRack && targetParent instanceof PanelRack) {
+            scrabble.getController().notifyOrganizeRack(((PanelRack) sourceParent).getPosition(), ((PanelRack) targetParent).getPosition());
         }
+    }
+
+    public void unselect() {
+        this.setBorder(null);
+        isSelected = false;
+    }
+
+    public void select() {
+        this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED, Color.RED, Color.GRAY));
+        isSelected = true;
     }
 }

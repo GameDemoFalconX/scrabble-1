@@ -3,26 +3,25 @@ package client.model.event;
 import java.util.EventObject;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>
  */
 public class InitRackEvent extends EventObject {
 
+    // Rack is formated in JSON : [{"letter":"A","value":2},{"letter":"A","value":2}, ...], 
     private final String rack;
+    private final boolean reset;
 
-    public InitRackEvent(Object source, String newRack) {
+    public InitRackEvent(Object source, String newRack, boolean reset) {
         super(source);
         this.rack = newRack;
+        this.reset = reset;
     }
 
-    public String[][] getTiles() {
-        String[] tileList = rack.split("=");
-        String[][] tiles = new String[tileList.length][2];
-        for (int i = 0; i < tileList.length; i++) {
-            String[] tileArgs = tileList[i].split(":");
-            tiles[i][0] = tileArgs[0];
-            tiles[i][1] = tileArgs[1];
-        }
-        return tiles;
+    public String getTiles() {
+        return rack;
+    }
+    
+    public boolean getReset() {
+        return this.reset;
     }
 }

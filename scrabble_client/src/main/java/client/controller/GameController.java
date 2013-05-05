@@ -5,6 +5,7 @@ import client.views.GameView;
 import client.views.swing.gameboard.Game;
 import client.views.swing.menu.Menu;
 import java.awt.Point;
+import java.util.List;
 
 /**
  *
@@ -12,34 +13,43 @@ import java.awt.Point;
  */
 public class GameController {
 
-    public GameView MainView = null;
+    public GameView mainView = null;
+//    public GameView secondView = null;
     private Play play = null; // Model in MVC Architecture
 
     public GameController(Play play) {
         this.play = play;
-        MainView = new Game(this);
+        mainView = new Game(this);
+//        secondView = new client.views.console.Game(this);
         addListenersToModel();
     }
 
     private void addListenersToModel() {
-        play.addTileListener(MainView);
-        play.addRackListener(MainView);
-        play.addErrorListener(MainView);
+        play.addTileListener(mainView);
+        play.addRackListener(mainView);
+        play.addGridListener(mainView);
+        play.addErrorListener(mainView);
+//        play.addTileListener(secondView);
+//        play.addRackListener(secondView);
+//        play.addGridListener(secondView);
+//        play.addErrorListener(secondView);
     }
 
     public void addMenuToView(Menu menu) {
-        ((Game) MainView).setMenu(menu.getPanel());
-        menu.setGame((Game) MainView);
+        ((Game) mainView).setMenu(menu.getPanel());
+        menu.setGame((Game) mainView);
     }
 
     public void displayViews() {
-        MainView.display();
+        mainView.display();
+//        secondView.display();
     }
 
     public void closeViews() {
-        MainView.close();
+        mainView.close();
+//        secondView.close();
     }
-
+    
     public void notifyCreateWord(int sourcePos, int x, int y) {
         play.createWord(sourcePos, x, y);
     }
@@ -60,8 +70,8 @@ public class GameController {
         play.reArrangeRack();
     }
 
-    public void notifyExchangeTiles() {
-        // Call model
+    public void notifyExchangeTiles(Integer[] selectedTiles) {
+        play.exchangeTiles(selectedTiles);
     }
 
     public void notifyValidWord() {
@@ -75,4 +85,5 @@ public class GameController {
     public void notifyBackTileBlank(int source) {
         play.backTileBlank(source);
     }
+
 }

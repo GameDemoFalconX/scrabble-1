@@ -1,15 +1,20 @@
 package server.server.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Model that contains the letter and the value of a Tile.
- *
- * @author Bernard <bernard.debecker@gmail.com>, R. FONCIER
- * <ro.foncier@gmail.com>
+ * @author Bernard <bernard.debecker@gmail.com>, R. FONCIER <ro.foncier@gmail.com>
  */
 public class Tile {
 
+    @JsonProperty("letter")
     private char letter;
+    @JsonProperty("value")
     private final int value;
+    @JsonProperty("blank")
     private final boolean isBlank;
     private int x;
     private int y;
@@ -19,14 +24,14 @@ public class Tile {
 
     /**
      * Creates a Tile base on a char letter and a integer value
-     *
      * @param letter a char
      * @param value a integer
      */
-    public Tile(char letter, int value) {
+    @JsonCreator
+    public Tile(@JsonProperty("letter") char letter, @JsonProperty("value") int value, @JsonProperty("blank") Boolean isBlank) {
         this.letter = letter;
         this.value = value;
-        this.isBlank = (letter == '?');
+        this.isBlank = isBlank;
     }
 
     public Tile(char letter, int value, boolean status) {
@@ -51,7 +56,6 @@ public class Tile {
 
     /**
      * Gets the value from the Tile
-     *
      * @return the value as an integer
      */
     public int getValue() {
@@ -61,6 +65,10 @@ public class Tile {
     public boolean isBlank() {
         return this.isBlank;
     }
+    
+    public void setBlank() {
+        this.letter = '?';
+    }
 
     /**
      * Specify that the tile is loaded from Memory (XML files, DB, ...)
@@ -69,6 +77,7 @@ public class Tile {
         loaded = true;
     }
 
+    @JsonIgnore
     protected boolean getLoadedState() {
         return loaded;
     }
@@ -96,9 +105,9 @@ public class Tile {
 
     /**
      * Gets the status of this tile
-     *
      * @return True if the tile has just been placed on the game board.
      */
+    @JsonIgnore
     public boolean getStatus() {
         return status;
     }
@@ -119,12 +128,11 @@ public class Tile {
 
     /**
      * Format the tile in a printable String
-     *
-     * @return a String
+     * @return a JSON format : {"letter":"A","value":2}
      */
     @Override
     public String toString() {
-        return letter + ":" + value;
+        return "{\"letter\":\""+this.letter+"\",\"value\":"+this.value+", \"blank\": "+this.isBlank+"}";
     }
 
     public String displayTile() {

@@ -1,8 +1,14 @@
 package server.server.ctrl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.common.GameException;
 import server.common.Message;
 import server.server.connection.ServerProtocol;
@@ -17,6 +23,7 @@ public class ServerScrabble {
 
     private IGame game;
     private int port = 8189;
+    private ObjectMapper om = new ObjectMapper();
 
     public static void main(String[] args) {
         ServerScrabble serverScrabble = new ServerScrabble();
@@ -59,14 +66,16 @@ public class ServerScrabble {
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message newAccount(String pl_name, String pl_pwd) {
+    public synchronized Message newAccount(String data) {
         Message response = null;
         try {
-            // Try to create a new player acount
-            response = game.newAccount(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.newAccount(node.get("email").asText(), node.get("pwd").asText());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON in class : "+ServerScrabble.class);
         } catch (GameException e) {
             response = processError(e);
         }
@@ -75,20 +84,21 @@ public class ServerScrabble {
 
     /**
      * Allows to log the current player.
-     *
      * @param pl_name
      * @param pl_pwd
      * @return the player UUID
      */
-    public synchronized Message login(String pl_name, String pl_pwd) {
+    public synchronized Message login(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.login(pl_name, pl_pwd);
+            JsonNode node = om.readTree(data);
+            response = game.login(node.get("email").asText(), node.get("pwd").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }
@@ -97,19 +107,20 @@ public class ServerScrabble {
 
     /**
      * Allows to logout the current user.
-     *
      * @param pl_id
      * @return
      */
-    public synchronized Message logout(String pl_id) {
+    public synchronized Message logout(String data) {
         Message response = null;
         try {
-            // Try to log the current player
-            response = game.logout(pl_id);
+            JsonNode root = om.readTree(data);
+            response = game.logout(root.get("user_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         } catch (GameException e) {
             response = processError(e);
         }
@@ -118,15 +129,14 @@ public class ServerScrabble {
 
     /**
      * Allows to create a new Play instance.
-     *
-     * @param playerID
+     * @param pl_id
      * @return the new playID and the formatedRack.
      */
-    public synchronized Message createNewPlay(String playerID) {
+    public synchronized Message createNewPlay(String pl_id) {
         Message response = null;
         try {
             // Try to create a new game for the current player
-            response = game.createNewPlay(playerID);
+            response = game.createNewPlay(pl_id);
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
@@ -138,8 +148,7 @@ public class ServerScrabble {
     }
 
     /**
-     * Allows to log an anonymous player/
-     *
+     * Allows to log an anonymous player
      * @param pl_id
      * @return status
      */
@@ -148,7 +157,6 @@ public class ServerScrabble {
         try {
             // Try to create a new game for the current anonymous player
             response = game.createNewAnonymPlay(pl_id);
-
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
@@ -160,7 +168,6 @@ public class ServerScrabble {
 
     /**
      * Allows to load the list of plays for the current player.
-     *
      * @param playerID
      * @return a formated list of plays for this player.
      */
@@ -181,7 +188,6 @@ public class ServerScrabble {
 
     /**
      * Allows to load a specific play for the current player.
-     *
      * @param playerID
      * @param playID
      * @return a formated list of word in JSON and a formatedRack.
@@ -219,7 +225,6 @@ public class ServerScrabble {
     /**
      * Try to delete all informations which belong to the current anonymous
      * user.
-     *
      * @param playerID
      * @return status
      */
@@ -238,31 +243,37 @@ public class ServerScrabble {
         return response;
     }
 
-    public synchronized Message gameTreatment(String playerID, String playID, String gameInfos) {
+    public synchronized Message gameTreatment(String data) {
         Message response = null;
         try {
-            // Check if the player's game is correct.
-            response = game.checkGame(playerID, playID, gameInfos);
-
+            System.out.println(data);
+            JsonNode root = om.readTree(data);
+            response = game.checkGame(root.get("user_id").asText(), root.get("play_id").asText(), root.get("orientation").asInt(), root.get("tiles").toString());
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
+        } catch (IOException ex) {
+            System.out.println("Error with JSON");
         } catch (GameException e) {
             response = processError(e);
         }
+        System.out.println(response);
         return response;
     }
 
-    public synchronized Message exchangeTile(String playerID, String tiles) {
+    public synchronized Message exchangeTile(String data) {
         Message response = null;
         try {
-            response = game.exchangeTile(playerID, tiles);
+            JsonNode root = om.readTree(data);
+            response = game.exchangeTile(root.get("user_id").asText(), root.get("play_id").asText(), root.get("tiles").toString());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
+        } catch (IOException ex) {
+            Logger.getLogger(ServerScrabble.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }

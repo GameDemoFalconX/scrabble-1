@@ -1,54 +1,64 @@
 package client.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 /**
- *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
 public class Player {
 
-    private String email;
-    private String password;
-    private UUID id;
-    private boolean isAnonymous = false;
+    @JsonProperty("user_id")
+    private String playerID;
+    @JsonProperty("username")
+    private String playerUsername;
+    @JsonProperty("email")
+    private String playerEmail;
 
-    public Player(String email, String pwd, String uuid) {
-        this.email = email;
-        password = pwd;
-        id = UUID.fromString(uuid);
+    /**
+     * Create a new instance of player.
+     * @param user_id, username, email.
+     */
+    @JsonCreator
+    public Player(@JsonProperty("user_id") String user_id, @JsonProperty("username") String username, @JsonProperty("email") String email) {
+        this.playerID = user_id;
+        this.playerUsername = username;
+        this.playerEmail = email;
     }
-
+    
+    /**
+     * Anonymous player constructor
+     * @return 
+     */
     public Player() {
-        isAnonymous = true;
-        id = UUID.randomUUID();
-        email = "PA" + id.toString();
+        this.playerID = UUID.randomUUID().toString();
+        this.playerUsername = "Anonym";
+        this.playerEmail = "anonym@anonymous.org";
     }
 
     public String getPlayerEmail() {
-        return email;
+        return this.playerEmail;
     }
 
-    public void setPlayerEmail(String name) {
-        this.email = name;
+    public void setPlayerEmail(String email) {
+        this.playerEmail = email;
     }
 
-    public String getPlayerPassword() {
-        return password;
+    public String getPlayerUsername() {
+        return this.playerUsername;
     }
 
-    public void setPlayerPassword(String pwd) {
-        this.password = pwd;
+    public void setPlayerUsername(String username) {
+        this.playerUsername = username;
     }
 
     public String getPlayerID() {
-        return id.toString();
+        return this.playerID;
     }
 
-    /**
-     * @return True if current player is anonymous.
-     */
-    public boolean isAnonym() {
-        return isAnonymous;
+    @Override
+    public String toString() {
+        return "{\"player_id\": \""+this.playerID+"\", \"username\": \""+this.playerUsername+"\", \"email\": \""+this.playerEmail+"\"}";
     }
 }

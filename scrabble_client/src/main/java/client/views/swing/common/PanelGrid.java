@@ -1,33 +1,35 @@
 package client.views.swing.common;
 
 import java.awt.GridLayout;
+import java.awt.Point;
 import javax.swing.JPanel;
 
 /**
- * This class represents a panel rack which might be contain a DTElement
+ * This class represents a panel grid which might be contain a DTElement (On the
+ * game board)
  *
  * @author Romain <ro.foncier@gmail.com>
  */
-public class panelRack extends JPanel {
+public class PanelGrid extends JPanel {
 
-    // Position inside the rack
-    private int pos;
+    // Coordiantes of the panel inside the grid
+    private Point coord;
 
     /**
-     * Constructor for panelRack
+     * Constructor for panelGrid
      *
      * @param tw (tile width),
      * @param th (tile height),
-     * @param pos (position inside the rack)
+     * @param coord (coordinates inside the grid)
      */
-    public panelRack(int tw, int th, int pos) {
-        setLayout(new GridLayout(1, 1));
+    public PanelGrid(int tw, int th, Point coord) {
+        setLayout(new GridLayout(1, 1, 0, 0));
         setSize(tw, th);
         setOpaque(false);
         setVisible(true);
-        setName("panelRack");
+        setName("panelGrid");
         setTransferHandler(new TileTransferHandler());
-        this.pos = pos;
+        this.coord = coord;
     }
 
     /**
@@ -51,9 +53,9 @@ public class panelRack extends JPanel {
     }
 
     /**
-     * @return the position of this container inside the rack
+     * @return the coordinates of this container inside the grid
      */
-    public int getPosition() {
-        return this.pos;
+    public Point getCoordinates() {
+        return this.coord;
     }
 }

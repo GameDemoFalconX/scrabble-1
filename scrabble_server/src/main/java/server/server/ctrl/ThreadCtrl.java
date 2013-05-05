@@ -9,13 +9,13 @@ import server.server.connection.ServerProtocol;
  */
 public class ThreadCtrl extends Thread {
 
-    private ServerScrabble HAL;
+    private ServerScrabble sScrabble;
     private ServerProtocol sProto;
     private Message request;
 
     public ThreadCtrl(ServerProtocol sp, ServerScrabble hal) {
         sProto = sp;
-        HAL = hal;
+        sScrabble = hal;
     }
 
     @Override
@@ -89,24 +89,22 @@ public class ThreadCtrl extends Thread {
      }
      */
     private void newAccount() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to create a new account");
         Message response;
 
         // Try to create a new player acount
-        response = HAL.newAccount(argsTab[0], argsTab[1]);
+        response = sScrabble.newAccount(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void login() {
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Current player is trying to login");
         Message response;
 
         // Try to log the current player
-        response = HAL.login(argsTab[0], argsTab[1]);
+        response = sScrabble.login(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -117,19 +115,18 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to log the current player
-        response = HAL.logout(new String(request.getBody()));
+        response = sScrabble.logout(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void newGame() {
-        String playerID = new String(request.getBody());
         outputPrint("Current player is trying to create a new game");
         Message response;
 
         // Try to create a new game for the current player
-        response = HAL.createNewPlay(playerID);
+        response = sScrabble.createNewPlay(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -140,7 +137,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to create a new play for the current anonymous player
-        response = HAL.newAnonymGame(new String(request.getBody()));
+        response = sScrabble.newAnonymGame(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -152,7 +149,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load the plays list for the current player
-        response = HAL.loadPlayList(playerID);
+        response = sScrabble.loadPlayList(playerID);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -164,7 +161,7 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load an existed play for the current player
-        response = HAL.loadGame(argsTab[0], argsTab[1]);
+        response = sScrabble.loadGame(argsTab[0], argsTab[1]);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -177,7 +174,7 @@ public class ThreadCtrl extends Thread {
 
         // Try to load an existed play for the current player
         String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
-        response = HAL.saveGame(type, argsTab[0], argsTab[1], blankTiles);
+        response = sScrabble.saveGame(type, argsTab[0], argsTab[1], blankTiles);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -189,34 +186,29 @@ public class ThreadCtrl extends Thread {
         Message response;
 
         // Try to load an existed play for the current player
-        response = HAL.deleteAnonym(playerID);
+        response = sScrabble.deleteAnonym(playerID);
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void gameTreatment() {
-        // Structure of args to recieve : pl_id+"_"+ga_id+"_"+orientation@@[tile 1]##[ tile 2 ]##...
-        System.out.println(new String(request.getBody()));
-        String[] argsTab = new String(request.getBody()).split("_");
         outputPrint("Start game treatment for the current player");
         Message response;
 
         // Check if the player's game is correct.
-        response = HAL.gameTreatment(argsTab[0], argsTab[1], argsTab[2]); // playerID, playID, gameInformations
+        response = sScrabble.gameTreatment(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
 
     private void exchangeTile() {
-        String[] argsTab = new String(request.getBody()).split("##");
-        outputPrint("Current player is trying to exchange tiles");
+        outputPrint("Start game treatment for the current player");
         Message response;
-        String playerID = argsTab[0];
-        String position = argsTab[1];
-        response = HAL.exchangeTile(playerID, position);
 
+        // Check if the player's game is correct.
+        response = sScrabble.exchangeTile(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -228,7 +220,7 @@ public class ThreadCtrl extends Thread {
         Message response;
         String playerID = argsTab[0];
         String position = argsTab[1];
-        response = HAL.switchTile(playerID, position);
+        response = sScrabble.switchTile(playerID, position);
 
         outputPrint("Send Response");
         sProto.sendResponse(response);

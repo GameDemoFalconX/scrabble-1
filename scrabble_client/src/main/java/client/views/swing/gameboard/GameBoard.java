@@ -1,11 +1,16 @@
 package client.views.swing.gameboard;
 
+import client.views.swing.common.DTPicture;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelGrid;
+import client.views.swing.common.PanelGrid;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.IOException;
+import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -32,11 +37,11 @@ public class GameBoard extends JPanel {
     private JLabel background;
     private boolean debug = false;
     private JPanel innerGrid;
+    // JSON treatment
+    ObjectMapper om = new ObjectMapper();
 
     public GameBoard() {
-        /**
-         * Construction of game board *
-         */
+         // Construction of game board
         background = new JLabel(setImageGameBoard(TYPE_VINTAGE));
         add(background);
         setLayout(new java.awt.GridLayout(1, 1, 0, 0)); //Allow to get rid of the gap between JPanel and JLabel
@@ -47,13 +52,33 @@ public class GameBoard extends JPanel {
         } else {
             setBorder(BorderFactory.createLineBorder(Color.WHITE));
         }
+        reset();
+    }
 
-        /**
-         * Construction of grid elements *
-         */
-        /**
-         * * Grid inner container **
-         */
+    public JPanel getInnerGrid() {
+        return this.innerGrid;
+    }
+
+    public void removeBadTiles(String tilesToRemove) {
+        System.out.println("tilesToRemove : " + tilesToRemove);
+        try {
+            JsonNode root = om.readTree(tilesToRemove);
+            for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
+                JsonNode cPoint = it.next();
+                Point cP = om.readValue(cPoint.toString(), Point.class);
+                PanelGrid pg = (PanelGrid) innerGrid.getComponent((cP.y * 15) + cP.x);
+                pg.remove(0);
+                pg.validate();
+                pg.repaint();
+            }
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON inclass : " + GameBoard.class);
+        }
+    }
+
+    public void reset() {
+        // Construction of grid elements
+         // Grid inner container
         innerGrid = new JPanel(new GridLayout(15, 15, 1, 1));
         if (debug) {
             innerGrid.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
@@ -64,7 +89,6 @@ public class GameBoard extends JPanel {
                 innerGrid.setBorder(BorderFactory.createLineBorder(new Color(190, 39, 39)));
             }
         }
-//				innerGrid.setSize(GB_INNER_WIDTH, GB_INNER_HEIGHT);
         innerGrid.setBounds(14, 12, GB_INNER_WIDTH, GB_INNER_HEIGHT);
         innerGrid.setOpaque(false);
 
@@ -72,7 +96,7 @@ public class GameBoard extends JPanel {
         int ind = 0; // Index for the layout
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 15; y++) {
-                panelGrid panelGridElement = new panelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(y, x));
+                PanelGrid panelGridElement = new PanelGrid(TILE_WIDTH, TILE_HEIGHT, new Point(y, x));
                 if (debug) {
                     panelGridElement.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Used for DEBUG
                 }
@@ -80,10 +104,8 @@ public class GameBoard extends JPanel {
                 ind++;
             }
         }
-    }
-
-    public JPanel getInnerGrid() {
-        return this.innerGrid;
+        innerGrid.validate();
+        innerGrid.repaint();
     }
 
     /**
@@ -113,7 +135,7 @@ public class GameBoard extends JPanel {
     public void changeGameBoard(String type) {
         if ("vintage".equals(type)) {
             vintage = true;
-        } else {
+        } else {    
             vintage = false;
         }
         remove(0);

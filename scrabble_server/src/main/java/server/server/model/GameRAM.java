@@ -27,7 +27,7 @@ import server.common.GameException;
  * @author Romain <ro.foncier@gmail.com>
  */
 public class GameRAM {
-
+/*
     private Map<String, Play> plays = new HashMap<String, Play>(); // HashMap which contains player ID like Key and Play instance like Value.
 
     public GameRAM() {
@@ -40,7 +40,7 @@ public class GameRAM {
      * @param playID
      * @return
      * @throws GameException
-     */
+     *//*
     public Play LoadGame(String playerUUID, String playID) throws GameException {
         File gameFile = new File("games.xml");
         if (gameFile.exists()) {
@@ -123,7 +123,7 @@ public class GameRAM {
      * @param playerID
      * @param play
      * @return true if operation is done.
-     */
+     *//*
     public boolean addNewPlay(String playerID, Play play) {
         Boolean done = false;
         if (plays.isEmpty()) {
@@ -147,7 +147,7 @@ public class GameRAM {
      * instance to null.
      *
      * @param playerID
-     */
+     *//*
     public void addPlayer(String playerID) {
         plays.put(playerID, null);
     }
@@ -157,7 +157,7 @@ public class GameRAM {
      * instance (Garbage collector).
      *
      * @param playerID
-     */
+     *//*
     public void removePlayer(String playerID) {
         plays.remove(playerID);
     }
@@ -166,7 +166,7 @@ public class GameRAM {
      * Set to null the play instance of the current logged player.
      *
      * @param playerID
-     */
+     *//*
     public void initPlayer(String playerID) {
         addNewPlay(playerID, null);
     }
@@ -177,7 +177,7 @@ public class GameRAM {
      *
      * @param playerID
      * @return
-     */
+     *//*
     public boolean playerIsLogged(String playerID) {
         return plays.containsKey(playerID);
     }
@@ -188,7 +188,7 @@ public class GameRAM {
      * @param pl_id
      * @param ga_id
      * @return Play instance if player can play this game and null otherwise.
-     */
+     *//*
     public Play playIdentification(String pl_id, String ga_id) {
         if (playerIsLogged(pl_id) && plays.get(pl_id).getPlayID().equals(ga_id)) {
             return plays.get(pl_id);
@@ -206,7 +206,7 @@ public class GameRAM {
      * @@[play unit 2]
      * @@ ... Two underscore between play attributes and two ## between play
      * units.
-     */
+     *//*
     public String loadPlayList(String playerUUID) throws GameException {
         String result = "";
         File gameFile = new File("games.xml");
@@ -248,7 +248,7 @@ public class GameRAM {
 
     /**
      * Save the current play in the games.xml file for the current player.
-     */
+     *//*
     public void saveGameOnFile(String pl_id, Play cPlay, String args) {
         File gameFile = new File("games.xml");
         if (gameFile.exists()) {
@@ -373,7 +373,7 @@ public class GameRAM {
 
     /**
      * Remove selected play in the games.xml file for the current player.
-     */
+     *//*
     public void removePlay() {
     }
 
@@ -381,7 +381,7 @@ public class GameRAM {
      *
      * @param playerID
      * @return
-     */
+     *//*
     public Play getPlay(String playerID) {
         if (!plays.isEmpty()) {
             System.out.println("GameRAM not empty " + playerID);
@@ -401,7 +401,8 @@ public class GameRAM {
         while (i.hasNext()) {
             Map.Entry me = (Map.Entry) i.next();
             System.out.print(me.getKey() + ": ");
-            System.out.println(me.getValue()); // Return the code of this instance. Use it only for debug.
+            Play play = (Play) me.getValue();
+            System.out.println(play.getPlayID()); // Return the code of this instance. Use it only for debug.
         }
-    }
+    }*/
 }

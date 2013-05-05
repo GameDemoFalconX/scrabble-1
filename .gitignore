@@ -8,6 +8,8 @@ nbdist/
 build.xml
 manifest.mf
 build-impl.xml
+scrabble_client/target/*
+scrabble_server/target/*
 
 # Class Files #
 *.class
@@ -16,6 +18,3 @@ build-impl.xml
 # Vim, OS, ...
 *.un~
 *.swp
-/Scrabble Server/nbproject/private/
-/Scrabble Client/nbproject/private/
-/Scrabble GUI/nbproject/private/

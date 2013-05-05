@@ -10,7 +10,7 @@ import server.common.Message;
 public interface IGame {
     // Player connection
 
-    Message newAccount(String pl_name, String pl_pwd) throws GameException;
+    Message newAccount(String pl_email, String pl_pwd) throws GameException;
     Message login(String pl_name, String pl_pwd) throws GameException;
     Message logout(String pl_id) throws GameException;
 
@@ -22,7 +22,7 @@ public interface IGame {
     Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException;
 
     // Game
-    Message checkGame(String pl_id, String ga_id, String ga_infos) throws GameException;
+    Message checkGame(String pl_id, String ga_id, int orientation, String ga_infos) throws GameException;
     
     // Deconnection
     void deconnection(String clientName) throws GameException;
@@ -31,6 +31,6 @@ public interface IGame {
     Message deleteAnonym(String pl_id) throws GameException;
 
     // Exchange tile
-    Message exchangeTile(String pl_id, String position) throws GameException;
+    Message exchangeTile(String pl_id, String ga_id, String tiles) throws GameException;
     Message switchTile(String pl_id, String position) throws GameException;
 }

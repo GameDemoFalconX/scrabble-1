@@ -1,26 +1,29 @@
 package server.server.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import client.model.utils.Point;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
 
-    private UUID playID;
-    private UUID owner;
-    private Date created;
-    private Date modified;
+    private String playID;
+    private String owner;
     private Integer score;
     private Grid grid;
-    private String formatedGrid;
     private Rack rack;
     private TileBag bag;
+    private final boolean isAnonym;
     // Game variables
     protected String lastWord;
     protected int lastWordScore;
@@ -28,91 +31,38 @@ public class Play {
     private int nbTests = 0;
     private int testsWithSuccess = 0;
     private int testsWithError = 0;
+    private int innerIndice = 0;
+    // JSON treatment
+    private ObjectMapper om = new ObjectMapper();
 
     /**
      * Constructor for Play instance from simply playerID.
      *
      * @param playerID
      */
-    public Play(String playerID) {
-        playID = UUID.randomUUID();
-        owner = UUID.fromString(playerID);
-        created = new Date();
+    public Play(String playerID, boolean anonym) {
+        playID = UUID.randomUUID().toString();
+        owner = playerID;
         score = 0;
         grid = new Grid();
         bag = new TileBag();
         rack = new Rack(bag);
-    }
-
-    /**
-     * Allows to initialize a Play object without grid, rack and bag to save
-     * memory. Thus it become possible to display some attributes of this
-     * without to have load the complete object.
-     */
-    public Play(String playerID, String playID, String created, String modified, Integer score) {
-        this.playID = UUID.fromString(playID);
-        this.owner = UUID.fromString(playerID);
-        String[] cDate = created.split("/");
-        this.created = new Date(Integer.parseInt(cDate[0]), Integer.parseInt(cDate[1]), Integer.parseInt(cDate[2]));
-        String[] mDate = modified.split("/");
-        this.modified = new Date(Integer.parseInt(mDate[0]), Integer.parseInt(mDate[1]), Integer.parseInt(mDate[2]));
-        this.score = score;
-
-        // Initialize grid,  tilebag and rack.
-        grid = new Grid();
-        bag = new TileBag();
-        rack = new Rack();
-    }
-
-    public void loadTile(int x, int y, char letter, int value) {
-        Tile newTile = bag.popTile(letter, value);
-        newTile.setLoaded();
-        grid.putInGrid(x, y, newTile);
-    }
-
-    public void loadRackTile(int index, char letter, int value) {
-        Tile newTile = bag.popTile(letter, value);
-        rack.setTile(index, newTile);
+        this.isAnonym = anonym;
     }
 
     /**
      * @return string representation of Play ID.
      */
     public String getPlayID() {
-        return playID.toString();
+        return playID;
     }
 
     public String getOwner() {
-        return owner.toString();
+        return owner;
     }
 
-    private String formatDate(Date d) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        return dateFormat.format(d);
-    }
-
-    protected String getCreated() {
-        return formatDate(created);
-    }
-
-    protected String getModified() {
-        setModified();
-        return formatDate(modified);
-    }
-
-    private void setModified() {
-        modified = new Date();
-    }
-
-    protected ArrayList getNewAddedTiles() {
-        System.out.println("@@@@@@@@@@");
-        System.out.println(this.grid.toString());
-
-        return grid.getNewAdds();
-    }
-
-    protected Rack getRack() {
-        return rack;
+    public boolean isAnonym() {
+        return this.isAnonym;
     }
 
     /**
@@ -123,37 +73,43 @@ public class Play {
      * the rack.
      */
     protected ArrayList<Tile> tilesSetUp(String args) {
-        String[] tilesList = args.split("##");
         ArrayList result = new ArrayList();
+        try {
+            JsonNode root = om.readTree(args);
+            for (Iterator<JsonNode> it = root.iterator(); it.hasNext();) {
+                JsonNode tile = it.next();
+                JsonNode coord = tile.get("coordinates");
+                JsonNode attrs = tile.get("attributes");
+                Tile t = om.readValue(attrs.toString(), Tile.class);
+                Point p = om.readValue(coord.toString(), Point.class);
 
-        for (int i = 0; i < tilesList.length; i++) {
-            String[] tileAttrs = tilesList[i].split(":");
-            String letter = tileAttrs[0];
-            int x = Integer.parseInt(tileAttrs[1]);
-            int y = Integer.parseInt(tileAttrs[2]);
-
-            Tile cTile = rack.getTile(letter.charAt(0));
-            if (letter.length() > 1) {
-                cTile.setLetter(letter.charAt(1));
+                // Tile treatment
+                result.add(t);
+                t.upStatus(); // Set this tile like a new add in the grid.
+                if (!rack.removeTileFromRack(t)) {
+                    // Improve this with Exception handler
+                    System.out.println("Tile not found in rack :" + t);
+                    break;
+                }
+                grid.putInGrid(p.x, p.y, t); // Put this tile on the game board and add it its coordinates.
             }
-            result.add(cTile);
-
-            // Tile treatment
-            cTile.setRackPosition(Integer.parseInt(tileAttrs[2])); // Set the position of this tile on the rack.
-            cTile.upStatus(); // Set this tile like a new add in the grid.
-            grid.putInGrid(x, y, cTile); // Put this tile on the game board and add it its coordinates.
+        } catch (IOException ioe) {
+            System.out.println("Error with JSON");
+            ioe.printStackTrace();
         }
         return result;
     }
 
     /**
-     * Remove the tiles added if the test contains some errors.
+     * Remove the tiles added if the test contains some errors and take them
+     * back in Rack
      *
      * @param tilesList
      */
     protected void removeBadTiles(ArrayList<Tile> tilesList) {
         for (int i = 0; i < tilesList.size(); i++) {
             grid.removeInGrid(tilesList.get(i).getX(), tilesList.get(i).getY()); // remove pointer
+            rack.putTile(tilesList.get(i));
         }
     }
 
@@ -169,12 +125,11 @@ public class Play {
         // Initialize values
         lastWordScore = 0;
         lastWord = "";
-        String p = "";
-        String n = "";
+        String p = "", n = "";
 
         // Display Grid and Rack
-        System.out.println(grid.toString());
-        System.out.println(rack.displayRack());
+        //System.out.println(grid.toString());
+        //System.out.println(rack.displayRack());
 
         // Initialization from current tile.
         int wordCounter = grid.scoringGrid.checkBonus(cTile, this);
@@ -215,6 +170,11 @@ public class Play {
         }
     }
 
+    /**
+     * Calculate the score for the currentWord (in treatment)
+     *
+     * @param score
+     */
     protected void setLastWordScore(int score) {
         lastWordScore += score;
     }
@@ -242,86 +202,66 @@ public class Play {
      * format them to send on the client.
      *
      * @param tilesList
-     * @return Formated list of tile with the following canvas : L:V__[index of
-     * tile in rack]##L:V__ ...
+     * @return Formated list of tile in JSON :
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
     protected String getNewTiles(int numberTile) {
-        String result = "";
+        String result = "[";
         for (int i = 0; i < numberTile; i++) {
             Tile nTile = bag.getTile();
             rack.putTile(nTile);
-            result += nTile.toString();
+            result += nTile;
             if (i < numberTile - 1) {
-                result += "=";
+                result += ", ";
             }
         }
-        return result;
+        return result + "]";
     }
 
     /**
-     * Format the content of the play object
+     * Return a String representation of the rack
      *
-     * @return String with this canvas : [play uuid]__[play created
-     * date]__[modified]__[score] Two underscore between play attributes.
-     */
-    public String formatAttr() {
-        return getPlayID() + "__" + formatDate(created) + "__" + formatDate(modified) + "__" + score.toString();
-    }
-
-    /**
-     * Return a String representation of the rack with the following canvas :
-     * [letter] [letter] ...
-     *
-     * @return
+     * @return JSON : [{"letter": "A", "value": 1, "blank": false}, ...]
      */
     public String getFormatRack() {
         return this.rack.toString();
     }
 
+    /**
+     * Return a String representation of the grid
+     *
+     * @return
+     */
     public String getGrid() {
         return this.grid.toString();
     }
 
-    public String tileExchange(String position) {
-        String newTiles = "";
-        String[] positions = position.split(" ");
-        for (int i = 0; i < positions.length; i++) {
-            Tile tile = this.bag.getTile();
-            newTiles += tile.getLetter() + ":" + tile.getValue();
-            if (i < positions.length - 1) {
-                newTiles += "=";
+    public String exchangeTiles(String tiles) {
+        Logger.getLogger(Play.class.getName()).log(Level.INFO, null, tiles);
+        Tile[] tileArray = null;
+        try {
+            tileArray = om.readValue(tiles, Tile[].class);
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (tileArray != null) {
+            String newTiles = this.getNewTiles(tileArray.length);
+            try {
+                Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
+                for (int i = 0; i < tileArray.length; i++) {
+                    int tmp = rack.getTilePos(tileArray[i].getLetter());
+                    rack.setTile(tmp-1, newTileArray[i]);
+                    bag.putBackTile(tileArray[i]);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
             }
+            return rack.getRack().toString();
+        } else {
+            return "";
         }
-        for (int i = 0; i < positions.length; i++) {
-            //bag.putBackTile(rack.getTile(i));
-        }
-        rack = new Rack(newTiles);
-        return newTiles;
-    }
 
-    public void tileSwitch(String position) {
-        rack.tileSwitch(position);
-    }
 
-    /**
-     * Update blank tiles in the rack before saving.
-     *
-     * @param args
-     */
-    public void updateBlankTile(String args) {
-        String[] tileList = args.split(":");
-        for (int i = 0; i < tileList.length; i++) {
-            rack.setTile(Integer.parseInt(tileList[i]), new Tile('?', 0));
-        }
-    }
-
-    // *** Formated data *** //
-    public void setFormatedGrid(String fGrid) {
-        this.formatedGrid = fGrid;
-    }
-
-    public String getFormatedGrid() {
-        return this.formatedGrid;
     }
 
     //*** Stats Section ***//
@@ -329,11 +269,31 @@ public class Play {
         this.nbTests += 1;
     }
 
+    protected int getTestsPlayed() {
+        return this.nbTests;
+    }
+
     protected void testWithSuccess() {
         this.testsWithSuccess += 1;
     }
 
+    protected int getTestsWon() {
+        return this.testsWithSuccess;
+    }
+
     protected void testWithError() {
         this.testsWithError += 1;
+    }
+
+    protected int getTestsLost() {
+        return this.testsWithError;
+    }
+
+    protected void increaseIndice() {
+        this.innerIndice++;
+    }
+
+    protected int getInnerIndice() {
+        return this.innerIndice;
     }
 }

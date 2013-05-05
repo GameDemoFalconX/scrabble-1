@@ -24,11 +24,11 @@ public class Utils {
         Component target = jlp.findComponentAt(p);
 
         // Check the type of target in all cases
-        if (target instanceof panelRack || target instanceof panelGrid) {
+        if (target instanceof PanelRack || target instanceof PanelGrid) {
             parent = target;
         } else if (target instanceof DTPicture) {
             DTPicture targetDTP = (DTPicture) target;
-            if (targetDTP.getParent() instanceof panelRack) {
+            if (targetDTP.getParent() instanceof PanelRack) {
                 parent = targetDTP.getParent();
             }
             // Only case to handle because if the target is a DTPicture inside the grid : no action required.

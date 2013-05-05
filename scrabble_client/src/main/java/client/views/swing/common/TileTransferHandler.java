@@ -35,7 +35,7 @@ public class TileTransferHandler extends TransferHandler {
         }
 
         // We forbid the drop gesture over another DTPicture located on the grid. 
-        if (support.getComponent() instanceof DTPicture && support.getComponent().getParent() instanceof panelGrid) {
+        if (support.getComponent() instanceof DTPicture && support.getComponent().getParent() instanceof PanelGrid) {
             System.out.println("Find DTPicture target on panelGrid");
             return false;
         }
@@ -54,18 +54,18 @@ public class TileTransferHandler extends TransferHandler {
         workOnRack = (support.getComponent() instanceof DTPicture) ? true : false;
 
         if (workOnRack) {
-            targetP = (panelRack) support.getComponent().getParent(); // Target parent instance
-            if (sourceParent instanceof panelRack) {
-                panelRack sourceP = (panelRack) sourceParent; // Source parent instance
+            targetP = (PanelRack) support.getComponent().getParent(); // Target parent instance
+            if (sourceParent instanceof PanelRack) {
+                PanelRack sourceP = (PanelRack) sourceParent; // Source parent instance
                 // Avoid the drag and drop on the same tile (in place).
                 if (sourceP.equals(targetP)) {
                     return false;
                 }
-                shiftTiles((JPanel) targetP.getParent(), sourceP.getPosition(), ((panelRack) targetP).getPosition());
+                shiftTiles((JPanel) targetP.getParent(), sourceP.getPosition(), ((PanelRack) targetP).getPosition());
             } else {
-                int tmpToDrop = findEmptyParent((JPanel) targetP.getParent(), ((panelRack) targetP).getPosition()); // Get the vacant position
-                shiftTiles((JPanel) targetP.getParent(), tmpToDrop, ((panelRack) targetP).getPosition());
-                panelRack tmpParent = ((panelRack) targetP.getParent().getComponent(tmpToDrop)); // Get the container at this specific vancant position.
+                int tmpToDrop = findEmptyParent((JPanel) targetP.getParent(), ((PanelRack) targetP).getPosition()); // Get the vacant position
+                shiftTiles((JPanel) targetP.getParent(), tmpToDrop, ((PanelRack) targetP).getPosition());
+                PanelRack tmpParent = ((PanelRack) targetP.getParent().getComponent(tmpToDrop)); // Get the container at this specific vancant position.
                 tmpParent.add(DTPtmp); // Add it the temp element
                 tmpParent.validate();
                 tmpParent.repaint();
@@ -169,11 +169,11 @@ public class TileTransferHandler extends TransferHandler {
     }
 
     private void displaySituation(JPanel parent) {
-        if (parent instanceof panelRack) {
-            panelRack p = (panelRack) parent;
+        if (parent instanceof PanelRack) {
+            PanelRack p = (PanelRack) parent;
             System.out.println("Start drag from Rack - index : " + p.getPosition());
         } else {
-            panelGrid p = (panelGrid) parent;
+            PanelGrid p = (PanelGrid) parent;
             System.out.println("Start drag from Grid - [ " + p.getCoordinates().x + ", " + p.getCoordinates().y + " ]");
         }
     }
@@ -196,15 +196,15 @@ public class TileTransferHandler extends TransferHandler {
         startPos += DEC;
 
         // STEP 2 : Save the first element in a temp variable
-        panelRack tmpParent = (panelRack) rack.getComponent(startPos);
+        PanelRack tmpParent = (PanelRack) rack.getComponent(startPos);
         if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
             DTPtmp = (DTPicture) tmpParent.getComponent(0);
         }
 
         // STEP 3 : Loop over the rack to shift tiles.
         while (startPos != stopPos) {
-            panelRack writerP = (panelRack) rack.getComponent(startPos);
-            panelRack readerP = (panelRack) rack.getComponent(startPos + DEC);
+            PanelRack writerP = (PanelRack) rack.getComponent(startPos);
+            PanelRack readerP = (PanelRack) rack.getComponent(startPos + DEC);
             if (writerP.getComponentCount() > 0 && writerP.getComponent(0) instanceof DTPicture) {
                 writerP.remove(0);
             }
@@ -217,7 +217,7 @@ public class TileTransferHandler extends TransferHandler {
         }
 
         // STEP 4 : Remove the last element to drop the dragged element.
-        tmpParent = (panelRack) rack.getComponent(startPos);
+        tmpParent = (PanelRack) rack.getComponent(startPos);
         if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
             tmpParent.remove(0);
             tmpParent.validate();
@@ -235,10 +235,10 @@ public class TileTransferHandler extends TransferHandler {
         int index = 1;
         int vacantPosition = -1;
         while (vacantPosition == -1 && index < 7) {
-            if ((targetPos + index < 7) && ((panelRack) rack.getComponent(targetPos + index)).getComponentCount() == 0) {
+            if ((targetPos + index < 7) && ((PanelRack) rack.getComponent(targetPos + index)).getComponentCount() == 0) {
                 vacantPosition = targetPos + index;
             } else {
-                if ((targetPos - index >= 0) && ((panelRack) rack.getComponent(targetPos - index)).getComponentCount() == 0) {
+                if ((targetPos - index >= 0) && ((PanelRack) rack.getComponent(targetPos - index)).getComponentCount() == 0) {
                     vacantPosition = targetPos - index;
                 }
             }

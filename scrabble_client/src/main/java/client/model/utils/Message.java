@@ -9,6 +9,7 @@ public class Message {
     private Integer header;
     private Integer size;
     private byte[] body;
+    
     // Server answers
     public static final int SYSOK = 1; // All is OK
     public static final int SYSKO = 2; // Err sys KO
@@ -55,9 +56,13 @@ public class Message {
     public static final int TILE_SWITCH_SUCCES = 64; // Exchange tiles with succes
     public static final int TILE_SWITCH_ERROR = 65; // Exchange tiles with error
     // PLACE_WORD //
-    public static final int PASS_WORD = 70; // Place word
-    public static final int PASS_WORD_SUCCESS = 71; // Place word with succes
-    public static final int PASS_WORD_ERROR = 72; // Place word with error
+    public static final int PLACE_WORD = 70; // Place word
+    public static final int PLACE_WORD_SUCCESS = 71; // Place word with succes
+    public static final int PLACE_WORD_ERROR = 72; // Place word with error
+    
+    public static final int UNDO = 75; 
+    public static final int UNDO_SUCCESS = 76;
+    public static final int UNDO_ERROR = 77;
     // SAVE_GAME //
     public static final int SAVE_GAME = 80; // Save game
     public static final int SAVE_GAME_WITH_END_GAME = 81; // Save and leave the current game
@@ -85,14 +90,6 @@ public class Message {
         this.body = body;
     }
 
-    public Message(String args) {
-        String[] argsTab = new String[2];
-        argsTab = args.split("#");
-        this.header = Integer.parseInt(argsTab[0]);
-        this.body = argsTab[1].getBytes();
-        this.size = this.body.length;
-    }
-
     public int getHeader() {
         return header;
     }
@@ -104,9 +101,13 @@ public class Message {
     public byte[] getBody() {
         return body;
     }
+    
+    public String getBodyJSON() {
+        return new String(body);
+    }
 
     @Override
     public String toString() {
-        return header.toString() + "&" + size.toString() + "&" + body;
+        return "{\"header\": "+header.toString()+", \"size\": "+size.toString()+", \"body\": "+new String(body)+"}";
     }
 }

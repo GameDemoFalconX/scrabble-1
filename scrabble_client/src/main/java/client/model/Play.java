@@ -2,11 +2,13 @@ package client.model;
 
 import client.model.event.ErrorListener;
 import client.model.event.ErrorMessageEvent;
-import client.model.event.InitMenuToPlayEvent;
+import client.model.event.GridListener;
+import client.model.event.InitMenuInterfaceEvent;
 import client.model.event.InitRackEvent;
 import client.model.event.MenuListener;
 import client.model.event.RackListener;
 import client.model.event.RackReArrangeEvent;
+import client.model.event.RemoveBadTilesEvent;
 import client.model.event.TileFromGridToGridEvent;
 import client.model.event.TileFromGridToRackEvent;
 import client.model.event.TileFromGridToRackWithShiftEvent;
@@ -14,15 +16,26 @@ import client.model.event.TileFromRackToGridEvent;
 import client.model.event.TileFromRackToRackEvent;
 import client.model.event.TileFromRackToRackWithShiftEvent;
 import client.model.event.TileListener;
+import client.model.event.UpdateAllStatsEvent;
 import client.model.event.UpdateScoreEvent;
+import client.model.event.UpdateStatsEvent;
+import client.model.event.UpdateWordsListEvent;
 import client.model.utils.GameException;
+import client.model.utils.Point;
 import client.service.GameService;
-import java.awt.Point;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -37,16 +50,25 @@ public class Play {
     private Integer score;
     private Grid grid;
     private Rack rack;
-    private Map<Point, Tile> newWord = new HashMap<>();
+    private Map<String, Tile> newWord = new HashMap<>();
     private boolean firstWord = true;
+    private String storedRack;
+    private Memento undo;
     private EventListenerList tileListeners;
     private EventListenerList rackListeners;
+    private EventListenerList gridListeners;
     private EventListenerList menuListeners;
     private EventListenerList errorListeners;
+    // Stats data
+    private int TESTS_PLAYED = 0;
+    private int TESTS_WON = 0;
+    private int TESTS_LOST = 0;
     // Integrity error
     private final static int FIRST_WORD_NUMBER = 1;
     private final static int FIRST_WORD_POSITION = 2;
     private final static int FLOATING_TILES = 3;
+    // JSON treatment
+    private ObjectMapper om = new ObjectMapper();
 
     /**
      * Constructor for the launcher.
@@ -55,6 +77,7 @@ public class Play {
         service = new GameService(args);
         tileListeners = new EventListenerList();
         rackListeners = new EventListenerList();
+        gridListeners = new EventListenerList();
         menuListeners = new EventListenerList();
         errorListeners = new EventListenerList();
     }
@@ -64,6 +87,7 @@ public class Play {
         this.score = score;
         grid = (formatedGrid.equals("")) ? new Grid() : new Grid(formatedGrid);
         rack = new Rack(formatedRack);
+        storedRack = formatedRack;
     }
 
     public String getPlayID() {
@@ -93,6 +117,10 @@ public class Play {
         rackListeners.add(RackListener.class, listener);
     }
 
+    public void addGridListener(GridListener listener) {
+        gridListeners.add(GridListener.class, listener);
+    }
+
     public void addMenuListener(MenuListener listener) {
         menuListeners.add(MenuListener.class, listener);
     }
@@ -107,6 +135,10 @@ public class Play {
 
     public void removeRackListener(RackListener listener) {
         rackListeners.remove(RackListener.class, listener);
+    }
+
+    public void removeGridListener(GridListener listener) {
+        gridListeners.remove(GridListener.class, listener);
     }
 
     public void removeMenuListener(MenuListener listener) {
@@ -180,15 +212,39 @@ public class Play {
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
         for (RackListener l : listeners) {
-            l.initRack(new InitRackEvent(this, newRack));
+            l.initRack(new InitRackEvent(this, newRack, false));
+        }
+    }
+    
+    public void fireUpdateRackToPlay(String newRack, boolean reset) {
+        RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+        for (RackListener l : listeners) {
+            l.updateRack(new InitRackEvent(this, newRack, reset));
         }
     }
 
-    public void fireInitMenuToPlay(boolean anonymous, String email, int score) {
+    public void fireRemoveBadTilesToGrid(String tilesToRemove) {
+        GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
+
+        for (GridListener l : listeners) {
+            l.removeBadTiles(new RemoveBadTilesEvent(this, tilesToRemove));
+        }
+    }
+
+    public void fireInitMenuInterface(boolean anonymous, String email, String username) {
         MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
 
         for (MenuListener l : listeners) {
-            l.initMenuToPlay(new InitMenuToPlayEvent(this, anonymous, email, score));
+            l.initMenuInterface(new InitMenuInterfaceEvent(this, anonymous, email, username));
+        }
+    }
+    
+    public void fireInitMenuLoadPlay(boolean anonymous) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.initMenuLoadPlay(anonymous);
         }
     }
 
@@ -200,6 +256,22 @@ public class Play {
         }
     }
 
+    public void fireResetGrid() {
+        GridListener[] listeners = (GridListener[]) gridListeners.getListeners(GridListener.class);
+
+        for (GridListener l : listeners) {
+            l.resetGrid();
+        }
+    }
+
+    public void fireResetRack() {
+        RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
+
+        for (RackListener l : listeners) {
+            l.resetRack();
+        }
+    }
+
     public void fireErrorMessage(String error) {
         ErrorListener[] listeners = (ErrorListener[]) errorListeners.getListeners(ErrorListener.class);
 
@@ -208,22 +280,141 @@ public class Play {
         }
     }
 
+    public void fireMenuUpdateStats(boolean validate) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateStats(new UpdateStatsEvent(this, validate));
+        }
+    }
+    
+    public void fireMenuUpdateAllStats(int tp, int tw, int tl) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateAllStats(new UpdateAllStatsEvent(this, tp, tw, tl));
+        }
+    }
+
+    public void fireMenuUpdateWordsList(String[] data) {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.updateWordsList(new UpdateWordsListEvent(this, data));
+        }
+    }
+
+    public void fireMenuShowUndoButton() {
+        MenuListener[] listeners = (MenuListener[]) menuListeners.getListeners(MenuListener.class);
+
+        for (MenuListener l : listeners) {
+            l.showUndoButton();
+        }
+    }
+
     /**
-     * * Methods used for create new player and play **
+     * Methods used for initGame (as guest or logged)
+     */
+    /**
+     * Init a new play for an anonymous player. format in JSON : {"play_id":
+     * "x0x000x0000x0000x00x0", "rack":
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...], "grid": ..., }
      */
     public void playAsGuest() {
-        String[] response = null;
+        String response = null;
         player = new Player();
         try {
             response = service.createNewPlay(player.getPlayerID(), true);
         } catch (GameException ge) {
             // catch exception header and fire message to view
         }
-        initPlay(response[0], "", response[1], 0);
 
-        // Dispatch the model modifications to all listeners
-        fireInitRackToPlay(response[1]);
-        fireInitMenuToPlay(true, player.getPlayerEmail(), 0);
+        try {
+            JsonNode root = om.readTree(response);
+            initPlay(root.get("play_id").asText(), "", root.get("rack").toString(), 0);
+
+            // Dispatch the model modifications to all listeners
+            fireInitRackToPlay(root.get("rack").toString());
+            fireInitMenuInterface(true, player.getPlayerEmail(), player.getPlayerUsername());
+            fireInitMenuLoadPlay(true);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void newGame() {
+        String response = null;
+        try {
+            response = service.createNewPlay(player.getPlayerID(), false);
+        } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
+
+        try {
+            JsonNode root = om.readTree(response);
+            initPlay(root.get("play_id").asText(), "", root.get("rack").toString(), 0);
+
+            // Dispatch the model modifications to all listeners
+            fireInitRackToPlay(root.get("rack").toString());
+            fireInitMenuLoadPlay(false);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    /**
+     * Methods used to signup, login and logout a player
+     */
+    public void signup(String email, String pwd) {
+        String response = null;
+        try {
+            response = service.newPlayer(email, pwd);
+        } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
+
+        try {
+            player = om.readValue(response, Player.class);
+
+            // Dispatch the model notifications to Menu listener
+            fireInitMenuInterface(false, player.getPlayerEmail(), player.getPlayerUsername());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void login(String email, String pwd) {
+        String response = null;
+        try {
+            response = service.loginPlayer(email, pwd);
+        } catch (GameException ge) {
+            // catch exception header and fire message to view
+        }
+
+        try {
+            player = om.readValue(response, Player.class);
+
+            // Dispatch the model notifications to Menu listener
+            fireInitMenuInterface(false, player.getPlayerEmail(), player.getPlayerUsername());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void logout() {
+        boolean response = false;
+        try {
+            response = service.logoutPlayer(player.getPlayerID());
+        } catch (GameException ge) {
+            // Catch exception
+        }
+
+        if (response) {
+            fireResetGrid();
+            fireResetRack();
+        } else {
+            fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
+        }
     }
 
     /**
@@ -258,24 +449,22 @@ public class Play {
      * * Methods used for the creation of words **
      */
     public void createWord(int sourcePos, int x, int y) {
-        newWord.put(new Point(x, y), rack.getTile(sourcePos));
+        newWord.put(x + "#" + y, rack.getTile(sourcePos));
         deplaceTileFromRackToGrid(sourcePos, x, y);
         fireTileMovedFromRackToGrid(sourcePos, x, y, grid.getTile(x, y).isBlank());
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void modifiedWord(int sX, int sY, int tX, int tY) {
-        newWord.put(new Point(tX, tY), newWord.get(new Point(sX, sY)));
-        newWord.remove(new Point(sX, sY));
+        newWord.put(tX + "#" + tY, newWord.get(sX + "#" + sY));
+        newWord.remove(sX + "#" + sY);
         deplaceTileFromGridToGrid(sX, sY, tX, tY);
         fireTileMovedFromGridToGrid(sX, sY, tX, tY);
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void removeLetterFromWord(int x, int y, int targetPos) {
-        newWord.remove(new Point(x, y));
+        newWord.remove(x + "#" + y);
         if (rack.getTile(targetPos) != null) {
             deplaceTileFromGridToRackWithShift(x, y, targetPos);
             fireTileMovedFromGridToRackWithShift(x, y, targetPos, rack.getTile(targetPos).isBlank());
@@ -283,8 +472,7 @@ public class Play {
             deplaceTileFromGridToRack(x, y, targetPos);
             fireTileMovedFromGridToRack(x, y, targetPos, rack.getTile(targetPos).isBlank());
         }
-        grid.printGrid();
-        displayNewWord();
+        //printDebug();
     }
 
     public void organizeRack(int sourcePos, int targetPos) {
@@ -301,118 +489,173 @@ public class Play {
     public void reArrangeRack() {
         fireRackReArrange(rack.reArrangeTiles());
     }
-
-    public void validateWord() {
-        String formatedWord = "";
-        int orientation = 1;
-        int done = 0; // indicator of integrity
-
-        // Step 0 - First check about the first word
-        done = (this.firstWord && newWord.size() < 1) ? FIRST_WORD_NUMBER : 0;
-
-        if (done < 1) {
-            Set set = this.newWord.entrySet();
-            Iterator i = set.iterator();
-
-            // Step 1 - Check the first tile
-            System.out.println("Valid word - start step 1 - done : " + done);
-            Map.Entry firstTile = (Map.Entry) i.next();
-            Point p1 = (Point) firstTile.getKey();
-            System.out.println("P1 : " + p1);
-            done = (this.firstWord && !(firstWordPosition(p1.x, p1.y))) ? FIRST_WORD_POSITION : (grid.hasNeighbors(p1.x, p1.y)) ? 0 : FLOATING_TILES;
-
-            if (done < 1) {
-                // Format the first letter
-                formatedWord += formatData(p1, (Tile) firstTile.getValue());
-
-                if (newWord.size() > 1) {
-                    // Step 2 - Second tile
-                    System.out.println("Valid word - start step 2 - done : " + done);
-                    Map.Entry secondTile = (Map.Entry) i.next();
-                    Point p2 = (Point) secondTile.getKey();
-                    System.out.println("P2 : " + p2);
-                    orientation = defineWordOrientation(p1.x, p1.y, p2.x, p2.y);
-                    done = (orientation > 0) ? 0 : FLOATING_TILES;
-
-                    if (done < 1) {
-                        // Format the second letter
-                        formatedWord += "##" + formatData(p2, (Tile) secondTile.getValue());
-
-                        // Step 3 - Other tile(s)
-                        System.out.println("Valid word - start step 3 - done : " + done);
-                        while (done < 1 && i.hasNext()) {
-                            Map.Entry otherTile = (Map.Entry) i.next();
-                            Point po = (Point) otherTile.getKey();
-                            System.out.println("PO : " + po);
-                            System.out.println("PO N : " + (grid.hasNeighbors(po.x, po.y)));
-                            System.out.println("PO O : " + (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y)));
-                            done = ((grid.hasNeighbors(po.x, po.y)) && (orientation == defineWordOrientation(p1.x, p1.y, po.x, po.y))) ? 0 : FLOATING_TILES;
-                            if (done < 1) {
-                                // Format the other letter(s)
-                                formatedWord += "##" + formatData(po, (Tile) otherTile.getValue());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        System.out.println("Valid word - check done : " + done);
-
-        switch (done) {
-            case 0:
-                try {
-                    String[] response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation + "@@" + formatedWord);
-
-                    // Update model
-                    setScore(Integer.parseInt(response[0]));
-                    rack.reLoadRack(response[1]);
-                    this.firstWord = false;
-                    newWord = new HashMap<>();
-
-                    // Dispatch the model modifications to all listeners
-                    fireUpdateScore(Integer.parseInt(response[0]));
-                    fireInitRackToPlay(response[1]);
-                } catch (GameException ge) {
-                    // Fire errors
-                }
-                break;
-            case FIRST_WORD_NUMBER:
-                fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
-                break;
-            case FIRST_WORD_POSITION:
-                fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
-                break;
-            case FLOATING_TILES:
-                fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
-                break;
-        }
+    
+    private void fireExchangeTiles(String formatedTiles) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private int defineWordOrientation(int x1, int y1, int x2, int y2) {
-        return (x1 == x2) ? 1 : (y1 == y2) ? 2 : 0;
+    public void exchangeTiles(Integer[] selectedTiles) {
+        String data = rack.getFormatedTiles(selectedTiles);
+        String response = null;
+        try {
+            response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
+        } catch (GameException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            JsonNode root = om.readTree(response);
+            rack.reLoadRack(root.get("tiles").toString());
+            fireUpdateRackToPlay(root.get("tiles").toString(), false);
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public void validateWord() {
+        undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
+        TESTS_PLAYED++;
+        Boolean done = (this.firstWord && newWord.size() < 1) ? false : true, check = false;
+        if (done) {
+            int x = -1, y = -1, orientation = -1, inspector = this.newWord.size();
+            Set set = this.newWord.entrySet();
+            Iterator i = set.iterator();
+            String dataToSend = "[";
+            while (done && i.hasNext()) {
+                Map.Entry t = (Map.Entry) i.next();
+                String[] coord = ((String) t.getKey()).split("#");
+                Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+
+                // Verification:
+                if (inspector == this.newWord.size()) {
+                    x = p.x;
+                    y = p.y;
+                    done = grid.hasNeighbors(p.x, p.y);
+                } else {
+                    int checkO = (x == p.x) ? 1 : (y == p.y) ? 2 : 0;
+                    if (inspector == this.newWord.size() - 1) {
+                        orientation = checkO;
+                    } else {
+                        orientation = (orientation == checkO) ? orientation : 0;
+                    }
+                    done = (grid.hasNeighbors(p.x, p.y) && orientation != 0);
+                }
+                if (this.firstWord && !check) {
+                    check = (p.x == 7 && p.y == 7);
+                }
+                dataToSend += "{" + formatData(p, (Tile) t.getValue()) + "}" + ((inspector != 1) ? ", " : "]");
+                inspector--;
+            }
+
+            if (done && ((!this.firstWord) || (this.firstWord && check))) {
+                String response;
+                try {
+                    System.out.println("dataToSend : " + dataToSend);
+                    response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
+                    JsonNode root = om.readTree(response);
+                    if (root.get("valid").asBoolean()) {
+                        // Update model
+                        TESTS_WON++;
+                        setScore(root.get("score").asInt());
+                        rack.reLoadRack(root.get("tiles").toString());
+                        this.firstWord = false;
+                        newWord = new HashMap<>();
+                        System.out.println("Rack JSON : "+rack.getFormatJSON());
+                        storedRack = rack.getFormatJSON();
+
+                        // Dispatch the model modifications to all listeners
+                        fireUpdateScore(root.get("score").asInt());
+                        fireUpdateRackToPlay(root.get("tiles").toString(), false);
+                        fireMenuUpdateStats(root.get("valid").asBoolean());
+                        fireMenuUpdateWordsList(om.readValue(root.get("words").toString(), String[].class));
+                        fireMenuShowUndoButton();
+                    } else {
+                        // Update model
+                        TESTS_LOST++;
+                        Set rSet = this.newWord.entrySet();
+                        setScore(root.get("score").asInt());
+                        String newTiles = "[";
+                        String tileToRemove = "[";
+                        Iterator it = rSet.iterator();
+                        while (it.hasNext()) {
+                            Map.Entry t = (Map.Entry) it.next();
+                            String[] coord = ((String) t.getKey()).split("#");
+                            Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                            Tile tile = (Tile) t.getValue();
+                            removeBadTiles(p, tile);
+                            newTiles += (it.hasNext()) ? tile + ", " : tile + "]";
+                            tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+                            it.remove();
+                        }
+                        // Dispatch the model modifications to all listeners
+                        fireUpdateScore(root.get("score").asInt());
+                        fireUpdateRackToPlay(newTiles, false);
+                        fireRemoveBadTilesToGrid(tileToRemove);
+                        fireMenuUpdateStats(root.get("valid").asBoolean());
+                        fireMenuShowUndoButton();
+                    }
+                } catch (GameException | IOException ge) {
+                    // Fire errors
+                    ge.printStackTrace();
+                }
+            } else {
+                if (!check) {
+                    fireErrorMessage("<HTML>The first word should contain at least<BR> one letter on the center of the grid!</HTML>");
+                } else {
+                    fireErrorMessage("<HTML>The floating letters must be on the same<BR> axis and form a word by touching<BR> a tile placed on the grid.</HTML>");
+                }
+            }
+        } else {
+            fireErrorMessage("<HTML>The first word should contain at least<BR> two letters!</HTML>");
+        }
+        
+        // Display states
+        System.out.println();
+        System.out.println("Play state");
+        System.out.println("Score : "+score+" - "+storedRack+" - "+TESTS_PLAYED+" - "+TESTS_WON+" - "+TESTS_LOST);
+        System.out.println("Memento state");
+        System.out.println("Score : "+undo.getSavedScore()+" - "+undo.getSavedRack()+" - "+undo.getSavedWord()+" - "+undo.getSavedTP()+" - "+undo.getSavedTW()+" - "+undo.getSavedTL());
     }
 
     private String formatData(Point p, Tile tile) {
-        String data = tile.getLetter() + ":" + p.x + ":" + p.y;
-        return (tile.isBlank()) ? "?" + data : data;
+        String result = "";
+        try {
+            result += "\"coordinates\": " + om.writeValueAsString(p) + ", \"attributes\": " + tile;
+        } catch (JsonProcessingException e) {
+        }
+        return result;
     }
 
-    private boolean firstWordPosition(int x, int y) {
-        System.out.println("First position : " + ((x == 7) ? true : (y == 7) ? true : false));
-        return (x == 7) ? true : (y == 7) ? true : false;
+    private String resetPlay(Map<String, Tile> word, String newRack, int score, int tp, int tw, int tl) {
+        String tileToRemove = null;
+        if (TESTS_WON > tw) {
+            // Update model rack
+            rack = new Rack(newRack);
+
+            // Update model grid
+            Set set = word.entrySet();
+            tileToRemove = "[";
+            Iterator it = set.iterator();
+            while (it.hasNext()) {
+                Map.Entry t = (Map.Entry) it.next();
+                String[] coord = ((String) t.getKey()).split("#");
+                Point p = new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1]));
+                grid.removeTile(p.x, p.y);
+                tileToRemove += (it.hasNext()) ? p + ", " : p + "]";
+            }
+        }
+        // Update model score and stats
+        setScore(score);
+        TESTS_PLAYED = tp;
+        TESTS_WON = tw;
+        TESTS_LOST = tl;
+        
+        return tileToRemove;
     }
 
     private void displayNewWord() {
-        Set set = this.newWord.entrySet();
-        Iterator i = set.iterator();
-
         System.out.println("New word content : ");
-        while (i.hasNext()) {
-            Map.Entry firstTile = (Map.Entry) i.next();
-            Point p = (Point) firstTile.getKey();
-            Tile t = (Tile) firstTile.getValue();
-            System.out.println(p + " - " + t.getLetter());
+        for (String key : newWord.keySet()) {
+            System.out.println(key.toString());
         }
     }
 
@@ -422,6 +665,12 @@ public class Play {
 
     public void backTileBlank(int source) {
         rack.getTile(source).setLetter('?');
+    }
+
+    private void removeBadTiles(Point p, Tile tile) {
+        // Add in rack and remove from Grid
+        rack.putTile(tile);
+        grid.removeTile(p.x, p.y);
     }
 
     /**
@@ -447,7 +696,79 @@ public class Play {
         return rack.isTileBlank(pos);
     }
 
-    public String checkBlankTile() {
-        return rack.getBlankTile();
+    /*public String checkBlankTile() {
+     return rack.getBlankTile();
+     }*/
+    private void printDebug() {
+        //grid.printGrid();
+        displayNewWord();
+    }
+
+    // These methods and class are used to offer the Undo feature.
+    public void undo() {
+        // Reset play
+        String resetGrid = resetPlay(undo.getSavedWord(), undo.getSavedRack(), undo.getSavedScore(), undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
+        // Fire event to views
+        fireUpdateScore(undo.getSavedScore());
+        fireMenuUpdateAllStats(undo.getSavedTP(), undo.getSavedTW(), undo.getSavedTL());
+        if (resetGrid != null) {
+            fireUpdateRackToPlay(undo.getSavedRack(), true);
+            fireRemoveBadTilesToGrid(resetGrid);
+            fireMenuUpdateWordsList(null);
+        }
+
+        // Request the server
+        /*try {
+            service.undo(player.getPlayerID(), this.getPlayID());
+        } catch (GameException ge) {
+            System.out.println("Error during undo");
+        }*/
+    }
+
+
+    /**
+     * Inner class Memento which allows to offer the undo feature.
+     */
+    public static class Memento {
+
+        private final int score;
+        private final String rack;
+        private final Map<String, Tile> word;
+        private final int t_played;
+        private final int t_won;
+        private final int t_lost;
+
+        public Memento(int score, String rack, Map<String, Tile> newWord, int tp, int tw, int tl) {
+            this.score = score;
+            this.rack = rack;
+            this.word = newWord;
+            this.t_played = tp;
+            this.t_won = tw;
+            this.t_lost = tl;
+        }
+
+        public int getSavedScore() {
+            return this.score;
+        }
+
+        public String getSavedRack() {
+            return this.rack;
+        }
+
+        public Map<String, Tile> getSavedWord() {
+            return this.word;
+        }
+
+        public int getSavedTP() {
+            return this.t_played;
+        }
+
+        public int getSavedTW() {
+            return this.t_won;
+        }
+
+        public int getSavedTL() {
+            return this.t_lost;
+        }
     }
 }
