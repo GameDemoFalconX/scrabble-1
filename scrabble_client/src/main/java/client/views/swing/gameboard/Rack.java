@@ -127,7 +127,7 @@ public class Rack extends JPanel {
             innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
         }
         innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
-        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
+        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT+10);
         innerRack.setOpaque(false);
 
         for (int i = 0; i < RACK_LENGTH; i++) {

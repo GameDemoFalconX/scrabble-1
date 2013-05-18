@@ -196,6 +196,7 @@ public class Game extends GameView {
                 if (exchangeMode) {
                     getController().notifyExchangeTiles(rack.getSelectedTiles());
                     setExchangeMode(false);
+                    rack.unselectAll();
                     exchangeButton.setBorder(null);
                 } else {
                 if (rack.rackIsFull()) {
