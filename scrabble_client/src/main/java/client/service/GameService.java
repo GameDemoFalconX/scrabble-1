@@ -122,32 +122,6 @@ public class GameService {
     }
 
     /**
-     * Ask the server to create a new play with an anonym player
-     *
-     * @param playerID as a String
-     * @return Play instance otherwise null
-     * @throws GameException
-     */
-    /*
-     public Play createNewPlayAnonym(String playerID) throws GameException {
-     Message serverResponse = servProtocol.sendRequest(Message.NEW_GAME_ANONYM,  playerID);
-				
-     if (serverResponse != null) {
-     switch(serverResponse.getHeader()) {
-     case Message.NEW_GAME_ANONYM_SUCCESS:
-     String [] args = new String(serverResponse.getBody()).split("##");
-     Play newPlay = new Play(playerID, args[0]);
-     newPlay.loadRack(args[1]);
-     return newPlay;
-     default:
-     exceptionTriggered(serverResponse.getHeader());
-     }
-     } else {
-     throw new GameException(GameException.typeErr.CONN_KO);
-     }
-     return null;
-     }*/
-    /**
      * Ask the server to delete an anonym player.
      *
      * @param playerID the player ID as a String
