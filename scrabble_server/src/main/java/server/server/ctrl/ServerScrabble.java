@@ -258,31 +258,33 @@ public class ServerScrabble {
         return response;
     }
 
-    public synchronized Message exchangeTile(String playerID, String tiles) {
+    public synchronized Message exchangeTile(String data) {
         Message response = null;
         try {
-            response = game.exchangeTile(playerID, tiles);
+            JsonNode root = om.readTree(data);
+            response = game.exchangeTile(root.get("user_id").asText(), root.get("play_id").asText(), root.get("tiles").toString());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
-        }
+        } catch (IOException ex) {}
         return response;
     }
-
-    public synchronized Message switchTile(String playerID, String position) {
+    
+    public synchronized Message undo(String data) {
         Message response = null;
         try {
-            response = game.switchTile(playerID, position);
+            JsonNode root = om.readTree(data);
+            response = game.undo(root.get("user_id").asText(), root.get("play_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
-        }
+        } catch (IOException ex) {}
         return response;
     }
 

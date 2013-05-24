@@ -289,24 +289,31 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message tileExchange(String pl_id, String position) {/*
-         Message response = null;
-         if (plays.playerIsLogged(pl_id)) {
-         Play play = plays.getPlay(pl_id);
-         String newTiles = play.tileExchange(position);
-         return new Message(Message.TILE_EXCHANGE_SUCCES, newTiles);
-         }*/
+    protected Message tileExchange(String pl_id, String ga_id, String tiles) {
+        Play cPlay = pCol.playIdentification(pl_id, ga_id);
+        if (cPlay != null) {
+            System.out.println("Server : start exchange");
+            String newTiles = cPlay.exchangeTiles(tiles);
+            if (!"".equals(newTiles)) {
+                System.out.println("New tiles = " + newTiles);
+                return new Message(Message.TILE_EXCHANGE_SUCCES,  "{\"tiles\": " + newTiles + "}");
+            } else {
+                return new Message(Message.TILE_EXCHANGE_ERROR, "");
+            }
+        }
         return new Message(Message.PLAYER_NOT_LOGGED, "");
     }
 
     @Override
-    protected Message tileSwitch(String pl_id, String position) {/*
-         Message response = null;
-         if (plays.playerIsLogged(pl_id)) {
-         Play play = plays.getPlay(pl_id);
-         play.tileSwitch(position);
-         return new Message(Message.TILE_SWITCH_SUCCES, "");
-         }*/
-        return new Message(Message.PLAYER_NOT_LOGGED, "");
+    protected Message undoProcess(String pl_id, String ga_id) {
+        Message response = null;
+        Play cPlay = pCol.playIdentification(pl_id, ga_id);
+        if (cPlay != null) {
+            Co.undo(pl_id, cPlay.getPlayID(), cPlay.getInnerIndice());
+            // Update the innerIndice
+            cPlay.undoInnerIndice();
+            return new Message(Message.UNDO_SUCCESS, "");
+        } 
+        return new Message(Message.UNDO_ERROR, "");
     }
 }

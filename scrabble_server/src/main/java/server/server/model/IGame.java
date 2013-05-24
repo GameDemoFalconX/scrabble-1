@@ -31,6 +31,8 @@ public interface IGame {
     Message deleteAnonym(String pl_id) throws GameException;
 
     // Exchange tile
-    Message exchangeTile(String pl_id, String position) throws GameException;
-    Message switchTile(String pl_id, String position) throws GameException;
+    Message exchangeTile(String pl_id, String ga_id, String tiles) throws GameException;
+    
+    // Undo
+    Message undo(String pl_id, String ga_id) throws GameException;
 }

@@ -220,28 +220,25 @@ public class Play {
         return this.grid.toString();
     }
 
-    /*
-    public String tileExchange(String position) {
-        String newTiles = "";
-        String[] positions = position.split(" ");
-        for (int i = 0; i < positions.length; i++) {
-            Tile tile = this.bag.getTile();
-            newTiles += tile.getLetter() + ":" + tile.getValue();
-            if (i < positions.length - 1) {
-                newTiles += "=";
+    public String exchangeTiles(String tiles) {
+        Tile[] tileArray = null;
+        try {
+            tileArray = om.readValue(tiles, Tile[].class);
+            if (tileArray != null) {
+                String newTiles = this.getNewTiles(tileArray.length);
+                Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
+                for (int i = 0; i < tileArray.length; i++) {
+                    int tmp = rack.getTilePos(tileArray[i].getLetter());
+                    rack.setTile(tmp-1, newTileArray[i]);
+                    bag.putBackTile(tileArray[i]);
+                }
+                return rack.getRack().toString();
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        for (int i = 0; i < positions.length; i++) {
-            //bag.putBackTile(rack.getTile(i));
-        }
-        rack = new Rack(newTiles);
-        return newTiles;
+        return "";
     }
-
-    public void tileSwitch(String position) {
-        rack.tileSwitch(position);
-    }
-    */
 
     //*** Stats Section ***//
     protected void newTest() {
@@ -274,5 +271,9 @@ public class Play {
     
     protected int getInnerIndice() {
         return this.innerIndice;
+    }
+    
+    protected void undoInnerIndice() {
+        this.innerIndice -= 2;
     }
 }

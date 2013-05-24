@@ -200,55 +200,29 @@ public class GameService {
         }
         return response;
     }
-
-    /**
-     * Ask the Play to switch two tiles based on their positions in the rack.
-     *
-     * @param position the position of the two tiles as a String
-     * @throws GameException
-     */
-    /*
-     public void switchTiles() throws GameException {
-     Message serverResponse = servProtocol.sendRequest(Message.TILE_SWITCH,  cPlay.getOwner()
-     +"##"+position);
-     if (serverResponse != null) {
-     switch (serverResponse.getHeader()) {
-     case Message.SYSKO:
-     throw new GameException(GameException.typeErr.SYSKO);
-     case Message.TILE_SWITCH_SUCCES:
-     cPlay.switchTiles(position);
-     break;
-     case Message.TILE_SWITCH_ERROR:
-     throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
-     }
-     }
-     }
-		
+	
      /**
      * Ask the server to change some or all the tiles.
      * @param position the position(s) of the tiles the player want to exchange as a String.
      * @throws GameException 
      */
-    /*
-     public void changeTiles(String position) throws GameException {
-     if ("".equals(position)) {
-     position += "1 2 3 4 5 6 7";
-     }
-     Message serverResponse = gbProtocol.sendRequest(Message.TILE_EXCHANGE, cPlay.getOwner()
-     +"##"+position);
-     if (serverResponse != null) {
-     switch (serverResponse.getHeader()) {
-     case Message.SYSKO:
-     throw new GameException(GameException.typeErr.SYSKO);
-     case Message.TILE_EXCHANGE_SUCCES:
-     String args = new String(serverResponse.getBody());
-     cPlay.setFormatedTilesToRack(position, args);
-     break;
-     case Message.TILE_EXCHANGE_ERROR:
-     throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
-     }
-     }
-     }
+     public String exchangeTiles(String playerID, String playID, String data) throws GameException {
+        String response = null;
+        Message serverResponse = servProtocol.sendRequest(Message.TILE_EXCHANGE, "{\"user_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"tiles\": "+data+"}");
+        if (serverResponse != null) {
+            switch (serverResponse.getHeader()) {
+                case Message.TILE_EXCHANGE_SUCCES:
+                    response = serverResponse.getBodyJSON();
+                    break;
+                case Message.TILE_EXCHANGE_ERROR:
+                    response = serverResponse.getBodyJSON();
+                    break;
+            }
+        } else {
+            throw new GameException(GameException.typeErr.CONN_KO);
+        }
+        return response;
+    }
 		
      /**
      * Private method which allows to throw GameException for common services.

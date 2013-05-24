@@ -155,8 +155,8 @@ public abstract class Game implements IGame {
     }
 
     @Override
-    public Message exchangeTile(String pl_id, String position) throws GameException {
-        Message response = tileExchange(pl_id, position);
+    public Message exchangeTile(String pl_id, String ga_id, String tiles) throws GameException {
+        Message response = tileExchange(pl_id, ga_id, tiles);
         switch (response.getHeader()) {
             case Message.TILE_EXCHANGE_SUCCES:
                 return response;
@@ -167,13 +167,13 @@ public abstract class Game implements IGame {
     }
 
     @Override
-    public Message switchTile(String pl_id, String position) throws GameException {
-        Message response = tileSwitch(pl_id, position);
+    public Message undo(String pl_id, String ga_id) throws GameException {
+        Message response = undoProcess(pl_id, ga_id);
         switch (response.getHeader()) {
-            case Message.TILE_SWITCH_SUCCES:
+            case Message.UNDO_SUCCESS:
                 return response;
-            case Message.TILE_SWITCH_ERROR:
-                throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+            case Message.UNDO_ERROR:
+                throw new GameException(GameException.typeErr.UNDO_ERROR);
         }
         return null;
     }
@@ -191,6 +191,6 @@ public abstract class Game implements IGame {
     // Game
     protected abstract Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos);
     protected abstract Message destroyAnonym(String pl_id);
-    protected abstract Message tileExchange(String pl_id, String position);
-    protected abstract Message tileSwitch(String pl_id, String position);
+    protected abstract Message tileExchange(String pl_id, String ga_id, String tiles);
+    protected abstract Message undoProcess(String pl_id, String ga_id);
 }
