@@ -2,7 +2,7 @@ package client.views.swing.gameboard;
 
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelRack;
+import client.views.swing.common.PanelRack;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Color;
@@ -11,7 +11,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -37,7 +39,6 @@ public class Rack extends JPanel {
     private JPanel innerRack;
     private boolean debug = false;
     private static int tileNumber = 0;
-    
     // JSON Treatment
     ObjectMapper om = new ObjectMapper();
 
@@ -83,9 +84,11 @@ public class Rack extends JPanel {
      */
     /**
      * Load new tiles on rack
-     * @param newTiles - JSON Format [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
+     *
+     * @param newTiles - JSON Format
+     * [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      * @param scrabble
-     * @param jlp 
+     * @param jlp
      */
     public void loadTilesOnRack(String newTiles, Game scrabble, JLayeredPane jlp, boolean reset) {
         if (reset) {
@@ -99,14 +102,15 @@ public class Rack extends JPanel {
                 putTile(new DTPicture(getTileImage(letter, cTile.get("value").asText()), scrabble, jlp));
                 upTileNumber();
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+        }
     }
 
     private void putTile(DTPicture dtp) {
         boolean found = false;
         int i = 0;
         while (!found && i < RACK_LENGTH) {
-            panelRack parent = (panelRack) innerRack.getComponent(i);
+            PanelRack parent = (PanelRack) innerRack.getComponent(i);
             if (parent.getComponentCount() == 0) {
                 parent.addDTElement(dtp);
                 found = true;
@@ -114,21 +118,21 @@ public class Rack extends JPanel {
             i++;
         }
     }
-    
+
     public void reset() {
         // Construction of rack elements
-         // Rack inner container
+        // Rack inner container
         innerRack = new JPanel(new GridLayout(1, 7, 0, 0));
         if (debug) {
             innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
         }
         innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
-        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
+        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT+10);
         innerRack.setOpaque(false);
 
         for (int i = 0; i < RACK_LENGTH; i++) {
             // Construct panelRack Element in the background of the rack and add it a DTPicture instance.
-            panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+            PanelRack panelRackElement = new PanelRack(TILE_WIDTH, TILE_HEIGHT, i);
             if (debug) {
                 panelRackElement.setBorder(BorderFactory.createLineBorder(Color.GREEN)); // Used for DEBUG
             }
@@ -148,8 +152,8 @@ public class Rack extends JPanel {
         newInnerRack.setOpaque(false);
 
         for (int i = 0; i < RACK_LENGTH; i++) {
-            panelRack reader = (panelRack) this.innerRack.getComponent(positions[i]);
-            panelRack panelRackElement = new panelRack(TILE_WIDTH, TILE_HEIGHT, i);
+            PanelRack reader = (PanelRack) this.innerRack.getComponent(positions[i]);
+            PanelRack panelRackElement = new PanelRack(TILE_WIDTH, TILE_HEIGHT, i);
             panelRackElement.addDTElement((DTPicture) reader.getComponent(0));
             newInnerRack.add(panelRackElement, i);
         }
@@ -176,15 +180,15 @@ public class Rack extends JPanel {
         int DEC = (startPos - stopPos < 0) ? 1 : -1;
 
         // STEP 2 : Save the first element in a temp variable
-        panelRack tmpParent = (panelRack) innerRack.getComponent(startPos);
+        PanelRack tmpParent = (PanelRack) innerRack.getComponent(startPos);
         if (tmpParent.getComponentCount() > 0 && tmpParent.getComponent(0) instanceof DTPicture) {
             DTPtmp = (DTPicture) tmpParent.getComponent(0);
         }
 
         // STEP 3 : Loop over the rack to shift tiles.
         while (startPos != stopPos) {
-            panelRack writerP = (panelRack) innerRack.getComponent(startPos);
-            panelRack readerP = (panelRack) innerRack.getComponent(startPos + DEC);
+            PanelRack writerP = (PanelRack) innerRack.getComponent(startPos);
+            PanelRack readerP = (PanelRack) innerRack.getComponent(startPos + DEC);
 
             if (readerP.getComponentCount() > 0 && readerP.getComponent(0) instanceof DTPicture) {
                 writerP.add(readerP.getComponent(0));
@@ -205,16 +209,19 @@ public class Rack extends JPanel {
         int index = 1;
         int vacantPosition = -1;
         while (vacantPosition == -1 && index < 7) {
-            if ((targetPos + index < 7) && ((panelRack) innerRack.getComponent(targetPos + index)).getComponentCount() == 0) {
+            if ((targetPos + index < 7) && ((PanelRack) innerRack.getComponent(targetPos + index)).getComponentCount() == 0) {
                 vacantPosition = targetPos + index;
             } else {
-                if ((targetPos - index >= 0) && ((panelRack) innerRack.getComponent(targetPos - index)).getComponentCount() == 0) {
+                if ((targetPos - index >= 0) && ((PanelRack) innerRack.getComponent(targetPos - index)).getComponentCount() == 0) {
                     vacantPosition = targetPos - index;
                 }
             }
             index++;
         }
         return vacantPosition;
+    }
+
+    protected void frameTile(int pos) {
     }
 
     /**
@@ -270,5 +277,47 @@ public class Rack extends JPanel {
         }
         Image result = finalTile.getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
         return result;
+    }
+
+    private boolean isTileSelected(int pos) {
+        PanelRack tmp;
+        tmp = (PanelRack) this.innerRack.getComponent(pos);
+        DTPicture dtp = (DTPicture) tmp.getComponent(0);
+        return dtp.isSelected();
+    }
+
+    public int[] getSelectedTiles() {
+        int[] result = new int[countSelected()];
+        int current = 0;
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result[current++] = i;
+            }
+        }
+        System.out.println(result);
+        return result;
+    }
+    
+    private int countSelected() {
+        int result = 0;
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private void unselect(int pos) {
+        PanelRack tmp;
+        tmp = (PanelRack) this.innerRack.getComponent(pos);
+        DTPicture dtp = (DTPicture) tmp.getComponent(0);
+        dtp.unselect();
+    }
+
+    public void unselectAll() {
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            unselect(i);
+        }
     }
 }

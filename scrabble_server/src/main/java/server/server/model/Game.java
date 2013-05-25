@@ -79,6 +79,7 @@ public abstract class Game implements IGame {
      * @return
      * @throws GameException
      */
+    @Override
     public Message loadPlayList(String pl_id) throws GameException {
         Message response = loadPlayLister(pl_id);
         switch (response.getHeader()) {
@@ -94,6 +95,7 @@ public abstract class Game implements IGame {
         return null;
     }
 
+    @Override
     public Message loadSavedPlay(String pl_id, String ga_id) throws GameException {
         Message response = loadPlay(pl_id, ga_id);
         switch (response.getHeader()) {
@@ -109,6 +111,7 @@ public abstract class Game implements IGame {
         return null;
     }
 
+    @Override
     public Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException {
         Message response = savePlay(type, pl_id, ga_id, ga_infos);
         switch (response.getHeader()) {

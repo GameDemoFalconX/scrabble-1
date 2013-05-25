@@ -23,7 +23,9 @@ import client.model.event.UpdateWordsListEvent;
 import client.model.utils.GameException;
 import client.model.utils.Point;
 import client.service.GameService;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -32,6 +34,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -212,6 +216,7 @@ public class Play {
     }
     
     public void fireUpdateRackToPlay(String newRack, boolean reset) {
+        System.out.println("fire rack : " + newRack);
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
         for (RackListener l : listeners) {
@@ -484,7 +489,29 @@ public class Play {
     public void reArrangeRack() {
         fireRackReArrange(rack.reArrangeTiles());
     }
+    
+    private void fireExchangeTiles(String formatedTiles) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
+    public void exchangeTiles(int[] selectedTiles) {
+        String data = rack.getFormatedTiles(selectedTiles);
+        String response = null;
+        try {
+            response = service.exchangeTiles(player.getPlayerID(), this.getPlayID(), data);
+        } catch (GameException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            System.out.println("Response : " + response);
+            JsonNode root = om.readTree(response);
+            rack.reLoadRack(root.get("tiles").toString());
+            fireUpdateRackToPlay(rack.getFormatJSON(), true);
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
     public void validateWord() {
         undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
         TESTS_PLAYED++;
@@ -521,7 +548,7 @@ public class Play {
             }
 
             if (done && ((!this.firstWord) || (this.firstWord && check))) {
-                String response = null;
+                String response;
                 try {
                     System.out.println("dataToSend : " + dataToSend);
                     response = service.passWord(player.getPlayerID(), this.getPlayID(), orientation, dataToSend);
@@ -689,6 +716,7 @@ public class Play {
             System.out.println("Error during undo");
         }
     }
+
 
     /**
      * Inner class Memento which allows to offer the undo feature.

@@ -199,14 +199,9 @@ public class GameService {
             throw new GameException(GameException.typeErr.CONN_KO);
         }
         return response;
-    }
-	
-     /**
-     * Ask the server to change some or all the tiles.
-     * @param position the position(s) of the tiles the player want to exchange as a String.
-     * @throws GameException 
-     */
-     public String exchangeTiles(String playerID, String playID, String data) throws GameException {
+    }	
+    
+    public String exchangeTiles(String playerID, String playID, String data) throws GameException {
         String response = null;
         Message serverResponse = servProtocol.sendRequest(Message.TILE_EXCHANGE, "{\"user_id\": \""+playerID+"\", \"play_id\": \""+playID+"\", \"tiles\": "+data+"}");
         if (serverResponse != null) {
@@ -223,7 +218,7 @@ public class GameService {
         }
         return response;
     }
-		
+    
      /**
      * Private method which allows to throw GameException for common services.
      * @param errorType

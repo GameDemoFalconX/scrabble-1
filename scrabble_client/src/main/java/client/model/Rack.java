@@ -4,16 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Bernard <bernard.debecker@gmail.com>, Romain <ro.foncier@gmail.com>
  */
-class Rack {
+public class Rack {
 
     ObjectMapper om = new ObjectMapper();
     @JsonProperty("rack")
     private Tile[] rack = new Tile[7];
+    
+    public Rack() {}
 
     public Rack(String formatedRack) {
         try {
@@ -56,7 +60,7 @@ class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
-                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                if ((newTile.isBlank()) && (newTile.getLetter() != '?')) {
                     newTile.setBlank();
                 }
                 rack[i] = newTile;
@@ -67,10 +71,14 @@ class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-        System.out.println(formatedRack);
+       System.out.println("reloadrack" + formatedRack);
         Tile[] tileList = null;
         try {
             tileList = om.readValue(formatedRack, Tile[].class);
+            System.out.println("tilelist" + tileList);
+            for (int i = 0; i < tileList.length; i++) {
+                addTile(i,tileList[i]);
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -199,6 +207,16 @@ class Rack {
 
     public boolean isTileBlank(Integer position) {
         return rack[position].getValue() == 0;
+    }
+    
+    public String toDisplay() {
+        String result = "";
+        for (int i = 0; i < 7; i++) {
+            result += (rack[i] != null) ? rack[i].toDisplay() : "   ";
+        }
+        result += "\n_____ _____ _____ _____ _____ _____ _____\n"
+                + "  1     2     3     4     5     6     7\n";
+        return result;
     }
 
     /**

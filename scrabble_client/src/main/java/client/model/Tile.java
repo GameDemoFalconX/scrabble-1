@@ -48,4 +48,8 @@ public class Tile {
     public String toString() {
         return "{\"letter\":\"" + this.letter + "\",\"value\":" + this.value + ", \"blank\": "+isBlank+"}";
     }
+    
+    public String toDisplay() {
+        return (String) (this.letter + this.value == 10 ? this.value : " " + this.value);
+    }
 }

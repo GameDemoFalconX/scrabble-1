@@ -15,8 +15,8 @@ import client.views.GameView;
 import client.views.swing.common.DTPicture;
 import client.views.swing.common.GlassPane;
 import client.views.swing.common.ImageIconTools;
-import client.views.swing.common.panelGrid;
-import client.views.swing.common.panelRack;
+import client.views.swing.common.PanelGrid;
+import client.views.swing.common.PanelRack;
 import client.views.swing.menu.BlankDialog;
 import client.views.swing.popup.ErrorMessagePopup;
 import java.awt.Color;
@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +58,9 @@ public class Game extends GameView {
     private static final String DARK_SHUFFLE_PATH = PATH_MEDIA + "shuffle_rack_icon.png";
     private static final String DARK_VALID_WORD_PATH = PATH_MEDIA + "add_word_icon.png";
     private static final String DARK_EXCHANGE_PATH = PATH_MEDIA + "exchange_tile_icon.png";
+    private static final String ICON = PATH_MEDIA + "icon.png";
     public static String tileBlank;
+    private boolean exchangeMode = false;
     private JFrame frame;
     private JLayeredPane JLPaneOfFrame;
     private Container contentPane;
@@ -95,9 +98,9 @@ public class Game extends GameView {
 
     private void initFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("../media/icon.png"));
+        Image icon = ImageIconTools.createImageIcon(ICON, "icon").getImage();
         icon = icon.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        frame.setIconImage(icon);*/
+        frame.setIconImage(icon);
         frame.setSize(gameboard.getWidth() + gameboard.getInsets().left + gameboard.getInsets().right + 250, 850);
         frame.setContentPane(contentPane);
         frame.setGlassPane(GlassPane.getInstance());
@@ -169,7 +172,13 @@ public class Game extends GameView {
         exchangeButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().notifyExchangeTiles();
+                exchangeMode = !exchangeMode;
+                if (!exchangeMode) {
+                    exchangeButton.setBorder(null);
+                    rack.unselectAll();
+                } else {
+                    exchangeButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+                }
             }
         });
     }
@@ -184,16 +193,23 @@ public class Game extends GameView {
         validWordButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (exchangeMode) {
+                    getController().notifyExchangeTiles(rack.getSelectedTiles());
+                    setExchangeMode(false);
+                    rack.unselectAll();
+                    exchangeButton.setBorder(null);
+                } else {
                 if (rack.rackIsFull()) {
                     ErrorMessagePopup errorPopup = new ErrorMessagePopup(null, "<HTML>Please, place tiles on the game board<BR> before validate</HTML>");
                     errorPopup.showErrorMessage();
                 } else {
                     getController().notifyValidWord();
                 }
+                }
             }
         });
     }
-
+    
     /**
      * * Methods used to set or update the background, game board and buttons of
      * the frame **
@@ -273,8 +289,8 @@ public class Game extends GameView {
     @Override
     public void tileMovedFromRackToGrid(TileFromRackToGridEvent event) {
         Point tP = event.getTargetPosition();
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.downTileNumber();
         if (event.isBlank()) {
@@ -287,18 +303,18 @@ public class Game extends GameView {
 
     @Override
     public void tileMovedFromRackToRack(TileFromRackToRackEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         // Set the targetParent component visible.
     }
 
     @Override
     public void tileMovedFromRackToRackWithShift(TileFromRackToRackWithShiftEvent event) {
-        panelRack sourceParent = (panelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
+        PanelRack sourceParent = (PanelRack) rack.getInnerRack().getComponent(event.getSourcePosition());
         DTPicture DTPtmp = (DTPicture) sourceParent.getComponent(0);
         rack.shiftTiles(event.getSourcePosition(), event.getTargetPosition());
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement(DTPtmp);
     }
 
@@ -306,16 +322,16 @@ public class Game extends GameView {
     public void tileMovedFromGridToGrid(TileFromGridToGridEvent event) {
         Point sP = event.getSourcePosition();
         Point tP = event.getTargetPosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelGrid targetParent = (panelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelGrid targetParent = (PanelGrid) gameboard.getInnerGrid().getComponent((tP.y * 15) + tP.x);
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
     }
 
     @Override
     public void tileMovedFromGridToRack(TileFromGridToRackEvent event) {
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {
@@ -328,8 +344,8 @@ public class Game extends GameView {
     public void tileMovedFromGridToRackWithShift(TileFromGridToRackWithShiftEvent event) {
         rack.shiftTiles(rack.findEmptyParent(event.getTargetPosition()), event.getTargetPosition());
         Point sP = event.getSourcePosition();
-        panelGrid sourceParent = (panelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
-        panelRack targetParent = (panelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
+        PanelGrid sourceParent = (PanelGrid) gameboard.getInnerGrid().getComponent((sP.y * 15) + sP.x);
+        PanelRack targetParent = (PanelRack) rack.getInnerRack().getComponent(event.getTargetPosition());
         targetParent.addDTElement((DTPicture) sourceParent.getComponent(0));
         rack.upTileNumber();
         if (event.isBlank()) {
@@ -392,5 +408,13 @@ public class Game extends GameView {
         contentPane.validate();
         rack.reset();
         resetGameButtons();
+    }
+
+    public boolean isExchangeMode() {
+        return exchangeMode;
+    }
+
+    public void setExchangeMode(boolean exchangeMode) {
+        this.exchangeMode = exchangeMode;
     }
 }
