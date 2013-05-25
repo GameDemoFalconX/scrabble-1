@@ -60,7 +60,7 @@ public class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
-                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                if ((newTile.isBlank()) && (newTile.getLetter() != '?')) {
                     newTile.setBlank();
                 }
                 rack[i] = newTile;
@@ -71,10 +71,14 @@ public class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-        System.out.println("formatedRack = " + formatedRack);
+       System.out.println("reloadrack" + formatedRack);
         Tile[] tileList = null;
         try {
             tileList = om.readValue(formatedRack, Tile[].class);
+            System.out.println("tilelist" + tileList);
+            for (int i = 0; i < tileList.length; i++) {
+                addTile(i,tileList[i]);
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -166,7 +170,7 @@ public class Rack {
      * @return JSON format of the all tiles located at their
      * respective position on the rack : [{"letter":"A","value":2},{"letter":"A","value":2}, ...]
      */
-    public String getFormatedTiles(Integer[] positions) {
+    public String getFormatedTiles(int[] positions) {
         String formatedTiles = "[";
         for (int i = 0; i < positions.length; i++) {
             formatedTiles += rack[positions[i]].toString();

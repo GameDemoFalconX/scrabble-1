@@ -25,13 +25,13 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
 
 /**
  * Main class for Scrabble game
@@ -177,7 +177,7 @@ public class Game extends GameView {
                     exchangeButton.setBorder(null);
                     rack.unselectAll();
                 } else {
-                    exchangeButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, Color.RED, Color.GRAY));
+                    exchangeButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                 }
             }
         });
@@ -196,6 +196,7 @@ public class Game extends GameView {
                 if (exchangeMode) {
                     getController().notifyExchangeTiles(rack.getSelectedTiles());
                     setExchangeMode(false);
+                    rack.unselectAll();
                     exchangeButton.setBorder(null);
                 } else {
                 if (rack.rackIsFull()) {

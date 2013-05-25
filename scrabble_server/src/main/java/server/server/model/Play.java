@@ -215,6 +215,7 @@ public class Play {
                 result += ", ";
             }
         }
+        System.out.println("getnewtiles : " + result);
         return result + "]";
     }
 
@@ -237,7 +238,7 @@ public class Play {
     }
 
     public String exchangeTiles(String tiles) {
-        Logger.getLogger(Play.class.getName()).log(Level.INFO, null, tiles);
+        System.out.println("Tiles to exchange " + tiles);
         Tile[] tileArray = null;
         try {
             tileArray = om.readValue(tiles, Tile[].class);

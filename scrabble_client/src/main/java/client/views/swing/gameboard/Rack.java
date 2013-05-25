@@ -127,7 +127,7 @@ public class Rack extends JPanel {
             innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
         }
         innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
-        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
+        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT+10);
         innerRack.setOpaque(false);
 
         for (int i = 0; i < RACK_LENGTH; i++) {
@@ -286,14 +286,26 @@ public class Rack extends JPanel {
         return dtp.isSelected();
     }
 
-    public Integer[] getSelectedTiles() {
-        List<Integer> result = new ArrayList<>();
+    public int[] getSelectedTiles() {
+        int[] result = new int[countSelected()];
+        int current = 0;
         for (int i = 0; i < RACK_LENGTH; i++) {
             if (isTileSelected(i)) {
-                result.add(i);
+                result[current++] = i;
             }
         }
-        return result.toArray(new Integer[result.size()]);
+        System.out.println(result);
+        return result;
+    }
+    
+    private int countSelected() {
+        int result = 0;
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result++;
+            }
+        }
+        return result;
     }
 
     private void unselect(int pos) {
