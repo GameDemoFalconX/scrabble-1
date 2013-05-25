@@ -23,9 +23,9 @@ import javax.swing.JPanel;
  */
 public class GameBoard extends JPanel {
 
-    private static final String VINTAGE_PATH = "../media/vintage_grid.png";
+    private static final String VINTAGE_PATH = "/media/vintage_grid.png";
     public static final String TYPE_VINTAGE = "vintage";
-    private static final String MODERN_PATH = "../media/modern_grid.png";
+    private static final String MODERN_PATH = "/media/modern_grid.png";
     public static final String TYPE_MODERN = "modern";
     private static final int GB_HEIGHT = 709;
     private static final int GB_WIDTH = 708;

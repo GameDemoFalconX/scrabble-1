@@ -40,7 +40,7 @@ import javax.swing.JPanel;
  */
 public class Game extends GameView {
 
-    private static final String PATH_MEDIA = "../media/";    
+    private static final String PATH_MEDIA = "/media/";    
     private static final String LIGHT_PATH = PATH_MEDIA + "background.png";
     private static final String DARK_PATH = PATH_MEDIA + "dark_background.png";
     private static final String DARKER_PATH = PATH_MEDIA + "darker_background.png";
