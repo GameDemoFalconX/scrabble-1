@@ -29,8 +29,6 @@ public class Menu extends MenuView {
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
             playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton, undoButton;
-    private JPopupMenu popUpMenu;
-    private JMenuItem logOff, helpOff;
     private DefaultListModel wListModel = new DefaultListModel();
     private JList wList = new JList(wListModel);
     private boolean dark = true;
@@ -84,7 +82,6 @@ public class Menu extends MenuView {
         panel.validate();
         
         initPlayerButton(anonymous, email);
-        initPopupMenu();
         initSettingsButton();
         initPlayerPanel();
         initUsernamePanel();
@@ -227,31 +224,10 @@ public class Menu extends MenuView {
         playerButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                popUpMenu.show(e.getComponent(), playerButton.getX() - 119, playerButton.getY() + 55);
-            }
-        });
-    }
-
-    private void initPopupMenu() {
-        popUpMenu = new JPopupMenu();
-        logOff = new JMenuItem(new AbstractAction("Log off") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getController().notifyLogout();
-                logoutProcess();
-            }
-        });
-        logOff.setSize(200, 20);
-        helpOff = new JMenuItem(new AbstractAction("Help") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, Blah.HELP, "Help",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        helpOff.setSize(200, 20);
-        popUpMenu.add(logOff);
-        popUpMenu.add(helpOff);
     }
 
     private void initScoreLabel() {
