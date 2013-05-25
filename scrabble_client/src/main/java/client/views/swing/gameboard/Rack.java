@@ -286,14 +286,26 @@ public class Rack extends JPanel {
         return dtp.isSelected();
     }
 
-    public Integer[] getSelectedTiles() {
-        List<Integer> result = new ArrayList<>();
+    public int[] getSelectedTiles() {
+        int[] result = new int[countSelected()];
+        int current = 0;
         for (int i = 0; i < RACK_LENGTH; i++) {
             if (isTileSelected(i)) {
-                result.add(i);
+                result[current++] = i;
             }
         }
-        return result.toArray(new Integer[result.size()]);
+        System.out.println(result);
+        return result;
+    }
+    
+    private int countSelected() {
+        int result = 0;
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result++;
+            }
+        }
+        return result;
     }
 
     private void unselect(int pos) {

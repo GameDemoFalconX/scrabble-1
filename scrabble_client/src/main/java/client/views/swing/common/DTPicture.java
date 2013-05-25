@@ -196,12 +196,12 @@ public class DTPicture extends Picture implements MouseMotionListener {
     public void unselect() {
         this.setLocation(new Point((int)this.getLocation().getX(), (int) this.getLocation().getY() - 9));
         this.repaint();
-        isSelected = false;
+        setSelected(false);
     }
 
     public void select() {
         this.setLocation(new Point((int)this.getLocation().getX(), (int) this.getLocation().getY() + 9));
         this.repaint();
-        isSelected = true;
+        setSelected(true);
     }
 }

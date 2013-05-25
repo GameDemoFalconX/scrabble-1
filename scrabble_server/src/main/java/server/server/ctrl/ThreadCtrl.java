@@ -206,7 +206,6 @@ public class ThreadCtrl extends Thread {
     private void exchangeTile() {
         outputPrint("Start game treatment for the current player");
         Message response;
-
         // Check if the player's game is correct.
         response = sScrabble.exchangeTile(request.getBodyJSON());
         outputPrint("Send Response");

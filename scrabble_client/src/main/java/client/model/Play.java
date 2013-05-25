@@ -494,7 +494,7 @@ public class Play {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void exchangeTiles(Integer[] selectedTiles) {
+    public void exchangeTiles(int[] selectedTiles) {
         String data = rack.getFormatedTiles(selectedTiles);
         String response = null;
         try {
@@ -505,7 +505,7 @@ public class Play {
         try {
             JsonNode root = om.readTree(response);
             rack.reLoadRack(root.get("tiles").toString());
-            fireUpdateRackToPlay(root.get("tiles").toString(), false);
+            fireUpdateRackToPlay(rack.getFormatJSON(), false);
         } catch (IOException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         } 
