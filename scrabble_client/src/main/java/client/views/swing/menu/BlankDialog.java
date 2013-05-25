@@ -23,9 +23,9 @@ import javax.swing.*;
  */
 public class BlankDialog extends JDialog {
 
-    private static final String PATH_TILE = "../media/";
-    private static final String PATH_LETTER = "../media/letters/";
-    private static final String PATH_NUMBER = "../media/numbers/";
+    private static final String PATH_TILE = "/media/";
+    private static final String PATH_LETTER = "/media/letters/";
+    private static final String PATH_NUMBER = "/media/numbers/";
     private static final String[] LETTERS = {"a", "b", "c", "d", "e", "f", "g", "h", "i",
         "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
     private ArrayList<String> lettersList;
