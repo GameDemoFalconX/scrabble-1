@@ -82,6 +82,9 @@ public class Rack {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+        for (int i = 0; i < tileList.length; i++) {
+            putTile(tileList[i]);
+        }
     }
 
     /**

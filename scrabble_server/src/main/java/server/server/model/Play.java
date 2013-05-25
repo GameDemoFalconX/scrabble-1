@@ -238,31 +238,23 @@ public class Play {
     }
 
     public String exchangeTiles(String tiles) {
-        System.out.println("Tiles to exchange " + tiles);
         Tile[] tileArray = null;
         try {
             tileArray = om.readValue(tiles, Tile[].class);
-        } catch (IOException ex) {
-            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (tileArray != null) {
-            String newTiles = this.getNewTiles(tileArray.length);
-            try {
+            if (tileArray != null) {
+                String newTiles = this.getNewTiles(tileArray.length);
                 Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
                 for (int i = 0; i < tileArray.length; i++) {
                     int tmp = rack.getTilePos(tileArray[i].getLetter());
                     rack.setTile(tmp-1, newTileArray[i]);
                     bag.putBackTile(tileArray[i]);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+                return rack.getRack().toString();
             }
-            return rack.getRack().toString();
-        } else {
-            return "";
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
-
+        return "";
     }
 
     //*** Stats Section ***//
@@ -296,5 +288,9 @@ public class Play {
 
     protected int getInnerIndice() {
         return this.innerIndice;
+    }
+    
+    protected void undoInnerIndice() {
+        this.innerIndice -= 2;
     }
 }

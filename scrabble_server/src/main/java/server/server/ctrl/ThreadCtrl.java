@@ -69,8 +69,8 @@ public class ThreadCtrl extends Thread {
             case Message.TILE_EXCHANGE:
                 exchangeTile();
                 break;
-            case Message.TILE_SWITCH:
-                switchTile();
+            case Message.UNDO:
+                undo();
                 break;
         }
     }
@@ -206,21 +206,20 @@ public class ThreadCtrl extends Thread {
     private void exchangeTile() {
         outputPrint("Start game treatment for the current player");
         Message response;
+
         // Check if the player's game is correct.
         response = sScrabble.exchangeTile(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
-
-    private void switchTile() {
-        String[] argsTab = new String(request.getBody()).split("##");
-        outputPrint("Current player is trying to switch tiles");
+    
+    private void undo() {
+        outputPrint("Undo the previous play");
         Message response;
-        String playerID = argsTab[0];
-        String position = argsTab[1];
-        response = sScrabble.switchTile(playerID, position);
 
+        // Check if the player's game is correct.
+        response = sScrabble.undo(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

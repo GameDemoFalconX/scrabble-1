@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
@@ -688,19 +687,10 @@ public class Play {
         rack.setFormatedTiles(positions, tiles);
     }
 
-    private void wordAddWithSuccess(String newRack, int score) {
-    }
-
-    private void wordAddWithError(int score) {
-    }
-
     public boolean isTileBlank(Integer pos) {
         return rack.isTileBlank(pos);
     }
 
-    /*public String checkBlankTile() {
-     return rack.getBlankTile();
-     }*/
     private void printDebug() {
         //grid.printGrid();
         displayNewWord();
@@ -720,11 +710,11 @@ public class Play {
         }
 
         // Request the server
-        /*try {
+        try {
             service.undo(player.getPlayerID(), this.getPlayID());
         } catch (GameException ge) {
             System.out.println("Error during undo");
-        }*/
+        }
     }
 
 

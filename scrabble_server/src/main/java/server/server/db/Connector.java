@@ -265,6 +265,15 @@ public class Connector {
             execPostQuery("UPDATE scrabble_play SET tests_played = ?, tests_lost = ?, modified = ? WHERE play_id = ?", params);
         }
     }
+    
+    /**
+     * Undo process : Remove the two last lines in the db.
+     * @param user_id, play_id 
+     */
+    public void undo(String user_id, String play_id, int ind) {
+        Object[] params = new Object[]{ind - 2};
+        execPostQuery("DELETE FROM scrabble_test WHERE indice > ?", params);
+    }
 
     // Methods used to format the results of DB requests in JSON
     private String formatInJSON(ResultSet res) {

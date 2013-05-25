@@ -185,7 +185,7 @@ public class Menu extends MenuView {
     }
 
     private void initScrabbleButton() {
-        scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png", "Scrabble"));
+        scrabbleButton = new JButton(ImageIconTools.createImageIcon("/media/Scrabble.png", "Scrabble"));
         scrabbleButton.setPreferredSize(new Dimension(190, 102));
         scrabbleButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
         scrabbleButton.setBackground(Color.WHITE);
@@ -200,7 +200,7 @@ public class Menu extends MenuView {
     }
     
     private void initHomeButton() {
-        homeButton = new JButton(ImageIconTools.createImageIcon("../media/home.png", "Home"));
+        homeButton = new JButton(ImageIconTools.createImageIcon("/media/home.png", "Home"));
         homeButton.setPreferredSize(new Dimension(30, 30));
         homeButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
         homeButton.setBackground(Color.WHITE);
@@ -266,7 +266,7 @@ public class Menu extends MenuView {
     }
 
     private void initSettingsButton() {
-        settingsButton = new JButton(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
+        settingsButton = new JButton(ImageIconTools.createImageIcon("/media/light_settings_icon.png", null));
         settingsButton.setBounds(panel.getWidth() - 77, panel.getHeight() - 173, 60, 60);
         settingsButton.setOpaque(false);
         settingsButton.setBorder(null);
@@ -412,10 +412,10 @@ public class Menu extends MenuView {
     
     public void setIcons(boolean dark) {
         if (dark) {
-            settingsButton.setIcon(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
+            settingsButton.setIcon(ImageIconTools.createImageIcon("/media/light_settings_icon.png", null));
             score.setForeground(Color.WHITE);
         } else {
-            settingsButton.setIcon(ImageIconTools.createImageIcon("../media/dark_settings_icon.png", null));
+            settingsButton.setIcon(ImageIconTools.createImageIcon("/media/dark_settings_icon.png", null));
             score.setForeground(Color.BLACK);
         }
     }
