@@ -217,6 +217,7 @@ public class Play {
     }
     
     public void fireUpdateRackToPlay(String newRack, boolean reset) {
+        System.out.println("fire rack : " + newRack);
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
         for (RackListener l : listeners) {
@@ -503,9 +504,10 @@ public class Play {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
+            System.out.println("Response : " + response);
             JsonNode root = om.readTree(response);
             rack.reLoadRack(root.get("tiles").toString());
-            fireUpdateRackToPlay(rack.getFormatJSON(), false);
+            fireUpdateRackToPlay(rack.getFormatJSON(), true);
         } catch (IOException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         } 

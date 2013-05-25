@@ -60,7 +60,7 @@ public class Rack {
         int i = 0;
         while (!found && i < rack.length) {
             if (rack[i] == null) {
-                if (newTile.isBlank() && newTile.getLetter() != '?') {
+                if ((newTile.isBlank()) && (newTile.getLetter() != '?')) {
                     newTile.setBlank();
                 }
                 rack[i] = newTile;
@@ -71,12 +71,13 @@ public class Rack {
     }
 
     public void reLoadRack(String formatedRack) {
-       System.out.println(formatedRack);
+       System.out.println("reloadrack" + formatedRack);
         Tile[] tileList = null;
         try {
             tileList = om.readValue(formatedRack, Tile[].class);
+            System.out.println("tilelist" + tileList);
             for (int i = 0; i < tileList.length; i++) {
-                putTile(tileList[i]);
+                addTile(i,tileList[i]);
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
