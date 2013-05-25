@@ -158,6 +158,9 @@ public class AppPopup extends JDialog {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     menu.getController().notifySave();
+                    menu.getController().notifyLogout();
+                    menu.callLogoutProcess();
+                    dispose();
                 }
             });
         } else {

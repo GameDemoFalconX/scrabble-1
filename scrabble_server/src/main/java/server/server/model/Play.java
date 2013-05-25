@@ -1,16 +1,12 @@
 package server.server.model;
 
 import client.model.utils.Point;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
@@ -233,7 +229,7 @@ public class Play {
      *
      * @return
      */
-    public String getGrid() {
+    public String getFormatGrid() {
         return this.grid.toString();
     }
 

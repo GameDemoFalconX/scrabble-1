@@ -172,9 +172,8 @@ public class ThreadCtrl extends Thread {
         outputPrint("Current player is trying to save an existed game - game ID : " + argsTab[1]);
         Message response;
 
-        // Try to load an existed play for the current player
-        String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
-        response = sScrabble.saveGame(type, argsTab[0], argsTab[1], blankTiles);
+    
+        response = sScrabble.saveGame(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

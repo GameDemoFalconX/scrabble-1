@@ -262,8 +262,4 @@ public class GameService {
                 throw new GameException(GameException.typeErr.CONN_KO);
         }
     }
-
-    public String save(String playerID, String playID) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

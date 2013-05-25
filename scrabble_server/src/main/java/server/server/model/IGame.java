@@ -19,7 +19,7 @@ public interface IGame {
     Message createNewAnonymPlay(String pl_id) throws GameException;
     Message loadPlayList(String pl_id) throws GameException;
     Message loadSavedPlay(String pl_id, String ga_id) throws GameException;
-    Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException;
+    Message SavePlay(String pl_id, String ga_id) throws GameException;
 
     // Game
     Message checkGame(String pl_id, String ga_id, int orientation, String ga_infos) throws GameException;
