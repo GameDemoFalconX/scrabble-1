@@ -512,6 +512,15 @@ public class Play {
         } 
     }
     
+    public void save() {
+        String response = null;
+        try {
+            response = service.save(player.getPlayerID(), this.getPlayID());
+        } catch (GameException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void validateWord() {
         undo = new Memento(score, storedRack, new HashMap<>(newWord), TESTS_PLAYED, TESTS_WON, TESTS_LOST);
         TESTS_PLAYED++;

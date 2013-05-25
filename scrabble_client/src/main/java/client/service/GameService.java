@@ -219,6 +219,24 @@ public class GameService {
         return response;
     }
     
+    public String save(String playerID, String playID) throws GameException {
+        String response = null;
+        Message serverResponse = servProtocol.sendRequest(Message.SAVE_GAME, "{\"user_id\": \""+playerID+"\", \"play_id\": \""+playID+"\"}");
+        if (serverResponse != null) {
+            switch (serverResponse.getHeader()) {
+                case Message.SAVE_GAME_SUCCESS:
+                    response = serverResponse.getBodyJSON();
+                    break;
+                case Message.SAVE_GAME_ERROR:
+                    response = serverResponse.getBodyJSON();
+                    break;
+            }
+        } else {
+            throw new GameException(GameException.typeErr.CONN_KO);
+        }
+        return response;
+    }
+    
      /**
      * Private method which allows to throw GameException for common services.
      * @param errorType
@@ -243,5 +261,9 @@ public class GameService {
             default:
                 throw new GameException(GameException.typeErr.CONN_KO);
         }
+    }
+
+    public String save(String playerID, String playID) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
