@@ -16,16 +16,16 @@ import javax.swing.*;
  */
 public class Settings extends JDialog {
 
-    private static final String PATH_MEDIA = "../media/";
+    private static final String PATH_MEDIA = "/media/";
     private static final String MODERN_PATH = "modern_grid.png";
-    private static final String MODERN_ICON_PATH = "modern_gb_icon.PNG";
+    private static final String MODERN_ICON_PATH = "modern_gb_icon.png";
     private static final String VINTAGE_PATH = "vintage_grid.png";
     private static final String VINTAGE_ICON_PATH = "vintage_gb_icon.png";
-    private static final String LIGHT_PATH = "light_bg_icon.PNG";
-    private static final String DARK_PATH = "dark_bg_icon.PNG";
-    private static final String DARKER_PATH = "darker_bg_icon.PNG";
-    private static final String DARKEST_PATH = "darkest_bg_icon.PNG";
-    private static final String BLACK_PATH = "black_bg_icon.PNG";
+    private static final String LIGHT_PATH = "light_bg_icon.png";
+    private static final String DARK_PATH = "dark_bg_icon.png";
+    private static final String DARKER_PATH = "darker_bg_icon.png";
+    private static final String DARKEST_PATH = "darkest_bg_icon.png";
+    private static final String BLACK_PATH = "black_bg_icon.png";
     
     private Game game;
     private Menu menu;

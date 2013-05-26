@@ -253,6 +253,15 @@ public class Connector {
     }
     
     /**
+     * Save the current test in the DB for a specific Play/User association.
+     * @param ind, play_id, rack, grid, score 
+     */
+    public void saveState(String play_id, String rack, String grid) {
+        Object[] params = new Object[]{play_id, rack, grid};
+        execPostQuery("INSERT INTO scrabble_play_state ('parent_play', 'rack', 'grid') VALUES (?, ?, ?)", params);
+    }
+    
+    /**
      * Update the latest stats information about the Play given in parameter.
      * @param play_id, won, test_played, test_to_increase 
      */

@@ -73,45 +73,69 @@ class Grid {
     }
 
     /**
-     * Format the grid in a printable String
+     * Format the rack in JSON
      *
-     * @return a String
+     * @return a String format in JSON
      */
     @Override
     public String toString() {
-        String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
-        prtGrid += "     ___________________________________________________________________________ \n";
+        String formatedGrid = "[";
         for (int x = 0; x <= 14; x++) {
-            if (x < 9) {
-                prtGrid += "0" + (x + 1) + " | ";
-            } else {
-                prtGrid += (x + 1) + " | ";
-            }
             for (int y = 0; y <= 14; y++) {
-                Tile tile = grid[y][x];
+                Tile tile = grid[x][y];
                 if (tile != null) {
-                    prtGrid += grid[y][x].displayTile() + "";
-                } else {
-                    switch (scoringGrid.getBonus(x, y)) {
-                        case ScoringGrid.TRIPLE_WORD:
-                            prtGrid += "[T W]";
-                            break;
-                        case ScoringGrid.DOUBLE_WORD:
-                            prtGrid += "[D W]";
-                            break;
-                        case ScoringGrid.TRIPLE_LETTER:
-                            prtGrid += "[T L]";
-                            break;
-                        case ScoringGrid.DOUBLE_LETTER:
-                            prtGrid += "[D L]";
-                            break;
-                        default:
-                            prtGrid += "[   ]";
-                    }
+                    formatedGrid += "{\"coordinates\": {\"x\":" + x + ",\"y\":" + y + "},";
+                    formatedGrid += "\"attributes\":";
+                    formatedGrid += "{\"letter\":\"" + tile.getLetter() + "\",";
+                    formatedGrid += "\"value\":" + tile.getValue() + ",";
+                    formatedGrid += "\"blank\":\"" + tile.isBlank() + "}}";
+                    formatedGrid += ",";
                 }
             }
-            prtGrid += "\n";
         }
-        return prtGrid;
+        formatedGrid = formatedGrid.substring(0, formatedGrid.length()-1);
+        return formatedGrid + "]";
     }
+//    /**
+//     * Format the grid in a printable String
+//     *
+//     * @return a String
+//     */
+//    @Override
+//    public String toString() {
+//        String prtGrid = "       1    2    3    4    5    6    7    8    9   10   11   12   13   14   15\n";
+//        prtGrid += "     ___________________________________________________________________________ \n";
+//        for (int x = 0; x <= 14; x++) {
+//            if (x < 9) {
+//                prtGrid += "0" + (x + 1) + " | ";
+//            } else {
+//                prtGrid += (x + 1) + " | ";
+//            }
+//            for (int y = 0; y <= 14; y++) {
+//                Tile tile = grid[y][x];
+//                if (tile != null) {
+//                    prtGrid += grid[y][x].displayTile() + "";
+//                } else {
+//                    switch (scoringGrid.getBonus(x, y)) {
+//                        case ScoringGrid.TRIPLE_WORD:
+//                            prtGrid += "[T W]";
+//                            break;
+//                        case ScoringGrid.DOUBLE_WORD:
+//                            prtGrid += "[D W]";
+//                            break;
+//                        case ScoringGrid.TRIPLE_LETTER:
+//                            prtGrid += "[T L]";
+//                            break;
+//                        case ScoringGrid.DOUBLE_LETTER:
+//                            prtGrid += "[D L]";
+//                            break;
+//                        default:
+//                            prtGrid += "[   ]";
+//                    }
+//                }
+//            }
+//            prtGrid += "\n";
+//        }
+//        return prtGrid;
+//    }
 }

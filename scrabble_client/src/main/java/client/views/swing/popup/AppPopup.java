@@ -82,7 +82,7 @@ public class AppPopup extends JDialog {
         add(buttonsPanel, BorderLayout.SOUTH);
         add(textPanel, BorderLayout.NORTH);
     }
-    
+
     private void initTextPanel() {
         text = new JLabel(this.message);
         textPanel = new JPanel();
@@ -124,22 +124,22 @@ public class AppPopup extends JDialog {
         pwdField = new JPasswordField();
         pwdLab.setLabelFor(pwdField);
         pwdField.setPreferredSize(new Dimension(180, 25));
-   
+
         fieldsPanel.add(error);
         fieldsPanel.add(emailLab);
         fieldsPanel.add(emailField);
         fieldsPanel.add(pwdLab);
         fieldsPanel.add(pwdField);
-        
+
         // Add constraints to the layout
         layout.putConstraint(SpringLayout.WEST, error, 40, SpringLayout.WEST, fieldsPanel);
         layout.putConstraint(SpringLayout.NORTH, error, 8, SpringLayout.NORTH, fieldsPanel);
-        
+
         layout.putConstraint(SpringLayout.WEST, emailLab, 68, SpringLayout.WEST, fieldsPanel);
         layout.putConstraint(SpringLayout.NORTH, emailLab, 32, SpringLayout.NORTH, fieldsPanel);
         layout.putConstraint(SpringLayout.WEST, emailField, 20, SpringLayout.EAST, emailLab);
         layout.putConstraint(SpringLayout.NORTH, emailField, 30, SpringLayout.NORTH, fieldsPanel);
-        
+
         layout.putConstraint(SpringLayout.WEST, pwdLab, 40, SpringLayout.WEST, fieldsPanel);
         layout.putConstraint(SpringLayout.NORTH, pwdLab, 72, SpringLayout.NORTH, fieldsPanel);
         layout.putConstraint(SpringLayout.WEST, pwdField, 20, SpringLayout.EAST, pwdLab);
@@ -153,37 +153,49 @@ public class AppPopup extends JDialog {
         buttonsPanel.setSize(360, 30);
         validateButton = new JButton(this.buttonTitle);
         validateButton.setSize(110, 30);
-        validateButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                char[] pwd = pwdField.getPassword();
-                if (!("".equals(email) && "".equals(new String(pwd)))) {
-                    if (EmailValidator.validate(email)) {
-                        switch (action) {
-                            case "signup":
-                                menu.getController().notifySignup(email, new String(pwd));
-                                dispose();
-                                break;
-                            case "login":
-                                menu.getController().notifyLogin(email, new String(pwd));
-                                dispose();
+        if (twoBtn) {
+            validateButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    menu.getController().notifySave();
+                    menu.getController().notifyLogout();
+                    menu.callLogoutProcess();
+                    dispose();
+                }
+            });
+        } else {
+            validateButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String email = emailField.getText();
+                    char[] pwd = pwdField.getPassword();
+                    if (!("".equals(email) && "".equals(new String(pwd)))) {
+                        if (EmailValidator.validate(email)) {
+                            switch (action) {
+                                case "signup":
+                                    menu.getController().notifySignup(email, new String(pwd));
+                                    dispose();
+                                    break;
+                                case "login":
+                                    menu.getController().notifyLogin(email, new String(pwd));
+                                    dispose();
+                            }
+                        } else {
+                            error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email is not valid<p</body></html>");
                         }
                     } else {
-                        error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email is not valid<p</body></html>");
+                        error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email and password  must be filled<p></body></html>");
                     }
-                } else {
-                    error.setText("<html><body style='width: 200px; color: red;'><p><strong>WARNING!</strong> email and password  must be filled<p></body></html>");
                 }
-            }
-        });
+            });
+        }
         buttonsPanel.add(validateButton, BorderLayout.EAST);
         if (twoBtn) {
             secondButton = new JButton(this.secondTitleButton);
             secondButton.setSize(110, 30);
             secondButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
                     menu.getController().notifyLogout();
                     menu.callLogoutProcess();
                     dispose();
