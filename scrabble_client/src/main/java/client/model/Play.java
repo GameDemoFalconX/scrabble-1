@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
- *
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
  */
 public class Play {
@@ -217,6 +216,7 @@ public class Play {
     }
     
     public void fireUpdateRackToPlay(String newRack, boolean reset) {
+        System.out.println("fire rack : " + newRack);
         RackListener[] listeners = (RackListener[]) rackListeners.getListeners(RackListener.class);
 
         for (RackListener l : listeners) {
@@ -494,7 +494,7 @@ public class Play {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void exchangeTiles(Integer[] selectedTiles) {
+    public void exchangeTiles(int[] selectedTiles) {
         String data = rack.getFormatedTiles(selectedTiles);
         String response = null;
         try {
@@ -503,12 +503,22 @@ public class Play {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
+            System.out.println("Response : " + response);
             JsonNode root = om.readTree(response);
             rack.reLoadRack(root.get("tiles").toString());
-            fireUpdateRackToPlay(root.get("tiles").toString(), false);
+            fireUpdateRackToPlay(rack.getFormatJSON(), true);
         } catch (IOException ex) {
             Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
         } 
+    }
+    
+    public void save() {
+        String response = null;
+        try {
+            response = service.save(player.getPlayerID(), this.getPlayID());
+        } catch (GameException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void validateWord() {
@@ -686,19 +696,10 @@ public class Play {
         rack.setFormatedTiles(positions, tiles);
     }
 
-    private void wordAddWithSuccess(String newRack, int score) {
-    }
-
-    private void wordAddWithError(int score) {
-    }
-
     public boolean isTileBlank(Integer pos) {
         return rack.isTileBlank(pos);
     }
 
-    /*public String checkBlankTile() {
-     return rack.getBlankTile();
-     }*/
     private void printDebug() {
         //grid.printGrid();
         displayNewWord();
@@ -718,11 +719,11 @@ public class Play {
         }
 
         // Request the server
-        /*try {
+        try {
             service.undo(player.getPlayerID(), this.getPlayID());
         } catch (GameException ge) {
             System.out.println("Error during undo");
-        }*/
+        }
     }
 
 

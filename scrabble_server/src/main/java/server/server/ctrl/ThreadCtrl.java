@@ -69,8 +69,8 @@ public class ThreadCtrl extends Thread {
             case Message.TILE_EXCHANGE:
                 exchangeTile();
                 break;
-            case Message.TILE_SWITCH:
-                switchTile();
+            case Message.UNDO:
+                undo();
                 break;
         }
     }
@@ -172,9 +172,8 @@ public class ThreadCtrl extends Thread {
         outputPrint("Current player is trying to save an existed game - game ID : " + argsTab[1]);
         Message response;
 
-        // Try to load an existed play for the current player
-        String blankTiles = (argsTab.length > 2) ? argsTab[2] : "";
-        response = sScrabble.saveGame(type, argsTab[0], argsTab[1], blankTiles);
+    
+        response = sScrabble.saveGame(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
@@ -213,15 +212,13 @@ public class ThreadCtrl extends Thread {
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();
     }
-
-    private void switchTile() {
-        String[] argsTab = new String(request.getBody()).split("##");
-        outputPrint("Current player is trying to switch tiles");
+    
+    private void undo() {
+        outputPrint("Undo the previous play");
         Message response;
-        String playerID = argsTab[0];
-        String position = argsTab[1];
-        response = sScrabble.switchTile(playerID, position);
 
+        // Check if the player's game is correct.
+        response = sScrabble.undo(request.getBodyJSON());
         outputPrint("Send Response");
         sProto.sendResponse(response);
         Thread.currentThread().interrupt();

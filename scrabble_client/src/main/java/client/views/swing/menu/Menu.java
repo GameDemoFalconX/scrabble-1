@@ -29,8 +29,6 @@ public class Menu extends MenuView {
     private Game game;
     private JButton playAsGuestButton, loginButton, signupButton, scrabbleButton,
             playerButton, settingsButton, newGameButton, saveButton, loadButton, homeButton, undoButton;
-    private JPopupMenu popUpMenu;
-    private JMenuItem logOff, helpOff;
     private DefaultListModel wListModel = new DefaultListModel();
     private JList wList = new JList(wListModel);
     private boolean dark = true;
@@ -84,7 +82,6 @@ public class Menu extends MenuView {
         panel.validate();
         
         initPlayerButton(anonymous, email);
-        initPopupMenu();
         initSettingsButton();
         initPlayerPanel();
         initUsernamePanel();
@@ -185,7 +182,7 @@ public class Menu extends MenuView {
     }
 
     private void initScrabbleButton() {
-        scrabbleButton = new JButton(ImageIconTools.createImageIcon("../media/Scrabble.png", "Scrabble"));
+        scrabbleButton = new JButton(ImageIconTools.createImageIcon("/media/Scrabble.png", "Scrabble"));
         scrabbleButton.setPreferredSize(new Dimension(190, 102));
         scrabbleButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
         scrabbleButton.setBackground(Color.WHITE);
@@ -200,7 +197,7 @@ public class Menu extends MenuView {
     }
     
     private void initHomeButton() {
-        homeButton = new JButton(ImageIconTools.createImageIcon("../media/home.png", "Home"));
+        homeButton = new JButton(ImageIconTools.createImageIcon("/media/home.png", "Home"));
         homeButton.setPreferredSize(new Dimension(30, 30));
         homeButton.setBounds(panel.getWidth() / 2 - 80, panel.getHeight() - 103, 190, 102);
         homeButton.setBackground(Color.WHITE);
@@ -227,31 +224,10 @@ public class Menu extends MenuView {
         playerButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                popUpMenu.show(e.getComponent(), playerButton.getX() - 119, playerButton.getY() + 55);
-            }
-        });
-    }
-
-    private void initPopupMenu() {
-        popUpMenu = new JPopupMenu();
-        logOff = new JMenuItem(new AbstractAction("Log off") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getController().notifyLogout();
-                logoutProcess();
-            }
-        });
-        logOff.setSize(200, 20);
-        helpOff = new JMenuItem(new AbstractAction("Help") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, Blah.HELP, "Help",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        helpOff.setSize(200, 20);
-        popUpMenu.add(logOff);
-        popUpMenu.add(helpOff);
     }
 
     private void initScoreLabel() {
@@ -266,7 +242,7 @@ public class Menu extends MenuView {
     }
 
     private void initSettingsButton() {
-        settingsButton = new JButton(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
+        settingsButton = new JButton(ImageIconTools.createImageIcon("/media/light_settings_icon.png", null));
         settingsButton.setBounds(panel.getWidth() - 77, panel.getHeight() - 173, 60, 60);
         settingsButton.setOpaque(false);
         settingsButton.setBorder(null);
@@ -412,10 +388,10 @@ public class Menu extends MenuView {
     
     public void setIcons(boolean dark) {
         if (dark) {
-            settingsButton.setIcon(ImageIconTools.createImageIcon("../media/light_settings_icon.png", null));
+            settingsButton.setIcon(ImageIconTools.createImageIcon("/media/light_settings_icon.png", null));
             score.setForeground(Color.WHITE);
         } else {
-            settingsButton.setIcon(ImageIconTools.createImageIcon("../media/dark_settings_icon.png", null));
+            settingsButton.setIcon(ImageIconTools.createImageIcon("/media/dark_settings_icon.png", null));
             score.setForeground(Color.BLACK);
         }
     }

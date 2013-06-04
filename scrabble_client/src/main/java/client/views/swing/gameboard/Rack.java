@@ -127,7 +127,7 @@ public class Rack extends JPanel {
             innerRack.setBorder(BorderFactory.createLineBorder(Color.YELLOW)); // Used for DEBUG
         }
         innerRack.setSize(TILE_WIDTH * 7, TILE_HEIGHT);
-        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT);
+        innerRack.setBounds(192, 737, (TILE_WIDTH + 7) * 7, TILE_HEIGHT+10);
         innerRack.setOpaque(false);
 
         for (int i = 0; i < RACK_LENGTH; i++) {
@@ -235,7 +235,7 @@ public class Rack extends JPanel {
      * @see Image
      */
     private void setImageRack() {
-        ImageIcon newIcon = ImageIconTools.createImageIcon("../media/Rack_empty.png", "Scrabble rack");
+        ImageIcon newIcon = ImageIconTools.createImageIcon("/media/Rack_empty.png", "Scrabble rack");
         // SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
         Image iconScaled = newIcon.getImage().getScaledInstance(RACK_WIDTH, RACK_HEIGHT, Image.SCALE_SMOOTH);
         this.icon = new ImageIcon(iconScaled);
@@ -249,7 +249,7 @@ public class Rack extends JPanel {
      * @see Image
      */
     private Image setImageTile() {
-        ImageIcon newIcon = ImageIconTools.createImageIcon("../media/vintage_tile.png", "Scrabble tile");
+        ImageIcon newIcon = ImageIconTools.createImageIcon("/media/vintage_tile.png", "Scrabble tile");
         // SCALE_SMOOTH : Choose an image-scaling algorithm that gives higher priority to image smoothness than scaling speed.
         Image iconScaled = newIcon.getImage().getScaledInstance(TILE_WIDTH, TILE_HEIGHT, Image.SCALE_SMOOTH);
         return iconScaled;
@@ -260,10 +260,10 @@ public class Rack extends JPanel {
         BufferedImage letterB = null;
         BufferedImage valueB = null;
         try {
-            tile = ImageIO.read(Rack.class.getResource("../media/vintage_tile.png"));
+            tile = ImageIO.read(Rack.class.getResource("/media/vintage_tile.png"));
             if (!letter.equals("?")) {
-                letterB = ImageIO.read(Rack.class.getResource("../media/letters/" + letter.toLowerCase() + ".png"));
-                valueB = ImageIO.read(Rack.class.getResource("../media/numbers/" + value + ".png"));
+                letterB = ImageIO.read(Rack.class.getResource("/media/letters/" + letter.toLowerCase() + ".png"));
+                valueB = ImageIO.read(Rack.class.getResource("/media/numbers/" + value + ".png"));
             }
         } catch (IOException ex) {
             Logger.getLogger(ImageIconTools.class.getName()).log(Level.SEVERE, null, ex);
@@ -286,14 +286,26 @@ public class Rack extends JPanel {
         return dtp.isSelected();
     }
 
-    public Integer[] getSelectedTiles() {
-        List<Integer> result = new ArrayList<>();
+    public int[] getSelectedTiles() {
+        int[] result = new int[countSelected()];
+        int current = 0;
         for (int i = 0; i < RACK_LENGTH; i++) {
             if (isTileSelected(i)) {
-                result.add(i);
+                result[current++] = i;
             }
         }
-        return result.toArray(new Integer[result.size()]);
+        System.out.println(result);
+        return result;
+    }
+    
+    private int countSelected() {
+        int result = 0;
+        for (int i = 0; i < RACK_LENGTH; i++) {
+            if (isTileSelected(i)) {
+                result++;
+            }
+        }
+        return result;
     }
 
     private void unselect(int pos) {

@@ -207,18 +207,19 @@ public class ServerScrabble {
         return response;
     }
 
-    public synchronized Message saveGame(int type, String playerID, String playID, String ga_infos) {
+    public synchronized Message saveGame(String data) {
         Message response = null;
         try {
             // Try to save current play for the current player
-            response = game.SavePlay(type, playerID, playID, ga_infos);
+            JsonNode root = om.readTree(data);
+            response = game.SavePlay(root.get("user_id").asText(), root.get("play_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
-        }
+        } catch (IOException ex) {}
         return response;
     }
 
@@ -272,23 +273,22 @@ public class ServerScrabble {
             }
         } catch (GameException e) {
             response = processError(e);
-        } catch (IOException ex) {
-            Logger.getLogger(ServerScrabble.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (IOException ex) {}
         return response;
     }
-
-    public synchronized Message switchTile(String playerID, String position) {
+    
+    public synchronized Message undo(String data) {
         Message response = null;
         try {
-            response = game.switchTile(playerID, position);
+            JsonNode root = om.readTree(data);
+            response = game.undo(root.get("user_id").asText(), root.get("play_id").asText());
 
             if (response == null) {
                 throw new GameException(GameException.typeErr.SYSKO);
             }
         } catch (GameException e) {
             response = processError(e);
-        }
+        } catch (IOException ex) {}
         return response;
     }
 

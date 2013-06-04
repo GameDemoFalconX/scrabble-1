@@ -196,21 +196,19 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message savePlay(int type, String pl_id, String ga_id, String ga_infos) {/*
-         Play cPlay = plays.playIdentification(pl_id, ga_id);
+    protected Message savePlay(String pl_id, String ga_id) {
+         Play cPlay = pCol.playIdentification(pl_id, ga_id);
          if (cPlay != null) {
-         plays.saveGameOnFile(pl_id, cPlay, ga_infos);  // TODO : Handle error (rom)
-         switch (type) {
-         case Message.SAVE_AND_STOP:
-         plays.initPlayer(pl_id);
-         break;
-         case Message.SAVE_AND_SIGNOUT:
-         plays.removePlayer(pl_id);
-         break;
+             System.out.println("Server : start save");
+             String formatedGrid;
+             formatedGrid = cPlay.getFormatGrid();
+             String formatedRack;
+             formatedRack = cPlay.getFormatRack();
+             Co.saveState(ga_id, formatedRack, formatedGrid);
+             return new Message(Message.SAVE_GAME_SUCCESS, "");
+         } else {
+             return new Message(Message.SAVE_GAME_ERROR, "");
          }
-         return new Message(Message.SAVE_GAME_SUCCESS, "");
-         }*/
-        return new Message(Message.GAME_IDENT_ERROR, "");
     }
 
     @Override
@@ -311,13 +309,15 @@ public class HAL extends Game {
     }
 
     @Override
-    protected Message tileSwitch(String pl_id, String position) {/*
-         Message response = null;
-         if (plays.playerIsLogged(pl_id)) {
-         Play play = plays.getPlay(pl_id);
-         play.tileSwitch(position);
-         return new Message(Message.TILE_SWITCH_SUCCES, "");
-         }*/
-        return new Message(Message.PLAYER_NOT_LOGGED, "");
+    protected Message undoProcess(String pl_id, String ga_id) {
+        Message response = null;
+        Play cPlay = pCol.playIdentification(pl_id, ga_id);
+        if (cPlay != null) {
+            Co.undo(pl_id, cPlay.getPlayID(), cPlay.getInnerIndice());
+            // Update the innerIndice
+            cPlay.undoInnerIndice();
+            return new Message(Message.UNDO_SUCCESS, "");
+        } 
+        return new Message(Message.UNDO_ERROR, "");
     }
 }

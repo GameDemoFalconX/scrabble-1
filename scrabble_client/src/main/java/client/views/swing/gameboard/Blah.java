@@ -12,7 +12,8 @@ public class Blah {
             + " score incrementing and new letters will appear on your rack.\nIf"
             + " the word is incorrect, you will see your score decrementing and the"
             + " letters will go back to your rack.\n\nThe \"Exchange\" button allows"
-            + " you to change tiles you don't want.\nThe \"Shuffle\" button allows"
+            + " you to change tiles you don't want. Just select the tiles you want to"
+            + " exchange then click the \"Validate\" button.\nThe \"Shuffle\" button allows"
             + " you to shuffle you rack in case you're short on ideas.\nThe \"Settings\""
             + " button allows you to change the gameboard style and the background color."
             + " \n\nGood luck !";

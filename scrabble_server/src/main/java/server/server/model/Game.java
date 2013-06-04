@@ -112,8 +112,8 @@ public abstract class Game implements IGame {
     }
 
     @Override
-    public Message SavePlay(int type, String pl_id, String ga_id, String ga_infos) throws GameException {
-        Message response = savePlay(type, pl_id, ga_id, ga_infos);
+    public Message SavePlay(String pl_id, String ga_id) throws GameException {
+        Message response = savePlay(pl_id, ga_id);
         switch (response.getHeader()) {
             case Message.SAVE_GAME_SUCCESS:
                 return response;
@@ -170,13 +170,13 @@ public abstract class Game implements IGame {
     }
 
     @Override
-    public Message switchTile(String pl_id, String position) throws GameException {
-        Message response = tileSwitch(pl_id, position);
+    public Message undo(String pl_id, String ga_id) throws GameException {
+        Message response = undoProcess(pl_id, ga_id);
         switch (response.getHeader()) {
-            case Message.TILE_SWITCH_SUCCES:
+            case Message.UNDO_SUCCESS:
                 return response;
-            case Message.TILE_SWITCH_ERROR:
-                throw new GameException(GameException.typeErr.TILE_EXCHANGE_ERROR);
+            case Message.UNDO_ERROR:
+                throw new GameException(GameException.typeErr.UNDO_ERROR);
         }
         return null;
     }
@@ -189,11 +189,11 @@ public abstract class Game implements IGame {
     protected abstract Message createNewAnonymGame(String pl_id);
     protected abstract Message loadPlayLister(String pl_id);
     protected abstract Message loadPlay(String pl_id, String ga_id);
-    protected abstract Message savePlay(int type, String pl_id, String ga_id, String ga_infos);
+    protected abstract Message savePlay(String pl_id, String ga_id);
 
     // Game
     protected abstract Message scrabbleValidator(String pl_id, String ga_id, int orientation, String ga_infos);
     protected abstract Message destroyAnonym(String pl_id);
     protected abstract Message tileExchange(String pl_id, String ga_id, String tiles);
-    protected abstract Message tileSwitch(String pl_id, String position);
+    protected abstract Message undoProcess(String pl_id, String ga_id);
 }

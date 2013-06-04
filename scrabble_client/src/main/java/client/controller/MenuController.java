@@ -49,4 +49,8 @@ public class MenuController {
     public void notifyUndo() {
         play.undo();
     }
+    
+    public void notifySave() {
+        play.save();
+    }
 }

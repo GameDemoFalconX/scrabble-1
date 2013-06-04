@@ -1,16 +1,12 @@
 package server.server.model;
 
 import client.model.utils.Point;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Romain <ro.foncier@gmail.com>, Bernard <bernard.debecker@gmail.com>
@@ -215,6 +211,7 @@ public class Play {
                 result += ", ";
             }
         }
+        System.out.println("getnewtiles : " + result);
         return result + "]";
     }
 
@@ -232,36 +229,28 @@ public class Play {
      *
      * @return
      */
-    public String getGrid() {
+    public String getFormatGrid() {
         return this.grid.toString();
     }
 
     public String exchangeTiles(String tiles) {
-        Logger.getLogger(Play.class.getName()).log(Level.INFO, null, tiles);
         Tile[] tileArray = null;
         try {
             tileArray = om.readValue(tiles, Tile[].class);
-        } catch (IOException ex) {
-            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (tileArray != null) {
-            String newTiles = this.getNewTiles(tileArray.length);
-            try {
+            if (tileArray != null) {
+                String newTiles = this.getNewTiles(tileArray.length);
                 Tile[] newTileArray = om.readValue(newTiles, Tile[].class);
                 for (int i = 0; i < tileArray.length; i++) {
                     int tmp = rack.getTilePos(tileArray[i].getLetter());
                     rack.setTile(tmp-1, newTileArray[i]);
                     bag.putBackTile(tileArray[i]);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+                return rack.getRack().toString();
             }
-            return rack.getRack().toString();
-        } else {
-            return "";
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
-
+        return "";
     }
 
     //*** Stats Section ***//
@@ -295,5 +284,9 @@ public class Play {
 
     protected int getInnerIndice() {
         return this.innerIndice;
+    }
+    
+    protected void undoInnerIndice() {
+        this.innerIndice -= 2;
     }
 }

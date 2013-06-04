@@ -16,7 +16,7 @@ import javax.swing.*;
  */
 public class Settings extends JDialog {
 
-    private static final String PATH_MEDIA = "../media/";
+    private static final String PATH_MEDIA = "/media/";
     private static final String MODERN_PATH = "modern_grid.png";
     private static final String MODERN_ICON_PATH = "modern_gb_icon.png";
     private static final String VINTAGE_PATH = "vintage_grid.png";
