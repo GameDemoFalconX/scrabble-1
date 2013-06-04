@@ -1,5 +1,5 @@
 # Scrabble Project
-*@authors: Bernard Debecker, Arnaud Morel, Romain Foncier*
+*@authors: Bernard Debecker and Romain Foncier*
 
 ### Description :
 
